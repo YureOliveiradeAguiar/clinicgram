@@ -1,0 +1,44 @@
+.dashBoardButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.dashBoardButtons a {
+    text-decoration: none;
+    font-weight: normal;
+}
+.dashBoardButtons span {
+    font-weight: normal;
+}
+
+.dashBoardButtons a,
+.dashBoardButtons button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.2s;
+
+    color: #195154;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+
+    background-color: white;
+
+    border-radius: 10px;
+
+    height: 90px;
+}
+
+.dashBoardButtons a:hover,
+.dashBoardButtons button:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12);
+}
+
+.icon {
+    margin-bottom: 2px;
+}

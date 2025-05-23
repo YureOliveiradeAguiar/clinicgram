@@ -1,0 +1,74 @@
+h2 {
+    padding: 10px;
+}
+.dateWrapper {
+    display: grid;
+    grid-template-columns: 3fr 5fr 4fr;
+    gap: 5px;
+    width: 100%;
+}
+
+.dateWrapper .icon {
+    width: 18px;
+    height: 18px;
+    box-sizing: content-box;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.dropdownToggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.selectedOption {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: white;
+    z-index: 1000;
+    max-height: 200px;
+    font-size: 0.8rem;
+    overflow-y: auto;
+}
+
+.options li {
+    padding: 10px;
+    background-color: white;
+}
+
+.options li:hover {
+    background-color: #f0f0f0;
+}
+
+.custom-dropdown.open .options {
+    display: block;
+}
+
+.mainCard {
+    padding: 8px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}

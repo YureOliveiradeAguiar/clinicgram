@@ -1,0 +1,262 @@
+main section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+}
+.icon {
+    width: 24px;
+    height: 24px;
+}
+.observation {
+    padding: 10px;
+    font-size: 1rem;
+    color: rgba(51, 51, 51, 0.8);
+}
+
+/* BUTTONS */
+button,
+input[type="submit"] {
+    margin-bottom: 15px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.2s;
+    color: white;
+    background-color: #5E9771;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.01);
+    background-color: #195154;
+}
+
+#confirmButton {
+    background-color: #4cb050;
+}
+
+#confirmButton:hover {
+    background-color: #397f3c;
+}
+
+#cancelButton {
+    background-color: #fe5721;
+}
+
+#cancelButton:hover {
+    background-color: #be4219;
+}
+
+.buttonSection {
+    width: 100%;
+}
+
+.buttonSection button {
+    max-width: 300px;
+}
+
+/* HERO */
+.hero {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.hero h2 {
+    font-size: 1.8rem;
+}
+
+/* EXTRAS */
+#statusMessage {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #666;
+}
+
+#errorMessage {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: right;
+    width: 100%;
+    color: red;
+    font-weight: bold;
+    font-size: 17px;
+    opacity: 0.8;
+    text-shadow: 3px 2px 2px rgb(235, 235, 235);
+}
+
+.dashBoardButtons {
+    width: 300px;
+}
+
+/* FORMS */
+.customForm {
+    width: 300px;
+    font-weight: bold;
+}
+
+.formGroup {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.customForm label,
+.fieldLabel,
+.customForm input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.customForm label,
+.fieldLabel {
+    font-size: 16px;
+}
+
+.customForm input {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+/*CLIENT CARDS*/
+.clientList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.clientCard {
+    border-radius: 5px;
+    width: 95%;
+    margin: 5px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+.clientCard:hover {
+    transform: scale(1.01);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.cardButtonSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    gap: 10px;
+}
+
+.cardButtonSection button {
+    margin: 0px;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 16px;
+    width: auto;
+    background-color: transparent;
+    box-shadow: none;
+    transition: background 0s;
+}
+
+.cardBody {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    border-top: 1px solid #ddd;
+    background: #f5f5f5;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.scheduleButton {
+    color: #195154;
+    opacity: 0.8;
+}
+
+.expandButton {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.scheduleButton:hover,
+.expandButton:hover {
+    transform: scale(1.15);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.removeButton {
+    width: 100%;
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    opacity: 0.65;
+    font-size: 16px;
+    text-shadow: 0px 2px 2px rgb(235, 235, 235);
+}
+
+.cardBody p {
+    margin: 5px 0;
+}
+
+.cardBody.active {
+    display: block;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f8f8f8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primaryFocused);
+}

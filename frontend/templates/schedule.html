@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Agenda</title>
+	<link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
+	<link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
+    <link rel="stylesheet" href="{% static 'css/schedule.css' %}">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<header>
+    	<div class="headerTop">
+        	<div class="headerTitle">
+        	    <h1>Clinicgram</h1>
+    		</div>
+      </div>
+	</header>
+
+	<main>
+		<section class="hero">
+    	   <h2>Agenda</h2>
+        </section>
+
+        <section class="appointmentDetails">
+            <p id="appointmentInfo">Selecione um agendamento para ver os detalhes.</p>
+            <form id="deleteAppointmentForm" method="POST">
+                {% csrf_token %}
+                <div id="deleteFormContent"></div>
+            </form>
+        </section>
+
+	    <section class="scheduleContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <div><div>
+                        {% for dia in dias %}
+                            <th>{{ dia|date:"d/m" }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in indexedCells %}
+                        <tr>
+                            <td>{{ row.0.horario }}</td>
+                            {% for cell in row %}
+                                <td class="scheduleCell
+                                    {% if cell.index in occupiedIndexes %}
+                                        occupied
+                                    {% endif %}"
+                                    data-index="{{ cell.index }}"></td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+      
+        <section class="buttonSection">
+            <a href="{% url 'dashboard' %}"><button>Voltar</button></a>
+        </section>
+  	</main>
+</body>
+</html>
+
+<script> // Schedule table translator.
+    document.addEventListener("DOMContentLoaded", function () {
+        const occupiedIndexes = {{ occupiedIndexes|safe }};
+        const cells = document.querySelectorAll(".scheduleCell");
+        const indexedCells = {{ indexedCells|safe }};
+
+        const appointments = JSON.parse('{{ Appointments|escapejs }}');
+        const clients = JSON.parse('{{ Clients|escapejs }}');
+    
+        cells.forEach(cell => {
+            cell.addEventListener("click", function () {
+                const clickedIndex = parseInt(cell.getAttribute("data-index"));
+                if (occupiedIndexes.includes(clickedIndex)) {
+                    function findDateTimeByIndex(indexedCells, targetIndex) {
+                        for (const row of indexedCells) {
+                            for (const cell of row) {
+                                if (cell.index === targetIndex) {
+                                    return cell.dia;
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                    const clickedDateTime = findDateTimeByIndex(indexedCells, clickedIndex);
+                    appointments.forEach(appointment => {
+                        const startDateTime = appointment.fields.startTime.
+                            substring(0, appointment.fields.startTime.length - 4);
+                        const endDateTime = appointment.fields.endTime.
+                            substring(0, appointment.fields.endTime.length - 4);
+
+                        const endDateTimeStr = endDateTime;
+                        const [date, time] = endDateTimeStr.split("T");
+                        let [hours, minutes] = time.split(":").map(num => parseInt(num, 10));
+                        minutes -= 30;
+                        if (minutes < 0) {
+                            minutes += 60;
+                            hours -= 1;
+                        }
+                        hours = hours < 10 ? `0${hours}` : hours;
+                        minutes = minutes < 10 ? `0${minutes}` : minutes;
+                        const updatedEndDateTimeStr = `${date}T${hours}:${minutes}`;
+
+                        if (clickedDateTime == startDateTime || clickedDateTime == updatedEndDateTimeStr){
+                            const client = clients.find(client => client.pk === appointment.fields.client);
+                            
+                            function formatDateTime(dateTimeStr) {
+                                const match = dateTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):/);
+                                if (!match) return dateTimeStr;
+                            
+                                const [, year, month, day, hours, minutes] = match;
+                                return `${day}/${month}/${year} ${hours}:${minutes}`;
+                            }
+                            
+                            const formattedFields = `
+                            Cliente: ${client.fields.name}<br>
+                            Início: ${formatDateTime(appointment.fields.startTime)}<br>
+                            Fim: ${formatDateTime(appointment.fields.endTime)}
+                            `;
+                            const appointmentId = appointment.pk;
+                            if (appointmentId) {
+                                const appointmentContent = `
+                                    <button onclick="return confirm('Tem certeza que deseja excluir essa consulta?');"
+                                        type="submit" class="removeButton">Excluir Consulta</button>
+                                `;
+                                document.getElementById("appointmentInfo").innerHTML = formattedFields;
+                                document.getElementById("deleteFormContent").innerHTML = appointmentContent;
+                                
+                                const deleteForm = document.getElementById("deleteAppointmentForm");
+                                deleteForm.action = `/appointments/deleteAppointment/${appointmentId}/`;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<script> // Dynamically coloring cells by column, pairing them across columns
+    document.addEventListener("DOMContentLoaded", function() {
+        const occupiedCells = document.querySelectorAll('.scheduleCell.occupied');
+        
+        // Define a set of colors
+        const colors = [
+            "#ffb3b3", // Light Red
+            "#b3ffb3", // Light Green
+            "#b3d9ff", // Light Blue
+            "#ffffb3", // Light Yellow
+            "#e6b3ff", // Light Purple
+            "#d9d9b3", // Light Khaki
+            "#ffb3d9", // Light Pink
+            "#ccccff", // Light Lavender
+            "#b3ffb3", // Light Lime
+            "#ff9999"  // Light Coral
+        ];
+
+        // Create a 2D array to store columns
+        const numColumns = document.querySelector('tr').children.length;
+        const columns = Array.from({ length: numColumns }, () => []);
+
+        // Fill columns with occupied cells based on their column index
+        occupiedCells.forEach(cell => {
+            const columnIndex = parseInt(cell.cellIndex); // Get column index
+            columns[columnIndex].push(cell);
+        });
+
+        // Now color the cells by alternating pairs across columns
+        let colorIndex = 0;
+        columns.forEach(column => {
+            for (let i = 0; i < column.length; i += 2) {
+                const cell1 = column[i];
+                const cell2 = column[i + 1];
+
+                // Assign a color to the current pair
+                const color = colors[colorIndex % colors.length];
+                
+                if (cell1) {
+                    cell1.style.backgroundColor = color;
+                }
+                if (cell2) {
+                    cell2.style.backgroundColor = color;
+                }
+
+                // Move to the next color for the next pair
+                colorIndex++;
+            }
+        });
+    });
+</script>

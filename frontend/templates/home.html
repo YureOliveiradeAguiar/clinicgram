@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinicgram - Agendamento de Salas</title>
+    <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <img src="{% static 'images/Logo.png' %}" alt="Clinicgram" class="headerLogo">
+            <h1>Clinicgram</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#advantages">Vantagens</a></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Agende sua consulta</h2>
+                <p>Marque suas visitas à clínica de forma rápida e simples com nosso sistema de agendamento online.</p>
+                <a href="{% url 'login' %}" class="apointmentButton">Fazer Agendamento</a>
+            </div>
+            <img src="{% static 'images/heroImage.png' %}" alt="Doutora realizando consulta com o Clinicgram">
+        </section>
+        
+        <section class="carousel">
+            <div class="carousel-inner">
+                <div class="slide"><img src="{% static 'images/slide1.png' %}" alt="Família feliz em consulta médica"></div>
+                <div class="slide"><img src="{% static 'images/slide2.png' %}" alt="Atendimento profissional e humanizado"></div>
+                <div class="slide"><img src="{% static 'images/slide3.png' %}" alt="Equipe médica especializada"></div>
+            </div>
+            <button class="prev" onclick="moveSlide(-1)"><strong>&#10094;</strong></button>
+            <button class="next" onclick="moveSlide(1)"><strong>&#10095;</strong></button>
+            <div class="dots-container"></div>
+        </section>
+    
+        <section class="banner">
+            <div class="bannerContent">
+                <h2>Gestão Eficiente de Consultas e Registros Clínicos</h2>
+                <p>Entre em contato e descubra como organizar seus e registros clínicos de forma simples e prática com nosso sistema especializado.</p>
+                <a href="#contact" class="banner-button">Fale Conosco</a>
+            </div>
+        </section>
+    
+        <section id="about" class="about-section">
+            <h2>Sobre o Clinicgram</h2>
+            <p>O Clinicgram é uma plataforma desenvolvida para a gestão eficiente de agendamentos de salas em clínicas universitárias,
+                proporcionando organização e praticidade para alunos e professores.</p>
+        </section>
+    
+        <section id="advantages" class="services-section">
+            <h2>Vantagens</h2>
+            <div class="services-list">
+                <div class="service-item">
+                    <h3>Disponibilidade em Tempo Real</h3>
+                    <p>Visualize a disponibilidade das salas de atendimento e escolha o melhor horário para você.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Agendamento Rápido e Fácil</h3>
+                    <p>Escolha o melhor horário para sua consulta e marque sua consulta em poucos cliques.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Registro digital</h3>
+                    <p>Tenha suas consultas e horários organizados e acessíveis de forma dinâmica e imediata.</p>
+                </div>
+            </div>
+        </section>
+    
+        <section id="contact" class="contactSection">
+            <div>
+                <h2>Entre em Contato</h2>
+                <p>Estamos disponíveis para esclarecer dúvidas e oferecer suporte.</p>
+                <ul>
+                    <li>suporte@clinicgram.com</li>
+                    <li>Av. Secretário Divino Padrão, 1.411 - Santo Antonio, Sete Lagoas - MG, 35702-075</li>
+                    <a href="mailto:contato@clinicabelvie.com" class="contact-button">Envie um Email</a>
+                </ul>
+            </div>
+        
+            <div>
+                <h2>Horário de Atendimento</h2>
+                <ul>
+                    <li><strong>Segunda a Sexta:</strong> 08:00 - 18:00</li>
+                    <li><strong>Sábado:</strong> 08:00 - 14:00</li>
+                    <li>Para uma clínica livre de barreiras.</li>
+                </ul>
+            </div>
+        </section>
+        </main>
+    <footer>
+        <p>&copy; 2025 Clinicgram. Todos os direitos reservados.</p>
+    </footer>
+</body>
+
+</html>
+
+<script>
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    const dotsContainer = document.querySelector(".dots-container");
+    let autoSlideInterval;
+
+    slides.forEach((_, i) => {
+        let dot = document.createElement("span");
+        dot.classList.add("dot");
+        dot.addEventListener("click", () => {
+            resetTimer();
+            showSlide(i);
+        });
+        dotsContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll(".dot");
+
+    function showSlide(n) {
+        index = (n + slides.length) % slides.length;
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+        slides[index].classList.add('active');
+        dots.forEach(dot => dot.classList.remove("active-dot"));
+        dots[index].classList.add("active-dot");
+    }
+    function moveSlide(step) {
+        resetTimer();
+        showSlide(index + step);
+    }
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => moveSlide(1), 8000);
+    }
+    function resetTimer() {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    }
+
+    startAutoSlide();
+    showSlide(0);
+</script>

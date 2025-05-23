@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Consultas</title>
+    <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
+    <link rel="stylesheet" href="{% static 'css/scheduling.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="headerTop">
+            <div class="headerTitle">
+                <h1>Clinicgram</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Agendar Consulta</h2>
+        </section>
+
+        <section class="schedulingSection">
+            <form action="{% url 'scheduleAppointment' %}" method="POST" id="schedulingForm">
+                {% csrf_token %}
+                <section class="dropdownSection">
+                    <p class= "dropdownLabel" for="clientDropdown">Selecione o Cliente:</p>
+                    <div class="dropdown" id="clientDropdown">
+                        <button type="button" class="dropdownButton">Selecione um cliente:</button>
+                        <div class="dropdownContent">
+                            <input type="text" class="searchBox" placeholder="Pesquisar cliente...">
+                            {% for client in Clients %}
+                                <div class="clientOption" data-value="{{ client.id }}"
+                                    data-name="{{ client.name }}">{{ client.name }}</div>
+                            {% empty %}
+                                <p>Nenhum cliente registrado.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+                <input type="hidden" name="client" id="selectedClient">
+
+                <section class="scheduleSection">
+                    <p class= "schedulingLabel" for="hoursScheduling">Selecione o Horário:</p>
+                    <div class="scheduleContainer" id="hoursScheduling">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for dia in dias %}
+                                      <th>{{ dia|date:"d/m" }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in indexedCells %}
+                                    <tr>
+                                        <td>{{ row.0.horario }}</td>
+                                        {% for cell in row %}
+                                            <td class="scheduleCell {% if cell.index in occupiedIndexes %}occupied{% endif %}" 
+                                                data-index="{{ cell.index }}"</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <input type="hidden" name="startTime" id="startTime">
+                <input type="hidden" name="endTime" id="endTime">
+
+                <section class="buttonSection">
+                    <button type="submit" id="confirmButton">Agendar</button>
+                    <button type="button" id="cancelButton" onclick="window.location.href='{% url 'dashboard' %}'">Cancelar</button>
+                </section>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
+
+<script src="{% static 'scripts/clientDropdown.js' %}"></script>
+
+<script> // Client dropdown translator.
+    document.addEventListener("DOMContentLoaded", function () {
+        const clientDropdown = document.getElementById("clientDropdown");
+        const dropdownOptions = clientDropdown.querySelectorAll(".clientOption");
+        const selectedClientInput = document.getElementById("selectedClient");
+        const dropdownButton = document.querySelector(".dropdownButton");
+        
+        dropdownOptions.forEach(option => {
+            option.addEventListener("click", function () {
+                selectedClientInput.value = this.getAttribute("data-value");
+                dropdownButton.textContent = this.getAttribute("data-name");
+                content.style.display = "none";
+
+                console.log(this.getAttribute("data-name"));
+                console.log(document.querySelector(".dropdownButton").textContent);
+                console.log(selectedClientInput.value);
+            });
+        });
+    });
+</script>
+
+<script> // Scheduling table translator.
+    document.addEventListener("DOMContentLoaded", function () {
+        const occupiedIndexes = {{ occupiedIndexes|safe }};
+        const cells = document.querySelectorAll(".scheduleCell");
+
+        const indexedCells = {{ indexedCells|safe }};
+    
+        cells.forEach(cell => {
+            cell.addEventListener("click", function () {
+                let row = this.parentNode;
+                let table = row.parentNode;
+                let rowIndex = [...table.children].indexOf(row);
+                let cellIndex = this.cellIndex;
+                let firstBlock = this;
+                let secondBlock = table.children[rowIndex + 1]?.children[cellIndex];
+    
+                const firstBlockIndex = Number(firstBlock.dataset.index);
+                const secondBlockIndex = secondBlock ? Number(secondBlock.dataset.index) : null;
+    
+                if (occupiedIndexes.includes(firstBlockIndex) || (secondBlock && occupiedIndexes.includes(secondBlockIndex))) {
+                    console.log("One or both blocks are occupied, not selecting.");
+                    return;
+                }
+                if (!secondBlock) return;
+    
+                document.querySelectorAll(".scheduleCell.selected").forEach(el => el.classList.remove("selected"));
+    
+                firstBlock.classList.add("selected");
+                secondBlock.classList.add("selected");
+
+                function findDateTimeByIndex(indexedCells, targetIndex) {
+                    for (const row of indexedCells) {
+                        for (const cell of row) {
+                            if (cell.index === targetIndex) {
+                                return cell.dia;
+                            }
+                        }
+                    }
+                    return null;
+                }
+                const startDateTime = findDateTimeByIndex(indexedCells, firstBlockIndex);
+                const endDateTime = findDateTimeByIndex(indexedCells, secondBlockIndex);
+                document.getElementById("startTime").value = startDateTime;
+                document.getElementById("endTime").value = endDateTime;
+
+                const endDateTimeStr = document.getElementById("endTime").value;
+                if (endDateTimeStr) {
+                    const [date, time] = endDateTimeStr.split("T");
+                    let [hours, minutes] = time.split(":").map(num => parseInt(num, 10));
+                    minutes += 30;
+                    if (minutes >= 60) {
+                        minutes -= 60;
+                        hours += 1;
+                    }
+                    hours = hours < 10 ? `0${hours}` : hours;
+                    minutes = minutes < 10 ? `0${minutes}` : minutes;
+                    const updatedEndDateTimeStr = `${date}T${hours}:${minutes}`;
+                    document.getElementById("endTime").value = updatedEndDateTimeStr;
+                }
+
+                //console.log("First Block Index:", firstBlockIndex);
+                //console.log("Second Block Index:", secondBlockIndex);
+                //console.log("startDateTime: ", document.getElementById("startTime").value);
+                //console.log("endDateTime: ", document.getElementById("endTime").value);
+            });
+        });
+    });    
+</script>

@@ -1,0 +1,61 @@
+.scheduleContainer{
+    width: 100%;
+    margin-top: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    gap: 5px;
+    background-color: #f9f9f9;
+}
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    background-color: #f1f1f1;
+    height: 45px;
+}
+th, td {
+    border-left: none;
+    border-right: 5px solid #f3f3f3;
+    text-align: center;
+    padding: 8px;
+}
+th {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    border-bottom: 1px solid #f1f1f1;
+}
+td {
+    padding: 2px;
+    border-bottom: 5px solid #f1f1f1;
+}
+th:first-child{
+    left: 0;
+    z-index: 5;
+    border-right: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #f1f1f1;
+}
+td:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    border-right: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #f1f1f1;
+    cursor: default;
+}
+.scheduleCell.occupied {
+    background-color: #5E9771;
+}
+.scheduleCell.selected {
+    background-color: #ff6f61;;
+}

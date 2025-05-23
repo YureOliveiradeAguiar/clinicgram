@@ -1,0 +1,97 @@
+/* SCHEDULING */
+.schedulingSection {
+    width: 100%;
+    min-width: 300px;
+    max-width: 600px;
+}
+#schedulingForm{ /* (dropdownSection + hoursScheduling + buttonSection) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 300px;
+    max-width: 600px;
+}
+
+/* DROPDOWN SECTION */
+.dropdownSection{
+    width: 100%;
+}
+.dropdownLabel, .schedulingLabel, #clientDropdown{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1.1rem;
+    font-weight: bold;
+    width: 100%;
+}
+.dropdownButton, .searchBox {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: normal;
+    border: 2px solid #5E9771;
+    border-radius: 3px;
+    background-color: white;
+    color: #333;
+}
+.dropdownButton:hover{
+    background-color: #f5f5f5;
+    transform: scale(1.00);
+}
+.dropdown {
+    position: relative;
+}
+.searchBox{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.dropdownContent {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    border-radius: 3px;
+}
+.dropdownContent div {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.dropdownContent div:hover {
+    background: #5E9771;
+    color: white;
+}
+
+/* SCHEDULE SECTION */
+.scheduleSection{
+    width: 100%;
+    min-width: 300px;
+    max-width: 800px;
+}
+#hoursScheduling{
+    max-height: 250px;
+}
+.scheduleCell.occupied {
+    cursor: default;
+}
+td {
+    cursor: pointer;
+}
+
+/* BUTTONS SECTION */
+.buttonSection {
+    display: flex;
+    flex-direction: default;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}

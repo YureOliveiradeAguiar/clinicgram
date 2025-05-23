@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menu de Dashboard</title>
+        <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>
+            <div class="headerTop">
+                <div class="headerTitle">
+                    <h1>Clinicgram</h1>
+                </div>
+            </div>
+        </header>
+        <main>
+            <section class="hero">
+                <img src="{%static 'images/Logo.png'%}" height="100"
+                alt="Clinic">
+                <h1> Sua Dashboard</h1>
+                {% if user.is_authenticated %}
+                <p id="statusMessage">Bem-vindo, {{ user.username }}!</p>
+                {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </section>
+
+            <section class="dashBoardButtons">
+                <a href="{% url 'registerClient' %}">
+                    <img src="{% static 'images/icons/RegisterClient.png'%}" alt="icon" class="icon"/>
+                    <span class="label">Registrar Cliente</span>
+                </a>
+                <a href="{% url 'clients' %}">
+                    <img src="{% static 'images/icons/Clients.png'%}" alt="icon" class="icon"/>
+                    <span class="label">Clientes</span>
+                </a>
+                <a href="{% url 'scheduling' %}">
+                    <img src="{% static 'images/icons/Scheduling.png'%}" alt="icon" class="icon"/>
+                    <span class="label">Agendamento</span>
+                </a>
+                <a href="{% url 'schedule' %}">
+                    <img src="{% static 'images/icons/Schedule.png'%}" alt="icon" class="icon"/>
+                    <span class="label">Agenda</span>
+                </a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">
+                        <img src="{% static 'images/icons/Logout.png'%}" alt="icon" class="icon"/>
+                        <span class="label">Sair</span>
+                    </button>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
