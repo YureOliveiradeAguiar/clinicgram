@@ -1,12 +1,10 @@
-
 /* HERO */
 .hero {
     display: flex;
     justify-content: center; /* horizontal alignment */
     align-items: center; /* vertical alignment */
-    padding: 40px 10px;
+    padding: 40px 0px;
 }
-
 .hero .hero-content h2 {
     font-size: 3rem;
     margin-bottom: 20px;
@@ -52,9 +50,7 @@
 /* CARROSSEL */
 .carousel {
     position: relative;
-    width: 95%;
     max-width: 800px;
-    margin: 50px auto;
 }
 .carousel-inner {
     position: relative;
@@ -75,32 +71,38 @@
     opacity: 1;
 }
 .slide img {
-    max-height: 400px;
-    max-width: 100%;
+    width: 100%;
     display: block;
     position: relative;
     margin: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
 }
 .prev, .next {
+    all: unset;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 45%;
+
     background-color: #333;
-    opacity: 20%;
+    opacity: 10%;
     color: white;
+
     border-radius: 4px;
     border: none;
-    padding: 20px 15px;
+
     cursor: pointer;
+    padding: 20px 15px;
     font-size: 28px;
 }
+.prev {
+    left: 5px;
+}
 .next {
-    right: 0px;
+    right: 5px;
 }
 @media (max-width: 600px) { 
     .prev, .next {
-        padding: 10px 5px;
+        display: none;
     }
 }
 .dots-container {
@@ -125,29 +127,28 @@
 /* BANNER */
 .banner{
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.bannerContent {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     width: 100%;
     max-width: 1000px;
-    background: #d4ecef;
+    background: var(--darkBackground);
     padding: 30px;
     border-radius: 5px;
     gap: 20px;
+
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.bannerContent h2 {
+.banner h2 {
     font-size: 2rem;
     margin-top: 0;
     margin-bottom: 10px;
     color: #195154
 }
-.bannerContent p {
+.banner p {
     font-size: 1.2rem;
     margin-bottom: 20px;
 }
@@ -206,12 +207,11 @@
     color: #666;
 }
 
-/* SERVICES */
+/* ADVANTAGES */
 .services-section {
     padding: 50px 20px;
     text-align: center;
     margin-bottom: 30px;
-    background-color: #f5f5f5;
 }
 .services-section h2 {
     font-size: 2.5rem;
@@ -233,11 +233,11 @@
 
 .service-item {
     background-color: white;
-    border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
     width: 280px;
     text-align: center;
+    border: 1px solid #ddd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -256,14 +256,15 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* horizontal alignment */
-    align-items: top; /* vertical alignment */
+    align-items: center; /* vertical alignment */
     padding: 50px 20px;
     text-align: center;
     margin-bottom: 0px;
-    background-color: #f5f5f5;
 }
 .contactSection div {
     max-width: 600px;
+    margin-bottom: 20px;
+    padding: 0px 40px;
 }
 .contactSection h2 {
     font-size: 2rem;
@@ -284,16 +285,19 @@
     font-size: 1.2rem;
     margin: 10px 0;
 }
-.contact-button{
-    background-color: #5E9771;
+.contactSection a {
     color: white;
-    padding: 15px 30px;
+    
     text-decoration: none;
-    font-weight: bold;
     border-radius: 5px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     display: inline-block;
+
+    text-decoration: underline;
+    color: inherit;
+    padding: 4px 12px;
+    border-radius: 5px;
 }
-.contact-button:hover {
-    background-color: #e47e96;
+.contactSection a:hover {
+    background-color: #e6e6e6;
 }

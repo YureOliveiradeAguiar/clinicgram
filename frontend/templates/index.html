@@ -8,7 +8,7 @@
     <title>Clinicgram - Agendamento de Salas</title>
     <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -42,18 +42,16 @@
                 <div class="slide"><img src="{% static 'images/slide1.png' %}" alt="Família feliz em consulta médica"></div>
                 <div class="slide"><img src="{% static 'images/slide2.png' %}" alt="Atendimento profissional e humanizado"></div>
                 <div class="slide"><img src="{% static 'images/slide3.png' %}" alt="Equipe médica especializada"></div>
+                <button class="prev" onclick="moveSlide(-1)"><strong>&#10094;</strong></button>
+                <button class="next" onclick="moveSlide(1)"><strong>&#10095;</strong></button>
             </div>
-            <button class="prev" onclick="moveSlide(-1)"><strong>&#10094;</strong></button>
-            <button class="next" onclick="moveSlide(1)"><strong>&#10095;</strong></button>
             <div class="dots-container"></div>
         </section>
     
         <section class="banner">
-            <div class="bannerContent">
-                <h2>Gestão Eficiente de Consultas e Registros Clínicos</h2>
-                <p>Entre em contato e descubra como organizar seus e registros clínicos de forma simples e prática com nosso sistema especializado.</p>
-                <a href="#contact" class="banner-button">Fale Conosco</a>
-            </div>
+            <h2>Gestão Eficiente de Consultas e Registros Clínicos</h2>
+            <p>Entre em contato e descubra como organizar seus e registros clínicos de forma simples e prática com nosso sistema especializado.</p>
+            <a href="#contact" class="banner-button">Fale Conosco</a>
         </section>
     
         <section id="about" class="about-section">
@@ -85,9 +83,8 @@
                 <h2>Entre em Contato</h2>
                 <p>Estamos disponíveis para esclarecer dúvidas e oferecer suporte.</p>
                 <ul>
-                    <li>suporte@clinicgram.com</li>
+                    <a href="mailto:contato@clinicabelvie.com" class="contact-button">suporte@clinicgram.com</a>
                     <li>Av. Secretário Divino Padrão, 1.411 - Santo Antonio, Sete Lagoas - MG, 35702-075</li>
-                    <a href="mailto:contato@clinicabelvie.com" class="contact-button">Envie um Email</a>
                 </ul>
             </div>
         

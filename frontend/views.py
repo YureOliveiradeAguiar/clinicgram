@@ -10,7 +10,7 @@ import locale
 locale.setlocale(locale.LC_TIME, 'pt_BR')
 
 def home(request):
-    return render(request, "home.html")
+    return render(request, "index.html")
 
 def dashboardView(request):
     return render(request, "userDashboard.html")

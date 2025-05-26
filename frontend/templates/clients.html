@@ -8,6 +8,8 @@
     <title>Seus Clientes</title>
     <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/clients.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -21,9 +23,7 @@
     </header>
 
     <main>
-        <section class="hero">
-            <h2>Clientes</h2>
-        </section>
+        <h2>Clientes</h2>
         <section class="clientList">
             {% for client in Clients %}
                 <div class="clientCard">

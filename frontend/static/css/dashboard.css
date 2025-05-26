@@ -1,9 +1,18 @@
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hero img {
+    height: 100px;
+    width: 100px;
+}
+
 .dashBoardButtons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-
 .dashBoardButtons a {
     text-decoration: none;
     font-weight: normal;
@@ -11,7 +20,6 @@
 .dashBoardButtons span {
     font-weight: normal;
 }
-
 .dashBoardButtons a,
 .dashBoardButtons button {
     display: flex;
@@ -27,18 +35,16 @@
     font-size: 0.85rem;
 
     background-color: white;
+    border: 1px solid #f1f1f1;
 
     border-radius: 10px;
-
+    padding: 10px;
+    
     height: 90px;
+    width: 100%;
 }
-
 .dashBoardButtons a:hover,
 .dashBoardButtons button:hover {
     transform: scale(1.01);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12);
-}
-
-.icon {
-    margin-bottom: 2px;
 }

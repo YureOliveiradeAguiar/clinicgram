@@ -1,34 +1,13 @@
-main section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+section {
+    max-width: 1000px;
 }
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-main {
-  flex: 1;
-}
-.icon {
-    width: 24px;
-    height: 24px;
-}
-.observation {
-    padding: 10px;
-    font-size: 1rem;
-    color: rgba(51, 51, 51, 0.8);
-}
-
 /* BUTTONS */
 button,
 input[type="submit"] {
     margin-bottom: 15px;
     padding: 10px 30px;
     border: none;
-    border-radius: 10px;
+    border-radius: 3px;
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
@@ -36,8 +15,8 @@ input[type="submit"] {
     width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background 0.3s, transform 0.2s;
-    color: white;
-    background-color: #5E9771;
+    color: var(--lightBackground);
+    background-color: var(--primary);
 }
 
 button:hover,
@@ -71,16 +50,6 @@ input[type="submit"]:hover {
     max-width: 300px;
 }
 
-/* HERO */
-.hero {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.hero h2 {
-    font-size: 1.8rem;
-}
-
 /* EXTRAS */
 #statusMessage {
     text-align: center;
@@ -107,7 +76,7 @@ input[type="submit"]:hover {
 }
 
 /* FORMS */
-.customForm {
+Form {
     width: 300px;
     font-weight: bold;
 }
@@ -117,20 +86,17 @@ input[type="submit"]:hover {
     margin-bottom: 30px;
 }
 
-.customForm label,
-.fieldLabel,
-.customForm input {
+Form label, .fieldLabel, Form input {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.customForm label,
-.fieldLabel {
+Form label, .fieldLabel {
     font-size: 16px;
 }
 
-.customForm input {
+Form input {
     width: 100%;
     font-size: 16px;
     padding: 10px;
@@ -140,32 +106,6 @@ input[type="submit"]:hover {
 }
 
 /*CLIENT CARDS*/
-.clientList {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.clientCard {
-    border-radius: 5px;
-    width: 95%;
-    margin: 5px;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-}
-
-.clientCard:hover {
-    transform: scale(1.01);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
 .cardHeader {
     display: flex;
     justify-content: space-between;

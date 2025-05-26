@@ -1,3 +1,12 @@
+@media (min-width: 375px) {
+    .mainCard {
+    padding: 6px 24px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+}
+
 h2 {
     padding: 10px;
 }
@@ -64,11 +73,4 @@ h2 {
 
 .custom-dropdown.open .options {
     display: block;
-}
-
-.mainCard {
-    padding: 8px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 10px;
 }

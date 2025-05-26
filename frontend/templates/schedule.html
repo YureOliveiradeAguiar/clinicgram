@@ -8,6 +8,7 @@
 	<title>Agenda</title>
 	<link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
 	<link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
     <link rel="stylesheet" href="{% static 'css/schedule.css' %}">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -15,18 +16,14 @@
 
 <body>
 	<header>
-    	<div class="headerTop">
-        	<div class="headerTitle">
-        	    <h1>Clinicgram</h1>
-    		</div>
-      </div>
+        <div class="brand">
+            <img src="{% static 'images/Logo.png' %}" alt="Clinicgram" class="headerLogo">
+            <h1>Clinicgram</h1>
+        </div>
 	</header>
 
 	<main>
-		<section class="hero">
-    	   <h2>Agenda</h2>
-        </section>
-
+		<h2>Agenda</h2>
         <section class="appointmentDetails">
             <p id="appointmentInfo">Selecione um agendamento para ver os detalhes.</p>
             <form id="deleteAppointmentForm" method="POST">

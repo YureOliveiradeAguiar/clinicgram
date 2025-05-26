@@ -10,24 +10,20 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
     <link rel="stylesheet" href="{% static 'css/scheduling.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <div class="headerTop">
-            <div class="headerTitle">
-                <h1>Clinicgram</h1>
-            </div>
+        <div class="brand">
+            <h1>Clinicgram</h1>
         </div>
     </header>
 
     <main>
-        <section class="hero">
-            <h2>Agendar Consulta</h2>
-        </section>
-
         <section class="schedulingSection">
+            <h2>Agendar Consulta</h2>
             <form action="{% url 'scheduleAppointment' %}" method="POST" id="schedulingForm">
                 {% csrf_token %}
                 <section class="dropdownSection">
