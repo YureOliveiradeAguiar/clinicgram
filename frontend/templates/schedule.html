@@ -17,7 +17,6 @@
 <body>
 	<header>
         <div class="brand">
-            <img src="{% static 'images/Logo.png' %}" alt="Clinicgram" class="headerLogo">
             <h1>Clinicgram</h1>
         </div>
 	</header>
@@ -32,32 +31,35 @@
             </form>
         </section>
 
-	    <section class="scheduleContainer">
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <div><div>
-                        {% for dia in dias %}
-                            <th>{{ dia|date:"d/m" }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in indexedCells %}
+	    <section class="outer-wrapper">
+            <div class="scheduleContainer">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ row.0.horario }}</td>
-                            {% for cell in row %}
-                                <td class="scheduleCell
-                                    {% if cell.index in occupiedIndexes %}
-                                        occupied
-                                    {% endif %}"
-                                    data-index="{{ cell.index }}"></td>
+                            <th></th>
+                            <div><div>
+                            {% for dia in dias %}
+                                <th>{{ dia|date:"d/m" }}</th>
                             {% endfor %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for row in indexedCells %}
+                            <tr>
+                                <td>{{ row.0.horario }}</td>
+                                {% for cell in row %}
+                                    <td class="scheduleCell
+                                        {% if cell.index in occupiedIndexes %}
+                                            occupied
+                                        {% endif %}"
+                                        data-index="{{ cell.index }}"></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="scrollbar-corner"></div>
         </section>
       
         <section class="buttonSection">

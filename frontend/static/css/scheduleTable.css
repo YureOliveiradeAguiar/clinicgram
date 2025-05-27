@@ -1,17 +1,23 @@
-.scheduleContainer{
+.outer-wrapper {
+    position: relative;
     width: 100%;
     max-height: 400px;
+    overflow: hidden;
+    background-color: var(--darkBackground);
 
-    border-radius: 6px;
-
-    overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+
+.scheduleContainer {
+    height: 100%;
+    overflow: auto;
+}
+
 table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    background-color: var(--lightBackground);
+    border-collapse: separate;
+    background-color: var(--darkBackground);
 }
 thead {
     position: sticky;
@@ -59,4 +65,56 @@ td:first-child{
 }
 .scheduleCell.selected {
     background-color: #ff6f61;;
+}
+
+td, td:first-child, th, th:first-child{
+    border: 1px solid var(--darkBackground);
+    
+
+}
+th, th:first-child {
+    border-radius: 0 0 6px 6px;
+}
+td:first-child {
+    border-radius: 0 6px 0 6px;
+}
+td {
+    border-radius: 6px;
+    background-color: var(--lightBackground);
+}
+
+ /* SCROLL-BAR */
+.scrollbar-corner {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 12px;
+    height: 16px;
+    background: var(--darkBackground);
+    border-bottom-right-radius: 12px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.scheduleContainer::-webkit-scrollbar {
+    width: 12px;
+}
+
+.scheduleContainer::-webkit-scrollbar-track {
+    border-radius: 12px;
+}
+
+.scheduleContainer::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    background-color: transparent;
+}
+
+.scheduleContainer:hover::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+}
+
+.scheduleContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #a8a8a8;
 }

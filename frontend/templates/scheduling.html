@@ -9,8 +9,8 @@
     <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
-    <link rel="stylesheet" href="{% static 'css/scheduling.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/scheduling.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -22,8 +22,8 @@
     </header>
 
     <main>
+        <h2>Agendar Consulta</h2>
         <section class="schedulingSection">
-            <h2>Agendar Consulta</h2>
             <form action="{% url 'scheduleAppointment' %}" method="POST" id="schedulingForm">
                 {% csrf_token %}
                 <section class="dropdownSection">
@@ -42,36 +42,37 @@
                     </div>
                 </section>
                 <input type="hidden" name="client" id="selectedClient">
-
                 <section class="scheduleSection">
                     <p class= "schedulingLabel" for="hoursScheduling">Selecione o Horário:</p>
-                    <div class="scheduleContainer" id="hoursScheduling">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    {% for dia in dias %}
-                                      <th>{{ dia|date:"d/m" }}</th>
-                                    {% endfor %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for row in indexedCells %}
+                    <div class="outer-wrapper">
+                        <div class="scheduleContainer" id="hoursScheduling">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>{{ row.0.horario }}</td>
-                                        {% for cell in row %}
-                                            <td class="scheduleCell {% if cell.index in occupiedIndexes %}occupied{% endif %}" 
-                                                data-index="{{ cell.index }}"</td>
+                                        <th></th>
+                                        {% for dia in dias %}
+                                          <th>{{ dia|date:"d/m" }}</th>
                                         {% endfor %}
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for row in indexedCells %}
+                                        <tr>
+                                            <td>{{ row.0.horario }}</td>
+                                            {% for cell in row %}
+                                                <td class="scheduleCell {% if cell.index in occupiedIndexes %}occupied{% endif %}" 
+                                                    data-index="{{ cell.index }}"</td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="scrollbar-corner"></div>
                     </div>
                 </section>
                 <input type="hidden" name="startTime" id="startTime">
                 <input type="hidden" name="endTime" id="endTime">
-
                 <section class="buttonSection">
                     <button type="submit" id="confirmButton">Agendar</button>
                     <button type="button" id="cancelButton" onclick="window.location.href='{% url 'dashboard' %}'">Cancelar</button>
