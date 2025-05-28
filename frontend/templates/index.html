@@ -8,6 +8,7 @@
     <title>Clinicgram - Agendamento de Salas</title>
     <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/carrousel.css' %}">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
@@ -36,17 +37,6 @@
             </div>
             <img src="{% static 'images/heroImage.png' %}" alt="Doutora realizando consulta com o Clinicgram">
         </section>
-        
-        <section class="carousel">
-            <div class="carousel-inner">
-                <div class="slide"><img src="{% static 'images/slide1.png' %}" alt="Família feliz em consulta médica"></div>
-                <div class="slide"><img src="{% static 'images/slide2.png' %}" alt="Atendimento profissional e humanizado"></div>
-                <div class="slide"><img src="{% static 'images/slide3.png' %}" alt="Equipe médica especializada"></div>
-                <button class="prev" onclick="moveSlide(-1)"><strong>&#10094;</strong></button>
-                <button class="next" onclick="moveSlide(1)"><strong>&#10095;</strong></button>
-            </div>
-            <div class="dots-container"></div>
-        </section>
     
         <section class="banner">
             <h2>Gestão Eficiente de Consultas e Registros Clínicos</h2>
@@ -55,9 +45,35 @@
         </section>
     
         <section id="about" class="about-section">
-            <h2>Sobre o Clinicgram</h2>
-            <p>O Clinicgram é uma plataforma desenvolvida para a gestão eficiente de agendamentos de salas em clínicas universitárias,
-                proporcionando organização e praticidade para alunos e professores.</p>
+            <div class="about-content">
+                <h2>Sobre o Clinicgram</h2>
+                <p>O Clinicgram é uma plataforma desenvolvida para a gestão eficiente de agendamentos de salas em clínicas universitárias,
+                    proporcionando organização e praticidade para alunos e professores.</p>
+            </div>
+
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div class="slide">
+                        <img src="{% static 'images/Cl Fisio.png' %}" alt="Clínica Fisioterápica - Una, Sete Lagoas">
+                        <h5>Una, Sete Lagoas</h5>
+                        <p>Clínica Fisioterápica</p>
+                        <a href="{% url 'login' %}" class="btn">Agendar agora</a>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'images/Cl Dent.png' %}" alt="Clínica Dentária - Una, Sete Lagoas">
+                        <h5>Una, Sete Lagoas</h5>
+                        <p>Clínica Dentária</p>
+                        <a href="{% url 'login' %}" class="btn">Agendar agora</a>
+                    </div>
+                    <div class="slide">
+                        <img src="{% static 'images/Cl Oftomo.png' %}" alt="Sala de Optometria - Una, Sete Lagoas">
+                        <h5>Una, Sete Lagoas</h5>
+                        <p>Sala de Optometria</p>
+                        <a href="{% url 'login' %}" class="btn">Agendar agora</a>
+                    </div>
+                </div>
+                <div class="dots-container"></div>
+            </div>
         </section>
     
         <section id="advantages" class="services-section">
@@ -68,12 +84,12 @@
                     <p>Visualize a disponibilidade das salas de atendimento e escolha o melhor horário para você.</p>
                 </div>
                 <div class="service-item">
-                    <h3>Agendamento Rápido e Fácil</h3>
-                    <p>Escolha o melhor horário para sua consulta e marque sua consulta em poucos cliques.</p>
-                </div>
-                <div class="service-item">
                     <h3>Registro digital</h3>
                     <p>Tenha suas consultas e horários organizados e acessíveis de forma dinâmica e imediata.</p>
+                </div>
+                <div class="service-item">
+                    <h3>Agendamento Rápido e Fácil</h3>
+                    <p>Escolha o melhor horário para sua consulta e marque sua consulta em poucos cliques.</p>
                 </div>
             </div>
         </section>
@@ -84,7 +100,7 @@
                 <p>Estamos disponíveis para esclarecer dúvidas e oferecer suporte.</p>
                 <ul>
                     <a href="mailto:contato@clinicabelvie.com" class="contact-button">suporte@clinicgram.com</a>
-                    <li>Av. Secretário Divino Padrão, 1.411 - Santo Antonio, Sete Lagoas - MG, 35702-075</li>
+                    <li>Av. Secretário Divino Padrão, 1.411<br>Santo Antonio, Sete Lagoas - MG, 35702-075</li>
                 </ul>
             </div>
         

@@ -1,0 +1,116 @@
+/* BASE STRUCTURE */
+.carousel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 380px;
+}
+
+.carousel-inner {
+    position: relative;
+    display: grid;
+    place-items: center;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.slide {
+    position: relative;
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 100%;
+    top: 0;
+    left: 0;
+
+    transition: opacity 0.4s ease-in-out;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+    position: relative;
+    margin: 0;
+}
+
+/* TEXT CONTENT */
+.slide h5,
+.slide p,
+.slide a {
+    position: absolute;
+    left: 5%;
+    color: var(--lightBackground);
+    text-align: center;
+    padding: 10px 0;
+    z-index: 2;
+    max-width: 90%;
+}
+
+.slide h5 {
+    bottom: 80px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.slide p {
+    bottom: 50px;
+    font-size: 1.1rem;
+}
+
+.slide a.btn {
+    transition: background 0.3s;
+    text-decoration: none;
+    
+    font-weight: bold;
+    bottom: 15px;
+    background-color: var(--primary);
+    padding: 0.5em 1.2em;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.slide a.btn:hover {
+    background-color: var(--primaryFocused);
+}
+
+.slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* DOTS CONTAINER */
+.dots-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.dot {
+    height: 20px;
+    width: 40px;
+    margin: 5px;
+    background-color: var(--primary);
+    border-radius: 2px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active-dot {
+    background-color: var(--primaryFocused);
+}
