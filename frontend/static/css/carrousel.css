@@ -31,6 +31,10 @@
 
     opacity: 0;
     pointer-events: none;
+
+    overflow: hidden;
+    border-radius: 16px;
+    border: 6px solid var(--lightBackground);
 }
 
 .slide.active {
@@ -75,14 +79,14 @@
     
     font-weight: bold;
     bottom: 15px;
-    background-color: var(--primary);
+    background-color: var(--primaryFocused);
     padding: 0.5em 1.2em;
     font-size: 1rem;
     border-radius: 5px;
 }
 
 .slide a.btn:hover {
-    background-color: var(--primaryFocused);
+    background-color: #2f6c5b;
 }
 
 .slide::before {

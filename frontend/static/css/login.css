@@ -1,5 +1,24 @@
+@media (min-width: 375px) {
+    .loginWrapper {
+        padding: 64px 18px 32px 18px;
+        background-color: white;
+        
+        border-radius: 16px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}
+.loginWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
 .observation {
-    padding: 10px;
+    border-top: 1px solid #ccc;
+    max-width: 360px;
+    padding: 20px;
     font-size: 1rem;
-    color: rgba(51, 51, 51, 0.8);
+    opacity: 0.8;
 }

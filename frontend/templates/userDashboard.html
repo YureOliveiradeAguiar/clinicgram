@@ -37,7 +37,7 @@
                     <span class="label">Registrar Cliente</span>
                 </a>
                 <a href="{% url 'clients' %}">
-                    <img src="{% static 'images/icons/Clients.png'%}" alt="icon" class="icon"/>
+                    <span class="icon-container"></span>
                     <span class="label">Clientes</span>
                 </a>
                 <a href="{% url 'scheduling' %}">
@@ -59,3 +59,11 @@
         </main>
     </body>
 </html>
+
+<script>
+    fetch("{% static 'images/icons/Groups.svg' %}")
+        .then(response => response.text())
+        .then(svgText => {
+            document.querySelector('.icon-container').innerHTML = svgText;
+        });
+</script>

@@ -48,3 +48,9 @@
     transform: scale(1.01);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12);
 }
+
+.icon-container svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--font);
+}

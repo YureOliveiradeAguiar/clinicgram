@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
@@ -16,40 +17,36 @@
 <body>
     <header>
         <div class="brand">
+            <img src="{% static 'images/Logo.png' %}" alt="Clinicgram" class="headerLogo">
             <h1>Clinicgram</h1>
         </div>
     </header>
 
     <main>
-        <section class="hero">
-            <img src="{%static 'images/Logo.png'%}" height="100" alt="Clinic">
-        </section>
-
-        <section>
+        <section class = "loginWrapper">
+            <p id="welcomeMessage">Faça seu login</p>
             <form method="POST" id="loginForm">
                 {% csrf_token %}
                 {% if form.errors %}
-                    <p id="errorMessage">Usuário ou senha inválidos.</p>
+                    <p id="errorMessage">Usuário ou senha inválidos</p>
                 {% else %}
-                    <p id="statusMessage">Faça seu login.</p>
+                    <p id="statusMessage">Entre para continuar</p>
                 {% endif %}
                 <div class="formGroup">
-                    <label for="username">RA:</label>
+                    <label for="username">Usuário</label>
                     <input type="text" id="username" name="username"
                         maxlength="80" placeholder="Digite aqui" required>
     
-                    <label for="password">Senha:</label>
+                    <label for="password">Senha</label>
                     <input type="password" id="password" name="password" minlenght="8"
                         maxlength="12" placeholder="Digite sua senha" required>
                 </div>
                 <input type="submit" name="login" value="Entrar">
             </form>
-        </section>
-
-        <section class="observation">
-            <p>Contate um professor se houver problemas.</p>
+            <div class="observation">
+                <p>Contate um professor se houver problemas.</p>
+            </div>
         </section>
     </main>
-
 </body>
 </html>

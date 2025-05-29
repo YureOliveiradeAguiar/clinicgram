@@ -1,3 +1,8 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 20vh;
+}
+
 /* HERO */
 .hero {
     display: flex;
@@ -23,10 +28,10 @@
     border-radius: 5px;
     font-size: 1.1rem;
     color: white;
-    background-color: #5E9771;
+    background-color: var(--primary);
 }
 .apointmentButton:hover {
-    background-color: #e47e96;
+    background-color: var(--primaryFocused);
 }
 .hero img {
     width: 400px;
@@ -82,10 +87,10 @@
     border-radius: 5px;
     font-size: 1.1rem;
     color: white;
-    background-color: #5E9771;
+    background-color: var(--primary);
 }
 .banner-button:hover {
-    background-color: #e47e96;
+    background-color: var(--primaryFocused);
 }
 @media (max-width: 768px) {
     .banner {
@@ -117,7 +122,6 @@
 }
 .about-content h2 {
     font-size: 2.8rem;
-    color: #195154
 }
 .about-content p {
     margin: 50px 0 100px 0;
@@ -131,6 +135,9 @@
         flex-direction: column;
         gap: 0;
     }
+    .about-content p {
+        margin: 20px 0 40px 0;
+    }
 }
 
 /* ADVANTAGES */
@@ -141,7 +148,6 @@
 .services-section h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #195154
 }
 .services-list {
     display: flex;

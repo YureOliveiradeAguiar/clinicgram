@@ -4,6 +4,7 @@
     --secondary: #a3dbcf;
     --complementary: #d6f0e8;
     --font: #1f3a57;
+    --h2Font: #195154;
     --lightBackground: #fcfdfa;
     --darkBackground: #f5f9f5;
     --gradientBackground: linear-gradient(to bottom, #fcfdfa 0%, #ddd 100%);
@@ -26,6 +27,9 @@ body {
     padding-top: 5vh;
     color: var(--font);
     background-color: var(--darkBackground);
+}
+body h2 {
+    color: var(--h2Font);
 }
 header {
     display: flex;
@@ -103,6 +107,9 @@ nav ul li button:hover {
     }
     header nav {
        display: none;
+    }
+    header img {
+        display: none;
     }
 }
 
