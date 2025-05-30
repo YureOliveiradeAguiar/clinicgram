@@ -2,7 +2,7 @@ from calendar import month_name
 from django.shortcuts import render, redirect
 from clients.models import Client
 from clients.forms import ClientForm
-from appointments.models import Appointment
+from appointments.models import Appointment, Room
 from datetime import datetime, timedelta
 from django.core.serializers import serialize
 import locale
@@ -74,12 +74,14 @@ def generateIndexedCells(dias, horarios, appointments):
 
 def schedulingView(request):
     clients = Client.objects.all().order_by('name')
+    rooms = Room.objects.all().order_by('name')
     appointments = Appointment.objects.all()
     dias, horarios = generateScheduleData()
     indexedCells, occupiedIndexes = generateIndexedCells(dias, horarios, appointments)
 
     context = {
         "Clients": clients,
+        "Rooms": rooms,
         "dias": dias,
         "horarios": horarios,
         "indexedCells": indexedCells,

@@ -33,25 +33,25 @@
 
             <section class="dashBoardButtons">
                 <a href="{% url 'registerClient' %}">
-                    <img src="{% static 'images/icons/RegisterClient.png'%}" alt="icon" class="icon"/>
+                    <span class="icon-container" data-icon="userAdd"></span>
                     <span class="label">Registrar Cliente</span>
                 </a>
                 <a href="{% url 'clients' %}">
-                    <span class="icon-container"></span>
+                    <span class="icon-container" data-icon="users"></span>
                     <span class="label">Clientes</span>
                 </a>
                 <a href="{% url 'scheduling' %}">
-                    <img src="{% static 'images/icons/Scheduling.png'%}" alt="icon" class="icon"/>
+                    <span class="icon-container" data-icon="appointment"></span>
                     <span class="label">Agendamento</span>
                 </a>
                 <a href="{% url 'schedule' %}">
-                    <img src="{% static 'images/icons/Schedule.png'%}" alt="icon" class="icon"/>
+                    <span class="icon-container" data-icon="schedule"></span>
                     <span class="label">Agenda</span>
                 </a>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit">
-                        <img src="{% static 'images/icons/Logout.png'%}" alt="icon" class="icon"/>
+                        <span class="icon-container" data-icon="logOut"></span>
                         <span class="label">Sair</span>
                     </button>
                 </form>
@@ -60,10 +60,5 @@
     </body>
 </html>
 
-<script>
-    fetch("{% static 'images/icons/Groups.svg' %}")
-        .then(response => response.text())
-        .then(svgText => {
-            document.querySelector('.icon-container').innerHTML = svgText;
-        });
-</script>
+<script>const basePath = "{% static 'images/icons/' %}";</script>
+<script src="{% static 'scripts/loadIcons.js' %}"></script>

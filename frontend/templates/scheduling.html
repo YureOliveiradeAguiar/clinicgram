@@ -24,25 +24,43 @@
     <main>
         <h2>Agendar Consulta</h2>
         <section class="schedulingSection">
-            <form action="{% url 'scheduleAppointment' %}" method="POST" id="schedulingForm">
+            <form action="{% url 'scheduleAppointment' %}" method="POST">
                 {% csrf_token %}
-                <section class="dropdownSection">
+                <div class="clientWrapper">
                     <p class= "dropdownLabel" for="clientDropdown">Selecione o Cliente:</p>
                     <div class="dropdown" id="clientDropdown">
-                        <button type="button" class="dropdownButton">Selecione um cliente:</button>
+                        <button type="button" class="dropdownButton">Selecione um cliente</button>
                         <div class="dropdownContent">
-                            <input type="text" class="searchBox" placeholder="Pesquisar cliente...">
+                            <input type="text" class="searchBox" id="clientSearchBox" placeholder="Pesquisar cliente...">
                             {% for client in Clients %}
-                                <div class="clientOption" data-value="{{ client.id }}"
+                                <div class="dropdownOption" data-value="{{ client.id }}"
                                     data-name="{{ client.name }}">{{ client.name }}</div>
                             {% empty %}
-                                <p>Nenhum cliente registrado.</p>
+                                <p class="dropdownNoOption">Nenhum cliente registrado</p>
                             {% endfor %}
                         </div>
+                        <input type="hidden" name="client" class="selectedOption">
                     </div>
-                </section>
-                <input type="hidden" name="client" id="selectedClient">
-                <section class="scheduleSection">
+                </div>
+
+                <div class="roomWrapper">
+                    <p class= "dropdownLabel" for="roomDropdown">Selecione a Sala:</p>
+                    <div class="dropdown" id="roomDropdown">
+                        <button type="button" class="dropdownButton">Selecione uma sala</button>
+                        <div class="dropdownContent">
+                            <input type="text" class="searchBox" id="roomSearchBox" placeholder="Pesquisar sala...">
+                            {% for room in Rooms %}
+                                <div class="dropdownOption" data-value="{{ room.id }}"
+                                    data-name="{{ room.name }}">{{ room.name }}</div>
+                            {% empty %}
+                                <p class="dropdownNoOption">Nenhuma sala registrada</p>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="room" class="selectedOption">
+                    </div>
+                </div>
+
+                <div class="scheduleSection">
                     <p class= "schedulingLabel" for="hoursScheduling">Selecione o Horário:</p>
                     <div class="outer-wrapper">
                         <div class="scheduleContainer" id="hoursScheduling">
@@ -70,40 +88,24 @@
                         </div>
                         <div class="scrollbar-corner"></div>
                     </div>
-                </section>
+                </div>
                 <input type="hidden" name="startTime" id="startTime">
                 <input type="hidden" name="endTime" id="endTime">
-                <section class="buttonSection">
+
+                <div class="buttonSection">
                     <button type="submit" id="confirmButton">Agendar</button>
                     <button type="button" id="cancelButton" onclick="window.location.href='{% url 'dashboard' %}'">Cancelar</button>
-                </section>
+                </div>
             </form>
         </section>
     </main>
 </body>
 </html>
 
-<script src="{% static 'scripts/clientDropdown.js' %}"></script>
-
-<script> // Client dropdown translator.
-    document.addEventListener("DOMContentLoaded", function () {
-        const clientDropdown = document.getElementById("clientDropdown");
-        const dropdownOptions = clientDropdown.querySelectorAll(".clientOption");
-        const selectedClientInput = document.getElementById("selectedClient");
-        const dropdownButton = document.querySelector(".dropdownButton");
-        
-        dropdownOptions.forEach(option => {
-            option.addEventListener("click", function () {
-                selectedClientInput.value = this.getAttribute("data-value");
-                dropdownButton.textContent = this.getAttribute("data-name");
-                content.style.display = "none";
-
-                console.log(this.getAttribute("data-name"));
-                console.log(document.querySelector(".dropdownButton").textContent);
-                console.log(selectedClientInput.value);
-            });
-        });
-    });
+<script src="{% static 'scripts/dropdown.js' %}"></script>
+<script>
+    setUpDropdown("clientDropdown");
+    setUpDropdown("roomDropdown");
 </script>
 
 <script> // Scheduling table translator.

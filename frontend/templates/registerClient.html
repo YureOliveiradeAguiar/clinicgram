@@ -50,7 +50,7 @@
                         <div class="dropdown" id="birthDayDropdown">
                             <div class="dropdownToggle">
                                 <p class="selectedOption">dia</p>
-                                <img src="{% static 'images/icons/DownArrow.png' %}" alt="icon" class="icon"/>
+                                <span class="icon-container" data-icon="downArrow"></span>
                             </div>
                             <ul class="options" id="dayOptions">
                                 {% for d in rangeDays %}
@@ -62,7 +62,7 @@
                         <div class="dropdown" id="birthMonthDropdown">
                             <div class="dropdownToggle">
                                 <p class="selectedOption">mês</p>
-                                <img src="{% static 'images/icons/DownArrow.png' %}" alt="icon" class="icon"/>
+                                <span class="icon-container" data-icon="downArrow"></span>
                             </div>
                             <ul class="options" id="monthOptions">
                                 {% for value, name in monthNames %}
@@ -74,7 +74,7 @@
                         <div class="dropdown" id="birthYearDropdown">
                             <div class="dropdownToggle">
                                 <p class="selectedOption">ano</p>
-                                <img src="{% static 'images/icons/DownArrow.png' %}" alt="icon" class="icon"/>
+                                <span class="icon-container" data-icon="downArrow"></span>
                             </div>
                             <ul class="options" id="yearOptions">
                                 {% for y in rangeYears %}
@@ -95,20 +95,24 @@
 </body>
 </html>
 
+<script>const basePath = "{% static 'images/icons/' %}";</script>
+<script src="{% static 'scripts/loadIcons.js' %}"></script>
+
 <script src="{% static 'scripts/formatPhone.js' %}"></script>
 
-<script> // Dropdown opener-closer
+<script> //Dropdown opener-closer
     document.addEventListener('DOMContentLoaded', () => {
         const dropdowns = document.querySelectorAll('.dropdown');
-        var upArrowImageUrl = "{% static 'images/up_arrow_icon.png' %}";
-        var downArrowImageUrl = "{% static 'images/down_arrow_icon.png' %}";
+        
+        const upIconUrl = `${basePath}upArrow.svg`;
+        const downIconUrl = `${basePath}downArrow.svg`;
     
         dropdowns.forEach(dropdown => {
-            const toggle = dropdown.querySelector('.dropdownToggle');
-            const selectedOption = dropdown.querySelector('.selectedOption');
-            const optionsList = dropdown.querySelector('.options');
-            const icon = dropdown.querySelector('.icon');
-            const allOptions = dropdown.querySelectorAll('.option');
+            const toggle = dropdown.querySelector(".dropdownToggle");
+            const selectedOption = dropdown.querySelector(".selectedOption");
+            const optionsList = dropdown.querySelector(".options");
+            const iconContainer = dropdown.querySelector(".icon-container");
+            const allOptions = dropdown.querySelectorAll(".option");
 
     
             toggle.addEventListener('click', (e) => {
@@ -117,7 +121,13 @@
 
                 const isOpen = optionsList.style.display === 'block';
                 optionsList.style.display = optionsList.style.display === 'block' ? 'none' : 'block';
-                icon.src = isOpen ? downArrowImageUrl : upArrowImageUrl;
+
+                const iconUrl = isOpen ? downIconUrl : upIconUrl;
+                fetch(iconUrl)
+                    .then(response => response.text())
+                    .then(svg => {
+                        iconContainer.innerHTML = svg;
+                    });
             });
     
             allOptions.forEach(option => {
@@ -125,13 +135,25 @@
                     selectedOption.textContent = option.textContent;
                     selectedOption.setAttribute('data-value', option.getAttribute('data-value'));
                     optionsList.style.display = 'none';
-                    icon.src = downArrowImageUrl;
+
+                    fetch(downIconUrl)
+                    .then(response => response.text())
+                    .then(svg => {
+                        iconContainer.innerHTML = svg;
+                    });
                 });
             });
         });
     
         // Close dropdowns if clicking outside
         document.addEventListener('click', () => {
+            document.querySelectorAll('.icon-container').forEach(icon => {
+            fetch(downIconUrl)
+                    .then(response => response.text())
+                    .then(svg => {
+                        icon.innerHTML = svg;
+                    });
+                });
             document.querySelectorAll('.options').forEach(opt => opt.style.display = 'none');
         });
     
@@ -139,9 +161,14 @@
             document.querySelectorAll('.dropdown').forEach(dropdown => {
                 if (dropdown !== currentDropdown) {
                     const optionsList = dropdown.querySelector('.options');
-                    const icon = dropdown.querySelector('.icon');
+                    const iconContainer = dropdown.querySelector('.icon-container');
                     optionsList.style.display = 'none';
-                    icon.src = downArrowImageUrl;
+                    
+                    fetch(downIconUrl)
+                    .then(response => response.text())
+                    .then(svg => {
+                        iconContainer.innerHTML = svg;
+                    });
                 }
             });
         }
