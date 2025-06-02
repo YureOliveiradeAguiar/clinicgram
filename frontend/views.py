@@ -2,7 +2,7 @@ from calendar import month_name
 from django.shortcuts import render, redirect
 from clients.models import Client
 from clients.forms import ClientForm
-from appointments.models import Appointment, Room
+from appointments.models import Room, Appointment
 from datetime import datetime, timedelta
 from django.core.serializers import serialize
 import locale
@@ -37,6 +37,7 @@ def clientsView(request):
     clients = Client.objects.all().order_by('name')
     return render(request, "clients.html", {"Clients": clients})
 
+# for scheduling  and schedule views
 def generateScheduleData():
     hoje = datetime.today()
     dias = [hoje + timedelta(days=i) for i in range(15)]
@@ -51,6 +52,7 @@ def generateScheduleData():
     
     return dias, horarios
 
+# for scheduling view
 def generateIndexedCells(dias, horarios, appointments):
     indexedCells = []
     occupiedIndexes = set()
@@ -60,14 +62,25 @@ def generateIndexedCells(dias, horarios, appointments):
         row = []
         for dia in dias:
             diaDateTimeLocal = f"{dia.strftime('%Y-%m-%d')}T{horario}"
-            row.append({"dia": diaDateTimeLocal, "horario": horario, "index": index})
+            cell = {
+                "dia": diaDateTimeLocal,
+                "horario": horario,
+                "index": index,
+                "room_id": ''
+            }
+            # row.append({"dia": diaDateTimeLocal, "horario": horario, "index": index})
+
             for appointment in appointments:
                 if dia.date() == appointment.startTime.date() or dia.date() == appointment.endTime.date():
                     appointmentStartTime = appointment.startTime.strftime("%H:%M")
                     appointmentEndTime = appointment.endTime.strftime("%H:%M")
                     if appointmentStartTime <= horario < appointmentEndTime:
                         occupiedIndexes.add(index)
+                        cell["room_id"] = appointment.room.id
+
+            row.append(cell)
             index += 1
+        
         indexedCells.append(row)
 
     return indexedCells, list(occupiedIndexes)
@@ -78,6 +91,7 @@ def schedulingView(request):
     appointments = Appointment.objects.all()
     dias, horarios = generateScheduleData()
     indexedCells, occupiedIndexes = generateIndexedCells(dias, horarios, appointments)
+    defaultRoom = rooms.first() if rooms.exists() else ""
 
     context = {
         "Clients": clients,
@@ -85,24 +99,27 @@ def schedulingView(request):
         "dias": dias,
         "horarios": horarios,
         "indexedCells": indexedCells,
-        "occupiedIndexes": occupiedIndexes
+        "occupiedIndexes": occupiedIndexes,
+        "defaultRoom": defaultRoom,
     }
 
     return render(request, 'scheduling.html', context)
 
 def scheduleView(request):
     clients = Client.objects.all()
+    rooms = Room.objects.all()
     appointments = Appointment.objects.all()
     clientsJson = serialize('json', clients, fields=('id', 'name'))
-    appointmentsJson = serialize('json', appointments, fields=('id', 'startTime', 'endTime', 'client'))
+    roomsJson = serialize('json', rooms, fields=('id', 'name'))
+    appointmentsJson = serialize('json', appointments, fields=('id', 'client', 'startTime', 'endTime', 'room'))
 
     dias, horarios = generateScheduleData()
     indexedCells, occupiedIndexes = generateIndexedCells(dias, horarios, appointments)
 
 
-
     context = {
         "Clients": clientsJson,
+        "Rooms": roomsJson,
         "Appointments": appointmentsJson,
         "dias": dias,
         "horarios": horarios,

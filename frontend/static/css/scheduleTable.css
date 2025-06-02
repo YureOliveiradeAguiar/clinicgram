@@ -40,7 +40,8 @@ th {
     border-bottom: 1px solid var(--darkBackground);
 }
 td {
-    padding: 2px;
+    padding: 0;
+    height: 32px;
     border-bottom: 5px solid var(--darkBackground);
 }
 th:first-child{
@@ -60,17 +61,13 @@ td:first-child{
     background-color: var(--darkBackground);
     cursor: default;
 }
-.scheduleCell.occupied {
-    background-color: #5E9771;
-}
+
 .scheduleCell.selected {
-    background-color: #ff6f61;;
+    background-color: #ff6f61;
 }
 
 td, td:first-child, th, th:first-child{
     border: 1px solid var(--darkBackground);
-    
-
 }
 th, th:first-child {
     border-radius: 0 0 6px 6px;
@@ -81,6 +78,24 @@ td:first-child {
 td {
     border-radius: 6px;
     background-color: var(--lightBackground);
+}
+
+/* OCCUPIED-CELLS LOGIC */
+.scheduleCell,
+.appointment-grid {
+    overflow: hidden;
+}
+.scheduleCell.occupied {
+    background-color: #5E9771;
+}
+.appointment-grid {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+.appointment-indicator {
+    flex: 1;
 }
 
  /* SCROLL-BAR */

@@ -46,7 +46,7 @@
                 <div class="roomWrapper">
                     <p class= "dropdownLabel" for="roomDropdown">Selecione a Sala:</p>
                     <div class="dropdown" id="roomDropdown">
-                        <button type="button" class="dropdownButton">Selecione uma sala</button>
+                        <button type="button" class="dropdownButton">{{ defaultRoom.name }}</button>
                         <div class="dropdownContent">
                             <input type="text" class="searchBox" id="roomSearchBox" placeholder="Pesquisar sala...">
                             {% for room in Rooms %}
@@ -56,7 +56,7 @@
                                 <p class="dropdownNoOption">Nenhuma sala registrada</p>
                             {% endfor %}
                         </div>
-                        <input type="hidden" name="room" class="selectedOption">
+                        <input type="hidden" name="room" class="selectedOption" value="{{ defaultRoom.id }}">
                     </div>
                 </div>
 
@@ -79,7 +79,9 @@
                                             <td>{{ row.0.horario }}</td>
                                             {% for cell in row %}
                                                 <td class="scheduleCell {% if cell.index in occupiedIndexes %}occupied{% endif %}" 
-                                                    data-index="{{ cell.index }}"</td>
+                                                    data-index="{{ cell.index }}"
+                                                    {% if cell.room_id %}data-room="{{ cell.room_id }}"{% endif %}>
+                                                </td>
                                             {% endfor %}
                                         </tr>
                                     {% endfor %}
@@ -127,10 +129,17 @@
                 const firstBlockIndex = Number(firstBlock.dataset.index);
                 const secondBlockIndex = secondBlock ? Number(secondBlock.dataset.index) : null;
     
-                if (occupiedIndexes.includes(firstBlockIndex) || (secondBlock && occupiedIndexes.includes(secondBlockIndex))) {
-                    console.log("One or both blocks are occupied, not selecting.");
+                const selectedRoom = roomInput.value;
+                const firstBlockRoom = document.querySelector(`[data-index="${firstBlockIndex}"]`).dataset.room;
+                const secondBlockRoom = secondBlock ? document.querySelector(`[data-index="${secondBlockIndex}"]`).dataset.room : null;           
+                if (
+                    (firstBlockRoom === selectedRoom && occupiedIndexes.includes(firstBlockIndex)) ||
+                    (secondBlockRoom === selectedRoom && secondBlock && occupiedIndexes.includes(secondBlockIndex))
+                ) {
+                    console.log("One or both blocks are occupied in the selected room, not selecting.");
                     return;
                 }
+
                 if (!secondBlock) return;
     
                 document.querySelectorAll(".scheduleCell.selected").forEach(el => el.classList.remove("selected"));
@@ -148,6 +157,8 @@
                     }
                     return null;
                 }
+
+                // Gets the selected cells time data, formats it and passes to hidden input
                 const startDateTime = findDateTimeByIndex(indexedCells, firstBlockIndex);
                 const endDateTime = findDateTimeByIndex(indexedCells, secondBlockIndex);
                 document.getElementById("startTime").value = startDateTime;
@@ -166,8 +177,8 @@
                     minutes = minutes < 10 ? `0${minutes}` : minutes;
                     const updatedEndDateTimeStr = `${date}T${hours}:${minutes}`;
                     document.getElementById("endTime").value = updatedEndDateTimeStr;
-                }
-
+                }            
+    
                 //console.log("First Block Index:", firstBlockIndex);
                 //console.log("Second Block Index:", secondBlockIndex);
                 //console.log("startDateTime: ", document.getElementById("startTime").value);
@@ -175,4 +186,29 @@
             });
         });
     });    
+</script>
+
+<script> // Updates dinamically after selected room changes.
+    const roomDropdown = document.getElementById('roomDropdown');
+    const roomInput = roomDropdown.querySelector('.selectedOption');
+    const cells = document.querySelectorAll('.scheduleCell');
+    const occupiedIndexes = {{ occupiedIndexes|safe }};
+
+    // Update table based on selected room.
+    function updateTable() {
+        const selectedRoom = roomInput.value;
+        cells.forEach(cell => {
+            const room = cell.dataset.room;
+            const isOccupied = occupiedIndexes.includes(parseInt(cell.dataset.index));
+            cell.classList.toggle('occupied', room === selectedRoom && isOccupied);
+        });
+    }
+
+    // Add listener to each dropdownOption to update the table.
+    const observer = new MutationObserver(() => {
+        updateTable();
+    });
+    observer.observe(roomInput, { attributes: true, attributeFilter: ['value'] });
+
+    updateTable();
 </script>

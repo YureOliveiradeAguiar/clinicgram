@@ -8,7 +8,6 @@ Form {
 
 .formGroup {
     width: 100%;
-    margin-bottom: 30px;
 }
 
 Form label, .fieldLabel, Form input {

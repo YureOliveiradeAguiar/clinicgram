@@ -77,6 +77,7 @@
 
         const appointments = JSON.parse('{{ Appointments|escapejs }}');
         const clients = JSON.parse('{{ Clients|escapejs }}');
+        const rooms = JSON.parse('{{ Rooms|escapejs }}');
     
         cells.forEach(cell => {
             cell.addEventListener("click", function () {
@@ -113,6 +114,7 @@
 
                         if (clickedDateTime == startDateTime || clickedDateTime == updatedEndDateTimeStr){
                             const client = clients.find(client => client.pk === appointment.fields.client);
+                            const room = rooms.find(room => room.pk === appointment.fields.room);
                             
                             function formatDateTime(dateTimeStr) {
                                 const match = dateTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):/);
@@ -125,7 +127,8 @@
                             const formattedFields = `
                             Cliente: ${client.fields.name}<br>
                             Início: ${formatDateTime(appointment.fields.startTime)}<br>
-                            Fim: ${formatDateTime(appointment.fields.endTime)}
+                            Fim: ${formatDateTime(appointment.fields.endTime)}<br>
+                            Sala: ${room.fields.name}
                             `;
                             const appointmentId = appointment.pk;
                             if (appointmentId) {
@@ -169,11 +172,32 @@
         const numColumns = document.querySelector('tr').children.length;
         const columns = Array.from({ length: numColumns }, () => []);
 
-        // Fill columns with occupied cells based on their column index
         occupiedCells.forEach(cell => {
+            //Organizes occupiedCells array in order of the columns
             const columnIndex = parseInt(cell.cellIndex); // Get column index
             columns[columnIndex].push(cell);
+
+            // Uses the loop to iterate over all occupiedCells adding a grid to each
+            const gridContainer = document.createElement('div');
+            gridContainer.classList.add('appointment-grid');
+            cell.appendChild(gridContainer);
+            cell.style.backgroundColor = 'transparent';
         });
+
+        // Create empty color div ti the cell's .appointment-grid
+        function addIndicator(cell, color) {
+            const gridContainer = cell.querySelector('.appointment-grid');
+            if (!gridContainer) {
+                console.warn('No .appointment-grid found inside the cell');
+                return;
+            }
+
+            const div = document.createElement('div');
+            div.classList.add('appointment-indicator');
+            div.style.backgroundColor = color;
+
+            gridContainer.appendChild(div);
+        }
 
         // Now color the cells by alternating pairs across columns
         let colorIndex = 0;
@@ -184,12 +208,16 @@
 
                 // Assign a color to the current pair
                 const color = colors[colorIndex % colors.length];
+                const indicator = document.createElement('div');
                 
+                if (cell1) addIndicator(cell1, color);
+                if (cell2) addIndicator(cell2, color);
+
                 if (cell1) {
-                    cell1.style.backgroundColor = color;
+                    //cell1.style.backgroundColor = color;
                 }
                 if (cell2) {
-                    cell2.style.backgroundColor = color;
+                    //cell2.style.backgroundColor = color;
                 }
 
                 // Move to the next color for the next pair
