@@ -48,11 +48,12 @@
                             <tr>
                                 <td>{{ row.0.horario }}</td>
                                 {% for cell in row %}
-                                    <td class="scheduleCell
-                                        {% if cell.index in occupiedIndexes %}
-                                            occupied
-                                        {% endif %}"
-                                        data-index="{{ cell.index }}"></td>
+                                    <td class="scheduleCell {% if cell.index in occupiedIndexes %} occupied {% endif %}"
+                                        data-index="{{ cell.index }}"
+                                        data-time="{{ cell.horario }}"
+                                        data-day="{{ cell.dia }}"
+                                    >
+                                    </td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
@@ -75,154 +76,106 @@
         const cells = document.querySelectorAll(".scheduleCell");
         const indexedCells = {{ indexedCells|safe }};
 
+        const indicators = document.querySelectorAll(".appointment-indicator");
         const appointments = JSON.parse('{{ Appointments|escapejs }}');
+
         const clients = JSON.parse('{{ Clients|escapejs }}');
         const rooms = JSON.parse('{{ Rooms|escapejs }}');
     
-        cells.forEach(cell => {
-            cell.addEventListener("click", function () {
-                const clickedIndex = parseInt(cell.getAttribute("data-index"));
-                if (occupiedIndexes.includes(clickedIndex)) {
-                    function findDateTimeByIndex(indexedCells, targetIndex) {
-                        for (const row of indexedCells) {
-                            for (const cell of row) {
-                                if (cell.index === targetIndex) {
-                                    return cell.dia;
-                                }
-                            }
-                        }
-                        return null;
-                    }
-                    const clickedDateTime = findDateTimeByIndex(indexedCells, clickedIndex);
-                    appointments.forEach(appointment => {
-                        const startDateTime = appointment.fields.startTime.
-                            substring(0, appointment.fields.startTime.length - 4);
-                        const endDateTime = appointment.fields.endTime.
-                            substring(0, appointment.fields.endTime.length - 4);
+        indicators.forEach(indicator => {
+            indicator.addEventListener("click", function () {
+                const appointmentId = indicator.getAttribute("data-appointment-id");
+                const appointment = appointments.find(app => String(app.fields.id) === id);
 
-                        const endDateTimeStr = endDateTime;
-                        const [date, time] = endDateTimeStr.split("T");
-                        let [hours, minutes] = time.split(":").map(num => parseInt(num, 10));
-                        minutes -= 30;
-                        if (minutes < 0) {
-                            minutes += 60;
-                            hours -= 1;
-                        }
-                        hours = hours < 10 ? `0${hours}` : hours;
-                        minutes = minutes < 10 ? `0${minutes}` : minutes;
-                        const updatedEndDateTimeStr = `${date}T${hours}:${minutes}`;
+                const startDateTime = appointment.fields.startTime.slice(0, 16);
+                const endDateTime = appointment.fields.endTime.slice(0, 16);
 
-                        if (clickedDateTime == startDateTime || clickedDateTime == updatedEndDateTimeStr){
-                            const client = clients.find(client => client.pk === appointment.fields.client);
-                            const room = rooms.find(room => room.pk === appointment.fields.room);
-                            
-                            function formatDateTime(dateTimeStr) {
-                                const match = dateTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):/);
-                                if (!match) return dateTimeStr;
-                            
-                                const [, year, month, day, hours, minutes] = match;
-                                return `${day}/${month}/${year} ${hours}:${minutes}`;
-                            }
-                            
-                            const formattedFields = `
-                            Cliente: ${client.fields.name}<br>
-                            Início: ${formatDateTime(appointment.fields.startTime)}<br>
-                            Fim: ${formatDateTime(appointment.fields.endTime)}<br>
-                            Sala: ${room.fields.name}
-                            `;
-                            const appointmentId = appointment.pk;
-                            if (appointmentId) {
-                                const appointmentContent = `
-                                    <button onclick="return confirm('Tem certeza que deseja excluir essa consulta?');"
-                                        type="submit" class="removeButton">Excluir Consulta</button>
-                                `;
-                                document.getElementById("appointmentInfo").innerHTML = formattedFields;
-                                document.getElementById("deleteFormContent").innerHTML = appointmentContent;
-                                
-                                const deleteForm = document.getElementById("deleteAppointmentForm");
-                                deleteForm.action = `/appointments/deleteAppointment/${appointmentId}/`;
-                            }
-                        }
-                    });
+                const client = clients.find(client => client.pk === appointment.fields.client);
+                const room = rooms.find(room => room.pk === appointment.fields.room);
+
+                const formattedFields = `
+                Cliente: ${client.fields.name}<br>
+                Início: ${appointment.fields.startTime}<br>
+                Fim: ${appointment.fields.endTime}<br>
+                Sala: ${room.fields.name}
+                `;
+
+                const appId = appointment.pk;
+                if (appId) {
+                    const appointmentContent = `
+                        <button onclick="return confirm('Tem certeza que deseja excluir essa consulta?');"
+                            type="submit" class="removeButton">Excluir Consulta</button>
+                    `;
+                    document.getElementById("appointmentInfo").innerHTML = formattedFields;
+                    document.getElementById("deleteFormContent").innerHTML = appointmentContent;
+                    
+                    const deleteForm = document.getElementById("deleteAppointmentForm");
+                    deleteForm.action = `/appointments/deleteAppointment/${appointmentId}/`;
                 }
             });
         });
     });
 </script>
 
-<script> // Dynamically coloring cells by column, pairing them across columns
+<script> // Dynamically coloring cells
     document.addEventListener("DOMContentLoaded", function() {
-        const occupiedCells = document.querySelectorAll('.scheduleCell.occupied');
-        
-        // Define a set of colors
-        const colors = [
-            "#ffb3b3", // Light Red
-            "#b3ffb3", // Light Green
-            "#b3d9ff", // Light Blue
-            "#ffffb3", // Light Yellow
-            "#e6b3ff", // Light Purple
-            "#d9d9b3", // Light Khaki
-            "#ffb3d9", // Light Pink
-            "#ccccff", // Light Lavender
-            "#b3ffb3", // Light Lime
-            "#ff9999"  // Light Coral
-        ];
+        const appointments = JSON.parse('{{ Appointments|escapejs }}');
+        const colors = [ "#ffb3b3", "#b3ffb3", "#b3d9ff", "#ffffb3",
+            "#e6b3ff", "#d9d9b3", "#ffb3d9", "#ccccff", "#b3ffb3", "#ff9999"];
+        const cells = document.querySelectorAll(".scheduleCell");
 
-        // Create a 2D array to store columns
-        const numColumns = document.querySelector('tr').children.length;
-        const columns = Array.from({ length: numColumns }, () => []);
-
-        occupiedCells.forEach(cell => {
-            //Organizes occupiedCells array in order of the columns
-            const columnIndex = parseInt(cell.cellIndex); // Get column index
-            columns[columnIndex].push(cell);
-
-            // Uses the loop to iterate over all occupiedCells adding a grid to each
-            const gridContainer = document.createElement('div');
-            gridContainer.classList.add('appointment-grid');
-            cell.appendChild(gridContainer);
-            cell.style.backgroundColor = 'transparent';
+        cells.forEach(cell => {
+            const oldIndicators = cell.querySelectorAll('.indicator');
+            oldIndicators.forEach(ind => ind.remove());
         });
 
-        // Create empty color div ti the cell's .appointment-grid
-        function addIndicator(cell, color) {
-            const gridContainer = cell.querySelector('.appointment-grid');
-            if (!gridContainer) {
-                console.warn('No .appointment-grid found inside the cell');
-                return;
-            }
+        // For each appointment, find cells that match its time range and add indicator
+        appointments.forEach((appointment, i) => {
+            const color = colors[i % colors.length];
 
-            const div = document.createElement('div');
-            div.classList.add('appointment-indicator');
-            div.style.backgroundColor = color;
+            const startDateTime = appointment.fields.startTime.slice(0, 16);
+            const endDateTime = appointment.fields.endTime.slice(0, 16);
 
-            gridContainer.appendChild(div);
-        }
-
-        // Now color the cells by alternating pairs across columns
-        let colorIndex = 0;
-        columns.forEach(column => {
-            for (let i = 0; i < column.length; i += 2) {
-                const cell1 = column[i];
-                const cell2 = column[i + 1];
-
-                // Assign a color to the current pair
-                const color = colors[colorIndex % colors.length];
-                const indicator = document.createElement('div');
-                
-                if (cell1) addIndicator(cell1, color);
-                if (cell2) addIndicator(cell2, color);
-
-                if (cell1) {
-                    //cell1.style.backgroundColor = color;
+            function subtract30MinFromString(dateTimeStr) {
+                const [date, time] = dateTimeStr.split('T');
+                let [hour, minute] = time.split(':').map(Number);
+                minute -= 30;
+                if (minute < 0) {
+                    minute += 60;
+                    hour -= 1;
+                    if (hour < 0) {
+                        hour = 23;
+                    }
                 }
-                if (cell2) {
-                    //cell2.style.backgroundColor = color;
-                }
-
-                // Move to the next color for the next pair
-                colorIndex++;
+                const pad = n => n.toString().padStart(2, '0');
+                return `${date}T${pad(hour)}:${pad(minute)}`;
             }
+            const formattedEndDateTime = subtract30MinFromString(endDateTime);
+
+            cells.forEach(cell => {
+                const cellDateTime = cell.getAttribute('data-day');
+
+                if (cellDateTime >= startDateTime && cellDateTime <= formattedEndDateTime) {
+                    addIndicator(cell, color, i);
+                }
+            });
         });
     });
+
+    // Create empty color div in the cell's appointment-grid class element.
+    function addIndicator(cell, color, appointmentID) {
+        let gridContainer = cell.querySelector('.appointment-grid');
+
+        if (!gridContainer) {
+            gridContainer = document.createElement("div");
+            gridContainer.classList.add("appointment-grid");
+            cell.appendChild(gridContainer);
+        }
+        const div = document.createElement('div');
+        div.classList.add('appointment-indicator');
+        div.dataset.appointmentId = appointmentID;
+        div.style.backgroundColor = color;
+
+        gridContainer.appendChild(div);
+    }
 </script>
