@@ -70,59 +70,18 @@
 </body>
 </html>
 
-<script> // Schedule table translator.
-    document.addEventListener("DOMContentLoaded", function () {
-        const occupiedIndexes = {{ occupiedIndexes|safe }};
-        const cells = document.querySelectorAll(".scheduleCell");
-        const indexedCells = {{ indexedCells|safe }};
-
-        const indicators = document.querySelectorAll(".appointment-indicator");
-        const appointments = JSON.parse('{{ Appointments|escapejs }}');
-
-        const clients = JSON.parse('{{ Clients|escapejs }}');
-        const rooms = JSON.parse('{{ Rooms|escapejs }}');
-    
-        indicators.forEach(indicator => {
-            indicator.addEventListener("click", function () {
-                const appointmentId = indicator.getAttribute("data-appointment-id");
-                const appointment = appointments.find(app => String(app.fields.id) === id);
-
-                const startDateTime = appointment.fields.startTime.slice(0, 16);
-                const endDateTime = appointment.fields.endTime.slice(0, 16);
-
-                const client = clients.find(client => client.pk === appointment.fields.client);
-                const room = rooms.find(room => room.pk === appointment.fields.room);
-
-                const formattedFields = `
-                Cliente: ${client.fields.name}<br>
-                Início: ${appointment.fields.startTime}<br>
-                Fim: ${appointment.fields.endTime}<br>
-                Sala: ${room.fields.name}
-                `;
-
-                const appId = appointment.pk;
-                if (appId) {
-                    const appointmentContent = `
-                        <button onclick="return confirm('Tem certeza que deseja excluir essa consulta?');"
-                            type="submit" class="removeButton">Excluir Consulta</button>
-                    `;
-                    document.getElementById("appointmentInfo").innerHTML = formattedFields;
-                    document.getElementById("deleteFormContent").innerHTML = appointmentContent;
-                    
-                    const deleteForm = document.getElementById("deleteAppointmentForm");
-                    deleteForm.action = `/appointments/deleteAppointment/${appointmentId}/`;
-                }
-            });
-        });
-    });
-</script>
-
 <script> // Dynamically coloring cells
     document.addEventListener("DOMContentLoaded", function() {
-        const appointments = JSON.parse('{{ Appointments|escapejs }}');
-        const colors = [ "#ffb3b3", "#b3ffb3", "#b3d9ff", "#ffffb3",
-            "#e6b3ff", "#d9d9b3", "#ffb3d9", "#ccccff", "#b3ffb3", "#ff9999"];
+        const colors = ["#f4a6a6", "#a6f4a6", "#a6c7f4", "#f4f4a6",
+          "#dba6f4", "#e0e0a6", "#f4a6c3", "#b6b6f4", "#a6f4dd", "#f4a6b8"];
         const cells = document.querySelectorAll(".scheduleCell");
+
+        const occupiedIndexes = {{ occupiedIndexes|safe }};
+        const indexedCells = {{ indexedCells|safe }};
+        const clients = JSON.parse('{{ Clients|escapejs }}');
+        const rooms = JSON.parse('{{ Rooms|escapejs }}');
+        const appointments = JSON.parse('{{ Appointments|escapejs }}');
+    
 
         cells.forEach(cell => {
             const oldIndicators = cell.querySelectorAll('.indicator');
@@ -132,9 +91,9 @@
         // For each appointment, find cells that match its time range and add indicator
         appointments.forEach((appointment, i) => {
             const color = colors[i % colors.length];
-
             const startDateTime = appointment.fields.startTime.slice(0, 16);
             const endDateTime = appointment.fields.endTime.slice(0, 16);
+            const appointmentId = appointment.pk;
 
             function subtract30MinFromString(dateTimeStr) {
                 const [date, time] = dateTimeStr.split('T');
@@ -156,7 +115,39 @@
                 const cellDateTime = cell.getAttribute('data-day');
 
                 if (cellDateTime >= startDateTime && cellDateTime <= formattedEndDateTime) {
-                    addIndicator(cell, color, i);
+                    addIndicator(cell, color, appointmentId);
+                }
+            });
+        });
+
+        // Schedule table translator.
+        const indicators = document.querySelectorAll(".appointment-indicator");
+        indicators.forEach(indicator => {
+            indicator.addEventListener("click", function () {
+                const appointmentId = indicator.getAttribute("data-appointment-id");
+                const appointment = appointments.find(app => String(app.pk) === appointmentId);
+                const startDateTime = appointment.fields.startTime.slice(0, 16);
+                const endDateTime = appointment.fields.endTime.slice(0, 16);
+                const client = clients.find(client => client.pk === appointment.fields.client);
+                const room = rooms.find(room => room.pk === appointment.fields.room);
+                const formattedFields = `
+                Cliente: ${client.fields.name}<br>
+                Início: ${formatDateTime(startDateTime)}<br>
+                Fim: ${formatDateTime(endDateTime)}<br>
+                Sala: ${room.fields.name}
+                `;
+
+                const appId = appointment.pk;
+                if (appId) {
+                    const appointmentContent = `
+                        <button onclick="return confirm('Tem certeza que deseja excluir essa consulta?');"
+                            type="submit" class="removeButton">Excluir Consulta</button>
+                    `;
+                    document.getElementById("appointmentInfo").innerHTML = formattedFields;
+                    document.getElementById("deleteFormContent").innerHTML = appointmentContent;
+                    
+                    const deleteForm = document.getElementById("deleteAppointmentForm");
+                    deleteForm.action = `/appointments/deleteAppointment/${appointmentId}/`;
                 }
             });
         });
@@ -178,4 +169,13 @@
 
         gridContainer.appendChild(div);
     }
+
+    function formatDateTime(dateTime) {
+    const date = new Date(dateTime);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month} - ${hours}h${minutes}`;
+}
 </script>

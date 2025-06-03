@@ -85,9 +85,6 @@ td {
 .appointment-grid {
     overflow: hidden;
 }
-.scheduleCell.occupied {
-    background-color: #5E9771;
-}
 .appointment-grid {
     display: flex;
     flex-direction: row;
