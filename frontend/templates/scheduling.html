@@ -80,7 +80,7 @@
                                             {% for cell in row %}
                                                 <td class="scheduleCell {% if cell.index in occupiedIndexes %}occupied{% endif %}" 
                                                     data-index="{{ cell.index }}"
-                                                    {% if cell.room_id %}data-room="{{ cell.room_id }}"{% endif %}>
+                                                    data-day="{{ cell.dia }}"
                                                 </td>
                                             {% endfor %}
                                         </tr>
@@ -110,11 +110,13 @@
     setUpDropdown("roomDropdown");
 </script>
 
-<script> // Scheduling table translator.
+<script> // Scheduling table cell selection translator.
     document.addEventListener("DOMContentLoaded", function () {
+        const roomDropdown = document.getElementById('roomDropdown');
+        const roomInput = roomDropdown.querySelector('.selectedOption');
+
         const occupiedIndexes = {{ occupiedIndexes|safe }};
         const cells = document.querySelectorAll(".scheduleCell");
-
         const indexedCells = {{ indexedCells|safe }};
     
         cells.forEach(cell => {
@@ -181,6 +183,10 @@
     
                 //console.log("First Block Index:", firstBlockIndex);
                 //console.log("Second Block Index:", secondBlockIndex);
+
+                //console.log("First Block Room:", firstBlockRoom)
+                //console.log("Second Block Room:", secondBlockRoom);
+
                 //console.log("startDateTime: ", document.getElementById("startTime").value);
                 //console.log("endDateTime: ", document.getElementById("endTime").value);
             });
@@ -188,27 +194,74 @@
     });    
 </script>
 
-<script> // Updates dinamically after selected room changes.
-    const roomDropdown = document.getElementById('roomDropdown');
-    const roomInput = roomDropdown.querySelector('.selectedOption');
-    const cells = document.querySelectorAll('.scheduleCell');
-    const occupiedIndexes = {{ occupiedIndexes|safe }};
+<script>
+    // For each appointment, find cells that match its time range and assigns cell to that appointment id.
+    document.addEventListener("DOMContentLoaded", function() {
+        const roomDropdown = document.getElementById('roomDropdown');
+        const roomInput = roomDropdown.querySelector('.selectedOption');
 
-    // Update table based on selected room.
-    function updateTable() {
-        const selectedRoom = roomInput.value;
-        cells.forEach(cell => {
-            const room = cell.dataset.room;
-            const isOccupied = occupiedIndexes.includes(parseInt(cell.dataset.index));
-            cell.classList.toggle('occupied', room === selectedRoom && isOccupied);
+        const cells = document.querySelectorAll(".scheduleCell");
+        const occupiedIndexes = {{ occupiedIndexes|safe }};
+
+        const appointments = JSON.parse('{{ Appointments|escapejs }}');
+
+        appointments.forEach((appointment) => {
+            const startDateTime = appointment.fields.startTime.slice(0, 16);
+            const endDateTime = appointment.fields.endTime.slice(0, 16);
+            const formattedEndDateTime = subtract30MinFromString(endDateTime);
+            const roomId = appointment.fields.room;
+
+            cells.forEach(cell => {
+                const cellDateTime = cell.getAttribute('data-day');
+                if (cellDateTime >= startDateTime && cellDateTime <= formattedEndDateTime) {
+                    let roomList = []; // Saving a JSON of corresponding rooms in the cells dataset.
+                    try {
+                        if (cell.dataset.room) {
+                            roomList = JSON.parse(cell.dataset.room);
+                        }
+                    } catch (e) {
+                        console.warn("Invalid JSON in data-room:", cell.dataset.room);
+                        roomList = [];
+                    }
+                    if (!roomList.includes(roomId)) {
+                        roomList.push(roomId);
+                    }
+                    cell.dataset.room = JSON.stringify(roomList);
+                }
+            });
         });
-    }
 
-    // Add listener to each dropdownOption to update the table.
-    const observer = new MutationObserver(() => {
         updateTable();
-    });
-    observer.observe(roomInput, { attributes: true, attributeFilter: ['value'] });
 
-    updateTable();
+        // Updates dinamically after selected room changes.
+        function updateTable() { // Update table based on selected room.
+            const selectedRoom = roomInput.value;
+            cells.forEach(cell => {
+                const roomList = JSON.parse(cell.getAttribute('data-room') || "[]");
+                const roomListStrings = roomList.map(String);
+                cell.classList.toggle('occupied', roomListStrings.includes(selectedRoom));
+            });
+        }
+        // Add listener to each dropdownOption to update the table.
+        const observer = new MutationObserver(() => {
+            updateTable();
+        });
+        observer.observe(roomInput, { attributes: true, attributeFilter: ['value'] });
+    });
+
+
+    function subtract30MinFromString(dateTimeStr) {
+        const [date, time] = dateTimeStr.split('T');
+        let [hour, minute] = time.split(':').map(Number);
+        minute -= 30;
+        if (minute < 0) {
+            minute += 60;
+            hour -= 1;
+            if (hour < 0) {
+                hour = 23;
+            }
+        }
+        const pad = n => n.toString().padStart(2, '0');
+        return `${date}T${pad(hour)}:${pad(minute)}`;
+    }
 </script>

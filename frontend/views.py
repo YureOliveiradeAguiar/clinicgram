@@ -43,6 +43,9 @@ def schedulingView(request):
     clients = Client.objects.all().order_by('name')
     rooms = Room.objects.all().order_by('name')
     appointments = Appointment.objects.all()
+
+    appointmentsJson = serialize('json', appointments, fields=('id', 'client', 'startTime', 'endTime', 'room'))
+
     dias, horarios = generateScheduleData()
     indexedCells, occupiedIndexes = generateIndexedCells(dias, horarios, appointments)
     defaultRoom = rooms.first() if rooms.exists() else ""
@@ -50,6 +53,7 @@ def schedulingView(request):
     context = {
         "Clients": clients,
         "Rooms": rooms,
+        "Appointments": appointmentsJson,
         "dias": dias,
         "horarios": horarios,
         "indexedCells": indexedCells,

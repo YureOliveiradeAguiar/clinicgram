@@ -83,7 +83,7 @@ Form {
 
 /* SCHEDULE SECTION */
 .scheduleCell.occupied {
-    background-color: #5E9771;
+    background-color: var(--primary);
 }
 .scheduleSection{
     width: 100%;
