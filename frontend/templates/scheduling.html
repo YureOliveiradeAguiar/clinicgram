@@ -8,8 +8,9 @@
     <title>Agendamento de Consultas</title>
     <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/scheduleTable.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dropdowns.css' %}">
     <link rel="stylesheet" href="{% static 'css/scheduling.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
@@ -23,7 +24,7 @@
 
     <main>
         <h2>Agendar Consulta</h2>
-        <section class="schedulingSection">
+        <section class="mainContentSection">
             <form action="{% url 'scheduleAppointment' %}" method="POST">
                 {% csrf_token %}
                 <div class="clientWrapper">
@@ -46,7 +47,7 @@
                 <div class="roomWrapper">
                     <p class= "dropdownLabel" for="roomDropdown">Selecione a Sala:</p>
                     <div class="dropdown" id="roomDropdown">
-                        <button type="button" class="dropdownButton">{{ defaultRoom.name }}</button>
+                        <button type="button" class="dropdownButton">{{ defaultRoom.name|default:"Selecione uma sala" }}</button>
                         <div class="dropdownContent">
                             <input type="text" class="searchBox" id="roomSearchBox" placeholder="Pesquisar sala...">
                             {% for room in Rooms %}
@@ -95,8 +96,8 @@
                 <input type="hidden" name="endTime" id="endTime">
 
                 <div class="buttonSection">
-                    <button type="submit" id="confirmButton">Agendar</button>
-                    <button type="button" id="cancelButton" onclick="window.location.href='{% url 'dashboard' %}'">Cancelar</button>
+                    <button type="submit" id="positiveButton">Agendar</button>
+                    <button type="button" id="negativeButton" onclick="window.location.href='{% url 'dashboard' %}'">Cancelar</button>
                 </div>
             </form>
         </section>

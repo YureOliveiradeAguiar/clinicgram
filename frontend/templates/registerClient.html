@@ -24,23 +24,27 @@
     </header>
 
     <main>
-        <section class="mainCard">
+        <section class="mainContentWrapper">
             <h2>Registrar Cliente</h2>
             <form method="POST" class="customForm">
                 {% csrf_token %}
-                <section class="formGroup">
+                <div class="formGroup">
                     <label for="{{ form.name.id_for_label }}">Nome:</label>
                     {{ form.name }}
                     {% if form.name.errors %}
                         <div class="error">{{ form.name.errors }}</div>
                     {% endif %}
-      
+                </div class="formGroup">
+
+                <div class="formGroup">
                     <label for="{{ form.whatsapp.id_for_label }}">WhatsApp:</label>
                     {{ form.whatsapp }}
                     {% if form.whatsapp.errors %}
                         <div class="error">{{ form.whatsapp.errors }}</div>
                     {% endif %}
-    
+                </div class="formGroup">
+                
+                <div class="formGroup">
                     <p id="dobLabel" class="fieldLabel">Data de Nascimento:</p>
                     {{ form.dateOfBirth }}
                     {% if form.dateOfBirth.errors %}
@@ -83,7 +87,7 @@
                             </ul>
                         </div>
                     </div>
-                </section>
+                </div>
 
                 <section class="formButtons">
                     <button type="submit">Registrar</button>

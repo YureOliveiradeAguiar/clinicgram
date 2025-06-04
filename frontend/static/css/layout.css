@@ -2,6 +2,30 @@ section {
     max-width: 1000px;
 }
 
+.mainContentSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 300px;
+    max-width: 600px;
+    gap: 15px;
+}
+
+@media (min-width: 375px) {
+    .mainContentWrapper {
+        padding: 12px 24px;
+        background-color: white;
+        
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}
+
+Form {
+    width: 100%;
+}
+
 /* BUTTONS */
 button,
 input[type="submit"] {
@@ -26,19 +50,19 @@ input[type="submit"]:hover {
     background-color: #195154;
 }
 
-#confirmButton {
+#positiveButton {
     background-color: #4cb050;
 }
 
-#confirmButton:hover {
+#positiveButton:hover {
     background-color: #397f3c;
 }
 
-#cancelButton {
+#negativeButton {
     background-color: #fe5721;
 }
 
-#cancelButton:hover {
+#negativeButton:hover {
     background-color: #be4219;
 }
 

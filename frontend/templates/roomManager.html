@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Salas</title>
+    <link rel="icon" type="image/png" href="{%static 'images/Favicon.png'%}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dropdowns.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/roomManager.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="headerTop">
+            <div class="headerTitle">
+                <h1>Clinicgram</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="mainContentWrapper">
+            <section class="mainContentSection">
+                <h2>Gerenciar Salas</h2>
+                <form action="{% url 'registerRoom' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="formGroup">
+                        <h3>Registrar uma Sala</h3>
+                        <label for="{{ form.name.id_for_label }}">Escolha um novo nome:</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="error">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" id="positiveButton">Registrar</button>
+                </form>
+
+                <form action="{% url 'deleteRoom' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="roomWrapper">
+                        <h3>Excluir uma sala</h3>
+                        <p class= "dropdownLabel" for="roomDropdown">Selecione uma sala:</p>
+                        <div class="dropdown" id="roomDropdown">
+                            <button type="button" class="dropdownButton">Selecione uma sala</button>
+                            <div class="dropdownContent">
+                                <input type="text" class="searchBox" id="clientSearchBox" placeholder="Pesquisar sala...">
+                                {% for room in Rooms %}
+                                    <div class="dropdownOption" data-value="{{ room.id }}"
+                                        data-name="{{ room.name }}">{{ room.name }}</div>
+                                {% empty %}
+                                    <p class="dropdownNoOption">Nenhuma sala registrada</p>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="roomId" class="selectedOption">
+                        </div>
+                    </div>
+                    <button type="submit" id="negativeButton">Excluir</button>
+                </form>
+
+                <div class="buttonSection">
+                    <a href="{% url 'dashboard' %}"><button>Voltar</button></a>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+</html>
+
+<script src="{% static 'scripts/dropdown.js' %}"></script>
+<script>
+    setUpDropdown("roomDropdown");
+</script>

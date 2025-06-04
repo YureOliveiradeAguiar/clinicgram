@@ -1,8 +1,6 @@
 from django.db import models
 from clients.models import Client
-
-class Room(models.Model):  
-    name = models.CharField(max_length=10, unique=True)
+from rooms.models import Room
 
 class Appointment(models.Model):  
     client = models.ForeignKey(Client, on_delete=models.CASCADE)

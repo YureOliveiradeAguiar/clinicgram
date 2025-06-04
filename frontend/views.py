@@ -3,8 +3,12 @@ from django.shortcuts import render, redirect
 
 from clients.models import Client
 from clients.forms import ClientForm
-from appointments.models import Room, Appointment
+
+from appointments.models import Appointment
 from appointments.utils import generateScheduleData, generateIndexedCells
+
+from rooms.models import Room
+from rooms.forms import RoomForm
 
 from django.core.serializers import serialize
 import locale
@@ -86,3 +90,19 @@ def scheduleView(request):
     }
 
     return render(request, "schedule.html", context)
+
+def roomManagerView(request):
+    rooms = Room.objects.all().order_by('name')
+
+    if request.method == "POST":
+        form = RoomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('clients')
+    else:
+        form = RoomForm()
+    context = {
+        "Rooms": rooms,
+        'form': form
+    }
+    return render(request, 'roomManager.html', context)
