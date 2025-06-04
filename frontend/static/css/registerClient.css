@@ -83,8 +83,13 @@ h2 {
     fill: var(--font);
 }
 
+Form, .formButtons {
+    gap: 15px;
+    margin: 10px 0;
+}
+
 .formButtons {
     display: flex;
     flex-direction: column;
-    gap: 8px
+    gap: 10px;
 }

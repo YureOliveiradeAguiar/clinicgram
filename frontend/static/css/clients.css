@@ -3,9 +3,7 @@
     flex-direction: column;
     align-items: center;
 
-    scroll-snap-type: y proximity;
     overflow-y: auto;
-    scroll-behavior: smooth;
 
     width: 100%;
     margin-top: 10px;
@@ -14,9 +12,6 @@
 }
 
 .clientCard {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-
     border-radius: 5px;
     width: 95%;
     margin: 5px;

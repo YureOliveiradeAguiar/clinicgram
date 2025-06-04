@@ -48,6 +48,10 @@
                     <span class="icon-container" data-icon="schedule"></span>
                     <span class="label">Agenda</span>
                 </a>
+                <a href="{% url 'schedule' %}">
+                    <span class="icon-container" data-icon="rooms"></span>
+                    <span class="label">Gerenciar Salas</span>
+                </a>
                 <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit">

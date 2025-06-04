@@ -3,6 +3,10 @@ html {
   scroll-padding-top: 20vh;
 }
 
+main section {
+    margin-bottom: 40px;
+}
+
 /* HERO */
 .hero {
     display: flex;
