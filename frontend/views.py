@@ -19,7 +19,7 @@ def home(request):
     return render(request, "index.html")
 
 def dashboardView(request):
-    return render(request, "userDashboard.html")
+    return render(request, "dashboard.html")
 
 def registerClientView(request):
     if request.method == "POST":
