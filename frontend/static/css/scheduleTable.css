@@ -19,6 +19,7 @@ table {
     border-collapse: separate;
     background-color: var(--darkBackground);
 }
+
 thead {
     position: sticky;
     top: 0;
@@ -27,11 +28,13 @@ thead {
     background-color: var(--darkBackground);
     height: 45px;
 }
+
 th, td {
     border-left: none;
     border-right: 5px solid var(--darkBackground);
     text-align: center;
     padding: 8px;
+    min-width: 70px;
 }
 th {
     position: sticky;
@@ -85,13 +88,16 @@ td {
 .appointment-grid {
     overflow: hidden;
 }
+
 .appointment-grid {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
 }
+
 .appointment-indicator {
+    min-width: 30px;
     flex: 1;
 }
 

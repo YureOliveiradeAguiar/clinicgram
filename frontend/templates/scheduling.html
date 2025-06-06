@@ -132,12 +132,18 @@
                 const firstBlockIndex = Number(firstBlock.dataset.index);
                 const secondBlockIndex = secondBlock ? Number(secondBlock.dataset.index) : null;
     
-                const selectedRoom = roomInput.value;
-                const firstBlockRoom = document.querySelector(`[data-index="${firstBlockIndex}"]`).dataset.room;
-                const secondBlockRoom = secondBlock ? document.querySelector(`[data-index="${secondBlockIndex}"]`).dataset.room : null;           
+                const selectedRoom = roomInput.value; // By the dropdown, not this table.
+
+                const firstBlockRooms = document.querySelector(`[data-index="${firstBlockIndex}"]`).dataset.room;
+                const secondBlockRooms = secondBlock ? document.querySelector(`[data-index="${secondBlockIndex}"]`).dataset.room : null;
+
+                //console.log(selectedRoom);
+                //console.log("First Block Room:", firstBlockRooms)
+                //console.log("Second Block Room:", secondBlockRooms);
+                
                 if (
-                    (firstBlockRoom === selectedRoom && occupiedIndexes.includes(firstBlockIndex)) ||
-                    (secondBlockRoom === selectedRoom && secondBlock && occupiedIndexes.includes(secondBlockIndex))
+                    (firstBlockRooms && firstBlockRooms.includes(selectedRoom)) ||
+                    (secondBlockRooms && secondBlockRooms.includes(selectedRoom))
                 ) {
                     console.log("One or both blocks are occupied in the selected room, not selecting.");
                     return;
@@ -184,9 +190,6 @@
     
                 //console.log("First Block Index:", firstBlockIndex);
                 //console.log("Second Block Index:", secondBlockIndex);
-
-                //console.log("First Block Room:", firstBlockRoom)
-                //console.log("Second Block Room:", secondBlockRoom);
 
                 //console.log("startDateTime: ", document.getElementById("startTime").value);
                 //console.log("endDateTime: ", document.getElementById("endTime").value);

@@ -31,7 +31,7 @@
                         <h3>{{ client.name }}</h3>
                         <div class="cardButtonSection">
                             <a href="{% url 'scheduling' %}"><button class="scheduleButton">Agendar</button></a>
-                            <button class="expandButton" style="background-image: url('{% static 'images/down_arrow_icon.png' %}');"></button>
+                            <span class="icon-container" data-icon="downArrow"></span>
                         </div>
                     </div>
                     <div class="cardBody">
@@ -56,8 +56,6 @@
 </body>
 </html>
 
-<script src="{% static 'scripts/expandCard.js' %}"></script>
-<script>
-    var upArrowImageUrl = "{% static 'images/up_arrow_icon.png' %}";
-    var downArrowImageUrl = "{% static 'images/down_arrow_icon.png' %}";
-</script>
+<script>const basePath = "{% static 'images/icons/' %}";</script>
+<script src="{% static 'scripts/loadIcons.js' %}"></script>
+<script src="{% static 'scripts/expandClient.js' %}"></script>

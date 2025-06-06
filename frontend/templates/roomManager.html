@@ -41,7 +41,7 @@
                     <button type="submit" id="positiveButton">Registrar</button>
                 </form>
 
-                <form action="{% url 'deleteRoom' %}" method="POST">
+                <form action="{% url 'deleteRoom' %}" method="POST" onsubmit="return confirmDeletion()">
                     {% csrf_token %}
                     <div class="roomWrapper">
                         <h3>Excluir uma sala</h3>
@@ -75,4 +75,9 @@
 <script src="{% static 'scripts/dropdown.js' %}"></script>
 <script>
     setUpDropdown("roomDropdown");
+</script>
+<script>
+    function confirmDeletion() {
+        return confirm("Tem certeza que deseja excluir essa sala?");
+    }
 </script>

@@ -50,7 +50,7 @@
                     <span class="icon-container" data-icon="rooms"></span>
                     <span class="label">Gerenciar Salas</span>
                 </a>
-                <form action="{% url 'logout' %}" method="post">
+                <form action="{% url 'logout' %}" method="post" onsubmit="return confirmLogout()">
                     {% csrf_token %}
                     <button type="submit">
                         <span class="icon-container" data-icon="logOut"></span>
@@ -64,4 +64,8 @@
 
 <script>const basePath = "{% static 'images/icons/' %}";</script>
 <script src="{% static 'scripts/loadIcons.js' %}"></script>
-<script>console.log(window.innerWidth + ' x ' + window.innerHeight);</script>
+<script>
+    function confirmLogout() {
+        return confirm("Tem certeza que deseja sair?");
+    }
+</script>

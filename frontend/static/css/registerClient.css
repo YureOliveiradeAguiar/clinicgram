@@ -60,15 +60,6 @@
     display: block;
 }
 
-.icon-container, .icon-container svg {
-    width: 24px;
-    height: 24px;
-}
-.icon-container svg {
-    stroke: var(--font);
-    fill: var(--font);
-}
-
 .formButtons {
     gap: 15px;
     margin: 10px 0;

@@ -142,6 +142,17 @@ input[type="submit"]:hover {
     display: block;
 }
 
+/* SVGs */
+.icon-container, .icon-container svg {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-container svg {
+    stroke: var(--font);
+    fill: var(--font);
+}
+
 /* SCROLL-BAR */
 ::-webkit-scrollbar {
     width: 12px;
