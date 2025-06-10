@@ -11,16 +11,21 @@ from rooms.models import Room
 from rooms.forms import RoomForm
 
 from django.core.serializers import serialize
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 import locale
 
 locale.setlocale(locale.LC_TIME, 'pt_BR')
 
 def home(request):
+    logout(request)
     return render(request, "index.html")
 
+@login_required
 def dashboardView(request):
     return render(request, "dashboard.html")
 
+@login_required
 def registerClientView(request):
     if request.method == "POST":
         form = ClientForm(request.POST)
@@ -39,10 +44,12 @@ def registerClientView(request):
     }
     return render(request, 'registerClient.html', context)
 
+@login_required
 def clientsView(request):
     clients = Client.objects.all().order_by('name')
     return render(request, "clients.html", {"Clients": clients})
 
+@login_required
 def schedulingView(request):
     clients = Client.objects.all().order_by('name')
     rooms = Room.objects.all().order_by('name')
@@ -67,6 +74,7 @@ def schedulingView(request):
 
     return render(request, 'scheduling.html', context)
 
+@login_required
 def scheduleView(request):
     clients = Client.objects.all()
     rooms = Room.objects.all()
@@ -92,6 +100,7 @@ def scheduleView(request):
 
     return render(request, "schedule.html", context)
 
+@login_required
 def roomManagerView(request):
     rooms = Room.objects.all().order_by('name')
 
