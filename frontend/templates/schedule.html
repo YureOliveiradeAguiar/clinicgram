@@ -72,8 +72,11 @@
 
 <script> // Dynamically coloring cells
     document.addEventListener("DOMContentLoaded", function() {
-        const colors = ["#f4a6a6", "#a6f4a6", "#a6c7f4", "#f4f4a6",
-          "#dba6f4", "#e0e0a6", "#f4a6c3", "#b6b6f4", "#a6f4dd", "#f4a6b8"];
+        const colors = [
+          "#FF5733", "#2ECC71", "#3498DB", "#F1C40F",
+          "#9B59B6", "#E67E22", "#1ABC9C", "#FF69B4",
+          "#8B4513", "#34495E"
+        ];
         const cells = document.querySelectorAll(".scheduleCell");
 
         const occupiedIndexes = {{ occupiedIndexes|safe }};

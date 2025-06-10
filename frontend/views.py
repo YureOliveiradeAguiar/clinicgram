@@ -70,7 +70,8 @@ def schedulingView(request):
 def scheduleView(request):
     clients = Client.objects.all()
     rooms = Room.objects.all()
-    appointments = Appointment.objects.all()
+    appointments = Appointment.objects.all().order_by('startTime')
+    
     clientsJson = serialize('json', clients, fields=('id', 'name'))
     roomsJson = serialize('json', rooms, fields=('id', 'name'))
     appointmentsJson = serialize('json', appointments, fields=('id', 'client', 'startTime', 'endTime', 'room'))

@@ -28,23 +28,25 @@
         <section class="mainContentWrapper">
             <section class="mainContentSection">
                 <h2>Gerenciar Salas</h2>
-                <form action="{% url 'registerRoom' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="formGroup">
+                    <form action="{% url 'registerRoom' %}" method="POST">
+                        {% csrf_token %}
                         <h3>Registrar uma Sala</h3>
-                        <label for="{{ form.name.id_for_label }}">Escolha um novo nome:</label>
-                        {{ form.name }}
-                        {% if form.name.errors %}
-                            <div class="error">{{ form.name.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <button type="submit" id="positiveButton">Registrar</button>
-                </form>
+                        <div class="insideWrapper">
+                            <div class="formGroup">
+                                <label for="{{ form.name.id_for_label }}">Escolha um novo nome:</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="error">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <button type="submit">Registrar</button>
+                        </div>
+                    </form>
 
                 <form action="{% url 'deleteRoom' %}" method="POST" onsubmit="return confirmDeletion()">
                     {% csrf_token %}
-                    <div class="roomWrapper">
-                        <h3>Excluir uma sala</h3>
+                    <h3>Excluir uma sala</h3>
+                    <div class="insideWrapper">
                         <p class= "dropdownLabel" for="roomDropdown">Selecione uma sala:</p>
                         <div class="dropdown" id="roomDropdown">
                             <button type="button" class="dropdownButton">Selecione uma sala</button>
@@ -59,8 +61,8 @@
                             </div>
                             <input type="hidden" name="roomId" class="selectedOption">
                         </div>
+                        <button type="submit" id="negativeButton">Excluir</button>
                     </div>
-                    <button type="submit" id="negativeButton">Excluir</button>
                 </form>
 
                 <div class="buttonSection">

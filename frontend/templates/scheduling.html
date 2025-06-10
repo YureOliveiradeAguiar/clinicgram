@@ -111,7 +111,7 @@
     setUpDropdown("roomDropdown");
 </script>
 
-<script> // Scheduling table cell selection translator.
+<script> // Scheduling table cell hours selection translator.
     document.addEventListener("DOMContentLoaded", function () {
         const roomDropdown = document.getElementById('roomDropdown');
         const roomInput = roomDropdown.querySelector('.selectedOption');
@@ -132,14 +132,19 @@
                 const firstBlockIndex = Number(firstBlock.dataset.index);
                 const secondBlockIndex = secondBlock ? Number(secondBlock.dataset.index) : null;
     
-                const selectedRoom = roomInput.value; // By the dropdown, not this table.
+                const selectedRoom = Number(roomInput.value); // By the dropdown, not this table.
 
-                const firstBlockRooms = document.querySelector(`[data-index="${firstBlockIndex}"]`).dataset.room;
-                const secondBlockRooms = secondBlock ? document.querySelector(`[data-index="${secondBlockIndex}"]`).dataset.room : null;
+                const getRoomsAsArray = (index) => {
+                    const roomsStr = document.querySelector(`[data-index="${index}"]`)?.dataset.room;
+                    const roomsArray = roomsStr ? JSON.parse(roomsStr) : null;
+                    return roomsArray;
+                };
+                const firstBlockRooms = getRoomsAsArray(firstBlockIndex);
+                const secondBlockRooms = secondBlock ? getRoomsAsArray(secondBlockIndex) : null;
 
-                //console.log(selectedRoom);
-                //console.log("First Block Room:", firstBlockRooms)
-                //console.log("Second Block Room:", secondBlockRooms);
+                //console.log("SelectedRoom:", selectedRoom);
+                //console.log("First Block Rooms:", firstBlockRooms);
+                //console.log("Second Block Rooms:", secondBlockRooms);
                 
                 if (
                     (firstBlockRooms && firstBlockRooms.includes(selectedRoom)) ||
@@ -240,6 +245,11 @@
         // Updates dinamically after selected room changes.
         function updateTable() { // Update table based on selected room.
             const selectedRoom = roomInput.value;
+            
+            document.getElementById("startTime").value = "";
+            document.getElementById("endTime").value = "";
+            document.querySelectorAll(".scheduleCell.selected").forEach(el => el.classList.remove("selected"));
+
             cells.forEach(cell => {
                 const roomList = JSON.parse(cell.getAttribute('data-room') || "[]");
                 const roomListStrings = roomList.map(String);
