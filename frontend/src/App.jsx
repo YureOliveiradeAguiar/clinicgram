@@ -1,21 +1,32 @@
-import Header from './Header/Header.jsx'
-import Footer from './Footer.jsx'
-import Hero from './Hero/Hero.jsx'
-import Banner from './Banner/Banner.jsx'
-import About from './About/About.jsx'
+import { useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header/Header.jsx'
+import Home from './pages/Home.jsx'
+import Login from './pages/Login.jsx'
 
-function App() {
-	return(
+function Layout() {
+	const location = useLocation();
+  	const path = location.pathname;
+  	const isLoginPage = path === '/login';
+  	const isHomePage = path === '/';
+	
+	return (
 		<>
-			<Header/>
-			<main>
-				<Hero/>
-				<Banner/>
-				<About/>
-			</main>
-			<Footer/>
+			{/* && is not AND conditional, its a React property of condition rendering*/}
+			{/* its structure: '(condition) && (component)'*/}
+			{!isLoginPage && (<Header showNavbar={!isHomePage ? true : false} />)}
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/Login" element={<Login />} />
+			</Routes>
 		</>
 	);
 }
 
-export default App
+export default function App () {
+	return (
+    	<Router>
+    		<Layout />
+    	</Router>
+  	);
+}

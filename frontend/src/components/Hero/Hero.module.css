@@ -18,14 +18,16 @@
 }
 
 .apointmentButton {
-    text-decoration: none;
     display: inline-block;
+    border: none;
+    text-decoration: none;
     text-align: center;
     font-weight: bold;
+    cursor: pointer;
     padding: 15px 30px;
     border-radius: 5px;
     font-size: 1.1rem;
-    color: white;
+    color: var(--darkBackground);
     background-color: var(--primary);
 }
 

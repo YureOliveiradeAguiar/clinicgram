@@ -1,6 +1,6 @@
-import Slide1 from '../assets/ClFisio.png'
-import Slide2 from '../assets/ClDent.png'
-import Slide3 from '../assets/ClOftomo.png'
+import Slide1 from '../../assets/ClFisio.png'
+import Slide2 from '../../assets/ClDent.png'
+import Slide3 from '../../assets/ClOftomo.png'
 import React, {useState , useEffect, useRef} from "react";
 import styles from './Carousel.module.css'
 
@@ -81,7 +81,7 @@ function Carousel () {
                     <div key={slide.id} className={`${styles.slide} ${i === activeIndex ? styles.activeSlide : ''}`}>
                         {slide.content}
                         <h5>Una, Sete Lagoas</h5>
-                        <a href="">Agendar agora</a>
+                        <button onClick={() => navigate('/login')} className={styles.apointmentButton}>Agendar agora</button>
                     </div>
                 ))}
             </div>

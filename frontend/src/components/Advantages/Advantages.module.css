@@ -1,0 +1,42 @@
+.servicesSection {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.servicesSection h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.servicesList {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.serviceItem {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.serviceItem h3 {
+    color: #195154;
+    font-size: 1.5rem;
+}
+
+.serviceItem p {
+    opacity: 90%;
+    font-size: 1.2rem;
+}
