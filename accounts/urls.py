@@ -1,7 +1,6 @@
 from django.urls import path
-from django.contrib.auth import views as authenticationView
+from .views import LoginAPIView
 
 urlpatterns = [
-    path('login/', authenticationView.LoginView.as_view(template_name="login.html"), name="login"),
-    path('logout/', authenticationView.LogoutView.as_view(), name="logout")
+    path('login/', LoginAPIView.as_view(), name='api-login'),
 ]

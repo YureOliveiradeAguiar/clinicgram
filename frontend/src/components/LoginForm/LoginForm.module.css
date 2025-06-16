@@ -10,11 +10,15 @@ Form {
 }
 
 Form input[type="submit"] {
+    background-color: var(--primary);
+    font-weight: bold;
+    color: var(--darkBackground);
+    cursor: pointer;
     margin: 10px 0;
 }
 
-.formGroup {
-    width: 100%;
+Form input[type="submit"]:hover {
+    background-color: var(--primaryFocused);
 }
 
 Form label, .fieldLabel, Form input {
@@ -30,15 +34,20 @@ Form label, .fieldLabel {
 Form input {
     width: 100%;
     font-size: 16px;
-    padding: 10px;
-    border-radius: 3px;
+    padding: 12px;
+    border-radius: 4px;
     border: 1px solid #ccc;
+}
+input:focus {
+    outline: var(--primary);
 }
 
 #welcomeMessage {
     font-weight: bold;
     font-size: 1.6rem;
+    opacity: 0.9;
 }
+
 #statusMessage, #errorMessage {
     height: 1rem;
     margin-bottom: 10px;

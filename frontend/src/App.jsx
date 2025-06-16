@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header.jsx'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
+import Dashboard from './pages/Dashboard.jsx';
 
 function Layout() {
 	const location = useLocation();
@@ -18,6 +19,7 @@ function Layout() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/Login" element={<Login />} />
+				<Route path='/Dashboard' element={<Dashboard/>} />
 			</Routes>
 		</>
 	);
