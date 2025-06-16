@@ -1,0 +1,53 @@
+.hero {
+    display: flex;
+    justify-content: center; /* horizontal alignment */
+    align-items: center; /* vertical alignment */
+}
+
+.hero .heroContent h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero .heroContent p {
+    font-size: 1.2rem;
+    margin: 40px 5px;
+    max-width: 500px;
+    opacity: 80%;
+    text-align: start;
+}
+
+.apointmentButton {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    color: white;
+    background-color: var(--primary);
+}
+
+.apointmentButton:hover {
+    background-color: var(--primaryFocused);
+}
+
+.hero img {
+    width: 400px;
+    height: 400px;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        display: flex;
+        flex-direction: column;
+    }
+    .heroContent {
+        text-align: center;
+    }
+    .hero img {
+        width: 90%;
+        height: auto;
+    }
+}

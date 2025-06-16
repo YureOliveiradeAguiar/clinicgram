@@ -1,0 +1,29 @@
+.aboutSection {
+    display: flex;
+    justify-content: center; /* horizontal alignment */
+    align-items: center; /* vertical alignment */
+    gap: 40px
+}
+
+.aboutContent h2 {
+    font-size: 2.8rem;
+}
+
+.aboutContent p {
+    margin: 50px 0 100px 0;
+    font-size: 1.2rem;
+    max-width: 500px;
+    opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+    .aboutSection {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .aboutContent p {
+        margin: 20px 0 40px 0;
+    }
+}
