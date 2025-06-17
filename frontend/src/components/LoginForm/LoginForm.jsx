@@ -1,12 +1,16 @@
-import LogoImg from '../../assets/Logo.png'
+import LogoImg from '../../assets/images/Logo.png'
 import styles from './LoginForm.module.css'
 
 import { useState } from "react";
+
 import { useForm } from "react-hook-form";
+
+import { useNavigate } from 'react-router-dom';
 
 function Login () {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [statusMessage, setStatusMessage] = useState("Entre para continuar");
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         try {
@@ -17,7 +21,9 @@ function Login () {
             });
             const result = await response.json();
             if (response.ok) {
-                setStatusMessage("Login bem-sucedido!");
+                const token = result.token;
+                localStorage.setItem('authToken', token);
+                navigate('/dashboard');
             } else {
                 setStatusMessage(result.detail || "Usuário ou senha inválidos");
             }

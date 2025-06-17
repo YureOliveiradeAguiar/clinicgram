@@ -1,9 +1,11 @@
-import Hero from '../components/Hero/Hero.jsx'
+import Greet from '../components/DashBoard/Greet.jsx'
+import Dash from '../components/DashBoard/Dash.jsx'
 
 function Dashboard () {
     return (
         <main>
-            <Hero/>
+            <Greet/>
+            <Dash/>
         </main>
     )
 }

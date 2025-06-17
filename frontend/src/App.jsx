@@ -15,11 +15,11 @@ function Layout() {
 		<>
 			{/* && is not AND conditional, its a React property of condition rendering*/}
 			{/* its structure: '(condition) && (component)'*/}
-			{!isLoginPage && (<Header showNavbar={!isHomePage ? true : false} />)}
+			{!isLoginPage && (<Header showNavbar={isHomePage} />)}
 			<Routes>
 				<Route path="/" element={<Home />} />
-				<Route path="/Login" element={<Login />} />
-				<Route path='/Dashboard' element={<Dashboard/>} />
+				<Route path="/login" element={<Login />} />
+				<Route path='/dashboard' element={<Dashboard/>} />
 			</Routes>
 		</>
 	);

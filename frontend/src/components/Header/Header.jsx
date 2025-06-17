@@ -1,7 +1,7 @@
-import LogoImg from '../../assets/Logo.png'
+import LogoImg from '../../assets/images/Logo.png'
 import styles from './Header.module.css'
 
-function Header(showNavbar) {
+function Header({showNavbar}) {
     return (
         <header className={styles.header}>
             <div className={styles.headerWrapper}>
