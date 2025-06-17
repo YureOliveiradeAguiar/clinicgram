@@ -1,30 +1,26 @@
-import { ReactComponent as UserAddIcon } from '../../assets/icons/userAdd.svg'
+import UserAddIcon from '../../assets/icons/userAddIcon.jsx'
 
-import Card from './Card.jsx'
+import styles from './Dash.module.css'
 
 function Dash () {
     const cards = [
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
-        { title: 'Registrar Cliente', Icon: UserAddIcon, link: '/register' },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/register" }
     ];
 
-    const styles = {
-        dash: {
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '10px',
-        },
-    };
     return (
-        <div style={styles.dash}>
-            {cards.map((card, i) => (
-                <Card key={i} {...card} />
+        <div className={styles.dash}>
+            {cards.map(({ title, Icon, link }, index) => (
+                <a key={index} href={link} className={styles.card}>
+                    {Icon && <Icon className={styles.icon} />}
+                    <span>{title}</span>
+                </a>
             ))}
         </div>
     )
