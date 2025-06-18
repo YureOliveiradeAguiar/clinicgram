@@ -1,4 +1,6 @@
-import LogoImg from '../../assets/images/Logo.png'
+import LogoImg from '@/assets/images/Logo.png'
+
+import styles from './Greet.module.css'
 
 import { useState, useEffect } from "react"
 
@@ -24,22 +26,9 @@ function Greet () {
 
     if (!user) return <p>Carregando...</p>;
 
-    const styles = {
-        hero: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '15px',
-        },
-        logo: {
-            height: '100px',
-            width: '100px',
-        }
-    };
-
     return (
-        <section style={styles.hero}>
-            <img src={LogoImg} height="100" alt="Clinic" style={styles.logo}/>
+        <section className={styles.hero}>
+            <img src={LogoImg} height="100" alt="Clinic" className={styles.logo}/>
             <h1> Sua Dashboard</h1>
             <p id="statusMessage">Bem-vindo, {user.username.charAt(0).toUpperCase() + user.username.slice(1)}!</p>
         </section>

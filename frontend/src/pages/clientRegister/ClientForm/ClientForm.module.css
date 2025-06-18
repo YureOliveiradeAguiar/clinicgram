@@ -1,0 +1,115 @@
+.clientForm {
+    display: flex;
+    flex-direction: column;
+    padding-top: 6px;
+    width: 300px;
+    gap: 10px;
+}
+
+#statusMessage {
+    height: 1rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.dateWrapper {
+    display: grid;
+    grid-template-columns: 3fr 5fr 4fr;
+    gap: 5px;
+    width: 100%;
+}
+
+.dateWrapper .icon {
+    width: 18px;
+    height: 18px;
+    box-sizing: content-box;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.dropdownToggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 2px 8px 8px;
+}
+
+.options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: white;
+    z-index: 1000;
+    max-height: 200px;
+    font-size: 0.8rem;
+    overflow-y: auto;
+}
+
+.options li {
+    padding: 10px;
+    background-color: white;
+}
+
+.options li:hover {
+    background-color: #f0f0f0;
+}
+
+.custom-dropdown.open .options {
+    display: block;
+}
+
+.buttonsContainer {
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.formButton {
+    background-color: var(--primary);
+    color: var(--darkBackground);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.formButton:hover {
+    background-color: var(--primaryFocused);
+}
+
+@media (min-width: 375px) {
+    .mainWrapper {
+        padding: 10px 24px;
+        background-color: white;
+        
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}

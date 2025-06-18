@@ -11,10 +11,6 @@
     fill: var(--font);
 }
 
-.label {
-    font-weight: normal;
-}
-
 .card {
     display: flex;
     flex-direction: column;

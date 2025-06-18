@@ -1,9 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header/Header.jsx'
-import Home from './pages/Home.jsx'
-import Login from './pages/Login.jsx'
-import Dashboard from './pages/Dashboard.jsx';
+
+import Home from '@/pages/home/Home.jsx'
+import Login from '@/pages/login/Login.jsx'
+import Dashboard from '@/pages/dashBoard/Dashboard.jsx';
+import ClientRegister from '@/pages/clientRegister/ClientRegister.jsx';
 
 function Layout() {
 	const location = useLocation();
@@ -17,9 +20,10 @@ function Layout() {
 			{/* its structure: '(condition) && (component)'*/}
 			{!isLoginPage && (<Header showNavbar={isHomePage} />)}
 			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route path='/dashboard' element={<Dashboard/>} />
+				<Route path="/" element={<Home/>}/>
+				<Route path="/login" element={<Login/>}/>
+				<Route path='/dashboard' element={<Dashboard/>}/>
+				<Route path='/clients/new' element={<ClientRegister/>}/>
 			</Routes>
 		</>
 	);

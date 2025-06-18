@@ -1,0 +1,69 @@
+.headerLogo {
+    max-width: 100px;
+}
+
+#welcomeMessage {
+    font-weight: bold;
+    font-size: 1.6rem;
+    opacity: 0.9;
+}
+
+#statusMessage, #errorMessage {
+    height: 1rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+#errorMessage {
+    color: #dc3545;
+}
+
+.observation {
+    border-top: 1px solid #ccc;
+    max-width: 360px;
+    padding: 10px 10px 0 10px;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.loginWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+}
+
+.loginButton {
+    background-color: var(--primary);
+    color: var(--darkBackground);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #ccc;
+}
+
+.loginButton:hover {
+    background-color: var(--primaryFocused);
+}
+
+@media (min-width: 375px) {
+    .loginWrapper {
+        padding: 24px 18px;
+        background-color: white;
+        
+        border-radius: 16px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}
