@@ -7,6 +7,7 @@ import Home from '@/pages/home/Home.jsx'
 import Login from '@/pages/login/Login.jsx'
 import Dashboard from '@/pages/dashBoard/Dashboard.jsx';
 import ClientRegister from '@/pages/clientRegister/ClientRegister.jsx';
+import Clients from '@/pages/clients/Clients.jsx';
 
 function Layout() {
 	const location = useLocation();
@@ -24,6 +25,7 @@ function Layout() {
 				<Route path="/login" element={<Login/>}/>
 				<Route path='/dashboard' element={<Dashboard/>}/>
 				<Route path='/clients/new' element={<ClientRegister/>}/>
+				<Route path='/clients' element={<Clients/>}/>
 			</Routes>
 		</>
 	);

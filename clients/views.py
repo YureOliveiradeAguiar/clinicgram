@@ -28,9 +28,26 @@ class RegisterClientAPIView(APIView):
                 whatsapp = data['whatsapp'],
                 dateOfBirth = data['dateOfBirth']
             )
-            return Response({'success': True, 'client_id': client.id})
+            firstName = client.name.split()[0] if client.name else ''
+            return Response({'success': True, 'client_id': client.id, 'message': f'{firstName} registrado com sucesso!'})
         except Exception as e:
             return Response({'success': False, 'error': str(e)}, status=400)
+        
+class ClientListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        clients = Client.objects.all().order_by('name')
+        clientData = [
+            {
+                'id': client.id,
+                'name': client.name,
+                'whatsapp': client.whatsapp,
+                'dateOfBirth': client.dateOfBirth.strftime('%Y-%m-%d')
+            }
+            for client in clients
+        ]
+        return Response(clientData)
 
 
 #def deleteClientView(request, client_id):

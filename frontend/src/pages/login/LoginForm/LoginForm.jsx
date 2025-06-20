@@ -43,10 +43,10 @@ function Login () {
     return (
         <section className={styles.loginWrapper}>
             <img src={LogoImg} alt="Clinicgram" className={styles.headerLogo}></img>
-            <h2 className={`statusMessage ${status.type}`}>Faça seu Login</h2>
+            <h2 id={styles.welcomeMessage}>Faça seu Login</h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-                <p id={[status.type]}>{status.message}</p>
+                <p className={`statusMessage ${status.type}`}>{status.message}</p>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="username">Usuário</label>
