@@ -8,16 +8,6 @@
     opacity: 0.9;
 }
 
-#statusMessage, #errorMessage {
-    height: 1rem;
-    margin-bottom: 10px;
-    opacity: 0.9;
-}
-
-#errorMessage {
-    color: #dc3545;
-}
-
 .observation {
     border-top: 1px solid #ccc;
     max-width: 360px;

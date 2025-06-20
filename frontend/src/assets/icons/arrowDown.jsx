@@ -1,0 +1,10 @@
+function arrowDownIcon ({ width = 60, height = 60, fill = 'currentColor', className }) {
+    return (
+        <svg width={width} height={height} viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" className={className}>
+            <path fillRule="evenodd" clipRule="evenodd" d="M10.7322 20.7322C11.7086 19.7559 13.2914 19.7559 14.2678 20.7322L30 36.4645L45.7323 20.7322C46.7085 19.7559 48.2915 19.7559 49.2677 20.7322C50.244 21.7086 50.244 23.2915 49.2677 24.2678L31.7677 41.7677C30.7915 42.744 29.2085 42.744 28.2323 41.7677L10.7322 24.2678C9.75593 23.2915 9.75593 21.7086 10.7322 20.7322Z"
+                fill={fill} stroke={fill}/>
+        </svg>
+    )
+}
+
+export default arrowDownIcon;
