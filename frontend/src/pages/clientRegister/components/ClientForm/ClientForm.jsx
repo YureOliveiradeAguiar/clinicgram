@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
     const navigate = useNavigate();
 
@@ -26,6 +26,13 @@ function ClientForm() {
         const mm = String(selectedMonth).padStart(2, '0');
         const dd = String(selectedDay).padStart(2, '0');
         return `${selectedYear}-${mm}-${dd}`;
+    };
+
+    const resetForm = () => {
+        reset();
+        setSelectedDay('');
+        setSelectedMonth('');
+        setSelectedYear('');
     };
 
     useEffect(() => {
@@ -59,8 +66,9 @@ function ClientForm() {
             const result = await response.json();
             if (response.ok) {
                 setStatus({message: result.message, type: "success"});
+                resetForm();
             } else {
-                setStatus({message: result.error, type: "error"});
+                setStatus({message: "Dados inválidos!", type: "error"});
             }
         } catch (error) {
             setStatus({message: "Erro de conexão com o servidor", type: "error"});
@@ -94,10 +102,10 @@ function ClientForm() {
                 <div className={styles.formGroup}>
                     <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
                     <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <CustomDropdown label="dia" options={days} onSelect={setSelectedDay}/>
-                        <CustomDropdown label="mês" options={months} onSelect={(name) => {
+                        <CustomDropdown label={selectedDay || "Dia"} options={days} onSelect={setSelectedDay}/>
+                        <CustomDropdown label={selectedMonth || "Mês"} options={months} onSelect={(name) => {
                             const monthNumber = months.indexOf(name) + 1; setSelectedMonth(monthNumber);}}/>
-                        <CustomDropdown label="ano" options={years} onSelect={setSelectedYear}/>
+                        <CustomDropdown label={selectedYear || "Ano"} options={years} onSelect={setSelectedYear}/>
                     </div>
                 </div>
                 

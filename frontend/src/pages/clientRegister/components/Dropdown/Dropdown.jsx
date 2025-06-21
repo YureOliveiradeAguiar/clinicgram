@@ -21,6 +21,10 @@ function Dropdown ({ label, options, onSelect }) {
         };
     }, []);
 
+    useEffect(() => { // Reacts to external label changes for Form reset.
+        setSelected(label);
+    }, [label]);
+
     const toggleDropdown = () => { setIsOpen(prev => !prev);};
 
     const handleOptionClick = (option) => {
@@ -33,7 +37,11 @@ function Dropdown ({ label, options, onSelect }) {
         <div className={styles.dropdown} ref={dropdownRef}>
             <div className={styles.dropdownToggle} onClick={toggleDropdown}>
                 <p className={styles.selectedOption}>{selected}</p>
-                {ArrowDownIcon && <ArrowDownIcon className={styles.icon} />}
+                {isOpen ? (
+                    <ArrowUpIcon className={styles.icon} />
+                ) : (
+                    <ArrowDownIcon className={styles.icon} />
+                )}
             </div>
 
             {isOpen && (

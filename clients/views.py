@@ -1,8 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Client
+
+from django.shortcuts import get_object_or_404
 
 class DateOptionsAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -32,6 +35,7 @@ class RegisterClientAPIView(APIView):
             return Response({'success': True, 'client_id': client.id, 'message': f'{firstName} registrado com sucesso!'})
         except Exception as e:
             return Response({'success': False, 'error': str(e)}, status=400)
+     
         
 class ClientListAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -43,16 +47,17 @@ class ClientListAPIView(APIView):
                 'id': client.id,
                 'name': client.name,
                 'whatsapp': client.whatsapp,
-                'dateOfBirth': client.dateOfBirth.strftime('%Y-%m-%d')
+                'dateOfBirth': client.dateOfBirth.strftime('%d/%m/%Y')
             }
             for client in clients
         ]
         return Response(clientData)
 
 
-#def deleteClientView(request, client_id):
-#    permission_classes = [IsAuthenticated]
-#
-#    client = get_object_or_404(Client, id=client_id)
-#    client.delete()
-#    return redirect('clients')
+class ClientDeleteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, client_id):
+        client = get_object_or_404(Client, id=client_id)
+        client.delete()
+        return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
