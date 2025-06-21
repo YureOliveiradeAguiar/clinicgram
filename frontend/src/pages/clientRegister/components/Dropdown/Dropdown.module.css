@@ -7,6 +7,16 @@
     border-radius: 4px;
 }
 
+.dropdownError {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid var(--error);
+    box-shadow: 0 0 0 1px var(--error);
+}
+
 .icon {
     width: 18px;
     height: 18px;

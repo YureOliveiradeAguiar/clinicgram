@@ -8,6 +8,7 @@
     --lightBackground: #fcfdfa;
     --darkBackground: #f5f9f5;
     --gradientBackground: linear-gradient(to bottom, #fcfdfa 0%, #ddd 100%);
+    --error: rgba(220, 60, 75, 0.9)
 }
 
 * {

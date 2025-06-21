@@ -4,7 +4,7 @@ import styles from './Dropdown.module.css';
 
 import { useState, useRef, useEffect } from 'react';
 
-function Dropdown ({ label, options, onSelect }) {
+function Dropdown ({ label, options, onSelect, hasError }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState(label);
 
@@ -34,7 +34,7 @@ function Dropdown ({ label, options, onSelect }) {
     };
 
     return (
-        <div className={styles.dropdown} ref={dropdownRef}>
+        <div className={hasError ? styles.dropdownError : styles.dropdown} ref={dropdownRef}>
             <div className={styles.dropdownToggle} onClick={toggleDropdown}>
                 <p className={styles.selectedOption}>{selected}</p>
                 {isOpen ? (

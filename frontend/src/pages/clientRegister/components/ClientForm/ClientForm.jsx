@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, reset, formState: { errors }, setError } = useForm();
     const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
     const navigate = useNavigate();
 
@@ -53,6 +53,12 @@ function ClientForm() {
     
     const onSubmit = async (data) => {
         const dateOfBirth = formatDateOfBirth();
+
+        if (!dateOfBirth) {
+            setError("dateOfBirth", {type: "manual", message: "Data de nascimento é obrigatória"});
+            return;
+        }
+
         const payload = { ...data, dateOfBirth };
         try {
             const response = await fetch('/api/clients/new/', {
@@ -87,26 +93,34 @@ function ClientForm() {
 
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Nome Completo</label>
-                    <input type="text" id="name" name="name" className="formInput"
-                        autoComplete="off" maxLength="70" placeholder="Digite aqui"
-                        {...register('name', { required: true })}/>
+                    <input type="text" id="name" name="name"  autoComplete="off"
+                        maxLength="70" placeholder="Digite aqui"
+                        className={errors.name ? styles.formInputError : 'formInput'}
+                        {...register('name', { required: "O nome é obrigatório" })}/>
+                    <p className={styles.errorMessage}>{errors.name?.message || " "}</p>
                 </div>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="whatsapp">WhatsApp</label>
-                    <input type="text" id="whatsapp" name="whatsapp" className="formInput"
-                        maxLength="20" placeholder="Digite aqui"
-                        {...register('whatsapp', {required: true, minLength: {value: 12}})}/>
+                    <input type="text" id="whatsapp" name="whatsapp"  maxLength="20" placeholder="Digite aqui"
+                        className={errors.whatsapp ? styles.formInputError : 'formInput'}
+                        {...register('whatsapp', {required: "WhatsApp é obrigatório",
+                            minLength: { value: 12, message: "Mínimo 12 caracteres"}})}/>
+                    <p className={styles.errorMessage}>{errors.whatsapp?.message || " "}</p>
                 </div>
 
                 <div className={styles.formGroup}>
                     <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
                     <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <CustomDropdown label={selectedDay || "Dia"} options={days} onSelect={setSelectedDay}/>
-                        <CustomDropdown label={selectedMonth || "Mês"} options={months} onSelect={(name) => {
+                        <CustomDropdown label={selectedDay || "Dia"} options={days} 
+                            hasError={!!errors.dateOfBirth} onSelect={setSelectedDay}/>
+                        <CustomDropdown label={selectedMonth || "Mês"} options={months}
+                            hasError={!!errors.dateOfBirth} onSelect={(name) => {
                             const monthNumber = months.indexOf(name) + 1; setSelectedMonth(monthNumber);}}/>
-                        <CustomDropdown label={selectedYear || "Ano"} options={years} onSelect={setSelectedYear}/>
+                        <CustomDropdown label={selectedYear || "Ano"} options={years}
+                            hasError={!!errors.dateOfBirth} onSelect={setSelectedYear}/>
                     </div>
+                    <p className={styles.errorMessage}>{errors.dateOfBirth?.message || " "}</p>
                 </div>
                 
                 <div className={styles.buttonsContainer}>
