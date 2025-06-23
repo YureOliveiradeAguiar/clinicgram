@@ -42,15 +42,17 @@ function Login () {
 
     return (
         <section className={styles.loginWrapper}>
-            <img src={LogoImg} alt="Clinicgram" className={styles.headerLogo}></img>
-            <h2 id={styles.welcomeMessage}>Faça seu Login</h2>
+            <div>
+                <img src={LogoImg} alt="Clinicgram" className={styles.headerLogo}></img>
+                <h2 id={styles.welcomeMessage}>Faça seu Login</h2>  
+            </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
                 <p className={`statusMessage ${status.type}`}>{status.message}</p>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="username">Usuário</label>
-                    <input type="text" id="username" name="username"
+                    <input type="text" id="username" name="username" autoComplete='true'
                         maxLength="80" placeholder="Digite aqui" className="formInput"
                         {...register("username", { required: "Usuário é obrigatório" })}/>
                 </div>
@@ -66,7 +68,7 @@ function Login () {
             </form>
 
             <div className={styles.observation}>
-                <p>Contate um professor se houver problemas.</p>
+                <p>Entre em contato se houver problemas.</p>
             </div>
         </section>
     )

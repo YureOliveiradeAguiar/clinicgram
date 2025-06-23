@@ -7,16 +7,20 @@ from .models import Client
 
 from django.shortcuts import get_object_or_404
 
+from datetime import datetime
+
+
 class DateOptionsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        monthNames = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
-            'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+        currentYear = datetime.now().year
+        monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         return Response({
             'days': list(range(1, 32)),
             'months': monthNames,
-            'years': list(range(2025, 1900, -1)),
+            'years': list(range(currentYear, 1899, -1))
         })
 
 
@@ -32,7 +36,7 @@ class RegisterClientAPIView(APIView):
                 dateOfBirth = data['dateOfBirth']
             )
             firstName = client.name.split()[0] if client.name else ''
-            return Response({'success': True, 'client_id': client.id, 'message': f'{firstName} registrado com sucesso!'})
+            return Response({'success': True, 'client_id': client.id, 'message': f'{firstName} registrado!'})
         except Exception as e:
             return Response({'success': False, 'error': str(e)}, status=400)
      

@@ -1,14 +1,7 @@
 .clientForm {
     display: flex;
     flex-direction: column;
-    padding-top: 6px;
     width: 300px;
-}
-
-#statusMessage {
-    height: 1rem;
-    margin-bottom: 10px;
-    opacity: 0.9;
 }
 
 .dateWrapper {
@@ -20,7 +13,7 @@
 
 .buttonsContainer {
     gap: 15px;
-    margin: 10px 0;
+    margin: 8px 0;
 }
 
 .buttonsContainer {

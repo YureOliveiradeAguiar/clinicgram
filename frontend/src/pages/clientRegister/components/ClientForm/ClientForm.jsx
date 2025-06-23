@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
-    const { register, handleSubmit, reset, formState: { errors }, setError } = useForm();
+    const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
     const navigate = useNavigate();
 
@@ -21,11 +21,37 @@ function ClientForm() {
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
 
+    const whatsappValue = watch('whatsapp');
+
     const formatDateOfBirth = () => {
         if (!selectedYear || !selectedMonth || !selectedDay) return null;
         const mm = String(selectedMonth).padStart(2, '0');
         const dd = String(selectedDay).padStart(2, '0');
         return `${selectedYear}-${mm}-${dd}`;
+    };
+
+    const formatPhone = (value) => {
+        if (!value) return "";
+        const cleaned = value.replace(/\D/g, '');
+        if (cleaned.length <= 2) {
+          return `(${cleaned}`;
+        } else if (cleaned.length <= 6) {
+          return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
+        } else if (cleaned.length <= 10) {
+          return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+        } else {
+          return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`;
+        }
+    };
+    const normalizePhone = (formatted) => {
+        if (!formatted) return "";
+        const cleaned = formatted.replace(/\D/g, '');
+        const ddd = cleaned.slice(0, 2);
+        let number = cleaned.slice(2);
+        if (number.length === 8 && number[0] !== '9') {
+            number = '9' + number;
+        }
+        return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
     };
 
     const resetForm = () => {
@@ -53,13 +79,16 @@ function ClientForm() {
     
     const onSubmit = async (data) => {
         const dateOfBirth = formatDateOfBirth();
+        const rawPhone = normalizePhone(data.whatsapp);
 
         if (!dateOfBirth) {
-            setError("dateOfBirth", {type: "manual", message: "Data de nascimento é obrigatória"});
-            return;
+            setError("dateOfBirth", {type: "manual", message: "Informe a data de nascimento completa"});
+        }
+        if (!rawPhone) {
+            setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
         }
 
-        const payload = { ...data, dateOfBirth };
+        const payload = { ...data, rawPhone, dateOfBirth };
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
@@ -82,7 +111,11 @@ function ClientForm() {
     };
 
     const handleError = () => {
-        setStatus({message: "Dados inválidos!", type: "error" });
+        // setStatus({message: "Dados inválidos!", type: "error" });
+        const dateOfBirth = formatDateOfBirth();
+        if (!dateOfBirth) {
+            setError("dateOfBirth", {type: "manual", message: "Informe a data de nascimento completa"});
+        }
     };
 
     return (
@@ -102,23 +135,40 @@ function ClientForm() {
 
                 <div className={styles.formGroup}>
                     <label htmlFor="whatsapp">WhatsApp</label>
-                    <input type="text" id="whatsapp" name="whatsapp"  maxLength="20" placeholder="Digite aqui"
-                        className={errors.whatsapp ? styles.formInputError : 'formInput'}
+                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder="(99) 9999-9999"
+                        className={errors.whatsapp ? styles.formInputError : 'formInput'} value={whatsappValue || ""}
                         {...register('whatsapp', {required: "WhatsApp é obrigatório",
-                            minLength: { value: 12, message: "Mínimo 12 caracteres"}})}/>
+                            validate: (value) => {
+                                const digits = value.replace(/\D/g, '');
+                                if (digits.length < 10) return "Número incompleto";
+                                return true;
+                        }})}
+                        onChange={(e) => {
+                            const formatted = formatPhone(e.target.value);
+                            setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
+                        }}/>
                     <p className={styles.errorMessage}>{errors.whatsapp?.message || " "}</p>
                 </div>
 
                 <div className={styles.formGroup}>
                     <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
                     <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <CustomDropdown label={selectedDay || "Dia"} options={days} 
-                            hasError={!!errors.dateOfBirth} onSelect={setSelectedDay}/>
-                        <CustomDropdown label={selectedMonth || "Mês"} options={months}
-                            hasError={!!errors.dateOfBirth} onSelect={(name) => {
-                            const monthNumber = months.indexOf(name) + 1; setSelectedMonth(monthNumber);}}/>
-                        <CustomDropdown label={selectedYear || "Ano"} options={years}
-                            hasError={!!errors.dateOfBirth} onSelect={setSelectedYear}/>
+                        <CustomDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
+                            onSelect={(day) => {
+                                setSelectedDay(day);
+                                if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
+                            }}/>
+                        <CustomDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
+                            onSelect={(name) => {
+                                const monthNumber = months.indexOf(name) + 1;
+                                setSelectedMonth(monthNumber);
+                                if (selectedDay && monthNumber && selectedYear) {clearErrors('dateOfBirth');}
+                            }}/>
+                        <CustomDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
+                            onSelect={(year)=> {
+                                setSelectedYear(year);
+                                if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
+                            }}/>
                     </div>
                     <p className={styles.errorMessage}>{errors.dateOfBirth?.message || " "}</p>
                 </div>

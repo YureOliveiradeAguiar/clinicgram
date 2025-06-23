@@ -5,11 +5,13 @@ import appointsIcon from '@/assets/icons/appointsIcon.jsx'
 import roomsIcon from '@/assets/icons/roomsIcon.jsx'
 import waitingIcon from '@/assets/icons/waitingIcon.jsx'
 import suppliesIcon from '@/assets/icons/suppliesIcon.jsx'
-import logOutIcon from '@/assets/icons/logOutIcon.jsx'
+import LogOutIcon from '@/assets/icons/logOutIcon.jsx'
 
 import styles from './Dash.module.css'
 
 import { Link } from 'react-router-dom';
+
+import handleLogout from '@/utils/logout.js'
 
 function Dash () {
     const cards = [
@@ -20,7 +22,6 @@ function Dash () {
         { title: "Estoque", Icon: suppliesIcon, link: "" },
         { title: "Lista de Espera", Icon: waitingIcon, link: "" },
         { title: "Registrar Sala", Icon: roomsIcon, link: "" },
-        { title: "Sair", Icon: logOutIcon, link: "" }
     ];
 
     return (
@@ -31,6 +32,10 @@ function Dash () {
                     <span>{title}</span>
                 </Link>
             ))}
+            <button onClick={handleLogout} className={styles.card}>
+                {LogOutIcon && <LogOutIcon className={styles.icon} />}
+                <span>Sair</span>
+            </button>
         </div>
     )
 }

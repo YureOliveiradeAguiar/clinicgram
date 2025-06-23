@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -36,3 +36,10 @@ class UserProfileView(APIView):
         return Response ({
             "username": user.username,
         })
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        logout(request)
+        return Response({"message": "Logged out successfully"})

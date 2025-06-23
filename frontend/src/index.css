@@ -80,6 +80,7 @@ Form label, .fieldLabel, Form input, .fieldLabel {
 .statusMessage {
     font-size: 1rem;
     opacity: 0.9;
+    padding: 4px 0;
 }
 
 .statusMessage.info {

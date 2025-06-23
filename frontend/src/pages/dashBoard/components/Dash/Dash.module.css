@@ -11,6 +11,14 @@
     fill: var(--font);
 }
 
+button {
+    cursor: pointer;
+}
+
+span {
+    line-height: 1.6;
+}
+
 .card {
     display: flex;
     flex-direction: column;

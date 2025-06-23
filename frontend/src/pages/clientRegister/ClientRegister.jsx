@@ -1,8 +1,8 @@
 import ClientForm from './components/ClientForm/ClientForm.jsx'
 
 function ClientRegister() {
-	return(
-        <main>
+	return (
+        <main style={{ paddingBottom: '25vh', justifyContent: 'center' }}>
 			<ClientForm/>
 		</main>
 	);
