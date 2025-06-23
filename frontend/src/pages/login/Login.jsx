@@ -1,19 +1,10 @@
 import LoginForm from './LoginForm/LoginForm.jsx'
 
-import handleLogout from '@/utils/logout.js'
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import useAutoLogoutIfAuthenticated from "@/utils/autoLogout.js";
 
 function Login() {
-	const navigate = useNavigate();
-	useEffect(() => {
-		const logoutAndProceed = async () => {
-			await handleLogout();
-			navigate("/login", { replace: true }); // Force refresh state.
-		};
 
-		logoutAndProceed();
-	}, []);
+	useAutoLogoutIfAuthenticated()
 
 	return(
         <main style={{ paddingBottom: '15vh', justifyContent: 'center' }}>

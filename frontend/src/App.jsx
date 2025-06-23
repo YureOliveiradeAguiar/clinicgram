@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header/Header.jsx'
+import RequireAuth from "@/components/RequireAuth";
 
 import Home from '@/pages/home/Home.jsx'
 import Login from '@/pages/login/Login.jsx'
@@ -23,9 +24,9 @@ function Layout() {
 			<Routes>
 				<Route path="/" element={<Home/>}/>
 				<Route path="/login" element={<Login/>}/>
-				<Route path='/dashboard' element={<Dashboard/>}/>
-				<Route path='/clients/new' element={<ClientRegister/>}/>
-				<Route path='/clients' element={<Clients/>}/>
+				<Route path='/dashboard' element={<RequireAuth><Dashboard/></RequireAuth>}/>
+				<Route path='/clients/new' element={<RequireAuth><ClientRegister/></RequireAuth>}/>
+				<Route path='/clients' element={<RequireAuth><Clients/></RequireAuth>}/>
 			</Routes>
 		</>
 	);

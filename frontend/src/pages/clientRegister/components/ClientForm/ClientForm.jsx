@@ -61,6 +61,10 @@ function ClientForm() {
         setSelectedYear('');
     };
 
+    const resetStatus = () => {
+        setStatus({ message: "Registre um cliente", type: "info" });
+    }
+
     useEffect(() => {
         fetch('/api/clients/date-options/', {
             method: 'GET',
@@ -102,8 +106,6 @@ function ClientForm() {
             if (response.ok) {
                 setStatus({message: result.message, type: "success"});
                 resetForm();
-            } else {
-                setStatus({message: "Dados inválidos!", type: "error"});
             }
         } catch (error) {
             setStatus({message: "Erro de conexão com o servidor", type: "error"});
@@ -135,7 +137,8 @@ function ClientForm() {
 
                 <div className={styles.formGroup}>
                     <label htmlFor="whatsapp">WhatsApp</label>
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder="(99) 9999-9999"
+                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14"
+                        placeholder="(99) 9999-9999" onFocus={resetStatus}
                         className={errors.whatsapp ? styles.formInputError : 'formInput'} value={whatsappValue || ""}
                         {...register('whatsapp', {required: "WhatsApp é obrigatório",
                             validate: (value) => {

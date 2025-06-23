@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 
 from datetime import datetime
 
+from .serializers import ClientSerializer
+
 
 class DateOptionsAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -28,17 +30,20 @@ class RegisterClientAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        try:
-            data = request.data
-            client = Client.objects.create(
-                name = data['name'],
-                whatsapp = data['whatsapp'],
-                dateOfBirth = data['dateOfBirth']
-            )
+        serializer = ClientSerializer(data=request.data)
+
+        if serializer.is_valid():
+            client = serializer.save()
             firstName = client.name.split()[0] if client.name else ''
-            return Response({'success': True, 'client_id': client.id, 'message': f'{firstName} registrado!'})
-        except Exception as e:
-            return Response({'success': False, 'error': str(e)}, status=400)
+            return Response({
+                'success': True,
+                'client_id': client.id,
+                'message': f'{firstName} registrado!'
+            })
+        return Response({
+            'success': False,
+            'errors': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
      
         
 class ClientListAPIView(APIView):

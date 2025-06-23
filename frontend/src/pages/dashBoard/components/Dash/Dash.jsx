@@ -11,7 +11,7 @@ import styles from './Dash.module.css'
 
 import { Link } from 'react-router-dom';
 
-import handleLogout from '@/utils/logout.js'
+import handleLogout from '@/utils/handleLogout.js'
 
 function Dash () {
     const cards = [

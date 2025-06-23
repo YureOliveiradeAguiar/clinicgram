@@ -36,6 +36,12 @@ class UserProfileView(APIView):
         return Response ({
             "username": user.username,
         })
+    
+class CheckAuthView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"detail": "Authenticated"})
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
