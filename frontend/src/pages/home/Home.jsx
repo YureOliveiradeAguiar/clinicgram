@@ -9,7 +9,7 @@ import useAutoLogoutIfAuthenticated from "@/utils/autoLogout.js";
 
 function Home() {
 
-	useAutoLogoutIfAuthenticated()
+	useAutoLogoutIfAuthenticated("/")
 	
 	return(
         <>
