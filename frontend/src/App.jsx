@@ -9,6 +9,7 @@ import Login from '@/pages/login/Login.jsx'
 import Dashboard from '@/pages/dashBoard/Dashboard.jsx';
 import ClientRegister from '@/pages/clientRegister/ClientRegister.jsx';
 import Clients from '@/pages/clients/Clients.jsx';
+import Scheduling from '@/pages/scheduling/Scheduling.jsx';
 
 function Layout() {
 	const location = useLocation();
@@ -27,6 +28,7 @@ function Layout() {
 				<Route path='/dashboard' element={<RequireAuth><Dashboard/></RequireAuth>}/>
 				<Route path='/clients/new' element={<RequireAuth><ClientRegister/></RequireAuth>}/>
 				<Route path='/clients' element={<RequireAuth><Clients/></RequireAuth>}/>
+				<Route path='/schedule/new' element={<RequireAuth><Scheduling/></RequireAuth>}/>
 			</Routes>
 		</>
 	);

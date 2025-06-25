@@ -1,6 +1,6 @@
 import ArrowDownIcon from '@/assets/icons/arrowDown.jsx'
 import ArrowUpIcon from '@/assets/icons/arrowUp.jsx'
-import styles from './Dropdown.module.css';
+import styles from './DateDropdown.module.css';
 
 import { useState, useRef, useEffect } from 'react';
 

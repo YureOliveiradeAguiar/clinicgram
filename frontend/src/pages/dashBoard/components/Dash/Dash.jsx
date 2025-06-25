@@ -17,7 +17,7 @@ function Dash () {
     const cards = [
         { title: "Registrar Cliente", Icon: userAddIcon, link: "/clients/new" },
         { title: "Clientes", Icon: usersIcon, link: "/clients" },
-        { title: "Agendamento", Icon: appointsIcon, link: "" },
+        { title: "Agendamento", Icon: appointsIcon, link: "/schedule/new" },
         { title: "Agenda", Icon: scheduleIcon, link: "" },
         { title: "Estoque", Icon: suppliesIcon, link: "" },
         { title: "Lista de Espera", Icon: waitingIcon, link: "" },

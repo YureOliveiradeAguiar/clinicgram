@@ -1,6 +1,6 @@
 import styles from './ClientForm.module.css'
 
-import CustomDropdown from '../Dropdown/Dropdown.jsx';
+import DateDropdown from '../DateDropdown/DateDropdown.jsx';
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -132,7 +132,7 @@ function ClientForm() {
                         maxLength="70" placeholder="Digite aqui"
                         className={errors.name ? styles.formInputError : 'formInput'}
                         {...register('name', { required: "O nome é obrigatório" })}/>
-                    <p className={styles.errorMessage}>{errors.name?.message || " "}</p>
+                    <p className="errorMessage">{errors.name?.message || " "}</p>
                 </div>
 
                 <div className={styles.formGroup}>
@@ -150,30 +150,30 @@ function ClientForm() {
                             const formatted = formatPhone(e.target.value);
                             setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
                         }}/>
-                    <p className={styles.errorMessage}>{errors.whatsapp?.message || " "}</p>
+                    <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
                 </div>
 
                 <div className={styles.formGroup}>
                     <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
                     <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <CustomDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
+                        <DateDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
                             onSelect={(day) => {
                                 setSelectedDay(day);
                                 if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
                             }}/>
-                        <CustomDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
+                        <DateDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
                             onSelect={(name) => {
                                 const monthNumber = months.indexOf(name) + 1;
                                 setSelectedMonth(monthNumber);
                                 if (selectedDay && monthNumber && selectedYear) {clearErrors('dateOfBirth');}
                             }}/>
-                        <CustomDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
+                        <DateDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
                             onSelect={(year)=> {
                                 setSelectedYear(year);
                                 if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
                             }}/>
                     </div>
-                    <p className={styles.errorMessage}>{errors.dateOfBirth?.message || " "}</p>
+                    <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
                 </div>
                 
                 <div className={styles.buttonsContainer}>

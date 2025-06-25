@@ -95,6 +95,17 @@ Form label, .fieldLabel, Form input, .fieldLabel {
     color: #dc3545;
 }
 
+.errorMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-weight: bold;
+    height: 1rem;
+    font-size: 0.8rem;
+    vertical-align: middle;
+    color: var(--error)
+}
+
 /* SCROLL-BAR */
 ::-webkit-scrollbar {
     width: 16px;

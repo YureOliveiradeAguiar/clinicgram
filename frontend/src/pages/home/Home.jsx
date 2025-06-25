@@ -5,12 +5,7 @@ import About from './components/About/About.jsx'
 import Advantages from './components/Advantages/Advantages.jsx'
 import Contact from './components/Contact/Contact.jsx'
 
-import useAutoLogoutIfAuthenticated from "@/utils/autoLogout.js";
-
 function Home() {
-
-	useAutoLogoutIfAuthenticated("/")
-	
 	return(
         <>
             <main>
