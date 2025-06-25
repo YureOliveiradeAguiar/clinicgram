@@ -67,26 +67,27 @@ function ScheduleForm() {
     return (
         <div className={styles.mainWrapper}>
             <h2>Agendamento</h2>
+            <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form className={styles.scheduleForm}>
-                <p className={`statusMessage ${status.type}`}>{status.message}</p>
-
-                <div className={styles.clientWrapper}>
-                    <SearchDropdown options={clients} selectedOption={selectedClient} onSelect={setSelectedClient}/>
-                    <p className="errorMessage"></p>
+                <div className={styles.formWrapper}>
+                    <div className={styles.inputsWrapper}>
+                        <div className={styles.clientWrapper}>
+                            <SearchDropdown options={clients} selectedOption={selectedClient} onSelect={setSelectedClient}/>
+                            <p className="errorMessage"></p>
+                        </div>
+                        <div className={styles.roomWrapper}>
+                            <SearchDropdown options={rooms} selectedOption={selectedRoom} onSelect={setSelectedRoom}
+                                labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
+                                placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
+                            <p className="errorMessage"></p>
+                        </div>
+                    </div>
+                    <div className={styles.hoursWrapper}>
+                        <ScheduleTable id="hoursScheduling" dias={dias} indexedCells={indexedCells}/>
+                        <p className="errorMessage"></p>
+                    </div>
                 </div>
 
-                <div className={styles.roomWrapper}>
-                    <SearchDropdown options={rooms} selectedOption={selectedRoom} onSelect={setSelectedRoom}
-                    labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
-                        placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
-                    <p className="errorMessage"></p>
-                </div>
-
-                <div className={styles.hoursWrapper}>
-                    <p className={styles.schedulingLabel} htmlFor="hoursScheduling">Selecione o Horário:</p>
-                    <ScheduleTable id="hoursScheduling" dias={dias} indexedCells={indexedCells}/>
-                </div>
-                
                 <div className={styles.buttonsContainer}>
                     <input type="submit" name="registrar" value="Registrar" className={styles.formButton}/>
                     <button type="button" onClick={() => navigate('/dashboard')} className={styles.formButton}>Voltar</button>

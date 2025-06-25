@@ -1,23 +1,32 @@
 .scheduleForm {
     display: flex;
     flex-direction: column;
-    width: 300px;
 }
-
-.schedulingLabel {
+.formWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.inputsWrapper {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    font-size: 1.1rem;
-    width: 100%;
+    min-width: 300px;
+}
+.clientWrapper, .roomWrapper {
+    max-width: 300px;
+}
+.hoursWrapper {
+    max-width: 500px;
+    max-height: 400px;
 }
 
 .buttonsContainer {
     display: flex;
+    justify-content: center;
     flex-direction: row;
-    justify-content: space-between;
     gap: 10px;
-    margin: 4px 0;
+    margin-top: 16px;
+    width: 100%;
 }
 
 .formButton {
@@ -29,12 +38,26 @@
     margin: 10px 0;
     border-radius: 4px;
     padding: 12px;
-    width: 100%;
+    width: 40%;
+    max-width: 160px;
     border: 1px solid #ccc;
 }
 
 .formButton:hover {
     background-color: var(--primaryFocused);
+}
+
+@media (max-width: 768px) {
+    .formWrapper {
+        flex-direction: column;
+    }
+    .buttonsContainer {
+        justify-content: center;
+    }
+    .hoursWrapper {
+        height: 320px;
+        max-width: 300px;
+    }
 }
 
 @media (min-width: 375px) {
@@ -48,8 +71,9 @@
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 374px) {
     .clientWrapper, .roomWrapper {
+        margin: 2px 0;
         padding: 10px 8px;
         background-color: white;
         border-radius: 8px;

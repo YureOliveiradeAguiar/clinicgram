@@ -28,8 +28,11 @@ export function generateDays(numDays = 14) {
 export function generateHours(startHour = 6, endHour = 22, intervalMinutes = 15) {
     const hours = [];
     for (let h = startHour; h < endHour; h++) {
-        const hourString = h.toString().padStart(2, '0') + ":00";
-        hours.push(hourString);
+        for (let m = 0; m < 60; m += intervalMinutes) {
+            const hourString = h.toString().padStart(2, '0');
+            const minuteString = m.toString().padStart(2, '0');
+            hours.push(`${hourString}:${minuteString}`);
+        }
     }
     return hours;
 }

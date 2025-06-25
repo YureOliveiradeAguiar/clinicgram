@@ -1,13 +1,14 @@
-.outer-wrapper {
+.outerWrapper { /* scheduleContainer + scrollbar bar track*/
     position: relative;
     width: 100%;
-    max-height: 400px;
+    height: 100%;
     overflow: hidden;
     background-color: var(--darkBackground);
 
-    border-radius: 12px;
+    border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    user-select: none;
 }
 
 .scheduleContainer {
@@ -28,43 +29,35 @@ thead {
     background-color: var(--darkBackground);
     height: 45px;
 }
-
 th, td {
     border-left: none;
-    border-right: 5px solid var(--darkBackground);
     text-align: center;
     padding: 8px;
     min-width: 70px;
 }
 th {
     position: sticky;
+    font-weight: normal;
     top: 0;
     z-index: 4;
-    border-bottom: 1px solid var(--darkBackground);
 }
 td {
     padding: 0;
     height: 32px;
-    border-bottom: 5px solid var(--darkBackground);
+    cursor: pointer;
 }
-th:first-child{
+th:first-child {
     left: 0;
     z-index: 5;
-    border-right: none;
-    padding: 0px 8px;
     background-color: var(--darkBackground);
 }
-td:first-child{
+td:first-child {
     position: sticky;
     left: 0;
     z-index: 2;
-    border-right: none;
-    padding-left: 8px;
-    padding-right: 8px;
     background-color: var(--darkBackground);
     cursor: default;
 }
-
 .scheduleCell.selected {
     background-color: #ff6f61;
 }
@@ -102,20 +95,19 @@ td {
 }
 
  /* SCROLL-BAR */
-.scrollbar-corner {
+.scrollbarCorner {
+    width: 14px;
+    height: 18px;
     position: absolute;
-    right: 0;
     bottom: 0;
-    width: 12px;
-    height: 16px;
-    background: var(--darkBackground);
-    border-bottom-right-radius: 12px;
+    right: 0;
     z-index: 10;
-    pointer-events: none;
+    background-color: inherit;
 }
 
 .scheduleContainer::-webkit-scrollbar {
-    width: 12px;
+    height: 18px;
+    width: 14px;
 }
 
 .scheduleContainer::-webkit-scrollbar-track {
@@ -123,8 +115,8 @@ td {
 }
 
 .scheduleContainer::-webkit-scrollbar-thumb {
+    cursor: pointer;
     border-radius: 12px;
-    border: 2px solid transparent;
     background-clip: content-box;
     background-color: transparent;
 }
