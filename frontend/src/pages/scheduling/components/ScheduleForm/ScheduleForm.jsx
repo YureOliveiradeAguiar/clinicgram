@@ -1,8 +1,7 @@
 import styles from './ScheduleForm.module.css'
 
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
-import ScheduleTable from '../ScheduleTable/ScheduleTable.jsx';
-import { generateDays, generateHours, generateScheduleMatrix } from '@/utils/generateScheduleMatrix';
+import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -12,6 +11,7 @@ import { getCookie } from '@/utils/csrf.js';
 
 function ScheduleForm() {
     const navigate = useNavigate();
+    const { register, handleSubmit, setValue, getValues, trigger, formState: { errors } } = useForm({mode:'onBlur'});
 
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
 
@@ -20,10 +20,9 @@ function ScheduleForm() {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
 
-    const dias = generateDays();
-    const horarios = generateHours();
-    const indexedCells = generateScheduleMatrix(dias, horarios);
-
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
+    const [scheduledDay, setScheduledDay] = useState(null);
     
     useEffect(() => {
         // Fetching for rendering clients in the dropdown.
@@ -64,28 +63,109 @@ function ScheduleForm() {
         });
     }, []);
 
+    useEffect(() => {
+        if (startTime && endTime && scheduledDay) {
+            const scheduleData = { day: scheduledDay, start: startTime, end: endTime };
+            setValue("schedule", scheduleData);
+            trigger("schedule");
+        }
+    }, [startTime, endTime, scheduledDay]);
+
+    const resetForm = () => {
+        reset(); // reset react-hook-form
+        setSelectedClient(null);
+        setSelectedRoom(null);
+        setStartTime(null);
+        setEndTime(null);
+        setScheduledDay(null);
+        setSelectedIndexes(new Set());
+    };
+
+    const onSubmit = async (data) => {
+        const { client, room, schedule } = data;
+
+        if (!client) {
+        setError("client", { type: "manual", message: "Selecione um cliente" });
+        }
+        if (!room) {
+            setError("room", { type: "manual", message: "Selecione uma sala" });
+        }
+        if (!schedule || !schedule.day || !schedule.start || !schedule.end) {
+            setError("schedule", { type: "manual", message: "Selecione um horário válido" });
+        }
+        if (!client || !room || !schedule?.day || !schedule?.start || !schedule?.end) {
+            return;
+        }
+
+        const payload = {clientId: client.id, roomId: room.id,
+            day: schedule.day, start: schedule.start, end: schedule.end};
+        try {
+            const response = await fetch('/api/schedule/new/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'include',
+                body: JSON.stringify(payload),
+            });
+            const result = await response.json();
+            if (response.ok) {
+                setStatus({ message: result.message || "Agendamento confirmado!", type: "success" });
+                resetForm();
+            } else {
+                setStatus({ message: result.message || "Erro ao agendar", type: "error" });
+            }
+        } catch (error) {
+            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+        }
+    };
+
+    const handleError = () => {
+        if (!getValues("client")) {
+            setError("client", { type: "manual", message: "Selecione um cliente" });
+        }
+        if (!getValues("room")) {
+            setError("room", { type: "manual", message: "Selecione uma sala" });
+        }
+        const schedule = getValues("schedule");
+        if (!schedule?.start || !schedule?.end || !schedule?.day) {
+            setError("schedule", { type: "manual", message: "Selecione um horário" });
+        }
+    };
+
     return (
         <div className={styles.mainWrapper}>
             <h2>Agendamento</h2>
             <p className={`statusMessage ${status.type}`}>{status.message}</p>
-            <form className={styles.scheduleForm}>
-                <div className={styles.formWrapper}>
-                    <div className={styles.inputsWrapper}>
-                        <div className={styles.clientWrapper}>
-                            <SearchDropdown options={clients} selectedOption={selectedClient} onSelect={setSelectedClient}/>
-                            <p className="errorMessage"></p>
-                        </div>
-                        <div className={styles.roomWrapper}>
-                            <SearchDropdown options={rooms} selectedOption={selectedRoom} onSelect={setSelectedRoom}
-                                labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
-                                placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
-                            <p className="errorMessage"></p>
-                        </div>
+            <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.scheduleForm}>
+                <div className={styles.inputsWrapper}>
+                    <div className={styles.clientWrapper}>
+                        <SearchDropdown options={clients} selectedOption={selectedClient}
+                            onSelect={(option) => {
+                                setSelectedClient(option);
+                                setValue("client", option);
+                                trigger("client");
+                            }}/>
+                        <p className="errorMessage">{errors.client?.message || " "}</p>
                     </div>
-                    <div className={styles.hoursWrapper}>
-                        <ScheduleTable id="hoursScheduling" dias={dias} indexedCells={indexedCells}/>
-                        <p className="errorMessage"></p>
+                    <div className={styles.roomWrapper}>
+                        <SearchDropdown options={rooms} selectedOption={selectedRoom}
+                            labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
+                                placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                            onSelect={(option) => {
+                                setSelectedRoom(option);
+                                setValue("room", option);
+                                trigger("room");
+                            }}/>
+                        <p className="errorMessage">{errors.room?.message || " "}</p>
                     </div>
+                </div>
+
+                <div className={styles.hoursWrapper}>
+                    <SchedulingTable startTime={startTime} endTime={endTime} scheduledDay={scheduledDay}
+                        setStartTime={setStartTime} setEndTime={setEndTime} setScheduledDay={setScheduledDay}/>
+                    <p className="errorMessage">{errors.schedule?.message || " "}</p>
                 </div>
 
                 <div className={styles.buttonsContainer}>

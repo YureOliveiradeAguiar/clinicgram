@@ -1,32 +1,56 @@
-.scheduleForm {
-    display: flex;
-    flex-direction: column;
+.mainWrapper {
+    max-width: 95%;
 }
-.formWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+.scheduleForm {
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile default: 1 column */
+    grid-template-rows: auto;
+    gap: 1rem;
 }
 .inputsWrapper {
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
+    min-width: 0
 }
 .clientWrapper, .roomWrapper {
-    max-width: 300px;
+    min-width: 0
 }
 .hoursWrapper {
-    max-width: 500px;
-    max-height: 400px;
+    min-width: 0
 }
-
 .buttonsContainer {
     display: flex;
     justify-content: center;
     flex-direction: row;
     gap: 10px;
-    margin-top: 16px;
-    width: 100%;
+    min-width: 0;
+}
+@media (min-width: 768px) {
+    .scheduleForm {
+      grid-template-columns: 5fr 3fr;
+      grid-template-rows: 6fr 1fr;
+      grid-template-areas:
+        "a b"
+        "a c";
+    }
+    .hoursWrapper {
+      grid-area: a;
+    }
+    .inputsWrapper {
+      grid-area: b;
+    }
+    .buttonsContainer {
+      grid-area: c;
+    }
+}
+
+@media (min-width: 375px) {
+    .mainWrapper {
+        padding: 10px 24px;
+        background-color: white;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
 }
 
 .formButton {
@@ -45,38 +69,4 @@
 
 .formButton:hover {
     background-color: var(--primaryFocused);
-}
-
-@media (max-width: 768px) {
-    .formWrapper {
-        flex-direction: column;
-    }
-    .buttonsContainer {
-        justify-content: center;
-    }
-    .hoursWrapper {
-        height: 320px;
-        max-width: 300px;
-    }
-}
-
-@media (min-width: 375px) {
-    .mainWrapper {
-        padding: 10px 24px;
-        background-color: white;
-        
-        border-radius: 12px;
-        border: 1px solid #ddd;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-}
-
-@media (max-width: 374px) {
-    .clientWrapper, .roomWrapper {
-        margin: 2px 0;
-        padding: 10px 8px;
-        background-color: white;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
 }
