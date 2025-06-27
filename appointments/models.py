@@ -7,3 +7,4 @@ class Appointment(models.Model):
     startTime = models.DateTimeField()
     endTime = models.DateTimeField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    note = models.TextField(blank=True, null=True)

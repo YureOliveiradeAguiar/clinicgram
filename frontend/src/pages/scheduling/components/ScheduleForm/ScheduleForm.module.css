@@ -11,7 +11,7 @@
 .inputsWrapper {
     min-width: 0
 }
-.clientWrapper, .roomWrapper {
+.formGroup {
     min-width: 0
 }
 .hoursWrapper {
@@ -69,4 +69,23 @@
 
 .formButton:hover {
     background-color: var(--primaryFocused);
+}
+
+.formTextarea {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    resize: none; /* Impede redimensionamento */
+    transition: border-color 0.3s ease;
+}
+
+.formTextarea:focus {
+    outline: none;
+    border-color: var(--primaryFocused);
+    background-color: #fff;
 }

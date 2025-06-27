@@ -13,7 +13,7 @@ import { roomsFetch } from '../../utils/roomsFetch.js';
 
 
 function ScheduleForm() {
-    const { handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
+    const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
     const navigate = useNavigate();
 
@@ -81,6 +81,10 @@ function ScheduleForm() {
             startTime: `${schedule.day}T${schedule.start}`,
             endTime: `${schedule.day}T${schedule.end}`
         };
+        if (data.note && data.note.trim() !== "") {
+            payload.note = data.note.trim();
+        }
+        console.log(payload);
         try {
             const response = await fetch('/api/appointments/new/', {
                 method: 'POST',
@@ -110,7 +114,7 @@ function ScheduleForm() {
             <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>
-                    <div className={styles.clientWrapper}>
+                    <div className={styles.formGroup}>
                         <SearchDropdown options={clients} selectedOption={selectedClient}
                             hasError={!!errors.client} onSelect={(client) => {
                                 if (!client) return;
@@ -120,7 +124,7 @@ function ScheduleForm() {
                             }}/>
                         <p className="errorMessage">{errors.client?.message || " "}</p>
                     </div>
-                    <div className={styles.roomWrapper}>
+                    <div className={styles.formGroup}>
                         <SearchDropdown options={rooms} selectedOption={selectedRoom} hasError={!!errors.room}
                             labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
                                 placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
@@ -131,6 +135,11 @@ function ScheduleForm() {
                                 setValue('selectedRoom', room);
                             }}/>
                         <p className="errorMessage">{errors.room?.message || " "}</p>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="note">Notas</label>
+                        <textarea id="note" name="note" rows={5} className={`formInput ${styles.formTextarea}`}
+                            {...register('note')} placeholder="Notas opcionais aqui"/>
                     </div>
                 </div>
 

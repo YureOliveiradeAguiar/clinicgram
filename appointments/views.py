@@ -19,6 +19,7 @@ class RegisterAppointmentAPIView(APIView):
         roomId = data.get("roomId")
         startDateTime = parse_datetime(data.get("startTime"))
         endDateTime = parse_datetime(data.get("endTime"))
+        note = data.get("note")
 
         if is_naive(startDateTime):
             startDateTime = make_aware(startDateTime)
@@ -52,6 +53,7 @@ class RegisterAppointmentAPIView(APIView):
             startTime=startDateTime,
             endTime=endDateTime,
             room=room,
+            note=note,
         )
 
         firstName = client.name.split()[0] if client.name else ''
