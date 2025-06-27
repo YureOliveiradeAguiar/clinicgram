@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './SearchDropdown.module.css';
 
-function SearchDropdown({ options = [], selectedOption, onSelect, labels = {
-        label: 'Selecione o Cliente',
-        optionName : 'Selecione um cliente',
-        placeholder: 'Pesquisar cliente...',
-        noResults: 'Nenhum cliente registrado',
+function SearchDropdown({ options = [], selectedOption, onSelect, hasError, labels = {
+        label: 'Selecione o Cliente', optionName : 'Selecione um cliente',
+        placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado',
     },}) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,7 +33,8 @@ function SearchDropdown({ options = [], selectedOption, onSelect, labels = {
         <div className={styles.optionWrapper} ref={dropdownRef}>
             <p className={styles.dropdownLabel} htmlFor="optionDropdown">{labels.label}</p>
             <div className={styles.dropdown} id="optionDropdown">
-                <button type="button" className={styles.dropdownButton} onClick={() => setIsOpen(!isOpen)}>
+                <button type="button" className={`${styles.dropdownButton} ${hasError ? styles.dropdownBtnError : ''}`}
+                        onClick={() => setIsOpen(!isOpen)}>
                     {selectedOption ? selectedOption.name : labels.optionName}
                 </button>
                 {isOpen && (

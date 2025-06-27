@@ -4,33 +4,36 @@ import styles from './Greet.module.css'
 
 import { useState, useEffect } from "react"
 
+import { getCookie } from '@/utils/csrf.js';
+
 function Greet () {
     const [user, setUser] = useState(null);
-    const token = localStorage.getItem('authToken');
-
     useEffect(() => {
-        if (!token) return;
-
-        fetch('/api/profile/', {
+        fetch('/api/profile', {
+            method: 'GET',
             headers: {
-                'Authorization': `Token ${token}`,
+              'X-CSRFToken': getCookie('csrftoken'),
             },
+            credentials: 'include',
         })
         .then(res => {
-            if (!res.ok) throw new Error('Falha ao carregar usuário');
+            if (!res.ok) throw new Error('Erro ao carregar usuário');
             return res.json();
         })
-        .then(data => setUser(data))
-        .catch(err => console.error(err));
-    }, [token]);
-
-    if (!user) return <p>Carregando...</p>;
+        .then(data => {setUser(data);})
+        .catch(err => {console.error('Erro ao buscar perfil do usuário:', err);});
+    }, []);
 
     return (
         <section className={styles.hero}>
             <img src={LogoImg} height="100" alt="Clinic" className={styles.logo}/>
             <h1> Sua Dashboard</h1>
-            <p id="statusMessage">Bem-vindo, {user.username.charAt(0).toUpperCase() + user.username.slice(1)}!</p>
+            {user ? (
+                <p id="statusMessage">Bem-vindo, {user.username.charAt(0).toUpperCase() + user.username.slice(1)}!</p>
+            ) : (
+                <p>Carregando usuário...</p>
+            )}
+            
         </section>
     )
 }

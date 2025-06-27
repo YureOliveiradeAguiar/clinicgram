@@ -15,9 +15,13 @@
     font-weight: normal;
     background-color: white;
     color: #333;
-
     border-radius: 6px;
     border: 1px solid #ddd;
+}
+
+.dropdownBtnError {
+    border: 1px solid var(--error);
+    box-shadow: 0 0 0 1px var(--error);
 }
 
 .dropdownButton:hover{

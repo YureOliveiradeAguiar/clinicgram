@@ -1,20 +1,28 @@
 import styles from './SchedulingTable.module.css';
 import { generateDays, generateHours, generateScheduleMatrix } from '@/utils/generateScheduleMatrix';
+import TimeSummary from '../../utils/TimeSummary.jsx';
 import { useState, useEffect } from 'react';
 
-function SchedulingTable({occupiedIndexes = new Set(), scheduledDay, setScheduledDay,
-        startTime, setStartTime, endTime, setEndTime}) {
+function SchedulingTable({occupiedIndexes = new Set(),
+        scheduledDay, setScheduledDay,
+        selectedIndexes, setSelectedIndexes,
+        startTime, setStartTime, endTime, setEndTime, hasError=false}) {
+
     const dias = generateDays();
     const horarios = generateHours();
     const indexedCells = generateScheduleMatrix(dias, horarios);
 
     const [isDragging, setIsDragging] = useState(false);
     const [selectedDay, setSelectedDay] = useState(null);
-    const [selectedIndexes, setSelectedIndexes] = useState(new Set());
     const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
 
     const numColumns = dias.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
+
+    const descriptionText = startTime && endTime
+        ? `Selecionado: ${startTime} às ${endTime} • ${formatDate(scheduledDay, true)}`
+        : 'Clique e arraste para selecionar';
+    const errorText = 'Selecione um horário válido antes de continuar';
 
     const addMinutesToTime = (timeString, minutesToAdd) => {
         const [hours, minutes] = timeString.split(':').map(Number);
@@ -126,15 +134,8 @@ function SchedulingTable({occupiedIndexes = new Set(), scheduledDay, setSchedule
                 </div>
                 <div className={styles.scrollbarCorner}></div>
             </div>
-            {startTime && endTime ? (
-                <div className={styles.timeSummary}>
-                    Selecionado: {startTime} às {endTime} • {formatDate(scheduledDay, true)}
-                </div>
-            ) : (
-              <div className={styles.timeSummary}>
-                Clique e arraste para selecionar
-              </div>
-            )}
+            <TimeSummary descriptionText={descriptionText} errorText={errorText}
+                hasError={hasError} className={`${styles.timeSummary} ${hasError ? styles.timeSumError : ''}`}/>
         </div>
     );
 }

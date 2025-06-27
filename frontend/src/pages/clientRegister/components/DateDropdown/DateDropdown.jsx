@@ -4,7 +4,7 @@ import styles from './DateDropdown.module.css';
 
 import { useState, useRef, useEffect } from 'react';
 
-function Dropdown ({ label, options, onSelect, hasError }) {
+function Dropdown ({ label, options, onSelect, hasError=false }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState(label);
 

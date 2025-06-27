@@ -25,6 +25,11 @@
 
 }
 
+.timeSumError {
+    font-weight: bold;
+    color: var(--error);
+}
+
 table {
     border-collapse: separate;
     background-color: var(--darkBackground);

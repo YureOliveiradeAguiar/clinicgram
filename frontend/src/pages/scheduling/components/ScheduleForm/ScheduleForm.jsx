@@ -8,12 +8,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 
 import { getCookie } from '@/utils/csrf.js';
+import { clientsFetch } from '../../utils/clientsFetch.js';
+import { roomsFetch } from '../../utils/roomsFetch.js';
+
 
 function ScheduleForm() {
-    const navigate = useNavigate();
-    const { register, handleSubmit, setValue, getValues, trigger, formState: { errors } } = useForm({mode:'onBlur'});
-
+    const { handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
+    const navigate = useNavigate();
 
     const [clients, setClients] = useState([]);
     const [selectedClient, setSelectedClient] = useState(null);
@@ -23,56 +25,36 @@ function ScheduleForm() {
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [scheduledDay, setScheduledDay] = useState(null);
+
+    const [selectedIndexes, setSelectedIndexes] = useState(new Set());
     
     useEffect(() => {
-        // Fetching for rendering clients in the dropdown.
-        fetch('/api/clients/list/', {
-            method: 'GET',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            credentials: 'include',
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Erro ao carregar clientes');
-            return res.json();
-        })
-        .then(data => {
-            setClients(data);
-        })
-        .catch(() => {
-            setStatus({message: "Erro de conexão com o servidor", type: "error" });
-        });
-        // Fetching for rendering rooms in the dropdown.
-        fetch('/api/rooms/list/', {
-            method: 'GET',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            credentials: 'include',
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Erro ao carregar salas');
-            return res.json();
-        })
-        .then(data => {
-            setRooms(data);
-        })
-        .catch(() => {
-            setStatus({message: "Erro de conexão com o servidor", type: "error" });
-        });
+        clientsFetch() // Fetching for rendering clients in the dropdown.
+            .then(data => setClients(data))
+            .catch(() => {
+                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
+        roomsFetch() // Fetching for rendering rooms in the dropdown.
+            .then(data => setRooms(data))
+            .catch(() => {
+                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
     }, []);
 
     useEffect(() => {
         if (startTime && endTime && scheduledDay) {
-            const scheduleData = { day: scheduledDay, start: startTime, end: endTime };
+            const scheduleData = {
+                day: scheduledDay,
+                start: startTime,
+                end: endTime,
+            };
             setValue("schedule", scheduleData);
-            trigger("schedule");
+            clearErrors("schedule");
         }
-    }, [startTime, endTime, scheduledDay]);
+    }, [startTime, endTime, scheduledDay, setValue, clearErrors]);
 
     const resetForm = () => {
-        reset(); // reset react-hook-form
+        reset(); // Reset from the react-hook-form.
         setSelectedClient(null);
         setSelectedRoom(null);
         setStartTime(null);
@@ -82,25 +64,25 @@ function ScheduleForm() {
     };
 
     const onSubmit = async (data) => {
-        const { client, room, schedule } = data;
+        const { selectedClient, selectedRoom, schedule } = data;
 
-        if (!client) {
-        setError("client", { type: "manual", message: "Selecione um cliente" });
-        }
-        if (!room) {
-            setError("room", { type: "manual", message: "Selecione uma sala" });
-        }
+        if (!selectedClient) {setError("client", {type: "manual", message: "Selecione um cliente"});}
+        if (!selectedRoom) {setError("room", {type: "manual", message: "Selecione uma sala"});}
         if (!schedule || !schedule.day || !schedule.start || !schedule.end) {
             setError("schedule", { type: "manual", message: "Selecione um horário válido" });
         }
-        if (!client || !room || !schedule?.day || !schedule?.start || !schedule?.end) {
+        if (!selectedClient || !selectedRoom || !schedule?.day || !schedule?.start || !schedule?.end) {
             return;
         }
 
-        const payload = {clientId: client.id, roomId: room.id,
-            day: schedule.day, start: schedule.start, end: schedule.end};
+        const payload = {
+            clientId: selectedClient.id,
+            roomId: selectedRoom.id,
+            startTime: `${schedule.day}T${schedule.start}`,
+            endTime: `${schedule.day}T${schedule.end}`
+        };
         try {
-            const response = await fetch('/api/schedule/new/', {
+            const response = await fetch('/api/appointments/new/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,20 +99,8 @@ function ScheduleForm() {
                 setStatus({ message: result.message || "Erro ao agendar", type: "error" });
             }
         } catch (error) {
+            console.error("Erro real:", error);
             setStatus({ message: "Erro de conexão com o servidor", type: "error" });
-        }
-    };
-
-    const handleError = () => {
-        if (!getValues("client")) {
-            setError("client", { type: "manual", message: "Selecione um cliente" });
-        }
-        if (!getValues("room")) {
-            setError("room", { type: "manual", message: "Selecione uma sala" });
-        }
-        const schedule = getValues("schedule");
-        if (!schedule?.start || !schedule?.end || !schedule?.day) {
-            setError("schedule", { type: "manual", message: "Selecione um horário" });
         }
     };
 
@@ -138,34 +108,38 @@ function ScheduleForm() {
         <div className={styles.mainWrapper}>
             <h2>Agendamento</h2>
             <p className={`statusMessage ${status.type}`}>{status.message}</p>
-            <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.scheduleForm}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>
                     <div className={styles.clientWrapper}>
                         <SearchDropdown options={clients} selectedOption={selectedClient}
-                            onSelect={(option) => {
-                                setSelectedClient(option);
-                                setValue("client", option);
-                                trigger("client");
+                            hasError={!!errors.client} onSelect={(client) => {
+                                if (!client) return;
+                                setSelectedClient(client);
+                                clearErrors('client');
+                                setValue('selectedClient', client);
                             }}/>
                         <p className="errorMessage">{errors.client?.message || " "}</p>
                     </div>
                     <div className={styles.roomWrapper}>
-                        <SearchDropdown options={rooms} selectedOption={selectedRoom}
+                        <SearchDropdown options={rooms} selectedOption={selectedRoom} hasError={!!errors.room}
                             labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
                                 placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
-                            onSelect={(option) => {
-                                setSelectedRoom(option);
-                                setValue("room", option);
-                                trigger("room");
+                            onSelect={(room) => {
+                                if (!room) return;
+                                setSelectedRoom(room);
+                                clearErrors('room');
+                                setValue('selectedRoom', room);
                             }}/>
                         <p className="errorMessage">{errors.room?.message || " "}</p>
                     </div>
                 </div>
 
                 <div className={styles.hoursWrapper}>
-                    <SchedulingTable startTime={startTime} endTime={endTime} scheduledDay={scheduledDay}
-                        setStartTime={setStartTime} setEndTime={setEndTime} setScheduledDay={setScheduledDay}/>
-                    <p className="errorMessage">{errors.schedule?.message || " "}</p>
+                    <SchedulingTable hasError={!!errors.schedule}
+                        startTime={startTime} endTime={endTime}
+                        setStartTime={setStartTime} setEndTime={setEndTime}
+                        scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
+                        selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}/>
                 </div>
 
                 <div className={styles.buttonsContainer}>

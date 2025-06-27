@@ -1,41 +1,68 @@
-from django.shortcuts import redirect, get_object_or_404
-from .models import Room, Appointment, Client
-from django.utils.dateparse import parse_datetime
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
-#def scheduleAppointmentView(request):
-#    if request.method == "POST":
-#        client_id = request.POST.get("client")
-#        startTime = request.POST.get("startTime")
-#        endTime = request.POST.get("endTime")
-#        room_id = request.POST.get("room")
-#
-#        if client_id and room_id and startTime and endTime:
-#            try:
-#                client = Client.objects.get(id=client_id)
-#                startTime = parse_datetime(startTime)
-#                endTime = parse_datetime(endTime)
-#                room = Room.objects.get(id=room_id)
-#                
-#                if startTime and endTime and room_id:
-#                    Appointment.objects.create(
-#                        client=client,
-#                        startTime=startTime,
-#                        endTime=endTime,
-#                        room=room
-#                    )
-#                    return redirect("schedule")
-#                else:
-#                    print("Error: Datetime parsing failed")
-#            except Client.DoesNotExist:
-#                print("Error: Client not found")
-#            except Room.DoesNotExist:
-#                print("Error: Room not found")
-#        return redirect("scheduling")
-#
-#def deleteAppointmentView(request, appointment_id):
-#    if request.method == "POST":
-#        appointment = get_object_or_404(Appointment, pk=appointment_id)
-#        appointment.delete()
-#        return redirect('schedule')
-#    
-#    return redirect('schedule')
+from .models import Room, Appointment, Client
+
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware, is_naive
+from django.utils.timezone import localtime
+
+class RegisterAppointmentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+
+        clientId = data.get("clientId")
+        roomId = data.get("roomId")
+        startDateTime = parse_datetime(data.get("startTime"))
+        endDateTime = parse_datetime(data.get("endTime"))
+
+        if is_naive(startDateTime):
+            startDateTime = make_aware(startDateTime)
+        if is_naive(endDateTime):
+            endDateTime = make_aware(endDateTime)
+
+        if not all([clientId, roomId, startDateTime, endDateTime]):
+            return Response({
+                "success": False,
+                "message": "Todos os campos são obrigatórios."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            client = Client.objects.get(id=clientId)
+        except Client.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Cliente não encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            room = Room.objects.get(id=roomId)
+        except Room.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Sala não encontrada."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        appointment = Appointment.objects.create(
+            client=client,
+            startTime=startDateTime,
+            endTime=endDateTime,
+            room=room,
+        )
+
+        firstName = client.name.split()[0] if client.name else ''
+        day = localtime(appointment.startTime).strftime("%d")
+        startLocal = localtime(appointment.startTime).strftime("%H:%M")
+        endLocal = localtime(appointment.endTime).strftime("%H:%M")
+        return Response({
+            "success": True,
+            "appointment_id": appointment.id,
+            "message": (
+                f"{firstName} agendado para o dia {day} das {startLocal} às {endLocal} "
+                f"na sala: {appointment.room.name}."
+            ),
+        }, status=status.HTTP_201_CREATED)
