@@ -68,3 +68,20 @@ class RegisterAppointmentAPIView(APIView):
                 f"na sala: {appointment.room.name}."
             ),
         }, status=status.HTTP_201_CREATED)
+    
+class AppointmentListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        appointments = Appointment.objects.all().order_by('startTime')
+        appointmentData = [
+            {
+                'id': appointment.id,
+                'startTime': appointment.startTime,
+                'endTime': appointment.endTime,
+                'room': {'id': appointment.room.id,'name': appointment.room.name,},
+                'note': appointment.note,
+            }
+            for appointment in appointments
+        ]
+        return Response(appointmentData)

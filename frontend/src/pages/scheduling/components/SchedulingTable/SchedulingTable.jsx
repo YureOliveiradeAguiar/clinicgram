@@ -1,22 +1,18 @@
 import styles from './SchedulingTable.module.css';
-import { generateDays, generateHours, generateScheduleMatrix } from '@/utils/generateScheduleMatrix';
 import TimeSummary from '../../utils/TimeSummary.jsx';
 import { useState, useEffect } from 'react';
 
-function SchedulingTable({occupiedIndexes = new Set(),
+function SchedulingTable({ occupiedIndexes,
+        days, indexedCells,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
-        startTime, setStartTime, endTime, setEndTime, hasError=false}) {
-
-    const dias = generateDays();
-    const horarios = generateHours();
-    const indexedCells = generateScheduleMatrix(dias, horarios);
+        startTime, setStartTime, endTime, setEndTime, hasError=false }) {
 
     const [isDragging, setIsDragging] = useState(false);
     const [selectedDay, setSelectedDay] = useState(null);
     const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
 
-    const numColumns = dias.length;
+    const numColumns = days.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
 
     const descriptionText = startTime && endTime
@@ -49,13 +45,13 @@ function SchedulingTable({occupiedIndexes = new Set(),
     const handleMouseDown = (cell) => {
         if (occupiedIndexes.has(cell.index)) return;
         setIsDragging(true);
-        setSelectedDay(cell.dia);
+        setSelectedDay(cell.day);
         setSelectedIndexes(new Set([cell.index]));
         setLastSelectedIndex(cell.index);
     };
 
     const handleMouseEnter = (cell) => {
-        if (!isDragging || cell.dia !== selectedDay || occupiedIndexes.has(cell.index)) return;
+        if (!isDragging || cell.day !== selectedDay || occupiedIndexes.has(cell.index)) return;
 
         if (isAdjacentInColumn(lastSelectedIndex, cell.index)) {
             setSelectedIndexes(prev => {
@@ -78,9 +74,9 @@ function SchedulingTable({occupiedIndexes = new Set(),
             const lastCell = indexedCells.flat().find(cell => cell.index === sorted[sorted.length - 1]);
 
             if (firstCell && lastCell) {
-                const day = firstCell.dia;
-                const start = firstCell.horario;
-                const end = addMinutesToTime(lastCell.horario, 15);
+                const day = firstCell.day;
+                const start = firstCell.time;
+                const end = addMinutesToTime(lastCell.time, 15);
                 setScheduledDay(day);
                 setStartTime(start);
                 setEndTime(end);
@@ -104,24 +100,23 @@ function SchedulingTable({occupiedIndexes = new Set(),
                         <thead>
                             <tr>
                                 <th></th>
-                                {dias.map((dia, index) => (
-                                    <th key={index}>{formatDate(dia)}</th>
+                                {days.map((day, index) => (
+                                    <th key={index}>{formatDate(day)}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {indexedCells.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td className={styles.hourLabel}>{row[0]?.horario}</td>
+                                    <td className={styles.hourLabel}>{row[0]?.time}</td>
                                     {row.map((cell) => (
                                         <td
-                                            key={cell.index}
                                             className={`${styles.scheduleCell}
                                                 ${occupiedIndexes.has(cell.index) ? styles.occupied : ''}
                                                 ${selectedIndexes.has(cell.index) ? styles.selected : ''}`}
-                                            data-index={cell.index}
-                                            data-day={cell.dia}
-                                            data-time={cell.horario}
+                                            key={cell.index} data-index={cell.index}
+                                            data-day={cell.day}
+                                            data-time={cell.time}
                                             onMouseDown={() => handleMouseDown(cell)}
                                             onMouseEnter={() => handleMouseEnter(cell)}
                                             onMouseUp={handleMouseUp}

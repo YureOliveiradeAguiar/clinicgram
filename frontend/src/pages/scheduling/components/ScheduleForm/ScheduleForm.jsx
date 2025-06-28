@@ -3,13 +3,16 @@ import styles from './ScheduleForm.module.css'
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 
 import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../../utils/clientsFetch.js';
 import { roomsFetch } from '../../utils/roomsFetch.js';
+import { appointmentsFetch } from '../../utils/appointmentsFetch.js';
+
+import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 
 function ScheduleForm() {
@@ -18,15 +21,21 @@ function ScheduleForm() {
     const navigate = useNavigate();
 
     const [clients, setClients] = useState([]);
-    const [selectedClient, setSelectedClient] = useState(null);
     const [rooms, setRooms] = useState([]);
+
+    const [selectedClient, setSelectedClient] = useState(null);
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [selectedIndexes, setSelectedIndexes] = useState(new Set());
 
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [scheduledDay, setScheduledDay] = useState(null);
 
-    const [selectedIndexes, setSelectedIndexes] = useState(new Set());
+    const [appointments, setAppointments] = useState([]);
+    const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
+    const days = useMemo(() => generateDays(), []);
+    const times = useMemo(() => generateHours(), []);
+    const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
     
     useEffect(() => {
         clientsFetch() // Fetching for rendering clients in the dropdown.
@@ -39,7 +48,30 @@ function ScheduleForm() {
             .catch(() => {
                 setStatus({ message: "Erro de conexão com o servidor", type: "error" });
             });
+        appointmentsFetch() // Fetching for rendering appointments in the table.
+            .then(data => setAppointments(data))
+            .catch(() => {
+                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
     }, []);
+
+    useEffect(() => { // For rendering the occupied cells based on the selected room.
+        if (!selectedRoom || !appointments.length || !matrix.length) return;
+        const roomAppointments = appointments.filter(
+            (appt) => appt.room.id === selectedRoom.id
+        );
+        const indexes = new Set();
+        for (const appt of roomAppointments) {
+            const start = new Date(appt.startTime);
+            const end = new Date(appt.endTime);
+
+            const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
+            apptIndexes.forEach(index => indexes.add(index));
+            //console.log("appt.startTime : ", appt.startTime);
+            //console.log("start : ", start);
+        }
+        setOccupiedIndexes(indexes);
+    }, [selectedRoom, appointments, matrix]);
 
     useEffect(() => {
         if (startTime && endTime && scheduledDay) {
@@ -84,7 +116,7 @@ function ScheduleForm() {
         if (data.note && data.note.trim() !== "") {
             payload.note = data.note.trim();
         }
-        console.log(payload);
+
         try {
             const response = await fetch('/api/appointments/new/', {
                 method: 'POST',
@@ -144,7 +176,8 @@ function ScheduleForm() {
                 </div>
 
                 <div className={styles.hoursWrapper}>
-                    <SchedulingTable hasError={!!errors.schedule}
+                    <SchedulingTable occupiedIndexes={occupiedIndexes} hasError={!!errors.schedule}
+                        days={days} times={times} indexedCells={matrix}
                         startTime={startTime} endTime={endTime}
                         setStartTime={setStartTime} setEndTime={setEndTime}
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}

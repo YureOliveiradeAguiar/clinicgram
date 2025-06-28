@@ -1,12 +1,17 @@
-export function generateScheduleMatrix(dates, times) {
+export function generateScheduleMatrix(days, times) {
     let indexCounter = 0;
 
-    return times.map(horario => {
-        return dates.map(dia => {
+    return times.map(time => {
+        return days.map(day => {
+            const [year, month, dayNum] = day.split("-").map(Number);
+            const [hour, minute] = time.split(":").map(Number);
+
+            const start = new Date(Date.UTC(year, month - 1, dayNum, hour, minute));
+            const end = new Date(Date.UTC(year, month - 1, dayNum, hour, minute + 15));
+
             return {
-                horario,
-                dia,
-                index: indexCounter++,
+                day, time, index: indexCounter++,
+                start: start.toISOString(), end: end.toISOString(),
             };
         });
     });
@@ -35,4 +40,21 @@ export function generateHours(startHour = 6, endHour = 22, intervalMinutes = 15)
         }
     }
     return hours;
+}
+
+export function getIndexesFromTimeRange(start, end, matrix2D) {
+    const indexes = [];
+
+    for (const row of matrix2D) {
+        for (const cell of row) {
+            const cellStart = new Date(cell.start);
+            const cellEnd = new Date(cell.end);
+
+            console.log ("Comparing ", start, "to", cellStart);
+            if (start < cellEnd && end > cellStart) {
+                indexes.push(cell.index);
+            }
+        }
+    }
+    return indexes;
 }
