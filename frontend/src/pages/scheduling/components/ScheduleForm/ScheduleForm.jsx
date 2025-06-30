@@ -85,6 +85,15 @@ function ScheduleForm() {
         }
     }, [startTime, endTime, scheduledDay, setValue, clearErrors]);
 
+    useEffect(()=> { // Resets selection when a new room is selected.
+        setSelectedIndexes(new Set());
+        setStartTime(null);
+        setEndTime(null);
+        setScheduledDay(null);
+        setValue("schedule", null);
+        clearErrors("schedule");
+    }, [selectedRoom]);
+
     const resetForm = () => {
         reset(); // Reset from the react-hook-form.
         setSelectedClient(null);
