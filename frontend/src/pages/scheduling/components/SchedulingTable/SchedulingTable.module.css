@@ -33,7 +33,6 @@
 table {
     border-collapse: separate;
     background-color: var(--darkBackground);
-    cursor: pointer;
 }
 
 thead {
@@ -70,17 +69,22 @@ td:first-child {
     left: 0;
     z-index: 2;
     background-color: var(--darkBackground);
-    cursor: default;
+}
+.scheduleCell {
+    cursor: pointer;
 }
 .scheduleCell.selected {
     background-color: #ff6f61;
+}
+.scheduleCell.occupied {
+    cursor: default;
+    background-color: var(--primary);
 }
 
 td, td:first-child, th, th:first-child{
     border: 1px solid var(--darkBackground);
 }
 th, th:first-child {
-    cursor: default;
     border-radius: 0 0 6px 6px;
 }
 td {

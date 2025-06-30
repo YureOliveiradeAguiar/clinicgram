@@ -38,6 +38,11 @@ function ScheduleForm() {
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
     
     useEffect(() => {
+        appointmentsFetch() // Fetching for rendering appointments in the table.
+            .then(data => setAppointments(data))
+            .catch(() => {
+                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
         clientsFetch() // Fetching for rendering clients in the dropdown.
             .then(data => setClients(data))
             .catch(() => {
@@ -45,11 +50,6 @@ function ScheduleForm() {
             });
         roomsFetch() // Fetching for rendering rooms in the dropdown.
             .then(data => setRooms(data))
-            .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
-            });
-        appointmentsFetch() // Fetching for rendering appointments in the table.
-            .then(data => setAppointments(data))
             .catch(() => {
                 setStatus({ message: "Erro de conexão com o servidor", type: "error" });
             });
@@ -62,13 +62,13 @@ function ScheduleForm() {
         );
         const indexes = new Set();
         for (const appt of roomAppointments) {
-            const start = new Date(appt.startTime);
-            const end = new Date(appt.endTime);
-
+            const start = appt.startTime;
+            const end = appt.endTime;
             const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
             apptIndexes.forEach(index => indexes.add(index));
-            //console.log("appt.startTime : ", appt.startTime);
-            //console.log("start : ", start);
+            // console.log(apptIndexes);
+            // console.log("appt.startTime (UTC) ", appt.startTime);
+            // console.log("appt.startTime (locale) ", start);
         }
         setOccupiedIndexes(indexes);
     }, [selectedRoom, appointments, matrix]);
@@ -95,6 +95,14 @@ function ScheduleForm() {
         setSelectedIndexes(new Set());
     };
 
+    function localDateTimeToUTCISOString(day, time) {
+        const [year, month, dayOfMonth] = day.split('-').map(Number);
+        const [hour, minute] = time.split(':').map(Number);
+
+        const localDate = new Date(year, month - 1, dayOfMonth, hour, minute);
+        return localDate.toISOString(); // UTC ISO string with Z.
+    }
+
     const onSubmit = async (data) => {
         const { selectedClient, selectedRoom, schedule } = data;
 
@@ -110,8 +118,8 @@ function ScheduleForm() {
         const payload = {
             clientId: selectedClient.id,
             roomId: selectedRoom.id,
-            startTime: `${schedule.day}T${schedule.start}`,
-            endTime: `${schedule.day}T${schedule.end}`
+            startTime: localDateTimeToUTCISOString(schedule.day, schedule.start),
+            endTime: localDateTimeToUTCISOString(schedule.day, schedule.end),
         };
         if (data.note && data.note.trim() !== "") {
             payload.note = data.note.trim();
@@ -129,8 +137,23 @@ function ScheduleForm() {
             });
             const result = await response.json();
             if (response.ok) {
-                setStatus({ message: result.message || "Agendamento confirmado!", type: "success" });
+                const startLocal = new Date(result.startUTC);
+                const endLocal = new Date(result.endUTC);
+                const timeFormatter = new Intl.DateTimeFormat('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hourCycle: 'h23',
+                });
+                setStatus({
+                    message: `${result.firstName} agendado para o dia ${startLocal.getDate()} das ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} na sala: ${result.roomName}.` || "Agendamento confirmado!",
+                    type: "success"
+                });
                 resetForm();
+                appointmentsFetch()
+                    .then(data => setAppointments(data))
+                    .catch(() => {
+                        setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                    });
             } else {
                 setStatus({ message: result.message || "Erro ao agendar", type: "error" });
             }

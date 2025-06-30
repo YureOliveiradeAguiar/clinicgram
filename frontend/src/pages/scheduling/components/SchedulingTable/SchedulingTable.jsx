@@ -31,7 +31,8 @@ function SchedulingTable({ occupiedIndexes,
     };
 
     function formatDate(dateString, withWeekday = false) {
-        const date = new Date(dateString);
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // Local time (not UTC).
         const formattedDate = date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',

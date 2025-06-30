@@ -57,16 +57,13 @@ class RegisterAppointmentAPIView(APIView):
         )
 
         firstName = client.name.split()[0] if client.name else ''
-        day = localtime(appointment.startTime).strftime("%d")
-        startLocal = localtime(appointment.startTime).strftime("%H:%M")
-        endLocal = localtime(appointment.endTime).strftime("%H:%M")
+        startUTC = appointment.startTime
+        endUTC = appointment.endTime
         return Response({
-            "success": True,
-            "appointment_id": appointment.id,
-            "message": (
-                f"{firstName} agendado para o dia {day} das {startLocal} às {endLocal} "
-                f"na sala: {appointment.room.name}."
-            ),
+            "firstName": firstName,
+            "startUTC": startUTC,
+            "endUTC": endUTC,
+            "roomName": appointment.room.name,
         }, status=status.HTTP_201_CREATED)
     
 class AppointmentListAPIView(APIView):

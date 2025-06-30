@@ -18,15 +18,13 @@ export function generateScheduleMatrix(days, times) {
 }
 
 export function generateDays(numDays = 14) {
-    const today = new Date();
+    const today = new Date(); // Generates local to the user.
     const days = [];
-
     for (let i = 0; i < numDays; i++) {
         const nextDate = new Date(today);
         nextDate.setDate(today.getDate() + i);
         days.push(nextDate.toISOString().split('T')[0]); // "YYYY-MM-DD"
     }
-
     return days;
 }
 
@@ -42,16 +40,29 @@ export function generateHours(startHour = 6, endHour = 22, intervalMinutes = 15)
     return hours;
 }
 
+function localDateTime(day, time) {
+    // day = 2025-06-30
+    // time = 2025-06-30T06:00:00.000Z
+    const [year, month, dayOfMonth] = day.split('-').map(Number);
+    const timeStringPart = time.split('T')[1].substring(0, 5);
+    const [hour, minute] = timeStringPart.split(':').map(Number);
+    const localDate = new Date(year, month - 1, dayOfMonth, hour, minute);
+    return localDate;
+}
+
 export function getIndexesFromTimeRange(start, end, matrix2D) {
     const indexes = [];
 
     for (const row of matrix2D) {
         for (const cell of row) {
-            const cellStart = new Date(cell.start);
-            const cellEnd = new Date(cell.end);
+            const cellStartUTC = localDateTime(cell.day, cell.start).toISOString();
 
-            console.log ("Comparing ", start, "to", cellStart);
-            if (start < cellEnd && end > cellStart) {
+            const cellEndLocal = localDateTime(cell.day, cell.end);
+            cellEndLocal.setMinutes(cellEndLocal.getMinutes() + 15);
+
+            const cellEndUTC = cellEndLocal.toISOString();
+            // console.log ("Comparing ", start, "to", cellStart);
+            if (start < cellEndUTC && end > cellStartUTC) {
                 indexes.push(cell.index);
             }
         }
