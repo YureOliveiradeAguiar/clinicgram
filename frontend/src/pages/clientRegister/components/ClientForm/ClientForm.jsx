@@ -1,6 +1,7 @@
 import styles from './ClientForm.module.css'
 
 import DateDropdown from '../DateDropdown/DateDropdown.jsx';
+import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -122,10 +123,10 @@ function ClientForm() {
 
     return (
         <div className={styles.mainWrapper}>
-            <h2>Registrar Cliente</h2>
+            <h2>Novo Cliente</h2>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
                 <p className={`statusMessage ${status.type}`}>{status.message}</p>
-
+                
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Nome Completo</label>
                     <input type="text" id="name" name="name"  autoComplete="off"
@@ -175,11 +176,8 @@ function ClientForm() {
                     </div>
                     <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
                 </div>
-                
-                <div className={styles.buttonsContainer}>
-                    <input type="submit" name="registrar" value="Registrar" className={styles.formButton}/>
-                    <button type="button" onClick={() => navigate('/dashboard')} className={styles.formButton}>Voltar</button>
-                </div>
+
+                <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
             </form>
         </div>
     );

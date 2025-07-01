@@ -64,7 +64,7 @@ function Login () {
                         {...register("password", {required: "Senha é obrigatória"})}/>
                 </div>
 
-                <input type="submit" name="login" value="Entrar" className={styles.loginButton}/>
+                <input type="submit" name="login" value="Login" className={styles.loginButton}/>
             </form>
 
             <div className={styles.observation}>

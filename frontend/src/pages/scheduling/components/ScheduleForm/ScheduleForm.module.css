@@ -4,20 +4,15 @@
 .scheduleForm {
     max-width: 900px;
     display: grid;
-    grid-template-columns: 1fr; /* Mobile default: 1 column */
+    grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 1rem;
 }
-.inputsWrapper {
-    min-width: 0
-}
-.formGroup {
-    min-width: 0
-}
 .hoursWrapper {
-    min-width: 0
+    min-width: 0;
 }
 .buttonsContainer {
+    align-self: start;
     display: flex;
     justify-content: center;
     flex-direction: row;
@@ -27,20 +22,20 @@
 }
 @media (min-width: 768px) {
     .scheduleForm {
-      grid-template-columns: 5fr 3fr;
-      grid-template-rows: 6fr 1fr;
-      grid-template-areas:
-        "a b"
-        "a c";
+        grid-template-columns: 5fr 3fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "a b"
+          "a c";
     }
     .hoursWrapper {
-      grid-area: a;
+        grid-area: a;
     }
     .inputsWrapper {
-      grid-area: b;
+        grid-area: b;
     }
     .buttonsContainer {
-      grid-area: c;
+        grid-area: c;
     }
 }
 
@@ -124,7 +119,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 10px 0 10px;
+    padding: 8px 30px 0 10px;
 }
 
 @media (max-width: 768px) {

@@ -1,7 +1,6 @@
-import CheckIcon from '@/assets/icons/checkMark.jsx'
-import BackIcon from '@/assets/icons/arrowLeft.jsx'
 import styles from './ScheduleForm.module.css'
 import { Link } from 'react-router-dom';
+import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
@@ -182,7 +181,7 @@ function ScheduleForm() {
                 <nav className={styles.formNav} aria-label="Navegação de Agendamento">
                     <ul>
                         <li><Link to="/schedule/new">Agenda</Link></li>
-                        <li><Link to="/schedule/new">+Cliente</Link></li>
+                        <li><Link to="/clients/new">+Cliente</Link></li>
                         <li><Link to="/schedule/new">Salas</Link></li>
                     </ul>
                 </nav>
@@ -228,15 +227,7 @@ function ScheduleForm() {
                         selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}/>
                 </div>
 
-                <div className={styles.buttonsContainer}>
-                    <button type="submit" name="registrar" className={`${styles.formButton} ${styles.confirmBtn}`}>
-                        {CheckIcon && <CheckIcon className={styles.icon} aria-hidden="true"/>}Registrar
-                    </button>
-                    <button type="button" onClick={() => navigate('/dashboard')}
-                            className={`${styles.formButton} ${styles.returnBtn}`}>
-                        {BackIcon && <BackIcon className={styles.icon} aria-hidden="true"/>}Voltar
-                    </button>
-                </div>
+                <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
             </form>
         </div>
     );
