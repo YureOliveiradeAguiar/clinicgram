@@ -1,4 +1,7 @@
+import CheckIcon from '@/assets/icons/checkMark.jsx'
+import BackIcon from '@/assets/icons/arrowLeft.jsx'
 import styles from './ScheduleForm.module.css'
+import { Link } from 'react-router-dom';
 
 import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
 import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
@@ -174,7 +177,16 @@ function ScheduleForm() {
 
     return (
         <div className={styles.mainWrapper}>
-            <h2>Agendamento</h2>
+            <div className={styles.formHeader}>
+                <h2>Novo Agendamento</h2>
+                <nav className={styles.formNav} aria-label="Navegação de Agendamento">
+                    <ul>
+                        <li><Link to="/schedule/new">Agenda</Link></li>
+                        <li><Link to="/schedule/new">+Cliente</Link></li>
+                        <li><Link to="/schedule/new">Salas</Link></li>
+                    </ul>
+                </nav>
+            </div>
             <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>
@@ -190,7 +202,7 @@ function ScheduleForm() {
                     </div>
                     <div className={styles.formGroup}>
                         <SearchDropdown options={rooms} selectedOption={selectedRoom} hasError={!!errors.room}
-                            labels = {{label: 'Selecione a sala', optionName : 'Selecione uma sala',
+                            labels = {{label: 'Sala', optionName : 'Selecione uma sala',
                                 placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
                             onSelect={(room) => {
                                 if (!room) return;
@@ -201,7 +213,7 @@ function ScheduleForm() {
                         <p className="errorMessage">{errors.room?.message || " "}</p>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="note">Notas</label>
+                        <p className={styles.dropdownLabel}>Sobre</p>
                         <textarea id="note" name="note" rows={5} className={`formInput ${styles.formTextarea}`}
                             {...register('note')} placeholder="Notas opcionais aqui"/>
                     </div>
@@ -217,8 +229,13 @@ function ScheduleForm() {
                 </div>
 
                 <div className={styles.buttonsContainer}>
-                    <input type="submit" name="registrar" value="Registrar" className={styles.formButton}/>
-                    <button type="button" onClick={() => navigate('/dashboard')} className={styles.formButton}>Voltar</button>
+                    <button type="submit" name="registrar" className={`${styles.formButton} ${styles.confirmBtn}`}>
+                        {CheckIcon && <CheckIcon className={styles.icon} aria-hidden="true"/>}Registrar
+                    </button>
+                    <button type="button" onClick={() => navigate('/dashboard')}
+                            className={`${styles.formButton} ${styles.returnBtn}`}>
+                        {BackIcon && <BackIcon className={styles.icon} aria-hidden="true"/>}Voltar
+                    </button>
                 </div>
             </form>
         </div>

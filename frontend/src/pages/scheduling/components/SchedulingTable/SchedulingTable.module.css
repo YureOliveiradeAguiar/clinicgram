@@ -78,7 +78,7 @@ td:first-child {
 }
 .scheduleCell.occupied {
     cursor: default;
-    background-color: var(--primary);
+    background-color: #a8a8a8;
 }
 
 td, td:first-child, th, th:first-child{

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './SearchDropdown.module.css';
 
 function SearchDropdown({ options = [], selectedOption, onSelect, hasError, labels = {
-        label: 'Selecione o Cliente', optionName : 'Selecione um cliente',
+        label: 'Cliente', optionName : 'Selecione um cliente',
         placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado',
     },}) {
     const [isOpen, setIsOpen] = useState(false);
