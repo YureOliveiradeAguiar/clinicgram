@@ -1,5 +1,5 @@
 import styles from './SchedulingTable.module.css';
-import TimeSummary from '../../utils/TimeSummary.jsx';
+import TimeSummary from '../TimeSummary/TimeSummary.jsx';
 import { useState, useEffect } from 'react';
 
 function SchedulingTable({ occupiedIndexes,
@@ -18,7 +18,7 @@ function SchedulingTable({ occupiedIndexes,
     const descriptionText = startTime && endTime
         ? `Selecionado: ${startTime} às ${endTime} • ${formatDate(scheduledDay, true)}`
         : 'Clique e arraste para selecionar';
-    const errorText = 'Selecione um horário válido antes de continuar';
+    const errorText = 'Selecione um horário válido';
 
     const addMinutesToTime = (timeString, minutesToAdd) => {
         const [hours, minutes] = timeString.split(':').map(Number);
@@ -130,8 +130,7 @@ function SchedulingTable({ occupiedIndexes,
                 </div>
                 <div className={styles.scrollbarCorner}></div>
             </div>
-            <TimeSummary descriptionText={descriptionText} errorText={errorText}
-                hasError={hasError} className={`${styles.timeSummary} ${hasError ? styles.timeSumError : ''}`}/>
+            <TimeSummary descriptionText={descriptionText} errorText={errorText} hasError={hasError}/>
         </div>
     );
 }

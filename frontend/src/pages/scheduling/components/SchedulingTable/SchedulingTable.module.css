@@ -7,27 +7,12 @@
 
     border-radius: 8px;
     border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     user-select: none;
 }
 
 .scheduleContainer {
     max-height: 420px;
     overflow: auto;
-}
-
-.timeSummary {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 8px;
-
-}
-
-.timeSumError {
-    font-weight: bold;
-    color: var(--error);
 }
 
 table {
@@ -46,8 +31,8 @@ thead {
 th, td {
     border-left: none;
     text-align: center;
-    padding: 8px;
-    min-width: 70px;
+    padding: 4px 8px;
+    min-width: 64px;
 }
 th {
     position: sticky;
@@ -115,6 +100,7 @@ td:first-child {
 
  /* SCROLL-BAR */
 .scrollbarCorner {
+    display: none;
     width: 14px;
     height: 18px;
     position: absolute;
@@ -123,9 +109,13 @@ td:first-child {
     z-index: 10;
     background-color: inherit;
 }
+@media (max-width: 768px) {
+    .scrollbarCorner {
+        display: block;
+    }
+}
 
 .scheduleContainer::-webkit-scrollbar {
-    height: 18px;
     width: 14px;
 }
 

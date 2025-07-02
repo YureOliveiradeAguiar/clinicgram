@@ -17,7 +17,7 @@ export function generateScheduleMatrix(days, times) {
     });
 }
 
-export function generateDays(numDays = 14) {
+export function generateDays(numDays = 7) {
     const today = new Date(); // Generates local to the user.
     const days = [];
     for (let i = 0; i < numDays; i++) {
