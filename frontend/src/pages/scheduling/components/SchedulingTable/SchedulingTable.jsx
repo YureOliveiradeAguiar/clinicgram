@@ -1,5 +1,5 @@
 import styles from './SchedulingTable.module.css';
-import TimeSummary from '../TimeSummary/TimeSummary.jsx';
+import TableMoving from '../TableMoving/TableMoving.jsx';
 import { useState, useEffect } from 'react';
 
 function SchedulingTable({ occupiedIndexes,
@@ -95,7 +95,8 @@ function SchedulingTable({ occupiedIndexes,
 
     return (
         <div>
-            <div className={styles.scheduleWrapper}>
+            <TableMoving descriptionText={descriptionText} errorText={errorText} hasError={hasError}/>
+            <div className={`${styles.scheduleWrapper} ${hasError ? styles.scheduleWrapperError : ''}`}>
                 <div className={styles.scheduleContainer} id="hoursScheduling">
                     <table>
                         <thead>
@@ -130,7 +131,6 @@ function SchedulingTable({ occupiedIndexes,
                 </div>
                 <div className={styles.scrollbarCorner}></div>
             </div>
-            <TimeSummary descriptionText={descriptionText} errorText={errorText} hasError={hasError}/>
         </div>
     );
 }

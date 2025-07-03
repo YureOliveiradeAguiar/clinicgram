@@ -1,0 +1,53 @@
+.tableMovingContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 2px 0;
+}
+
+.weeksButtons,
+.MonthDeets {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.moveButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    font-size: 1rem;
+    color: #444;
+    background-color: var(--darkBackground);
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.moveButton:hover {
+    background-color: #e3e3e3;
+}
+
+.MonthName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 12px;
+    background-color: var(--darkBackground);
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+    stroke: inherit;
+    fill: inherit;
+}

@@ -123,6 +123,7 @@ function ScheduleForm() {
             setError("schedule", { type: "manual", message: "Selecione um horário válido" });
         }
         if (!selectedClient || !selectedRoom || !schedule?.day || !schedule?.start || !schedule?.end) {
+            setStatus({ message: "Dados inválidos!", type: "error" });
             return;
         }
 
@@ -225,6 +226,7 @@ function ScheduleForm() {
                         setStartTime={setStartTime} setEndTime={setEndTime}
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
                         selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}/>
+                    <p className="errorMessage">{errors.room?.message || " "}</p>
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
