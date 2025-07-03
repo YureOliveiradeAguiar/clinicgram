@@ -1,4 +1,4 @@
-function appointsIcon ({ width = 60, height = 60, fill = 'currentColor', className }) {
+export default function AppointsIcon ({ width = 60, height = 60, fill = 'currentColor', className }) {
     return (
         <svg width={width} height={height} viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" className={className}>
             <path d="M35.675 17.2733H32.2711V13.8695C32.2711 12.6149 31.2539 11.5977 29.9993 11.5977C28.7447 11.5977 27.7275 12.6149 27.7275 13.8695V17.2734H24.3236C23.0689 17.2734 22.0518 18.2906 22.0518 19.5452C22.0518 20.7998 23.0689 21.817 24.3236 21.817H27.7275V25.2208C27.7275 26.4754 28.7447 27.4926 29.9993 27.4926C31.2539 27.4926 32.2711 26.4754 32.2711 25.2208V21.817H35.675C36.9296 21.817 37.9468 20.7998 37.9468 19.5452C37.9468 18.2905 36.9299 17.2733 35.675 17.2733Z"
@@ -8,5 +8,3 @@ function appointsIcon ({ width = 60, height = 60, fill = 'currentColor', classNa
         </svg>
     )
 }
-
-export default appointsIcon;

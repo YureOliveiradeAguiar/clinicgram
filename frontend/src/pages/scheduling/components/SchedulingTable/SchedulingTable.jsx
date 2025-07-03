@@ -1,3 +1,4 @@
+import AlertIcon from '@/assets/icons/alertSign.jsx'
 import styles from './SchedulingTable.module.css';
 import TableMoving from '../TableMoving/TableMoving.jsx';
 import { useState, useEffect } from 'react';
@@ -95,7 +96,7 @@ function SchedulingTable({ occupiedIndexes,
 
     return (
         <div>
-            <TableMoving descriptionText={descriptionText} errorText={errorText} hasError={hasError}/>
+            <TableMoving/>
             <div className={`${styles.scheduleWrapper} ${hasError ? styles.scheduleWrapperError : ''}`}>
                 <div className={styles.scheduleContainer} id="hoursScheduling">
                     <table>
@@ -130,6 +131,10 @@ function SchedulingTable({ occupiedIndexes,
                     </table>
                 </div>
                 <div className={styles.scrollbarCorner}></div>
+            </div>
+            <div className={`${styles.description} ${hasError ? styles.descriptionError : ''}`}>
+                {hasError && AlertIcon && <AlertIcon className={styles.icon}/>}
+                {hasError ? errorText : descriptionText}
             </div>
         </div>
     );

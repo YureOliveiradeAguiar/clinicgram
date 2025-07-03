@@ -6,8 +6,7 @@
     padding: 2px 0;
 }
 
-.weeksButtons,
-.MonthDeets {
+.weekConfigs, .monthConfigs {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -32,7 +31,7 @@
     background-color: #e3e3e3;
 }
 
-.MonthName {
+.segmentName {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -226,7 +226,6 @@ function ScheduleForm() {
                         setStartTime={setStartTime} setEndTime={setEndTime}
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
                         selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}/>
-                    <p className="errorMessage">{errors.room?.message || " "}</p>
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
