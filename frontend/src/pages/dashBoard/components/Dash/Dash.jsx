@@ -3,8 +3,8 @@ import usersIcon from '@/assets/icons/usersIcon.jsx'
 import scheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import appointsIcon from '@/assets/icons/appointsIcon.jsx'
 import roomsIcon from '@/assets/icons/roomsIcon.jsx'
-import waitingIcon from '@/assets/icons/clockIcon.jsx'
-import suppliesIcon from '@/assets/icons/boxes.jsx'
+//import waitingIcon from '@/assets/icons/clockIcon.jsx'
+//import suppliesIcon from '@/assets/icons/boxes.jsx'
 import LogOutIcon from '@/assets/icons/logOutIcon.jsx'
 
 import styles from './Dash.module.css'
@@ -19,8 +19,8 @@ function Dash () {
         { title: "Clientes", Icon: usersIcon, link: "/clients" },
         { title: "Agendamento", Icon: appointsIcon, link: "/schedule/new" },
         { title: "Agenda", Icon: scheduleIcon, link: "" },
-        { title: "Estoque", Icon: suppliesIcon, link: "" },
-        { title: "Lista de Espera", Icon: waitingIcon, link: "" },
+        //{ title: "Estoque", Icon: suppliesIcon, link: "" },
+        //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
         { title: "Registrar Sala", Icon: roomsIcon, link: "" },
     ];
 

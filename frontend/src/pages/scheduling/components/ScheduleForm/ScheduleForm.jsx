@@ -7,7 +7,6 @@ import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
 
 import { useMemo, useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
 
 import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../../utils/clientsFetch.js';
@@ -20,7 +19,6 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 function ScheduleForm() {
     const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
-    const navigate = useNavigate();
 
     const [clients, setClients] = useState([]);
     const [rooms, setRooms] = useState([]);
@@ -36,13 +34,18 @@ function ScheduleForm() {
     const [appointments, setAppointments] = useState([]);
     const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
 
-
     const [startOffset, setStartOffset] = useState(0);
-    const days = useMemo(() => {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() + startOffset);
-        return generateDays(7, startDate);
+
+    // Centralized base date info.
+    const startDate = useMemo(() => {
+      const date = new Date();
+      date.setDate(date.getDate() + startOffset);
+      return date;
     }, [startOffset]);
+    const days = useMemo(() => generateDays(7, startDate), [startDate]);
+    const rawMonth = startDate.toLocaleString('pt-BR', { month: 'long' });
+    const monthName = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
+    const year = startDate.getFullYear();
 
     const times = useMemo(() => generateHours(), []);
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
@@ -102,7 +105,7 @@ function ScheduleForm() {
         setScheduledDay(null);
         setValue("schedule", null);
         clearErrors("schedule");
-    }, [selectedRoom]);
+    }, [selectedRoom, startOffset]);
 
     const resetForm = () => {
         reset(); // Reset from the react-hook-form.
@@ -234,7 +237,8 @@ function ScheduleForm() {
                         setStartTime={setStartTime} setEndTime={setEndTime}
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
                         selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}
-                        startOffset={startOffset} setStartOffset={setStartOffset}/>
+                        startOffset={startOffset} setStartOffset={setStartOffset}
+                        monthName={monthName} year={year}/>
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>

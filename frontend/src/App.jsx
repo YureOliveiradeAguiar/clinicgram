@@ -30,7 +30,7 @@ function Layout() {
 				<Route path='/clients/new' element={<RequireAuth><ClientRegister/></RequireAuth>}/>
 				<Route path='/clients' element={<RequireAuth><Clients/></RequireAuth>}/>
 				<Route path='/schedule/new' element={<RequireAuth><Scheduling/></RequireAuth>}/>
-				<Route path='/schedule' element={<RequireAuth><Schedule/></RequireAuth>}/>
+				<Route path='/locations' element={<RequireAuth><Schedule/></RequireAuth>}/>
 			</Routes>
 		</>
 	);

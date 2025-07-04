@@ -8,7 +8,8 @@ function SchedulingTable({ occupiedIndexes,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
         startTime, setStartTime, endTime, setEndTime, hasError=false,
-        startOffset={startOffset}, setStartOffset={setStartOffset}}) {
+        startOffset={startOffset}, setStartOffset={setStartOffset},
+        monthName={monthName}, year={year}}) {
 
     const [isDragging, setIsDragging] = useState(false);
     const [selectedDay, setSelectedDay] = useState(null);
@@ -18,7 +19,7 @@ function SchedulingTable({ occupiedIndexes,
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
 
     const descriptionText = startTime && endTime
-        ? `Selecionado: ${startTime} às ${endTime} • ${formatDate(scheduledDay, true)}`
+        ? `Selecionado: ${startTime} às ${endTime} • ${formatDate(scheduledDay, true)} • ${monthName} • ${year}`
         : 'Clique e arraste para selecionar';
     const errorText = 'Selecione um horário válido';
 
@@ -97,7 +98,7 @@ function SchedulingTable({ occupiedIndexes,
 
     return (
         <div>
-            <TableMoving startOffset={startOffset} setStartOffset={setStartOffset}/>
+            <TableMoving startOffset={startOffset} setStartOffset={setStartOffset} monthName={monthName} year={year}/>
             <div className={`${styles.scheduleWrapper} ${hasError ? styles.scheduleWrapperError : ''}`}>
                 <div className={styles.scheduleContainer} id="hoursScheduling">
                     <table>
