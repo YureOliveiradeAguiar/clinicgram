@@ -5,14 +5,12 @@ import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButto
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
 
 import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
-    const navigate = useNavigate();
 
     const [days, setDays] = useState([]);
     const [months, setMonths] = useState([]);

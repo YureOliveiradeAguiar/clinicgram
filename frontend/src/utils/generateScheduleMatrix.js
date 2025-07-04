@@ -17,12 +17,11 @@ export function generateScheduleMatrix(days, times) {
     });
 }
 
-export function generateDays(numDays = 7) {
-    const today = new Date(); // Generates local to the user.
+export function generateDays(numDays = 7, startDate = new Date()) {
     const days = [];
     for (let i = 0; i < numDays; i++) {
-        const nextDate = new Date(today);
-        nextDate.setDate(today.getDate() + i);
+        const nextDate = new Date(startDate);
+        nextDate.setDate(startDate.getDate() + i);
         days.push(nextDate.toISOString().split('T')[0]); // "YYYY-MM-DD"
     }
     return days;

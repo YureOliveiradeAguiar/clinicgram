@@ -35,7 +35,15 @@ function ScheduleForm() {
 
     const [appointments, setAppointments] = useState([]);
     const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
-    const days = useMemo(() => generateDays(), []);
+
+
+    const [startOffset, setStartOffset] = useState(0);
+    const days = useMemo(() => {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() + startOffset);
+        return generateDays(7, startDate);
+    }, [startOffset]);
+
     const times = useMemo(() => generateHours(), []);
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
     
@@ -225,7 +233,8 @@ function ScheduleForm() {
                         startTime={startTime} endTime={endTime}
                         setStartTime={setStartTime} setEndTime={setEndTime}
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
-                        selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}/>
+                        selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}
+                        startOffset={startOffset} setStartOffset={setStartOffset}/>
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>

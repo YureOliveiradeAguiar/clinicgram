@@ -7,7 +7,8 @@ function SchedulingTable({ occupiedIndexes,
         days, indexedCells,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
-        startTime, setStartTime, endTime, setEndTime, hasError=false }) {
+        startTime, setStartTime, endTime, setEndTime, hasError=false,
+        startOffset={startOffset}, setStartOffset={setStartOffset}}) {
 
     const [isDragging, setIsDragging] = useState(false);
     const [selectedDay, setSelectedDay] = useState(null);
@@ -96,7 +97,7 @@ function SchedulingTable({ occupiedIndexes,
 
     return (
         <div>
-            <TableMoving/>
+            <TableMoving startOffset={startOffset} setStartOffset={setStartOffset}/>
             <div className={`${styles.scheduleWrapper} ${hasError ? styles.scheduleWrapperError : ''}`}>
                 <div className={styles.scheduleContainer} id="hoursScheduling">
                     <table>

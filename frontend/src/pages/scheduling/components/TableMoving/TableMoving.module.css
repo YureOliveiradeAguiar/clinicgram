@@ -1,17 +1,28 @@
 .tableMovingContainer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 2rem;
-    padding: 2px 0;
+    margin-bottom: 6px;
 }
 
-.weekConfigs, .monthConfigs {
+.todayButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 999px;
+    color: #444;
+    font-size: 1rem;
+    padding: 6px 0px;
+    height: 100%;
+    width: 80px;
+}
+
+/* WEEK CONFIGS */
+.weekConfigs {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
-
 .moveButton {
     display: flex;
     justify-content: center;
@@ -19,31 +30,43 @@
     border: none;
     font-size: 1rem;
     color: #444;
-    background-color: var(--darkBackground);
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 4px 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    border-radius: 50%;
+    padding: 6px;
 }
 
-.moveButton:hover {
+/* CALENDAR */
+.dateGroup, .dateElement {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.dateGroup {
+    justify-content: space-between;
+    gap: 4px;
+    color: #444;
+    font-size: 1rem;
+    width: 260px;
+}
+.dateElement {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-radius: 6px;
+    padding: 0 6px;
+    height: 100%;
+}
+
+/* BUTTONS */
+.todayButton, .moveButton, .dateElement {
+    background-color: var(--darkBackground);
+    border: 1px solid #ccc;
+    transition: background-color 0.4s ease-in-out;
+}
+.todayButton:hover, .moveButton:hover, .dateElement:hover {
     background-color: #e3e3e3;
 }
 
-.segmentName {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 4px 12px;
-    background-color: var(--darkBackground);
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    font-weight: 500;
-    min-width: 100px;
-    text-align: center;
-}
-
+/* ICONS */
 .icon {
     width: 22px;
     height: 22px;

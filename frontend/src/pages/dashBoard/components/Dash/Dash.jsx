@@ -1,6 +1,6 @@
 import userAddIcon from '@/assets/icons/userAddIcon.jsx'
 import usersIcon from '@/assets/icons/usersIcon.jsx'
-import scheduleIcon from '@/assets/icons/scheduleIcon.jsx'
+import scheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import appointsIcon from '@/assets/icons/appointsIcon.jsx'
 import roomsIcon from '@/assets/icons/roomsIcon.jsx'
 import waitingIcon from '@/assets/icons/clockIcon.jsx'
