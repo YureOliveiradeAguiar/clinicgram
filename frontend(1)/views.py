@@ -7,8 +7,8 @@ from clients.forms import ClientForm
 from appointments.models import Appointment
 from appointments.utils import generateScheduleData, generateIndexedCells
 
-from rooms.models import Room
-from rooms.forms import RoomForm
+from places.models import Place
+from places.forms import RoomForm
 
 from django.core.serializers import serialize
 from django.contrib.auth.decorators import login_required

@@ -2,7 +2,7 @@ import userAddIcon from '@/assets/icons/userAddIcon.jsx'
 import usersIcon from '@/assets/icons/usersIcon.jsx'
 import scheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import appointsIcon from '@/assets/icons/appointsIcon.jsx'
-import roomsIcon from '@/assets/icons/roomsIcon.jsx'
+import placesIcon from '@/assets/icons/placesIcon.jsx'
 //import waitingIcon from '@/assets/icons/clockIcon.jsx'
 //import suppliesIcon from '@/assets/icons/boxes.jsx'
 import LogOutIcon from '@/assets/icons/logOutIcon.jsx'
@@ -21,7 +21,7 @@ function Dash () {
         { title: "Agenda", Icon: scheduleIcon, link: "" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
         //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
-        { title: "Registrar Sala", Icon: roomsIcon, link: "" },
+        { title: "Registrar Local", Icon: placesIcon, link: "" },
     ];
 
     return (

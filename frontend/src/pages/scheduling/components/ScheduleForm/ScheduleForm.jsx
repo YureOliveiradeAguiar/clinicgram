@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../../utils/clientsFetch.js';
-import { roomsFetch } from '../../utils/roomsFetch.js';
+import { placesFetch } from '../../utils/placesFetch.js';
 import { appointmentsFetch } from '../../utils/appointmentsFetch.js';
 
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
@@ -21,10 +21,10 @@ function ScheduleForm() {
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
 
     const [clients, setClients] = useState([]);
-    const [rooms, setRooms] = useState([]);
+    const [places, setPlaces] = useState([]);
 
     const [selectedClient, setSelectedClient] = useState(null);
-    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [selectedPlace, setSelectedPlace] = useState(null);
     const [selectedIndexes, setSelectedIndexes] = useState(new Set());
 
     const [startTime, setStartTime] = useState(null);
@@ -61,20 +61,20 @@ function ScheduleForm() {
             .catch(() => {
                 setStatus({ message: "Erro de conexão com o servidor", type: "error" });
             });
-        roomsFetch() // Fetching for rendering rooms in the dropdown.
-            .then(data => setRooms(data))
+        placesFetch() // Fetching for rendering places in the dropdown.
+            .then(data => setPlaces(data))
             .catch(() => {
                 setStatus({ message: "Erro de conexão com o servidor", type: "error" });
             });
     }, []);
 
-    useEffect(() => { // For rendering the occupied cells based on the selected room.
-        if (!selectedRoom || !appointments.length || !matrix.length) return;
-        const roomAppointments = appointments.filter(
-            (appt) => appt.room.id === selectedRoom.id
+    useEffect(() => { // For rendering the occupied cells based on the selected place.
+        if (!selectedPlace || !appointments.length || !matrix.length) return;
+        const placeAppointments = appointments.filter(
+            (appt) => appt.place.id === selectedPlace.id
         );
         const indexes = new Set();
-        for (const appt of roomAppointments) {
+        for (const appt of placeAppointments) {
             const start = appt.startTime;
             const end = appt.endTime;
             const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
@@ -84,7 +84,7 @@ function ScheduleForm() {
             // console.log("appt.startTime (locale) ", start);
         }
         setOccupiedIndexes(indexes);
-    }, [selectedRoom, appointments, matrix]);
+    }, [selectedPlace, appointments, matrix]);
 
     useEffect(() => {
         if (startTime && endTime && scheduledDay) {
@@ -98,19 +98,19 @@ function ScheduleForm() {
         }
     }, [startTime, endTime, scheduledDay, setValue, clearErrors]);
 
-    useEffect(()=> { // Resets selection when a new room is selected.
+    useEffect(()=> { // Resets selection when a new place is selected.
         setSelectedIndexes(new Set());
         setStartTime(null);
         setEndTime(null);
         setScheduledDay(null);
         setValue("schedule", null);
         clearErrors("schedule");
-    }, [selectedRoom, startOffset]);
+    }, [selectedPlace, startOffset]);
 
     const resetForm = () => {
         reset(); // Reset from the react-hook-form.
         setSelectedClient(null);
-        setSelectedRoom(null);
+        setSelectedPlace(null);
         setStartTime(null);
         setEndTime(null);
         setScheduledDay(null);
@@ -126,21 +126,21 @@ function ScheduleForm() {
     }
 
     const onSubmit = async (data) => {
-        const { selectedClient, selectedRoom, schedule } = data;
+        const { selectedClient, selectedPlace, schedule } = data;
 
         if (!selectedClient) {setError("client", {type: "manual", message: "Selecione um cliente"});}
-        if (!selectedRoom) {setError("room", {type: "manual", message: "Selecione uma sala"});}
+        if (!selectedPlace) {setError("placa", {type: "manual", message: "Selecione uma sala"});}
         if (!schedule || !schedule.day || !schedule.start || !schedule.end) {
             setError("schedule", { type: "manual", message: "Selecione um horário válido" });
         }
-        if (!selectedClient || !selectedRoom || !schedule?.day || !schedule?.start || !schedule?.end) {
+        if (!selectedClient || !selectedPlace || !schedule?.day || !schedule?.start || !schedule?.end) {
             setStatus({ message: "Dados inválidos!", type: "error" });
             return;
         }
 
         const payload = {
             clientId: selectedClient.id,
-            roomId: selectedRoom.id,
+            placeId: selectedPlace.id,
             startTime: localDateTimeToUTCISOString(schedule.day, schedule.start),
             endTime: localDateTimeToUTCISOString(schedule.day, schedule.end),
         };
@@ -168,7 +168,7 @@ function ScheduleForm() {
                     hourCycle: 'h23',
                 });
                 setStatus({
-                    message: `${result.firstName} agendado para o dia ${startLocal.getDate()} das ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} na sala: ${result.roomName}.` || "Agendamento confirmado!",
+                    message: `${result.firstName} agendado para o dia ${startLocal.getDate()} das ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} na sala: ${result.placeName}.` || "Agendamento confirmado!",
                     type: "success"
                 });
                 resetForm();
@@ -212,16 +212,16 @@ function ScheduleForm() {
                         <p className="errorMessage">{errors.client?.message || " "}</p>
                     </div>
                     <div className={styles.formGroup}>
-                        <SearchDropdown options={rooms} selectedOption={selectedRoom} hasError={!!errors.room}
+                        <SearchDropdown options={places} selectedOption={selectedPlace} hasError={!!errors.place}
                             labels = {{label: 'Sala', optionName : 'Selecione uma sala',
                                 placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
-                            onSelect={(room) => {
-                                if (!room) return;
-                                setSelectedRoom(room);
-                                clearErrors('room');
-                                setValue('selectedRoom', room);
+                            onSelect={(place) => {
+                                if (!place) return;
+                                setSelectedPlace(place);
+                                clearErrors('place');
+                                setValue('selectedPlace', place);
                             }}/>
-                        <p className="errorMessage">{errors.room?.message || " "}</p>
+                        <p className="errorMessage">{errors.place?.message || " "}</p>
                     </div>
                     <div className={styles.formGroup}>
                         <p className={styles.dropdownLabel}>Sobre</p>

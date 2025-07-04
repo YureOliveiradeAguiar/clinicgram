@@ -1,8 +1,8 @@
 import { getCookie } from '@/utils/csrf.js';
 
-export async function roomsFetch() {
+export async function placesFetch() {
     try {
-        const res = await fetch('/api/rooms/list/', {
+        const res = await fetch('/api/places/list/', {
             method: 'GET',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),

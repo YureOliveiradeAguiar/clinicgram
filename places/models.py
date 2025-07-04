@@ -1,4 +1,4 @@
 from django.db import models
 
-class Room(models.Model):  
+class Place(models.Model):
     name = models.CharField(max_length=30, unique=True)
