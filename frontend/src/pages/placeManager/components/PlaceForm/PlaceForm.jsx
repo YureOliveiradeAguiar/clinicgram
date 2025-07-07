@@ -15,7 +15,7 @@ export default function PlaceForm() {
     const [places, setPlaces] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState(null);
 
-    const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
+    const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
 
     const [listMessage, setListMessage] = useState('');
     const [openCardId, setOpenCardId] = useState(null);

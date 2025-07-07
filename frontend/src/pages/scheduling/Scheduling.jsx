@@ -1,9 +1,9 @@
-import ScheduleForm from './components/ScheduleForm/ScheduleForm.jsx'
+import SchedulingForm from './components/SchedulingForm/SchedulingForm.jsx'
 
 function Scheduling() {
 	return (
         <main>
-			<ScheduleForm/>
+			<SchedulingForm/>
 		</main>
 	);
 }

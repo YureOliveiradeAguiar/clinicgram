@@ -36,7 +36,7 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
             </div>
             {isOpen && (
                 <div className={styles.cardBody}>
-                    <p> Sala registrada há 1 ano.</p>
+                    <p> Sala registrada.</p>
                     <button className={styles.deleteButton} onClick={() => onDelete(place.id)}>Excluir Sala</button>
                 </div>
             )}

@@ -1,6 +1,6 @@
 import AlertIcon from '@/assets/icons/alertSign.jsx'
 import styles from './SchedulingTable.module.css';
-import TableMoving from '../TableMoving/TableMoving.jsx';
+import TableMoving from '@/components/TableMoving/TableMoving.jsx';
 import { useState, useEffect } from 'react';
 
 function SchedulingTable({ occupiedIndexes,

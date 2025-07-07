@@ -1,4 +1,4 @@
-import styles from './ScheduleForm.module.css'
+import styles from './SchedulingForm.module.css'
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import SearchDropdown from '@/components/SearchDropdown/SearchDropdown.jsx';
@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../../utils/clientsFetch.js';
 import { placesFetch } from '@/utils/placesFetch.js';
-import { appointmentsFetch } from '../../utils/appointmentsFetch.js';
+import { appointmentsFetch } from '../../../../utils/appointmentsFetch.js';
 
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 

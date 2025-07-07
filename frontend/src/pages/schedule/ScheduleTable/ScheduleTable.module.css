@@ -1,0 +1,182 @@
+.mainWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 95%;
+}
+
+.contentWrapper {
+    padding-bottom: 10px;
+}
+
+@media (min-width: 375px) {
+    .mainWrapper {
+        padding: 10px 24px;
+        background-color: white;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}
+
+.formHeader {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    width: 100%;
+}
+.formHeader h2 {
+    white-space: nowrap;
+}
+.statusContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.scheduleWrapper { /* scheduleContainer + scrollbar bar track*/
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 8px;
+    user-select: none;
+
+    background-color: var(--darkBackground);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.scheduleContainer {
+    max-height: 420px;
+    overflow: auto;
+}
+
+table {
+    border-collapse: separate;
+    background-color: var(--darkBackground);
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    background-color: var(--darkBackground);
+    height: 45px;
+}
+
+th, td {
+    border-left: none;
+    text-align: center;
+    padding: 4px auto;
+    min-width: 64px;
+}
+
+th {
+    position: sticky;
+    font-weight: normal;
+    top: 0;
+    z-index: 4;
+}
+
+td {
+    height: 32px;
+}
+
+th:first-child {
+    left: 0;
+    z-index: 5;
+}
+
+td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: var(--darkBackground);
+}
+.scheduleCell {
+    cursor: pointer;
+}
+.scheduleCell.selected {
+    background-color: #ff6f61;
+}
+.scheduleCell.occupied {
+    cursor: default;
+    background-color: #a8a8a8;
+}
+
+td, td:first-child, th {
+    border: 1px solid var(--darkBackground);
+}
+th {
+    border-radius: 0 0 6px 6px;
+}
+td {
+    border-radius: 6px;
+    background-color: var(--lightBackground);
+}
+
+/* OCCUPIED-CELLS LOGIC */
+.scheduleCell,
+.appointment-grid {
+    overflow: hidden;
+}
+
+.appointment-grid {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.appointment-indicator {
+    min-width: 30px;
+    flex: 1;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    fill: inherit;
+    stroke: inherit;
+}
+
+ /* SCROLL-BAR */
+.scrollbarCorner {
+    display: none;
+    width: 14px;
+    height: 18px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    background-color: inherit;
+}
+@media (max-width: 768px) {
+    .scrollbarCorner {
+        display: block;
+    }
+}
+
+.scheduleContainer::-webkit-scrollbar {
+    width: 14px;
+}
+
+.scheduleContainer::-webkit-scrollbar-track {
+    border-radius: 12px;
+}
+
+.scheduleContainer::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 12px;
+    background-clip: content-box;
+    background-color: transparent;
+}
+
+.scheduleContainer:hover::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+}
+
+.scheduleContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #a8a8a8;
+}

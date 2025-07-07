@@ -1,5 +1,6 @@
 import styles from './ClientList.module.css'
 
+import ReturnButton from '@/components/ReturnButton/ReturnButton';
 import ClientCard from '../ClientCard/ClientCard.jsx';
 
 import React, { useEffect, useState } from 'react';
@@ -74,9 +75,7 @@ function ClientList() {
                 )}
             </section>
 
-            <section className={styles.buttonSection}>
-                <button className={styles.returnButton} onClick={() => navigate('/dashboard')}>Voltar</button>
-            </section>
+            <ReturnButton containerClass={styles.returnButtonContainer}/>
         </div>
     );
 }
