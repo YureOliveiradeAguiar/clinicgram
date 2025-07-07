@@ -21,7 +21,7 @@ function Dash () {
         { title: "Agenda", Icon: scheduleIcon, link: "" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
         //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
-        { title: "Registrar Local", Icon: placesIcon, link: "" },
+        { title: "Salas", Icon: placesIcon, link: "/places" },
     ];
 
     return (

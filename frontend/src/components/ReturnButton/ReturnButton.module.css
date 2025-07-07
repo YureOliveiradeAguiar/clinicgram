@@ -18,15 +18,15 @@
     border: 1px solid #ccc;
 }
 
-.confirmBtn {
-    max-width: 60%;
-    border: none;
-    background-color: var(--primary);
-    color: var(--darkBackground);
+.returnBtn {
+    max-width: 40%;
+    background-color: #f9f9f9;
+    color: #444;
 }
 
-.confirmBtn:hover {
-    background-color: var(--primaryFocused);
+.returnBtn:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
 }
 
 .icon {

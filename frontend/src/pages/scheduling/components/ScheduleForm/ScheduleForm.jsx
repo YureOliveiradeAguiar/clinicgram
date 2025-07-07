@@ -1,8 +1,7 @@
 import styles from './ScheduleForm.module.css'
-import { Link } from 'react-router-dom';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
-import SearchDropdown from '../SearchDropdown/SearchDropdown.jsx';
+import SearchDropdown from '@/components/SearchDropdown/SearchDropdown.jsx';
 import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
 
 import { useMemo, useState, useEffect } from 'react';
@@ -10,7 +9,7 @@ import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../../utils/clientsFetch.js';
-import { placesFetch } from '../../utils/placesFetch.js';
+import { placesFetch } from '@/utils/placesFetch.js';
 import { appointmentsFetch } from '../../utils/appointmentsFetch.js';
 
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
@@ -129,7 +128,7 @@ function ScheduleForm() {
         const { selectedClient, selectedPlace, schedule } = data;
 
         if (!selectedClient) {setError("client", {type: "manual", message: "Selecione um cliente"});}
-        if (!selectedPlace) {setError("placa", {type: "manual", message: "Selecione uma sala"});}
+        if (!selectedPlace) {setError("place", {type: "manual", message: "Selecione uma sala"});}
         if (!schedule || !schedule.day || !schedule.start || !schedule.end) {
             setError("schedule", { type: "manual", message: "Selecione um horário válido" });
         }
@@ -190,15 +189,10 @@ function ScheduleForm() {
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
                 <h2>Novo Agendamento</h2>
-                <nav className={styles.formNav} aria-label="Navegação de Agendamento">
-                    <ul>
-                        <li><Link to="/schedule/new">Agenda</Link></li>
-                        <li><Link to="/clients/new">+Cliente</Link></li>
-                        <li><Link to="/schedule/new">Salas</Link></li>
-                    </ul>
-                </nav>
+                <div className={styles.statusContainer}>
+                    <p className={`statusMessage ${status.type}`}>{status.message}</p>
+                </div>
             </div>
-            <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>
                     <div className={styles.formGroup}>
