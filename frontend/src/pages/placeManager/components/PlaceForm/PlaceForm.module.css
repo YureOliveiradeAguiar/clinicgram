@@ -1,8 +1,17 @@
+.mainWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+}
+
 .placeForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 300px;
+    padding: 8px 0;
 }
 
 .addPlaceGroup {
@@ -25,10 +34,10 @@
 }
 
 .submitButton {
-    padding: 0.6rem 0.8rem;
     border: none;
+    padding: 0 10px;
     border-radius: 4px;
-    font-weight: 600;
+    font-size: 1rem;
     transition: background-color 0.2s;
     color: var(--darkBackground);
     background-color: var(--primary);
@@ -36,6 +45,17 @@
 
 .submitButton:hover {
     background-color: var(--primaryFocused);
+}
+
+.placesList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    gap: 6px;
+    width: 100%;
+    margin: 10px 0;
+    height: 300px;
 }
 
 .returnButton {
@@ -54,5 +74,15 @@
         border-radius: 12px;
         border: 1px solid #ddd;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .placesList {
+        padding: 18px;
+        background-color: white;
+        
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.05);
+        background-color: #f9f9f9;
     }
 }

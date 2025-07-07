@@ -19,7 +19,7 @@
 }
 
 .confirmBtn {
-    max-width: 60%;
+    min-width: 60%;
     border: none;
     background-color: var(--primary);
     color: var(--darkBackground);

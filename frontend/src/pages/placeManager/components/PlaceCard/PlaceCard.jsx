@@ -3,10 +3,8 @@ import ArrowUpIcon from '@/assets/icons/arrowUp.jsx'
 import styles from './PlaceCard.module.css';
 
 import { useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
-    const navigate = useNavigate();
     const cardRef = useRef(null);
 
     const toggleCard = () => {
@@ -27,7 +25,6 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
             <div className={styles.cardHeader}>
                 <p className={styles.cardName}>{place.name}</p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.scheduleButton} onClick={() => navigate('/scheduling')}>Agendar</button>
                     <button className={styles.expandButton} onClick={() => toggleCard()}>
                         {isOpen ? (
                             <ArrowUpIcon className={styles.expandIcon} />
@@ -40,7 +37,7 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
             {isOpen && (
                 <div className={styles.cardBody}>
                     <p> Sala registrada há 1 ano.</p>
-                    <button className={styles.deleteButton} onClick={() => onDelete(client.id)}>Excluir Sala</button>
+                    <button className={styles.deleteButton} onClick={() => onDelete(place.id)}>Excluir Sala</button>
                 </div>
             )}
         </div>

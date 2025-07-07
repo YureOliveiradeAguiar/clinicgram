@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
 import { placesFetch } from '@/utils/placesFetch.js';
+import { getCookie } from '@/utils/csrf.js';
 
 export default function PlaceForm() {
     const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
@@ -27,11 +28,38 @@ export default function PlaceForm() {
             });
     }, []);
 
+    const onSubmit = async (data) => {
+    try {
+        const response = await fetch('/api/places/new/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')},
+            credentials: 'include',
+            body: JSON.stringify(data)});
+
+            if (!response.ok) {
+                setStatus({ message: "Erro ao registrar lugar", type: "error" });
+                return;
+            }
+            placesFetch()
+                .then(data => setPlaces(data))
+                .catch(() => {
+                    setStatus({ message: "Erro ao atualizar lista de lugares", type: "error" });
+            });
+            setStatus({ message: "Lugar registrado com sucesso", type: "success" });
+            reset();
+        } catch (err) {
+            console.error('Erro na requisição:', err);
+            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+        }
+    };
+
     // Fetching for deleting a client.
-    const handleDelete = async (clientId) => {
+    const handleDelete = async (placeId) => {
         if (!window.confirm('Tem certeza que deseja excluir esse sala?')) return;
         try {
-            const res = await fetch(`/api/places/delete/${clientId}/`, {
+            const res = await fetch(`/api/places/delete/${placeId}/`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -39,7 +67,7 @@ export default function PlaceForm() {
                 }
             });
             if (res.ok) {
-                setClients(prev => prev.filter(c => c.id !== clientId));
+                setPlaces(prev => prev.filter(p => p.id !== placeId));
             } else {
                 setStatus({ message: "Erro ao excluir sala", type: "error" });
             }
@@ -51,8 +79,8 @@ export default function PlaceForm() {
     return (
         <div className={styles.mainWrapper}>
             <h2>Gerenciar Salas</h2>
-            <form className={styles.placeForm}>
-                <p className={`statusMessage ${status.type}`}>{status.message}</p>
+            <p className={`statusMessage ${status.type}`}>{status.message}</p>
+            <form className={styles.placeForm} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.addPlaceGroup}>
                     <input type="text" id="name" name="name"  autoComplete="off"
                         maxLength="70" placeholder="Digite aqui"
@@ -61,7 +89,7 @@ export default function PlaceForm() {
                     <button type="submit" className={styles.submitButton}>Registrar</button>
                 </div>
             </form>
-            <section className={styles.placeList}>
+            <section className={styles.placesList}>
                 {places.length > 0 ? (
                     places.map(place => (
                         <PlaceCard key={place.id} place={place} onDelete={handleDelete}
