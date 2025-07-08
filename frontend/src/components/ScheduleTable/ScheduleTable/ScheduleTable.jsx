@@ -3,7 +3,8 @@ import styles from './ScheduleTable.module.css';
 import TableTopBar from '@/components/ScheduleTable/TableTopBar/TableTopBar.jsx';
 import { useState, useEffect } from 'react';
 
-export default function ScheduleTable({ mode = 'viewing', occupiedIndexes,
+export default function ScheduleTable({
+        mode = 'viewing', occupiedIndexes, occupiedMap,
         days, indexedCells,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
@@ -115,18 +116,23 @@ export default function ScheduleTable({ mode = 'viewing', occupiedIndexes,
                                 <tr key={rowIndex}>
                                     <td className={styles.hourLabel}>{row[0]?.time}</td>
                                     {row.map((cell) => (
-                                        <td
+                                        <td key={cell.index} data-index={cell.index} data-day={cell.day} data-time={cell.time}
                                             className={`${styles.scheduleCell}
-                                                ${occupiedIndexes.has(cell.index) ? styles.occupied : ''}
+                                                ${occupiedIndexes?.has(cell.index) ? styles.occupied : ''}
                                                 ${mode === 'scheduling' && selectedIndexes?.has(cell.index) ? styles.selected : ''}`}
-                                            key={cell.index} data-index={cell.index}
-                                            data-day={cell.day}
-                                            data-time={cell.time}
                                             onMouseDown={ mode === 'scheduling' ? () => handleMouseDown(cell) : undefined }
                                             onMouseEnter={ mode === 'scheduling' ? () => handleMouseEnter(cell) : undefined }
                                             onMouseUp={ mode === 'scheduling' ? handleMouseUp : undefined }
                                             onClick={ mode === 'viewing' ? () => handleScrollToAppointment(cell) : undefined }
-                                        />
+                                            >
+                                                {mode === 'viewing' && occupiedMap?.has(cell.index) && (
+                                                  <div
+                                                    className={styles.appointmentBlock}
+                                                    style={{ backgroundColor: occupiedMap.get(cell.index)?.color || 'red' }}
+                                                    title={occupiedMap.get(cell.index)?.name}
+                                                  />
+                                                )}
+                                        </td>
                                     ))}
                                 </tr>
                             ))}
@@ -135,10 +141,12 @@ export default function ScheduleTable({ mode = 'viewing', occupiedIndexes,
                 </div>
                 <div className={styles.scrollbarCorner}></div>
             </div>
-            <div className={`${styles.description} ${hasError ? styles.descriptionError : ''}`}>
+            {mode === 'scheduling' && (
+                <div className={`${styles.description} ${hasError ? styles.descriptionError : ''}`}>
                 {hasError && AlertIcon && <AlertIcon className={styles.icon}/>}
                 {hasError ? errorText : descriptionText}
             </div>
+            )}
         </div>
     );
 }

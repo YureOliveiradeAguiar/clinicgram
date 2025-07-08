@@ -8,25 +8,17 @@ import ReturnButton from '@/components/ReturnButton/ReturnButton';
 import { useMemo, useState, useEffect} from 'react';
 
 import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
-import { generateDays, generateHours, generateScheduleMatrix } from '@/utils/generateScheduleMatrix';
+import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 export default function ScheduleViewing() {
     const [status, setStatus] = useState({ message: "Selecione um horário", type: "info" });
     const [appointments, setAppointments] = useState([]);
-    const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
+    const [occupiedMap, setOccupiedMap] = useState(new Map());
     const [startOffset, setStartOffset] = useState(0);
 
     const [listMessage, setListMessage] = useState('');
     const [openCardId, setOpenCardId] = useState(null);
 
-    useEffect(() => {
-        appointmentsFetch() // Fetching for rendering appointments.
-            .then(data => setAppointments(data))
-            .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
-            });
-    }, []);
-    
     // Centralized base date info.
     const startDate = useMemo(() => {
       const date = new Date();
@@ -41,32 +33,29 @@ export default function ScheduleViewing() {
     const times = useMemo(() => generateHours(), []);
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
 
-    const addMinutesToTime = (timeString, minutesToAdd) => {
-        const [hours, minutes] = timeString.split(':').map(Number);
-        const date = new Date();
-        date.setHours(hours);
-        date.setMinutes(minutes + minutesToAdd);
+    useEffect(() => {
+        appointmentsFetch() // Fetching for rendering appointments.
+            .then(data => setAppointments(data))
+            .catch(() => {
+                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
+    }, []);
 
-        const pad = n => n.toString().padStart(2, '0');
-        return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    };
-
-    function formatDate(dateString, withWeekday = false) {
-        const [year, month, day] = dateString.split('-').map(Number);
-        const date = new Date(year, month - 1, day); // Local time (not UTC).
-        const formattedDate = date.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-        });
-        if (!withWeekday) return formattedDate;
-        const weekday = date.toLocaleDateString('pt-BR', { weekday: 'short' });
-        const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1).replace('.', '');
-        return `${capitalizedWeekday}, ${formattedDate}`;
-    }
+    useEffect(() => {
+        if (!appointments.length || !matrix.length) return;
+        const map = new Map();
+        for (const appt of appointments) {
+            const apptIndexes = getIndexesFromTimeRange(appt.startTime, appt.endTime, matrix);
+            apptIndexes.forEach(index => {
+                map.set(index, appt); // Store appointment object or a subset (e.g. name/color)
+            });
+        }
+        setOccupiedMap(map);
+    }, [appointments, matrix]);
 
     // Fetching for deleting a client.
         const handleDelete = async (placeId) => {
-            if (!window.confirm('Tem certeza que deseja excluir esse sala?')) return;
+            if (!window.confirm('Tem certeza que deseja excluir essa sala?')) return;
             try {
                 const res = await fetch(`/api/places/delete/${placeId}/`, {
                     method: 'DELETE',
@@ -95,7 +84,7 @@ export default function ScheduleViewing() {
             </div>
             <div className={styles.contentWrapper}>
                 <div className={styles.TableWrapper}>
-                    <ScheduleTable occupiedIndexes={occupiedIndexes}
+                    <ScheduleTable occupiedMap={occupiedMap}
                         days={days} times={times} indexedCells={matrix}
                         startOffset={startOffset} setStartOffset={setStartOffset}
                         monthName={monthName} year={year}/>

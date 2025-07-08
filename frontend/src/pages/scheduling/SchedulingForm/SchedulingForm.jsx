@@ -225,7 +225,7 @@ function ScheduleForm() {
                 </div>
 
                 <div className={styles.hoursWrapper}>
-                    <ScheduleTable mode={"scheduling"}occupiedIndexes={occupiedIndexes} hasError={!!errors.schedule}
+                    <ScheduleTable mode={"scheduling"} occupiedIndexes={occupiedIndexes} hasError={!!errors.schedule}
                         days={days} times={times} indexedCells={matrix}
                         startTime={startTime} endTime={endTime}
                         setStartTime={setStartTime} setEndTime={setEndTime}
