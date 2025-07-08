@@ -15,6 +15,8 @@ export default function ScheduleTable({
     const [isDragging, setIsDragging] = useState(false);
     const [selectedDay, setSelectedDay] = useState(null);
     const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
+    const colorPalette = ["#FF6B6B", "#4ECDC4", "#FFD93D", "#845EC2",
+        "#00C9A7", "#FF9671", "#2C73D2", "#0081CF", "#C34A36",];
 
     const numColumns = days.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
@@ -118,20 +120,23 @@ export default function ScheduleTable({
                                     {row.map((cell) => (
                                         <td key={cell.index} data-index={cell.index} data-day={cell.day} data-time={cell.time}
                                             className={`${styles.scheduleCell}
-                                                ${occupiedIndexes?.has(cell.index) ? styles.occupied : ''}
+                                                ${mode === 'scheduling' && occupiedIndexes?.has(cell.index) ? styles.occupied : ''}
                                                 ${mode === 'scheduling' && selectedIndexes?.has(cell.index) ? styles.selected : ''}`}
+                                            style={{cursor: (mode === 'viewing' && occupiedMap?.has(cell.index)) ||
+                                                (mode === 'scheduling' && !occupiedIndexes?.has(cell.index)) ? 'pointer' : 'default'}}
                                             onMouseDown={ mode === 'scheduling' ? () => handleMouseDown(cell) : undefined }
                                             onMouseEnter={ mode === 'scheduling' ? () => handleMouseEnter(cell) : undefined }
                                             onMouseUp={ mode === 'scheduling' ? handleMouseUp : undefined }
                                             onClick={ mode === 'viewing' ? () => handleScrollToAppointment(cell) : undefined }
-                                            >
-                                                {mode === 'viewing' && occupiedMap?.has(cell.index) && (
-                                                  <div
-                                                    className={styles.appointmentBlock}
-                                                    style={{ backgroundColor: occupiedMap.get(cell.index)?.color || 'red' }}
-                                                    title={occupiedMap.get(cell.index)?.name}
-                                                  />
-                                                )}
+                                        >
+                                            {mode === 'viewing' && occupiedMap?.has(cell.index) && (
+                                                <div className={styles.appointmentGrid}>
+                                                    {occupiedMap.get(cell.index).map((appointment) => (
+                                                        <div key={appointment.id} className={styles.appointmentBlock}
+                                                                style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}/>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </td>
                                     ))}
                                 </tr>

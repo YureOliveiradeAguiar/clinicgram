@@ -46,11 +46,14 @@ export default function ScheduleViewing() {
         const map = new Map();
         for (const appt of appointments) {
             const apptIndexes = getIndexesFromTimeRange(appt.startTime, appt.endTime, matrix);
+
             apptIndexes.forEach(index => {
-                map.set(index, appt); // Store appointment object or a subset (e.g. name/color)
+                const existing = map.get(index) || [];
+                map.set(index, [...existing, appt]);
             });
         }
         setOccupiedMap(map);
+        console.log(map);
     }, [appointments, matrix]);
 
     // Fetching for deleting a client.
