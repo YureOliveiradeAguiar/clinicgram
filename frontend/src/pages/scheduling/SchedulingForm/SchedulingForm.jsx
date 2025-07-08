@@ -2,15 +2,15 @@ import styles from './SchedulingForm.module.css'
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import SearchDropdown from '@/components/SearchDropdown/SearchDropdown.jsx';
-import SchedulingTable from '../SchedulingTable/SchedulingTable.jsx';
+import ScheduleTable from '@/components/ScheduleTable/ScheduleTable/ScheduleTable.jsx';
 
 import { useMemo, useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
-import { clientsFetch } from '../../utils/clientsFetch.js';
+import { clientsFetch } from '../utils/clientsFetch.js';
 import { placesFetch } from '@/utils/placesFetch.js';
-import { appointmentsFetch } from '../../../../utils/appointmentsFetch.js';
+import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
 
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
@@ -225,7 +225,7 @@ function ScheduleForm() {
                 </div>
 
                 <div className={styles.hoursWrapper}>
-                    <SchedulingTable occupiedIndexes={occupiedIndexes} hasError={!!errors.schedule}
+                    <ScheduleTable mode={"scheduling"}occupiedIndexes={occupiedIndexes} hasError={!!errors.schedule}
                         days={days} times={times} indexedCells={matrix}
                         startTime={startTime} endTime={endTime}
                         setStartTime={setStartTime} setEndTime={setEndTime}

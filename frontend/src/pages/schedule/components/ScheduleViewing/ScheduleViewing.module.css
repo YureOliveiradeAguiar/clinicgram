@@ -1,0 +1,90 @@
+.mainWrapper {
+    max-width: 95%;
+}
+
+.contentWrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    max-width: 900px;
+    gap: 1rem;
+}
+
+.TableWrapper {
+    min-width: 0;
+}
+
+.returnButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .contentWrapper {
+        grid-template-columns: 5fr 3fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "a b"
+          "a c";
+    }
+    .TableWrapper {
+        grid-area: a;
+    }
+    .AppointmentList {
+        grid-area: b;
+    }
+    .returnButtonContainer {
+        grid-area: c;
+    }
+}
+
+.formHeader {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    width: 100%;
+}
+
+.formHeader h2 {
+    white-space: nowrap;
+}
+
+.statusContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.appointmentList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    gap: 4px;
+    width: 100%;
+    margin: 10px 0;
+    height: 400px;
+}
+
+@media (min-width: 375px) {
+    .mainWrapper {
+        padding: 10px 24px;
+        background-color: white;
+        
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .appointmentList {
+        padding: 8px;
+        background-color: white;
+        
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.05);
+        background-color: #f9f9f9;
+    }
+}

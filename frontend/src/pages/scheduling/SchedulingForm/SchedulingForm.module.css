@@ -12,8 +12,8 @@
     min-width: 0;
 }
 .buttonsContainer {
-    align-self: start;
     display: flex;
+    align-items: center;
     justify-content: center;
     flex-direction: row;
     gap: 10px;

@@ -1,9 +1,9 @@
 import AlertIcon from '@/assets/icons/alertSign.jsx'
-import styles from './SchedulingTable.module.css';
-import TableMoving from '@/components/TableMoving/TableMoving.jsx';
+import styles from './ScheduleTable.module.css';
+import TableTopBar from '@/components/ScheduleTable/TableTopBar/TableTopBar.jsx';
 import { useState, useEffect } from 'react';
 
-function SchedulingTable({ occupiedIndexes,
+export default function ScheduleTable({ mode = 'viewing', occupiedIndexes,
         days, indexedCells,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
@@ -98,7 +98,7 @@ function SchedulingTable({ occupiedIndexes,
 
     return (
         <div>
-            <TableMoving startOffset={startOffset} setStartOffset={setStartOffset} monthName={monthName} year={year}/>
+            <TableTopBar startOffset={startOffset} setStartOffset={setStartOffset} monthName={monthName} year={year}/>
             <div className={`${styles.scheduleWrapper} ${hasError ? styles.scheduleWrapperError : ''}`}>
                 <div className={styles.scheduleContainer} id="hoursScheduling">
                     <table>
@@ -118,13 +118,14 @@ function SchedulingTable({ occupiedIndexes,
                                         <td
                                             className={`${styles.scheduleCell}
                                                 ${occupiedIndexes.has(cell.index) ? styles.occupied : ''}
-                                                ${selectedIndexes.has(cell.index) ? styles.selected : ''}`}
+                                                ${mode === 'scheduling' && selectedIndexes?.has(cell.index) ? styles.selected : ''}`}
                                             key={cell.index} data-index={cell.index}
                                             data-day={cell.day}
                                             data-time={cell.time}
-                                            onMouseDown={() => handleMouseDown(cell)}
-                                            onMouseEnter={() => handleMouseEnter(cell)}
-                                            onMouseUp={handleMouseUp}
+                                            onMouseDown={ mode === 'scheduling' ? () => handleMouseDown(cell) : undefined }
+                                            onMouseEnter={ mode === 'scheduling' ? () => handleMouseEnter(cell) : undefined }
+                                            onMouseUp={ mode === 'scheduling' ? handleMouseUp : undefined }
+                                            onClick={ mode === 'viewing' ? () => handleScrollToAppointment(cell) : undefined }
                                         />
                                     ))}
                                 </tr>
@@ -141,5 +142,3 @@ function SchedulingTable({ occupiedIndexes,
         </div>
     );
 }
-
-export default SchedulingTable;

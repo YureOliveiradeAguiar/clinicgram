@@ -1,9 +1,9 @@
-import ScheduleTable from './ScheduleTable/ScheduleTable.jsx'
+import ScheduleViewing from './components/ScheduleViewing/ScheduleViewing.jsx'
 
 export default function Schedule() {
 	return (
         <main>
-			<ScheduleTable/>
+			<ScheduleViewing/>
 		</main>
 	);
 }

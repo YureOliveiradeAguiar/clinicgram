@@ -1,4 +1,4 @@
-import SchedulingForm from './components/SchedulingForm/SchedulingForm.jsx'
+import SchedulingForm from './SchedulingForm/SchedulingForm.jsx'
 
 function Scheduling() {
 	return (

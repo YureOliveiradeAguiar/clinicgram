@@ -1,8 +1,8 @@
 import ArrowLeft from '@/assets/icons/arrowLeft.jsx'
 import ArrowRight from '@/assets/icons/arrowRight.jsx'
-import styles from "./TableMoving.module.css";
+import styles from "./TableTopBar.module.css";
 
-export default function TableMoving ({
+export default function TableTopBar ({
 		startOffset={startOffset}, setStartOffset={setStartOffset},
 		monthName={monthName}, year={year}}) {
 
