@@ -1,6 +1,9 @@
 import AlertIcon from '@/assets/icons/alertSign.jsx'
 import styles from './ScheduleTable.module.css';
-import TableTopBar from '@/components/ScheduleTable/TableTopBar/TableTopBar.jsx';
+
+import TableTopBar from '../TableTopBar/TableTopBar.jsx';
+import AppointmentModal from '../AppointmentModal/AppointmentModal';
+
 import { useState, useEffect } from 'react';
 
 export default function ScheduleTable({
@@ -12,11 +15,12 @@ export default function ScheduleTable({
         startOffset={startOffset}, setStartOffset={setStartOffset},
         monthName={monthName}, year={year}}) {
 
-    const [isDragging, setIsDragging] = useState(false);
-    const [selectedDay, setSelectedDay] = useState(null);
-    const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
+    const [isDragging, setIsDragging] = useState(false); // Scheduling.
+    const [selectedDay, setSelectedDay] = useState(null); // Scheduling.
+    const [lastSelectedIndex, setLastSelectedIndex] = useState(null); // Scheduling.
+    const [selectedAppointment, setSelectedAppointment] = useState(null); // Viewing.
     const colorPalette = ["#FF6B6B", "#4ECDC4", "#FFD93D", "#845EC2",
-        "#00C9A7", "#FF9671", "#2C73D2", "#0081CF", "#C34A36",];
+        "#00C9A7", "#FF9671", "#2C73D2", "#0081CF", "#C34A36",]; // Viewing.
 
     const numColumns = days.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
@@ -56,7 +60,6 @@ export default function ScheduleTable({
         setSelectedIndexes(new Set([cell.index]));
         setLastSelectedIndex(cell.index);
     };
-
     const handleMouseEnter = (cell) => {
         if (!isDragging || cell.day !== selectedDay || occupiedIndexes.has(cell.index)) return;
 
@@ -69,17 +72,14 @@ export default function ScheduleTable({
             setLastSelectedIndex(cell.index);
         }
     };
-
     const handleMouseUp = () => {
         setIsDragging(false);
         setSelectedDay(null);
         setLastSelectedIndex(null);
-
         if (selectedIndexes.size > 0) {
             const sorted = [...selectedIndexes].sort((a, b) => a - b);
             const firstCell = indexedCells.flat().find(cell => cell.index === sorted[0]);
             const lastCell = indexedCells.flat().find(cell => cell.index === sorted[sorted.length - 1]);
-
             if (firstCell && lastCell) {
                 const day = firstCell.day;
                 const start = firstCell.time;
@@ -127,13 +127,15 @@ export default function ScheduleTable({
                                             onMouseDown={ mode === 'scheduling' ? () => handleMouseDown(cell) : undefined }
                                             onMouseEnter={ mode === 'scheduling' ? () => handleMouseEnter(cell) : undefined }
                                             onMouseUp={ mode === 'scheduling' ? handleMouseUp : undefined }
-                                            onClick={ mode === 'viewing' ? () => handleScrollToAppointment(cell) : undefined }
                                         >
                                             {mode === 'viewing' && occupiedMap?.has(cell.index) && (
                                                 <div className={styles.appointmentGrid}>
                                                     {occupiedMap.get(cell.index).map((appointment) => (
                                                         <div key={appointment.id} className={styles.appointmentBlock}
-                                                                style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}/>
+                                                                    style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}
+                                                                    onClick={() => setSelectedAppointment(appointment)}>
+                                                                🥁!
+                                                        </div>
                                                     ))}
                                                 </div>
                                             )}
@@ -151,6 +153,9 @@ export default function ScheduleTable({
                 {hasError && AlertIcon && <AlertIcon className={styles.icon}/>}
                 {hasError ? errorText : descriptionText}
             </div>
+            )}
+            {selectedAppointment && (
+                <AppointmentModal appointment={selectedAppointment} onClose={() => setSelectedAppointment(null)}/>
             )}
         </div>
     );

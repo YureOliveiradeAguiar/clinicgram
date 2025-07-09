@@ -6,6 +6,7 @@ from rest_framework import status
 from .models import Appointment
 from clients.models import Client
 from places.models import Place
+from .serializers import AppointmentSerializer
 
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware, is_naive
@@ -67,19 +68,11 @@ class RegisterAppointmentAPIView(APIView):
             "placeName": appointment.place.name,
         }, status=status.HTTP_201_CREATED)
     
+
 class AppointmentListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        appointments = Appointment.objects.all().order_by('startTime')
-        appointmentData = [
-            {
-                'id': appointment.id,
-                'startTime': appointment.startTime,
-                'endTime': appointment.endTime,
-                'place': {'id': appointment.place.id,'name': appointment.place.name,},
-                'note': appointment.note,
-            }
-            for appointment in appointments
-        ]
-        return Response(appointmentData)
+        appointments = Appointment.objects.select_related('client', 'place').order_by('startTime')
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)

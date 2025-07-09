@@ -1,0 +1,73 @@
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.modal {
+    background: var(--lightBackground);
+    padding: 24px 32px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.infoRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #444;
+}
+
+.label {
+    font-weight: bold;
+    color: #222;
+}
+
+.buttonRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.closeButton {
+    padding: 8px 16px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+    background-color: var(--primaryFocused);
+}

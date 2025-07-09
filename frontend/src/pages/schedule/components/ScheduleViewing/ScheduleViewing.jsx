@@ -21,9 +21,9 @@ export default function ScheduleViewing() {
 
     // Centralized base date info.
     const startDate = useMemo(() => {
-      const date = new Date();
-      date.setDate(date.getDate() + startOffset);
-      return date;
+        const date = new Date();
+        date.setDate(date.getDate() + startOffset);
+        return date;
     }, [startOffset]);
     const days = useMemo(() => generateDays(7, startDate), [startDate]);
     const rawMonth = startDate.toLocaleString('pt-BR', { month: 'long' });
@@ -53,7 +53,6 @@ export default function ScheduleViewing() {
             });
         }
         setOccupiedMap(map);
-        console.log(map);
     }, [appointments, matrix]);
 
     // Fetching for deleting a client.
