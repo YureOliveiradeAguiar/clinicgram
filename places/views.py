@@ -10,14 +10,8 @@ class PlaceListAPIView(APIView):
 
     def get(self, request):
         places = Place.objects.all().order_by('name')
-        placeData = [
-            {
-                'id': place.id,
-                'name': place.name,
-            }
-            for place in places
-        ]
-        return Response(placeData)
+        serializer = PlaceSerializer(places, many=True)
+        return Response(serializer.data)
     
 class RegisterPlaceAPIView(APIView):
     permission_classes = [IsAuthenticated]

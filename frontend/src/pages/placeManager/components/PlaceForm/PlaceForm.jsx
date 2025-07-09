@@ -1,7 +1,8 @@
 import styles from './PlaceForm.module.css'
 
-import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
+import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
+import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -10,12 +11,14 @@ import { placesFetch } from '@/utils/placesFetch.js';
 import { getCookie } from '@/utils/csrf.js';
 
 export default function PlaceForm() {
-    const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({mode:'onBlur'});
 
     const [places, setPlaces] = useState([]);
-    const [selectedPlace, setSelectedPlace] = useState(null);
 
     const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedEmoji, setSelectedEmoji] = useState('');
 
     const [listMessage, setListMessage] = useState('');
     const [openCardId, setOpenCardId] = useState(null);
@@ -86,8 +89,23 @@ export default function PlaceForm() {
                         maxLength="70" placeholder="Digite aqui"
                         className={`${styles.formInput} ${errors.name ? styles.formInputError : ''}`}
                         {...register('name', { required: "O nome é obrigatório" })}/>
+
+                    <div className={styles.emojiPickerWrapper}>
+                        <button type="button" className={styles.iconPickerButton}
+                                onClick={() => setIsModalOpen(true)}>
+                            {selectedEmoji || '🛇'}
+                        </button>
+                        <input type="hidden" {...register('icon')} value={selectedEmoji} />
+                    </div>
+
                     <button type="submit" className={styles.submitButton}>Registrar</button>
                 </div>
+                {isModalOpen && (
+                    <EmojiModal onClose={() => setIsModalOpen(false)}
+                        onSelect={(emoji) => {
+                            setSelectedEmoji(emoji);
+                            setValue('icon', emoji);}}/>
+                )}
             </form>
             <section className={styles.placesList}>
                 {places.length > 0 ? (

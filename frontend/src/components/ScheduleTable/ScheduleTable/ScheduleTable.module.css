@@ -141,12 +141,6 @@ td {
     background-color: inherit;
 }
 
-@media (max-width: 768px) {
-    .scrollbarCorner {
-        display: block;
-    }
-}
-
 .scheduleContainer::-webkit-scrollbar {
     width: 14px;
     height: 16px;

@@ -23,7 +23,9 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
     return (
         <div className={styles.clientCard} ref={cardRef}>
             <div className={styles.cardHeader}>
-                <p className={styles.cardName}>{place.name}</p>
+                <p className={styles.cardName} aria-label={`${place.icon || ''} ${place.name}`}>
+                    {place.icon} {place.name}
+                </p>
                 <div className={styles.cardButtonSection}>
                     <button className={styles.expandButton} onClick={() => toggleCard()}>
                         {isOpen ? (

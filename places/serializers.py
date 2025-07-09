@@ -4,4 +4,4 @@ from .models import Place
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'icon']

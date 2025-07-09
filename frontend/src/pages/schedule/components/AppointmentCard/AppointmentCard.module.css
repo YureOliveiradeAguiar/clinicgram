@@ -7,9 +7,9 @@
     border: 1px solid #ccc;
 }
 .appointmentCard.notStarted {
-    background-color: #fff4e5;
-    color: #8a6d3b;
-    border: 1px solid #ffe0b2;
+    background-color: #e6f0fb;
+    color: #4a6c8a;
+    border: 1px solid #b3cee5;
 }
 .appointmentCard.started {
     background-color: #edf7ed;
@@ -38,7 +38,7 @@
 }
 
 .cardColorLabel {
-    width: 16px;
+    width: 12px;
     height: 100%;
     background-color: orange;
 }

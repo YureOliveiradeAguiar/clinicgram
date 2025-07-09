@@ -134,7 +134,7 @@ export default function ScheduleTable({
                                                         <div key={appointment.id} className={styles.appointmentBlock}
                                                                     style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
-                                                                🥁!
+                                                                🥁
                                                         </div>
                                                     ))}
                                                 </div>
