@@ -4,11 +4,26 @@ import styles from './AppointmentCard.module.css';
 
 import { useRef, useEffect } from 'react';
 
+import { useTime } from '../../hooks/useTime';
+
 export default function AppointmentCard({ appointment, onDelete, isOpen, setOpenCardId }) {
+    const now = useTime(5000);
+    const start = new Date(appointment.startTime);
+    const end = new Date(appointment.endTime);
+    let statusClass = '';
+    if (now < start) {
+      statusClass = styles.notStarted;
+    } else if (now > end) {
+      statusClass = styles.ended;
+    } else {
+      statusClass = styles.started;
+    }
+
     const cardRef = useRef(null);
     const toggleCard = () => {
         setOpenCardId(prev => (prev === appointment.id ? null : appointment.id));
     };
+
     useEffect(() => {
         if (isOpen && cardRef.current) {
             cardRef.current.scrollIntoView({
@@ -18,7 +33,7 @@ export default function AppointmentCard({ appointment, onDelete, isOpen, setOpen
         }
     }, [isOpen]);
 
-    function formatDateRange(startIso, endIso) {
+    const formatDateRange = (startIso, endIso) => {
         const start = new Date(startIso);
         const end = new Date(endIso);
         const weekday = start.toLocaleDateString('pt-BR', {
@@ -45,9 +60,13 @@ export default function AppointmentCard({ appointment, onDelete, isOpen, setOpen
     }
 
     return (
-        <div className={styles.appointmentCard} ref={cardRef}>
+        <div className={`${styles.appointmentCard} ${statusClass}`} ref={cardRef}>
             <div className={styles.cardHeader}>
-                <p className={styles.cardName}>{formatDateRange(appointment.startTime, appointment.endTime)}</p>
+                <div className={styles.cardColorLabel}></div>
+                <div className={styles.cardTextSection}>
+                    <p className={styles.cardName}>{appointment.client.name.split(' ')[0]} · {appointment.place.name}</p>
+                    <p className={styles.cardDeets}>{formatDateRange(appointment.startTime, appointment.endTime)}</p>
+                </div>
                 <div className={styles.cardButtonSection}>
                     <button className={styles.expandButton} onClick={() => toggleCard()}>
                         {isOpen ? (

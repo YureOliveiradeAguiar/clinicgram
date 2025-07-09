@@ -6,6 +6,22 @@
     background-color: #f9f9f9;
     border: 1px solid #ccc;
 }
+.appointmentCard.notStarted {
+    background-color: #fff4e5;
+    color: #8a6d3b;
+    border: 1px solid #ffe0b2;
+}
+.appointmentCard.started {
+    background-color: #edf7ed;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+.appointmentCard.ended {
+    background-color: #f4f4f4;
+    color: #5c5c5c;
+    border: 1px solid #d6d6d6;
+    opacity: 0.8;
+}
 
 .returnButton:hover {
     background-color: var(--primaryFocused);
@@ -15,12 +31,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 2px 4px 12px;
+    overflow: hidden;
+    border-radius: 6px;
+    height: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.cardColorLabel {
+    width: 16px;
+    height: 100%;
+    background-color: orange;
 }
 
 .cardName {
-    color: var(--font);
-    font-size: 0.9rem;
+    text-align: left;
+    font-size: 1rem;
+}
+.cardDeets {
+    font-size: 0.8rem;
 }
 
 .cardButtonSection {
