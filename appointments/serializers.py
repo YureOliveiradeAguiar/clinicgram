@@ -18,5 +18,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
     def get_place(self, obj):
         return {
             'id': obj.place.id,
-            'name': obj.place.name
+            'name': obj.place.name,
+            'icon' : obj.place.icon
         }

@@ -58,7 +58,7 @@ export default function PlaceForm() {
         }
     };
 
-    // Fetching for deleting a client.
+    // Fetching for deleting a place.
     const handleDelete = async (placeId) => {
         if (!window.confirm('Tem certeza que deseja excluir esse sala?')) return;
         try {

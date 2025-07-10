@@ -86,10 +86,12 @@ export default function ScheduleViewing() {
             </div>
             <div className={styles.contentWrapper}>
                 <div className={styles.TableWrapper}>
-                    <ScheduleTable occupiedMap={occupiedMap}
-                        days={days} times={times} indexedCells={matrix}
-                        startOffset={startOffset} setStartOffset={setStartOffset}
-                        monthName={monthName} year={year}/>
+                    <ScheduleTable
+                            setAppointments={setAppointments} setStatus={setStatus}
+                            occupiedMap={occupiedMap}
+                            days={days} times={times} indexedCells={matrix}
+                            startOffset={startOffset} setStartOffset={setStartOffset}
+                            monthName={monthName} year={year}/>
                 </div>
                 <div className={styles.appointmentList}>
                     {appointments.length > 0 ? (

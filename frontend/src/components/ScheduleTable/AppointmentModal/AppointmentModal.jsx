@@ -1,7 +1,9 @@
-import { useRef, useEffect } from 'react';
+import TrashCan from '@/assets/icons/trashCan';
 import styles from './AppointmentModal.module.css';
 
-export default function AppointmentModal({ appointment, onClose }) {
+import { useRef, useEffect } from 'react';
+
+export default function AppointmentModal({ appointment, onClose, onDelete }) {
     const modalRef = useRef();
 
     useEffect(() => {
@@ -54,9 +56,10 @@ export default function AppointmentModal({ appointment, onClose }) {
                 </div>
 
                 <div className={styles.buttonRow}>
-                    <button className={styles.closeButton} onClick={onClose}>
-                        Fechar
+                    <button className={styles.deleteButton} onClick={onDelete}>
+                        <TrashCan className={styles.deleteIcon} />
                     </button>
+                    <button className={styles.closeButton} onClick={onClose}>Fechar</button>
                 </div>
             </div>
         </div>

@@ -33,7 +33,6 @@
     margin-top: 0;
     font-size: 1.5rem;
     margin-bottom: 16px;
-    color: #333;
 }
 
 .infoRow {
@@ -52,22 +51,48 @@
 
 .buttonRow {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 24px;
+    justify-content: space-between;
+    margin-top: 18px;
 }
 
-.closeButton {
-    padding: 8px 16px;
-    background-color: var(--primary);
-    color: white;
+/* DELETE BUTTON */
+.deleteButton {
+    background-color: #ffe5e5;
     border: none;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.deleteButton:hover {
+    background-color: #ffcccc;
+    transform: scale(1.05);
+}
+.deleteButton:active {
+    background-color: #ffb3b3;
+    transform: scale(0.98);
+}
+.deleteIcon {
+    color: #d93025;
+    width: 22px;
+    height: 22px;
+}
+
+/* CLOSE BUTTON */
+.closeButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
 .closeButton:hover {
-    background-color: var(--primaryFocused);
+  background-color: #e0e0e0;
 }

@@ -6,12 +6,17 @@ import AppointmentModal from '../AppointmentModal/AppointmentModal';
 
 import { useState, useEffect } from 'react';
 
-export default function ScheduleTable({
-        mode = 'viewing', occupiedIndexes, occupiedMap,
+import { getCookie } from '@/utils/csrf';
+
+export default function ScheduleTable({ mode = 'viewing',
+        occupiedMap, setStatus, setAppointments, // < Viewing.
+        // Scheduling >.
+        occupiedIndexes,
         days, indexedCells,
         scheduledDay, setScheduledDay,
         selectedIndexes, setSelectedIndexes,
         startTime, setStartTime, endTime, setEndTime, hasError=false,
+        //Base Structure >.
         startOffset={startOffset}, setStartOffset={setStartOffset},
         monthName={monthName}, year={year}}) {
 
@@ -87,8 +92,6 @@ export default function ScheduleTable({
                 setScheduledDay(day);
                 setStartTime(start);
                 setEndTime(end);
-                //console.log("Start:", start);
-                //console.log("End:", end);
             }
         }
     };
@@ -98,6 +101,35 @@ export default function ScheduleTable({
         window.addEventListener('mouseup', stopDrag);
         return () => window.removeEventListener('mouseup', stopDrag);
     }, []);
+
+    const handleDeleteAppointment = async () => { // Viewing.
+        if (!selectedAppointment) return;
+        if (!window.confirm('Tem certeza que deseja excluir esse agendamento?')) return;
+        try {
+            const res = await fetch(`/api/appointments/delete/${selectedAppointment.id}/`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            });
+            if (res.ok) {
+                setStatus({ message: "Agendamento excluído com sucesso", type: "success" });
+                setAppointments(prev => // Filters out the deleted appointment.
+                    prev.filter(appt => appt.id !== selectedAppointment.id)
+                );
+                setSelectedAppointment(null); // Closes the modal.
+            } else {
+                setStatus({ type: "error", message:<>
+                    <AlertIcon className={styles.icon} />
+                    Erro ao excluir o agendamento</>});
+            }
+        } catch {
+            setStatus({ type: "error", message:<>
+                    <AlertIcon className={styles.icon} />
+                    Erro de conexão com o servidor</>});
+        }
+    };
 
     return (
         <div>
@@ -134,7 +166,7 @@ export default function ScheduleTable({
                                                         <div key={appointment.id} className={styles.appointmentBlock}
                                                                     style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
-                                                                🥁
+                                                                {appointment.place.icon || ''}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -155,7 +187,8 @@ export default function ScheduleTable({
             </div>
             )}
             {selectedAppointment && (
-                <AppointmentModal appointment={selectedAppointment} onClose={() => setSelectedAppointment(null)}/>
+                <AppointmentModal appointment={selectedAppointment} onClose={() => setSelectedAppointment(null)}
+                        onDelete={ handleDeleteAppointment }/>
             )}
         </div>
     );

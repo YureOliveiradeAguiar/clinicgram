@@ -10,6 +10,7 @@ from .serializers import AppointmentSerializer
 
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware, is_naive
+from django.shortcuts import get_object_or_404
 
 class RegisterAppointmentAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -76,3 +77,11 @@ class AppointmentListAPIView(APIView):
         appointments = Appointment.objects.select_related('client', 'place').order_by('startTime')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
+    
+class AppointmentDeleteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, appointment_id):
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        appointment.delete()
+        return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
