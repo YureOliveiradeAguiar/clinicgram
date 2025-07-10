@@ -46,7 +46,6 @@ export default function ScheduleViewing() {
         const map = new Map();
         for (const appt of appointments) {
             const apptIndexes = getIndexesFromTimeRange(appt.startTime, appt.endTime, matrix);
-
             apptIndexes.forEach(index => {
                 const existing = map.get(index) || [];
                 map.set(index, [...existing, appt]);

@@ -162,6 +162,7 @@ export default function ScheduleTable({ mode = 'viewing',
                                         >
                                             {mode === 'viewing' && occupiedMap?.has(cell.index) && (
                                                 <div className={styles.appointmentGrid}>
+                                                    {/* occupiedMap.get(cell.index).lenght */}
                                                     {occupiedMap.get(cell.index).map((appointment) => (
                                                         <div key={appointment.id} className={styles.appointmentBlock}
                                                                     style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}
