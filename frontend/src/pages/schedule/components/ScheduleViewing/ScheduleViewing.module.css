@@ -42,12 +42,14 @@
 .formHeader {
     display: flex;
     align-items: center;
-    padding: 8px;
+    justify-content: space-between;
     width: 100%;
+    padding: 8px 16px;
 }
 .formHeader h2 {
     white-space: nowrap;
 }
+
 .statusContainer {
     display: flex;
     align-items: center;

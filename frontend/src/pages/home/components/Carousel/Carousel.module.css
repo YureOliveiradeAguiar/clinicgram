@@ -78,7 +78,7 @@
     font-weight: bold;
     bottom: 15px;
     color: var(--darkBackground);
-    background-color: var(--primaryFocused);
+    background-color: var(--primaryHover);
     padding: 12px 16px;
     font-size: 1rem;
     border-radius: 5px;
@@ -115,5 +115,5 @@
 }
 
 .activeDot {
-    background-color: var(--primaryFocused);
+    background-color: var(--primaryHover);
 }

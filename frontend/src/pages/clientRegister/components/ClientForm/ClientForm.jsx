@@ -1,5 +1,7 @@
+import UsersIcon from '@/assets/icons/usersIcon';
 import styles from './ClientForm.module.css'
 
+import Navbar from '@/components/Navbar/Navbar.jsx';
 import DateDropdown from '../DateDropdown/DateDropdown.jsx';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
@@ -9,6 +11,10 @@ import { useForm } from "react-hook-form";
 import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
+    const navItems = [
+        { to: '/clients', Icon: UsersIcon, label: "Clientes" },
+    ];
+    
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
     const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
 
@@ -121,7 +127,10 @@ function ClientForm() {
 
     return (
         <div className={styles.mainWrapper}>
-            <h2>Novo Cliente</h2>
+            <div className={styles.formHeader}>
+                <h2>Novo Cliente</h2>
+                <Navbar items={navItems}/>
+            </div>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
                 <p className={`statusMessage ${status.type}`}>{status.message}</p>
                 

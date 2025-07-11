@@ -44,7 +44,7 @@
 }
 
 .loginButton:hover {
-    background-color: var(--primaryFocused);
+    background-color: var(--primaryHover);
 }
 
 @media (min-width: 375px) {

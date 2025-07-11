@@ -28,7 +28,7 @@ class LoginAPIView(APIView):
             return Response({'error': 'Usuário ou senha inválidos'}, status=400)
 
 
-class UserProfileView(APIView):
+class UserProfileAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -37,13 +37,13 @@ class UserProfileView(APIView):
             "username": user.username,
         })
     
-class CheckAuthView(APIView):
+class CheckAuthAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         return Response({"detail": "Authenticated"})
 
-class LogoutView(APIView):
+class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):

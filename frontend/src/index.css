@@ -83,7 +83,7 @@ Form label, .fieldLabel, Form input, .fieldLabel {
     font-size: 1rem;
     opacity: 0.9;
     margin: 8px;
-    padding: 8px 16px;
+    padding: 4px 16px;
     border-radius: 8px;
     border: 1px solid #ccc;
     transition: all 0.08s ease-in-out;

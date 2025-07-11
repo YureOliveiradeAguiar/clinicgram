@@ -75,7 +75,7 @@
     color: var(--darkBackground);
 }
 .confirmBtn:hover {
-    background-color: var(--primaryFocused);
+    background-color: var(--primaryHover);
 }
 .returnBtn {
     max-width: 40%;
@@ -110,7 +110,7 @@
 
 .formTextarea:focus {
     outline: none;
-    border-color: var(--primaryFocused);
+    border-color: var(--primaryHover);
     background-color: #fff;
 }
 

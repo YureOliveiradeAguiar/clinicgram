@@ -9,7 +9,7 @@
 }
 
 .returnButton:hover {
-    background-color: var(--primaryFocused);
+    background-color: var(--primaryHover);
 }
 
 .cardHeader {

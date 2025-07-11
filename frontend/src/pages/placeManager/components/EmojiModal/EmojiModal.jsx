@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import styles from './EmojiModal.module.css';
 
-const emojiList = ['🏥', '👨‍⚕️', '🎸', '📚', '💼', '🏫', '🧪', '🎤', '🎮', '📅', '🧑‍💼', '💻', '🔬', '🧘‍♂️'];
+const emojiList = ['🏥', '👨‍⚕️', '🎸', '📚', '💼', '🏫', '🧪', '🎤', '🎮', '📅', '💻', '🔬', '🧘‍♂️'];
 
 export default function EmojiModal({ onSelect, onClose }) {
     const modalRef = useRef();
@@ -23,15 +23,19 @@ export default function EmojiModal({ onSelect, onClose }) {
             <div className={styles.modal} ref={modalRef}>
                 <h3>Selecione um ícone</h3>
                 <div className={styles.emojiGrid}>
-                    {emojiList.map((emoji) => (
-                        <button
-                            key={emoji}
+                        <button className={styles.emojiButton}
                             onClick={() => {
-                                onSelect(emoji);
-                                onClose();
-                            }}
-                            className={styles.emojiButton}
-                        >
+                                    onSelect(null);
+                                    onClose();
+                                }}>
+                            🛇
+                        </button>
+                    {emojiList.map((emoji) => (
+                        <button key={emoji} className={styles.emojiButton}
+                                onClick={() => {
+                                    onSelect(emoji);
+                                    onClose();
+                                }}>
                             {emoji}
                         </button>
                     ))}

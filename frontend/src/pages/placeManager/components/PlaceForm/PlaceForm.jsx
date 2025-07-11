@@ -50,7 +50,7 @@ export default function PlaceForm() {
                 .catch(() => {
                     setStatus({ message: "Erro ao atualizar lista de lugares", type: "error" });
             });
-            setStatus({ message: "Lugar registrado com sucesso", type: "success" });
+            setStatus({ message: "Sala registrada com sucesso", type: "success" });
             reset();
         } catch (err) {
             console.error('Erro na requisição:', err);

@@ -18,9 +18,9 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 export default function ScheduleViewing() {
 
     const navItems = [
-        { to: '/schedule/new', Icon: AppointsIcon, label: 'New Appointment' },
-        { to: '/clients/new', Icon: UserAddIcon, label: 'New Client' },
-        { to: '/places', Icon: PlacesIcon, label: 'Places' },
+        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
+        { to: '/clients/new', Icon: UserAddIcon, label: "Novo Cliente" },
+        { to: '/places', Icon: PlacesIcon, label: "Salas" },
     ];
 
     const [status, setStatus] = useState({ message: "Selecione um horário", type: "info" });

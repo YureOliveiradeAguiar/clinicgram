@@ -198,7 +198,7 @@ export default function ScheduleForm() {
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
-                <h2>Novo Agendamento</h2>
+                <h2>Agendamento</h2>
                 <div className={styles.statusContainer}>
                     <p className={`statusMessage ${status.type}`}>{status.message}</p>
                 </div>
