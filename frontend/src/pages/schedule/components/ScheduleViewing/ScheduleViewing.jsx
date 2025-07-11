@@ -52,6 +52,7 @@ export default function ScheduleViewing() {
             });
         }
         setOccupiedMap(map);
+        //console.log(map);
     }, [appointments, matrix]);
 
     // Fetching for deleting a client.

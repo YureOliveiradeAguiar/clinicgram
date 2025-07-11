@@ -131,6 +131,18 @@ export default function ScheduleTable({ mode = 'viewing',
         }
     };
 
+    const getMaxIndexForAppt = (appointmentId) => {
+        let maxIndex = -1;
+        for (const [cellIndex, appointments] of occupiedMap.entries()) {
+            appointments.forEach((appt, i) => {
+                if (appt.id === appointmentId && i > maxIndex) {
+                    maxIndex = i;
+                }
+            });
+        }
+        return maxIndex;
+    };
+
     return (
         <div>
             <TableTopBar startOffset={startOffset} setStartOffset={setStartOffset} monthName={monthName} year={year}/>
@@ -162,10 +174,10 @@ export default function ScheduleTable({ mode = 'viewing',
                                         >
                                             {mode === 'viewing' && occupiedMap?.has(cell.index) && (
                                                 <div className={styles.appointmentGrid}>
-                                                    {/* occupiedMap.get(cell.index).lenght */}
                                                     {occupiedMap.get(cell.index).map((appointment) => (
                                                         <div key={appointment.id} className={styles.appointmentBlock}
-                                                                    style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}
+                                                                    style={{backgroundColor: colorPalette[appointment.id % colorPalette.length],
+                                                                        marginLeft: `${32 * getMaxIndexForAppt(appointment.id)}px`,}}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
                                                                 {appointment.place.icon || ''}
                                                         </div>
