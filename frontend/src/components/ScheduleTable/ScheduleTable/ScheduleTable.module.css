@@ -35,8 +35,8 @@ thead {
 }
 
 th, td {
+    line-height: 1.2rem;
     text-align: center;
-    padding: 4px auto;
     min-width: 64px;
 }
 
@@ -62,6 +62,7 @@ td:first-child {
     z-index: 2;
     background-color: var(--darkBackground);
 }
+
 .scheduleCell.selected {
     background-color: #ff6f61;
 }
@@ -69,7 +70,8 @@ td:first-child {
     background-color: #a8a8a8;
 }
 td, td:first-child, th {
-    border: 1px solid var(--darkBackground);
+    border: solid var(--darkBackground);
+    border-width: 0 1px;
 }
 th {
     border-radius: 0 0 6px 6px;
@@ -97,7 +99,8 @@ td {
     font-weight: bold;
     width: 32px;
     height: 100%;
-    border-radius: inherit;
+    border-radius: 3px;
+    box-sizing: content-box;
 }
 
 /* DESCRIPTION */

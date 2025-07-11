@@ -54,14 +54,10 @@ export function getIndexesFromTimeRange(start, end, matrix2D) {
 
     for (const row of matrix2D) {
         for (const cell of row) {
-            const cellStartUTC = localDateTime(cell.day, cell.start).toISOString();
-
-            const cellEndLocal = localDateTime(cell.day, cell.end);
-            cellEndLocal.setMinutes(cellEndLocal.getMinutes() + 15);
-
-            const cellEndUTC = cellEndLocal.toISOString();
+            const cellStartUTC = localDateTime(cell.day, cell.start);
+            const cellEndUTC = localDateTime(cell.day, cell.end);
             // console.log ("Comparing ", start, "to", cellStart);
-            if (start < cellEndUTC && end > cellStartUTC) {
+            if (cellStartUTC < new Date(end) && cellEndUTC > new Date(start)) {
                 indexes.push(cell.index);
             }
         }

@@ -153,14 +153,16 @@ export default function ScheduleTable({ mode = 'viewing',
                             <tr>
                                 <th></th>
                                 {days.map((day, index) => (
-                                    <th key={index}>{formatDate(day)}</th>
+                                    <th key={index}>{formatDate(day, true)}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {indexedCells.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
-                                    <td className={styles.hourLabel}>{row[0]?.time}</td>
+                                    <td>
+                                        <span className={styles.hourLabel}>{row[0]?.time}</span>
+                                    </td>
                                     {row.map((cell) => (
                                         <td key={cell.index} data-index={cell.index} data-day={cell.day} data-time={cell.time}
                                             className={`${styles.scheduleCell}
@@ -176,8 +178,9 @@ export default function ScheduleTable({ mode = 'viewing',
                                                 <div className={styles.appointmentGrid}>
                                                     {occupiedMap.get(cell.index).map((appointment) => (
                                                         <div key={appointment.id} className={styles.appointmentBlock}
-                                                                    style={{backgroundColor: colorPalette[appointment.id % colorPalette.length],
-                                                                        marginLeft: `${32 * getMaxIndexForAppt(appointment.id)}px`,}}
+                                                                    style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length],
+                                                                        marginLeft: `${32 * getMaxIndexForAppt(appointment.id)}px`,
+                                                                        borderBottom: `6px solid ${colorPalette[appointment.id % colorPalette.length]}`, }}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
                                                                 {appointment.place.icon || ''}
                                                         </div>

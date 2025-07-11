@@ -1,6 +1,7 @@
 :root {
     --primary: #4da78d;
-    --primaryFocused: #3d8d76;
+    --primaryHover: #3e8c76;
+    --primaryActive: #357866;
     --secondary: #a3dbcf;
     --complementary: #d6f0e8;
     --font: #1f3a57;

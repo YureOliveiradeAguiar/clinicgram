@@ -1,0 +1,41 @@
+.navList {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 18px;
+}
+
+.navLink {
+    background-color: var(--lightBackground);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.navLink:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+.navLink:active {
+    background-color: var(--primaryActive);
+    transform: scale(0.98);
+}
+
+.navLinkIcon {
+    width: 22px;
+    height: 22px;
+    color: var(--primary);
+    transition: color 0.2s ease;
+}
+
+.navLink:hover .navLinkIcon {
+    color: white;
+}

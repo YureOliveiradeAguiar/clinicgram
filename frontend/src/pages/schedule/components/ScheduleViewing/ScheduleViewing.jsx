@@ -1,16 +1,28 @@
 import AlertIcon from '@/assets/icons/alertSign.jsx'
+import AppointsIcon from '@/assets/icons/appointsIcon';
+import UserAddIcon from '@/assets/icons/userAddIcon';
+import PlacesIcon from '@/assets/icons/placesIcon';
 import styles from './ScheduleViewing.module.css';
 
+import Navbar from '@/components/Navbar/Navbar.jsx';
 import ScheduleTable from '@/components/ScheduleTable/ScheduleTable/ScheduleTable.jsx';
 import AppointmentCard from '../AppointmentCard/AppointmentCard.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton';
 
 import { useMemo, useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 
 import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 export default function ScheduleViewing() {
+
+    const navItems = [
+        { to: '/schedule/new', Icon: AppointsIcon, label: 'New Appointment' },
+        { to: '/clients/new', Icon: UserAddIcon, label: 'New Client' },
+        { to: '/places', Icon: PlacesIcon, label: 'Places' },
+    ];
+
     const [status, setStatus] = useState({ message: "Selecione um horário", type: "info" });
     const [appointments, setAppointments] = useState([]);
     const [occupiedMap, setOccupiedMap] = useState(new Map());
@@ -83,6 +95,7 @@ export default function ScheduleViewing() {
                 <div className={styles.statusContainer}>
                     <p className={`statusMessage ${status.type}`}>{status.message}</p>
                 </div>
+                <Navbar items={navItems} />
             </div>
             <div className={styles.contentWrapper}>
                 <div className={styles.TableWrapper}>

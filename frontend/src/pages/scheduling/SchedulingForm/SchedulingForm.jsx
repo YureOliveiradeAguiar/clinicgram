@@ -1,4 +1,8 @@
+import CalendarIcon from '@/assets/icons/calendarIcon';
+import UserAddIcon from '@/assets/icons/UserAddIcon';
+import PlacesIcon from '@/assets/icons/PlacesIcon';
 import styles from './SchedulingForm.module.css'
+import Navbar from '@/components/Navbar/Navbar';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import SearchDropdown from '@/components/SearchDropdown/SearchDropdown.jsx';
@@ -15,8 +19,14 @@ import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 
-function ScheduleForm() {
-    const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({mode:'onBlur'});
+export default function ScheduleForm() {
+    const navItems = [
+        { to: '/schedule/', Icon: CalendarIcon, label: 'Agenda' },
+        { to: '/clients/new', Icon: UserAddIcon, label: 'Novo Cliente' },
+        { to: '/places', Icon: PlacesIcon, label: 'Salas' },
+    ];
+
+    const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({ mode: 'onBlur' });
     const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
 
     const [clients, setClients] = useState([]);
@@ -192,6 +202,7 @@ function ScheduleForm() {
                 <div className={styles.statusContainer}>
                     <p className={`statusMessage ${status.type}`}>{status.message}</p>
                 </div>
+                <Navbar items={navItems} />
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>
@@ -240,5 +251,3 @@ function ScheduleForm() {
         </div>
     );
 }
-
-export default ScheduleForm
