@@ -10,13 +10,11 @@ import AppointmentCard from '../AppointmentCard/AppointmentCard.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton';
 
 import { useMemo, useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
 
 import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 export default function ScheduleViewing() {
-
     const navItems = [
         { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
         { to: '/clients/new', Icon: UserAddIcon, label: "Novo Cliente" },
@@ -68,25 +66,37 @@ export default function ScheduleViewing() {
     }, [appointments, matrix]);
 
     // Fetching for deleting a client.
-        const handleDelete = async (placeId) => {
-            if (!window.confirm('Tem certeza que deseja excluir essa sala?')) return;
-            try {
-                const res = await fetch(`/api/places/delete/${placeId}/`, {
-                    method: 'DELETE',
-                    credentials: 'include',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                });
-                if (res.ok) {
-                    setPlaces(prev => prev.filter(p => p.id !== placeId));
-                } else {
-                    setStatus({ message: "Erro ao excluir sala", type: "error" });
+    const handleDelete = async (placeId) => {
+        if (!window.confirm('Tem certeza que deseja excluir essa sala?')) return;
+        try {
+            const res = await fetch(`/api/places/delete/${placeId}/`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
                 }
-            } catch {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            });
+            if (res.ok) {
+                setPlaces(prev => prev.filter(p => p.id !== placeId));
+            } else {
+                setStatus({ message: "Erro ao excluir sala", type: "error" });
             }
-        };
+        } catch {
+            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+        }
+    };
+
+    const colorPalette = ["#49ccc3ff", "#ffde58ff", "#b485ffff", "#ffab24ff",
+        "#9d15a7ff", "#53b64bff", "#FF5E78", "#3C91E6",
+    ];
+    const appointmentColors = useMemo(() => { // Sort appointments for coloring & assigns colors
+        const sortedAppointments = [...appointments].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+        const colorMap = {};
+        sortedAppointments.forEach((appointment, index) => {
+            colorMap[appointment.id] = colorPalette[index % colorPalette.length];
+        });
+        return colorMap;
+    }, [appointments]);
 
     return (
         <div className={styles.mainWrapper}>
@@ -101,7 +111,7 @@ export default function ScheduleViewing() {
                 <div className={styles.TableWrapper}>
                     <ScheduleTable
                             setAppointments={setAppointments} setStatus={setStatus}
-                            occupiedMap={occupiedMap}
+                            appointmentColors={appointmentColors} occupiedMap={occupiedMap}
                             days={days} times={times} indexedCells={matrix}
                             startOffset={startOffset} setStartOffset={setStartOffset}
                             monthName={monthName} year={year}/>
@@ -110,6 +120,7 @@ export default function ScheduleViewing() {
                     {appointments.length > 0 ? (
                         appointments.map(appointment => (
                             <AppointmentCard key={appointment.id} appointment={appointment} onDelete={handleDelete}
+                                labelColor={appointmentColors[appointment.id]}
                                 isOpen={openCardId === appointment.id} setOpenCardId={setOpenCardId}/>
                     ))
                     ) : (

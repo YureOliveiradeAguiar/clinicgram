@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { getCookie } from '@/utils/csrf';
 
 export default function ScheduleTable({ mode = 'viewing',
-        occupiedMap, setStatus, setAppointments, // < Viewing.
+        occupiedMap, setStatus, setAppointments, appointmentColors, // < Viewing.
         // Scheduling >.
         occupiedIndexes,
         days, indexedCells,
@@ -24,8 +24,6 @@ export default function ScheduleTable({ mode = 'viewing',
     const [selectedDay, setSelectedDay] = useState(null); // Scheduling.
     const [lastSelectedIndex, setLastSelectedIndex] = useState(null); // Scheduling.
     const [selectedAppointment, setSelectedAppointment] = useState(null); // Viewing.
-    const colorPalette = ["#FF6B6B", "#4ECDC4", "#FFD93D", "#845EC2",
-        "#00C9A7", "#FF9671", "#2C73D2", "#0081CF", "#C34A36",]; // Viewing.
 
     const numColumns = days.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;
@@ -178,9 +176,9 @@ export default function ScheduleTable({ mode = 'viewing',
                                                 <div className={styles.appointmentGrid}>
                                                     {occupiedMap.get(cell.index).map((appointment) => (
                                                         <div key={appointment.id} className={styles.appointmentBlock}
-                                                                    style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length],
+                                                                    style={{ backgroundColor: appointmentColors[appointment.id],
                                                                         marginLeft: `${32 * getMaxIndexForAppt(appointment.id)}px`,
-                                                                        borderBottom: `6px solid ${colorPalette[appointment.id % colorPalette.length]}`, }}
+                                                                        borderBottom: `6px solid ${appointmentColors[appointment.id]}`, }}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
                                                                 {appointment.place.icon || ''}
                                                         </div>

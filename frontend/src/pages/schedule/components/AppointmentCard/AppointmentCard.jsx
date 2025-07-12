@@ -6,20 +6,17 @@ import { useRef, useEffect } from 'react';
 
 import { useTime } from '../../hooks/useTime';
 
-export default function AppointmentCard({ appointment, onDelete, isOpen, setOpenCardId }) {
-    const colorPalette = ["#FF6B6B", "#4ECDC4", "#FFD93D", "#845EC2",
-        "#00C9A7", "#FF9671", "#2C73D2", "#0081CF", "#C34A36",];
-
+export default function AppointmentCard({ appointment, onDelete, isOpen, setOpenCardId, labelColor }) {
     const now = useTime(5000);
     const start = new Date(appointment.startTime);
     const end = new Date(appointment.endTime);
     let statusClass = '';
     if (now < start) {
-      statusClass = styles.notStarted;
+        statusClass = styles.notStarted;
     } else if (now > end) {
-      statusClass = styles.ended;
+        statusClass = styles.ended;
     } else {
-      statusClass = styles.started;
+        statusClass = styles.started;
     }
 
     const cardRef = useRef(null);
@@ -65,7 +62,7 @@ export default function AppointmentCard({ appointment, onDelete, isOpen, setOpen
     return (
         <div className={`${styles.appointmentCard} ${statusClass}`} ref={cardRef}>
             <div className={styles.cardHeader}>
-                <div className={styles.cardColorLabel} style={{ backgroundColor: colorPalette[appointment.id % colorPalette.length] }}/>
+                <div className={styles.cardColorLabel} style={{ backgroundColor: labelColor }}/>
 
                 <div className={styles.cardTextSection}>
                     <p className={styles.cardName}>{appointment.client.name.split(' ')[0]} · {appointment.place.name} {appointment.place.icon}</p>
