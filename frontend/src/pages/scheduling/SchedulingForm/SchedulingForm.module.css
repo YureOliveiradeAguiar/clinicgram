@@ -117,7 +117,7 @@
 .formHeader {
     display: flex;
     align-items: center;
-    padding: 8px;
+    padding: 8px 16px;
 }
 .formHeader h2 {
     white-space: nowrap;

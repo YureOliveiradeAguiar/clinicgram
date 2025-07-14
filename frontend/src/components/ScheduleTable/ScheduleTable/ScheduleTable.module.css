@@ -73,9 +73,6 @@ td, td:first-child, th {
     border: solid var(--darkBackground);
     border-width: 0 1px;
 }
-th {
-    border-radius: 0 0 6px 6px;
-}
 td {
     border-radius: 6px;
     background-color: var(--lightBackground);
@@ -97,6 +94,7 @@ td {
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    cursor: pointer;
     width: 32px;
     height: 100%;
     border-radius: 3px;

@@ -1,5 +1,9 @@
+import AppointsIcon from '@/assets/icons/appointsIcon';
+import CalendarIcon from '@/assets/icons/calendarIcon';
+import UserAddIcon from '@/assets/icons/userAddIcon';
 import styles from './PlaceForm.module.css'
 
+import Navbar from '@/components/Navbar/Navbar.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
@@ -11,6 +15,12 @@ import { placesFetch } from '@/utils/placesFetch.js';
 import { getCookie } from '@/utils/csrf.js';
 
 export default function PlaceForm() {
+    const navItems = [
+        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
+        { to: '/schedule', Icon: CalendarIcon, label: "Agenda" },
+        { to: '/clients/new', Icon: UserAddIcon, label: "Novo Cliente" },
+    ];
+
     const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({mode:'onBlur'});
 
     const [places, setPlaces] = useState([]);
@@ -81,7 +91,11 @@ export default function PlaceForm() {
 
     return (
         <div className={styles.mainWrapper}>
-            <h2>Gerenciar Salas</h2>
+            <div className={styles.formHeader}>
+                <h2>Salas</h2>
+                <Navbar items={navItems}/>
+            </div>
+            
             <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form className={styles.placeForm} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.addPlaceGroup}>

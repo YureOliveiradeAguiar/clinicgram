@@ -16,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 12px;
+    padding: 2px 12px;
     font-size: 1rem;
 }
 
@@ -46,50 +46,66 @@
     transition: background 0s;
 }
 
-.expandButton {
+.infoButton {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    padding: 4px;
+    padding: 6px;
     background-color: transparent;
     border: none;
     box-sizing: content-box;
     cursor: pointer;
 }
 
-.expandIcon {
+.infoIcon {
     width: inherit;
     height: inherit;
     color: var(--font);
 }
 
-.scheduleButton:hover, .expandButton:hover, .deleteButton:hover {
+.infoButton:hover {
     background-color: #ebebeb;
 }
 
 .cardBody {
+    display: flex;
+    flex-direction: column;
     margin-top: 10px;
-    padding: 10px 0;
+    padding: 12px 8px;
     border-top: 1px solid #ddd;
     background: #f5f5f5;
-    gap: 10px;
 }
 
-.deleteButton {
-    border-radius: 6px;
-    color: #dc3545;
-    margin: 6px;
-    font-weight: bold;
-    opacity: 0.8;
-    font-size: 1rem;
-    padding: 4px;
-    cursor: pointer;
-    
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
-    background-color: #f9f9f9;
+/* WEEK AVAILABILITY */
+.weekOptions {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    border-radius: 999px;
+    background-color: var(--darkBackground);
     border: 1px solid #ccc;
 }
-
-.cardBody.active {
-    display: block;
+.weekOptions span {
+    font-weight: 600;
+}
+.dayToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    background-color: var(--darkBackground);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.dayToggle:hover {
+    background-color: #ccc;
+}
+.dayToggle input {
+    display: none;
+}
+.dayToggle input:checked {
+    background-color: red;
 }

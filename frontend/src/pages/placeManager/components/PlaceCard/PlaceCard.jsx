@@ -1,10 +1,21 @@
-import ArrowDownIcon from '@/assets/icons/arrowDown.jsx'
-import ArrowUpIcon from '@/assets/icons/arrowUp.jsx'
+import InfoIcon from '@/assets/icons/infoIcon';
 import styles from './PlaceCard.module.css';
 
-import { useRef, useEffect } from 'react';
+import DeleteButton from '@/components/DeleteButton/DeleteButton';
+
+import { React, useRef, useEffect } from 'react';
 
 export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
+    const daysOfWeek = [
+        { label: "Seg", value: "monday" },
+        { label: "Ter", value: "tuesday" },
+        { label: "Qua", value: "wednesday" },
+        { label: "Qui", value: "thursday" },
+        { label: "Sex", value: "friday" },
+        { label: "Sáb", value: "saturday" },
+        { label: "Dom", value: "sunday" },
+    ];
+
     const cardRef = useRef(null);
 
     const toggleCard = () => {
@@ -27,19 +38,31 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
                     {place.icon} {place.name}
                 </p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.expandButton} onClick={() => toggleCard()}>
-                        {isOpen ? (
-                            <ArrowUpIcon className={styles.expandIcon} />
-                        ) : (
-                            <ArrowDownIcon className={styles.expandIcon} />
-                        )}
+                    <button className={styles.infoButton} onClick={() => toggleCard()}>
+                        <InfoIcon className={styles.infoIcon}/>
                     </button>
                 </div>
             </div>
             {isOpen && (
                 <div className={styles.cardBody}>
-                    <p> Sala registrada.</p>
-                    <button className={styles.deleteButton} onClick={() => onDelete(place.id)}>Excluir Sala</button>
+                    <div className={styles.infoRow}>
+                        <span className={styles.label}>Nome:</span>
+                        <span>{place.name}</span>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <span className={styles.label}>Disponibilidade:</span>
+                        <div className={styles.weekOptions}>
+                            {daysOfWeek.map((day) => (
+                                <label key={day.value} className={styles.dayToggle}>
+                                    <input type="checkbox" value={day.value} />
+                                    <span>{day.label}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    <div className={styles.buttonRow}>
+                        <DeleteButton onClick={() => onDelete(place.id)} />
+                    </div>
                 </div>
             )}
         </div>

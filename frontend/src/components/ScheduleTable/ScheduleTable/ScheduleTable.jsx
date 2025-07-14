@@ -166,8 +166,7 @@ export default function ScheduleTable({ mode = 'viewing',
                                             className={`${styles.scheduleCell}
                                                 ${mode === 'scheduling' && occupiedIndexes?.has(cell.index) ? styles.occupied : ''}
                                                 ${mode === 'scheduling' && selectedIndexes?.has(cell.index) ? styles.selected : ''}`}
-                                            style={{cursor: (mode === 'viewing' && occupiedMap?.has(cell.index)) ||
-                                                (mode === 'scheduling' && !occupiedIndexes?.has(cell.index)) ? 'pointer' : 'default'}}
+                                            style={{cursor: (mode === 'scheduling' && !occupiedIndexes?.has(cell.index)) ? 'pointer' : 'default'}}
                                             onMouseDown={ mode === 'scheduling' ? () => handleMouseDown(cell) : undefined }
                                             onMouseEnter={ mode === 'scheduling' ? () => handleMouseEnter(cell) : undefined }
                                             onMouseUp={ mode === 'scheduling' ? handleMouseUp : undefined }

@@ -177,7 +177,7 @@ export default function ScheduleForm() {
                     hourCycle: 'h23',
                 });
                 setStatus({
-                    message: `${result.firstName} agendado para o dia ${startLocal.getDate()} das ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} na sala: ${result.placeName}.` || "Agendamento confirmado!",
+                    message: `Agendado | ${result.firstName} | dia ${startLocal.getDate()} | ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} | ${result.placeName}.` || "Agendamento confirmado!",
                     type: "success"
                 });
                 resetForm();

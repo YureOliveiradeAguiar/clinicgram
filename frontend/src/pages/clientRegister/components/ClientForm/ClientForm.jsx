@@ -1,3 +1,4 @@
+import AppointsIcon from '@/assets/icons/appointsIcon';
 import UsersIcon from '@/assets/icons/usersIcon';
 import styles from './ClientForm.module.css'
 
@@ -12,6 +13,7 @@ import { getCookie } from '@/utils/csrf.js';
 
 function ClientForm() {
     const navItems = [
+        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
         { to: '/clients', Icon: UsersIcon, label: "Clientes" },
     ];
     

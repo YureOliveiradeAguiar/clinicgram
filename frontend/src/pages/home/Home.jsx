@@ -1,4 +1,4 @@
-import Footer from '@/components/Footer/Footer.jsx'
+import Footer from './components/Footer/Footer.jsx'
 import Hero from './components/Hero/Hero.jsx'
 import Banner from './components/Banner/Banner.jsx'
 import About from './components/About/About.jsx'
