@@ -1,11 +1,9 @@
 import InfoIcon from '@/assets/icons/infoIcon';
 import styles from './PlaceCard.module.css';
 
-import DeleteButton from '@/components/DeleteButton/DeleteButton';
-
 import { React, useRef, useEffect } from 'react';
 
-export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
+export default function PlaceCard({ place, onDelete, selectedPlace, setSelectedPlace }) {
     const daysOfWeek = [
         { label: "Seg", value: "monday" },
         { label: "Ter", value: "tuesday" },
@@ -18,18 +16,14 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
 
     const cardRef = useRef(null);
 
-    const toggleCard = () => {
-        setOpenCardId(prev => (prev === place.id ? null : place.id));
-    };
-
     useEffect(() => {
-        if (isOpen && cardRef.current) {
+        if (selectedPlace?.id === place.id && cardRef.current) {
             cardRef.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
             });
         }
-    }, [isOpen]);
+    }, [selectedPlace?.id, place.id]);
 
     return (
         <div className={styles.clientCard} ref={cardRef}>
@@ -38,33 +32,11 @@ export default function PlaceCard({ place, onDelete, isOpen, setOpenCardId }) {
                     {place.icon} {place.name}
                 </p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.infoButton} onClick={() => toggleCard()}>
+                    <button className={styles.infoButton} onClick={() => setSelectedPlace(place)}>
                         <InfoIcon className={styles.infoIcon}/>
                     </button>
                 </div>
             </div>
-            {isOpen && (
-                <div className={styles.cardBody}>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Nome:</span>
-                        <span>{place.name}</span>
-                    </div>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Disponibilidade:</span>
-                        <div className={styles.weekOptions}>
-                            {daysOfWeek.map((day) => (
-                                <label key={day.value} className={styles.dayToggle}>
-                                    <input type="checkbox" value={day.value} />
-                                    <span>{day.label}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                    <div className={styles.buttonRow}>
-                        <DeleteButton onClick={() => onDelete(place.id)} />
-                    </div>
-                </div>
-            )}
         </div>
     )
 }

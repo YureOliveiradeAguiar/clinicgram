@@ -79,6 +79,10 @@ Form label, .fieldLabel, Form input, .fieldLabel {
 }
 
 .statusMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     width: fit-content;
     font-size: 1rem;
     opacity: 0.9;

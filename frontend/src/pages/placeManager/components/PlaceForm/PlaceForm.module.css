@@ -77,7 +77,7 @@
     align-items: center;
     height: 100%;
 }
-.iconPickerButton {
+.emojiPickerButton {
     background: #f1f1f1;
     border: 1px solid #ccc;
     padding: 6px 12px;
@@ -85,6 +85,12 @@
     cursor: pointer;
     font-size: 16px;
     height: 100%;
+}
+.icon {
+    width: 24px;
+    height: 24px;
+    fill: inherit;
+    stroke: inherit;
 }
 
 @media (min-width: 375px) {

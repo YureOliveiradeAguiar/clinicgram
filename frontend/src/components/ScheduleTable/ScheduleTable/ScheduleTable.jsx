@@ -199,6 +199,7 @@ export default function ScheduleTable({ mode = 'viewing',
                 {hasError ? errorText : descriptionText}
             </div>
             )}
+            
             {selectedAppointment && (
                 <AppointmentModal appointment={selectedAppointment} onClose={() => setSelectedAppointment(null)}
                         onDelete={ handleDeleteAppointment }/>

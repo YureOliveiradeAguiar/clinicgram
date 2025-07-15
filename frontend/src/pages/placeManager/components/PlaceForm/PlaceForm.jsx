@@ -1,3 +1,4 @@
+import AlertIcon from '@/assets/icons/alertSign';
 import AppointsIcon from '@/assets/icons/appointsIcon';
 import CalendarIcon from '@/assets/icons/calendarIcon';
 import UserAddIcon from '@/assets/icons/userAddIcon';
@@ -6,6 +7,7 @@ import styles from './PlaceForm.module.css'
 import Navbar from '@/components/Navbar/Navbar.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
+import PlaceModal from '../PlaceModal/PlaceModal.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
@@ -22,16 +24,15 @@ export default function PlaceForm() {
     ];
 
     const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({mode:'onBlur'});
-
     const [places, setPlaces] = useState([]);
-
     const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState('');
 
     const [listMessage, setListMessage] = useState('');
-    const [openCardId, setOpenCardId] = useState(null);
+
+    const [selectedPlace, setSelectedPlace] = useState(null);
 
     useEffect(() => {
         placesFetch() // Fetching for rendering places.
@@ -63,16 +64,16 @@ export default function PlaceForm() {
             setStatus({ message: "Sala registrada com sucesso", type: "success" });
             reset();
         } catch (err) {
-            console.error('Erro na requisição:', err);
             setStatus({ message: "Erro de conexão com o servidor", type: "error" });
         }
     };
 
     // Fetching for deleting a place.
-    const handleDelete = async (placeId) => {
-        if (!window.confirm('Tem certeza que deseja excluir esse sala?')) return;
+    const handleDeletePlace = async () => { // Viewing.
+        if (!selectedPlace) return;
+        if (!window.confirm('Tem certeza que deseja excluir esse recipiente?')) return;
         try {
-            const res = await fetch(`/api/places/delete/${placeId}/`, {
+            const res = await fetch(`/api/places/delete/${selectedPlace.id}/`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -80,12 +81,20 @@ export default function PlaceForm() {
                 }
             });
             if (res.ok) {
-                setPlaces(prev => prev.filter(p => p.id !== placeId));
+                setStatus({ message: "Recipiente excluído com sucesso", type: "success" });
+                setPlaces(prev => // Filters out the deleted place.
+                    prev.filter(place => place.id !== selectedPlace.id)
+                );
+                setSelectedPlace(null); // Closes the modal.
             } else {
-                setStatus({ message: "Erro ao excluir sala", type: "error" });
+                setStatus({ type: "error", message:<>
+                    <AlertIcon className={styles.icon}/>
+                    Erro ao excluir o recipiente</>});
             }
         } catch {
-            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            setStatus({ type: "error", message:<>
+                    <AlertIcon className={styles.icon} />
+                    Erro de conexão com o servidor</>});
         }
     };
 
@@ -105,17 +114,17 @@ export default function PlaceForm() {
                         {...register('name', { required: "O nome é obrigatório" })}/>
 
                     <div className={styles.emojiPickerWrapper}>
-                        <button type="button" className={styles.iconPickerButton}
-                                onClick={() => setIsModalOpen(true)}>
+                        <button type="button" className={styles.emojiPickerButton}
+                                onClick={() => setIsEmojiModalOpen(true)}>
                             {selectedEmoji || '🛇'}
                         </button>
-                        <input type="hidden" {...register('icon')} value={selectedEmoji} />
+                        <input type="hidden" {...register('icon')} value={selectedEmoji || ''} />
                     </div>
 
                     <button type="submit" className={styles.submitButton}>Registrar</button>
                 </div>
-                {isModalOpen && (
-                    <EmojiModal onClose={() => setIsModalOpen(false)}
+                {isEmojiModalOpen && (
+                    <EmojiModal onClose={() => setIsEmojiModalOpen(false)}
                         onSelect={(emoji) => {
                             setSelectedEmoji(emoji);
                             setValue('icon', emoji);}}/>
@@ -124,14 +133,19 @@ export default function PlaceForm() {
             <section className={styles.placesList}>
                 {places.length > 0 ? (
                     places.map(place => (
-                        <PlaceCard key={place.id} place={place} onDelete={handleDelete}
-                            isOpen={openCardId === place.id} setOpenCardId={setOpenCardId}/>
+                        <PlaceCard key={place.id} place={place}
+                            selectedPlace = {selectedPlace} setSelectedPlace={setSelectedPlace}/>
                 ))
                 ) : (
                     <p className="listMessage">{listMessage || 'Nenhuma sala registrada.'}</p>
                 )}
             </section>
             <ReturnButton containerClass={styles.returnButton}/>
+
+            {selectedPlace && (
+                <PlaceModal place={selectedPlace} onClose={() => setSelectedPlace(null)}
+                        onDelete={ handleDeletePlace }/>
+            )}
         </div>
     );
 }
