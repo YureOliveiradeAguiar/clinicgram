@@ -1,5 +1,5 @@
-.deleteButton {
-    background-color: #ffe5e5;
+.editButton {
+    background-color: #fff8e1;
     border: none;
     padding: 10px 12px;
     border-radius: 8px;
@@ -10,16 +10,18 @@
     justify-content: center;
 }
 
-.deleteButton:hover {
-    background-color: #ffcccc;
+.editButton:hover {
+    background-color: #ffecb3;
     transform: scale(1.05);
 }
-.deleteButton:active {
-    background-color: #ffb3b3;
+
+.editButton:active {
+    background-color: #ffe082;
     transform: scale(0.98);
 }
-.deleteIcon {
-    color: #d93025;
+
+.editIcon {
+    color: #f9a825;
     width: 22px;
     height: 22px;
 }

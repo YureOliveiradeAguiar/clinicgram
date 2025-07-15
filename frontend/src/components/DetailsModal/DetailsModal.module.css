@@ -9,6 +9,7 @@
 }
 
 .modal {
+    position: relative;
     background: var(--lightBackground);
     padding: 24px 32px;
     border-radius: 12px;
@@ -32,14 +33,24 @@
 .modal h2 {
     margin-top: 0;
     font-size: 1.5rem;
-    margin-bottom: 16px;
+}
+.statusMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2e7d32;
+    height: 1rem;
+}
+.statusMessage .icon {
+    width: 22px;
+    height: 22px;
 }
 
 .infoRow {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin: 8px 0;
+    margin: 10px 0 30px 0;
     font-size: 1rem;
     color: #444;
 }
@@ -49,23 +60,23 @@
     color: #222;
 }
 
+.input {
+    font-size: 1rem;
+    padding: 0 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+input:focus {
+    outline: var(--primary);
+}
+
 .buttonRow {
     display: flex;
     justify-content: space-between;
     margin-top: 18px;
 }
-
-/* CLOSE BUTTON */
-.closeButton {
-  background-color: #f0f0f0;
-  color: #333;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-.closeButton:hover {
-  background-color: #e0e0e0;
+.editButtonsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -36,3 +37,14 @@ class DeletePlaceAPIView(APIView):
             return Response({"detail": "Lugar não encontrado."})
         place.delete()
         return Response({"detail": "Lugar deletado com sucesso."})
+    
+class PlaceUpdateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, place_id):
+        place = get_object_or_404(Place, id=place_id)
+        serializer = PlaceSerializer(place, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)

@@ -1,3 +1,4 @@
+import CheckIcon from '@/assets/icons/checkMark';
 import AlertIcon from '@/assets/icons/alertSign';
 import AppointsIcon from '@/assets/icons/appointsIcon';
 import CalendarIcon from '@/assets/icons/calendarIcon';
@@ -7,7 +8,7 @@ import styles from './PlaceForm.module.css'
 import Navbar from '@/components/Navbar/Navbar.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
-import PlaceModal from '../PlaceModal/PlaceModal.jsx';
+import DetailsModal from '@/components/DetailsModal/DetailsModal';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
@@ -33,6 +34,7 @@ export default function PlaceForm() {
     const [listMessage, setListMessage] = useState('');
 
     const [selectedPlace, setSelectedPlace] = useState(null);
+    const [modalStatus, setModalStatus] = useState("");
 
     useEffect(() => {
         placesFetch() // Fetching for rendering places.
@@ -98,6 +100,28 @@ export default function PlaceForm() {
         }
     };
 
+    const handleUpdate = async (selectedPlace) => {
+        try {
+            const res = await fetch(`/api/places/${selectedPlace.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: selectedPlace.name }),
+            });
+            if (res.ok) {
+                const data = await response.json();
+                setModalStatus("Atualizado com sucesso!");
+                // setPlace(data); // Optional: update local state
+                setTimeout(() => setModalStatus(""), 3000);
+            } else {
+                setModalStatus("Erro ao atualizar");
+            }
+        } catch (err) {
+            setModalStatus("Erro na comunicação com o servidor");
+        }
+    };
+
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
@@ -143,8 +167,8 @@ export default function PlaceForm() {
             <ReturnButton containerClass={styles.returnButton}/>
 
             {selectedPlace && (
-                <PlaceModal place={selectedPlace} onClose={() => setSelectedPlace(null)}
-                        onDelete={ handleDeletePlace }/>
+                <DetailsModal place={selectedPlace} onClose={() => setSelectedPlace(null)}
+                        onDelete={handleDeletePlace} onUpdate={handleUpdate} modalStatus={modalStatus}/>
             )}
         </div>
     );

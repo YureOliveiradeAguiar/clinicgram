@@ -1,0 +1,102 @@
+.button {
+    border: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.buttonIcon {
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+}
+
+/* DELETE VARIANT */
+.deleteButton {
+    background-color: #ffe5e5;
+}
+.deleteButton:hover {
+    background-color: #ffcccc;
+}
+.deleteButton:active {
+    background-color: #ffb3b3;
+}
+.deleteIcon {
+    color: #d93025;
+}
+
+/* EDIT VARIANT */
+.editButton {
+    background-color: #e6f0ff;
+}
+.editButton:hover {
+    background-color: #cce0ff;
+}
+.editButton:active {
+    background-color: #b3d1ff;
+}
+.editIcon {
+    color: #1a73e8;
+}
+
+/* CLOSE VARIANT */
+.closeButton {
+    will-change: transform;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: transparent;
+}
+.closeButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: scale(1);
+}
+.closeButton:active {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+}
+.closeIcon {
+    color: #555;
+}
+
+/* SAVE VARIANT */
+.saveButton {
+    background-color: #e6f4ea;
+}
+.saveButton:hover {
+    background-color: #c8e6c9;
+}
+.saveButton:active {
+    background-color: #a5d6a7;
+}
+.saveIcon {
+    color: #2e7d32;
+}
+
+/* DEFAULT VARIANT */
+.defaultButton {
+    background-color: #f0f0f0;
+}
+.defaultButton:hover {
+    background-color: #e0e0e0;
+}
+.defaultButton:active {
+    background-color: #d0d0d0;
+}
+.defaultIcon {
+    color: #333;
+}

@@ -1,18 +1,22 @@
-import styles from './PlaceModal.module.css';
-
-import DeleteButton from '@/components/DeleteButton/DeleteButton';
+import XIcon from '@/assets/icons/xIcon';
+import TrashCan from '@/assets/icons/trashCan';
 import EditIcon from '@/assets/icons/editIcon.com';
+import SaveIcon from '@/assets/icons/saveIcon';
+import CancelIcon from '@/assets/icons/cancelIcon';
+import styles from './DetailsModal.module.css';
+
+import ModalButton from './ModalButton/ModalButton';
 
 import { useRef, useState, useEffect } from 'react';
 
-export default function PlaceModal({ place, onDelete, onClose, onUpdate }) {
+export default function DetailsModal({ place, onDelete, onClose, onUpdate, modalStatus }) {
     const modalRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedName, setEditedName] = useState(place.name);
 
     const handleSave = () => {
-        onUpdate({ ...place, name: editedName }); // Sends updated place to parent.
+        onUpdate({ ...place, name: editedName }); // Calls parent.
         setIsEditing(false);
     };
 
@@ -32,36 +36,40 @@ export default function PlaceModal({ place, onDelete, onClose, onUpdate }) {
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
                 <h2>Detalhes do Recipiente</h2>
+                <p className={styles.statusMessage}>{modalStatus || "teste"}</p>
                 <div className={styles.infoRow}>
                     <span className={styles.label}>Nome:</span>
                     {isEditing ? (
                         <>
                             <input type="text" value={editedName} className={styles.input}
                                     onChange={(e) => setEditedName(e.target.value)}/>
-                            <button onClick={handleSave}>💾</button>
-                            <button onClick={() => { setIsEditing(false);
-                                setEditedName(place.name); // Resets on cancel.
-                            }}>✖️</button>
                         </>
-                    ) : (
-                        <>
+                    ) : (<>
                             <span>{place.name}</span>
-                            <button onClick={() => setIsEditing(true)}>✏️</button>
-                        </>
-                    )}
+                        </>)}
                 </div>
 
                 <div className={styles.buttonRow}>
-                    <DeleteButton onDelete={onDelete}/>
-                    <button>
-                        <EditIcon className={styles.icon}/>
-                    </button>
-                    <button className={styles.closeButton} onClick={onClose}>Fechar</button>
+                    <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
+                    {!isEditing ? (
+                        <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
+                    ) : (<div className={styles.editButtonsRow}>
+                            <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
+                            <ModalButton Icon={CancelIcon} onClick={() => {setIsEditing(false); setEditedName(place.name);}} variant="default"/> 
+                        </div>)}
                 </div>
+                <ModalButton Icon={XIcon} onClick={onClose} variant="close"/>
             </div>
         </div>
     );
 }
+// <button onClick={handleSave}>💾</button>
+// <button onClick={() => { setIsEditing(false);
+//     setEditedName(place.name); // Resets on cancel.
+// }}>✖️</button>
+
+
+
 //<div className={styles.cardBody}>
 //        <div className={styles.infoRow}>
 //            <span className={styles.label}>Nome:</span>
