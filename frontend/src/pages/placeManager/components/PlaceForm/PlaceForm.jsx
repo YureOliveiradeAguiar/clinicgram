@@ -8,7 +8,7 @@ import styles from './PlaceForm.module.css'
 import Navbar from '@/components/Navbar/Navbar.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
-import DetailsModal from '@/components/DetailsModal/DetailsModal';
+import DetailsModal from '@/components/DetailsModal/DetailsModal/DetailsModal';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
@@ -104,20 +104,28 @@ export default function PlaceForm() {
         try {
             const res = await fetch(`/api/places/${selectedPlace.id}/`, {
                 method: 'PATCH',
+                credentials: 'include',
                 headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: selectedPlace.name }),
             });
+
             if (res.ok) {
-                const data = await response.json();
+                const updatedPlace = await res.json();
+                setPlaces(prev =>
+                    prev.map(place =>
+                        place.id === updatedPlace.id ? updatedPlace : place
+                    )
+                );
+                setSelectedPlace(updatedPlace);
                 setModalStatus("Atualizado com sucesso!");
-                // setPlace(data); // Optional: update local state
-                setTimeout(() => setModalStatus(""), 3000);
             } else {
                 setModalStatus("Erro ao atualizar");
             }
         } catch (err) {
+            console.error("Erro ao atualizar:", err);
             setModalStatus("Erro na comunicação com o servidor");
         }
     };
@@ -157,7 +165,8 @@ export default function PlaceForm() {
             <section className={styles.placesList}>
                 {places.length > 0 ? (
                     places.map(place => (
-                        <PlaceCard key={place.id} place={place}
+                        <PlaceCard key={place.id} place={place} 
+                            modalStatus={modalStatus} setModalStatus={setModalStatus}
                             selectedPlace = {selectedPlace} setSelectedPlace={setSelectedPlace}/>
                 ))
                 ) : (

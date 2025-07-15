@@ -5,7 +5,7 @@ import SaveIcon from '@/assets/icons/saveIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
 import styles from './DetailsModal.module.css';
 
-import ModalButton from './ModalButton/ModalButton';
+import ModalButton from '../ModalButton/ModalButton';
 
 import { useRef, useState, useEffect } from 'react';
 
@@ -16,7 +16,9 @@ export default function DetailsModal({ place, onDelete, onClose, onUpdate, modal
     const [editedName, setEditedName] = useState(place.name);
 
     const handleSave = () => {
-        onUpdate({ ...place, name: editedName }); // Calls parent.
+        if (editedName !== place.name) {
+            onUpdate({ ...place, name: editedName }); // Only if changed
+        }
         setIsEditing(false);
     };
 
@@ -36,7 +38,7 @@ export default function DetailsModal({ place, onDelete, onClose, onUpdate, modal
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
                 <h2>Detalhes do Recipiente</h2>
-                <p className={styles.statusMessage}>{modalStatus || "teste"}</p>
+                <p className={styles.statusMessage}>{modalStatus}</p>
                 <div className={styles.infoRow}>
                     <span className={styles.label}>Nome:</span>
                     {isEditing ? (
@@ -46,6 +48,17 @@ export default function DetailsModal({ place, onDelete, onClose, onUpdate, modal
                         </>
                     ) : (<>
                             <span>{place.name}</span>
+                        </>)}
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Ícone:</span>
+                    {isEditing ? (
+                        <>
+                            <input type="text" value={editedName} className={styles.input}
+                                    onChange={(e) => setEditedName(e.target.value)}/>
+                        </>
+                    ) : (<>
+                            <span>{place.icon || "nenhum"}</span>
                         </>)}
                 </div>
 

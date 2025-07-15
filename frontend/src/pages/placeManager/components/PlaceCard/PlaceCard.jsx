@@ -3,7 +3,8 @@ import styles from './PlaceCard.module.css';
 
 import { React, useRef, useEffect } from 'react';
 
-export default function PlaceCard({ place, onDelete, selectedPlace, setSelectedPlace }) {
+export default function PlaceCard({ place, selectedPlace, setSelectedPlace,
+        modalStatus, setModalStatus }) {
     const daysOfWeek = [
         { label: "Seg", value: "monday" },
         { label: "Ter", value: "tuesday" },
@@ -32,7 +33,8 @@ export default function PlaceCard({ place, onDelete, selectedPlace, setSelectedP
                     {place.icon} {place.name}
                 </p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.infoButton} onClick={() => setSelectedPlace(place)}>
+                    <button className={styles.infoButton} onClick={() => {setSelectedPlace(place);
+                            modalStatus !== null && setModalStatus("");}}>
                         <InfoIcon className={styles.infoIcon}/>
                     </button>
                 </div>
