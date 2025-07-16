@@ -40,7 +40,7 @@ export default function EmojiModal({ onSelect, onClose }) {
                         </button>
                     ))}
                 </div>
-                <button className={styles.closeButton} onClick={onClose}>
+                <button className={styles.closeButton} onClick={() => onClose()}>
                     Fechar
                 </button>
             </div>

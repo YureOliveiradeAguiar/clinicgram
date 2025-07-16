@@ -8,7 +8,7 @@ import styles from './PlaceForm.module.css'
 import Navbar from '@/components/Navbar/Navbar.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
-import DetailsModal from '@/components/DetailsModal/DetailsModal/DetailsModal';
+import PlaceModal from '@/pages/placeManager/components/PlaceModal/PlaceModal/PlaceModal';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
@@ -28,8 +28,8 @@ export default function PlaceForm() {
     const [places, setPlaces] = useState([]);
     const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
 
-    const [isEmojiModalOpen, setIsEmojiModalOpen] = useState(false);
-    const [selectedEmoji, setSelectedEmoji] = useState('');
+    const [isCreateEmojiModalOpen, setIsCreateEmojiModalOpen] = useState(false);
+    const [selectedCreateEmoji, setSelectedCreateEmoji] = useState('');
 
     const [listMessage, setListMessage] = useState('');
 
@@ -100,16 +100,19 @@ export default function PlaceForm() {
         }
     };
 
-    const handleUpdate = async (selectedPlace) => {
+    const handleUpdate = async (patchData) => {
         try {
-            const res = await fetch(`/api/places/${selectedPlace.id}/`, {
+            const res = await fetch(`/api/places/${patchData.id}/`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: selectedPlace.name }),
+                body: JSON.stringify({
+                    ...(patchData.name !== undefined && { name: patchData.name }),
+                    ...(patchData.icon !== undefined && { icon: patchData.icon }),
+                }),
             });
 
             if (res.ok) {
@@ -147,18 +150,18 @@ export default function PlaceForm() {
 
                     <div className={styles.emojiPickerWrapper}>
                         <button type="button" className={styles.emojiPickerButton}
-                                onClick={() => setIsEmojiModalOpen(true)}>
-                            {selectedEmoji || '🛇'}
+                                onClick={() => setIsCreateEmojiModalOpen(true)}>
+                            {selectedCreateEmoji || '🛇'}
                         </button>
-                        <input type="hidden" {...register('icon')} value={selectedEmoji || ''} />
+                        <input type="hidden" {...register('icon')} value={selectedCreateEmoji || ''} />
                     </div>
 
                     <button type="submit" className={styles.submitButton}>Registrar</button>
                 </div>
-                {isEmojiModalOpen && (
-                    <EmojiModal onClose={() => setIsEmojiModalOpen(false)}
+                {isCreateEmojiModalOpen && (
+                    <EmojiModal onClose={() => setIsCreateEmojiModalOpen(false)}
                         onSelect={(emoji) => {
-                            setSelectedEmoji(emoji);
+                            setSelectedCreateEmoji(emoji);
                             setValue('icon', emoji);}}/>
                 )}
             </form>
@@ -176,7 +179,7 @@ export default function PlaceForm() {
             <ReturnButton containerClass={styles.returnButton}/>
 
             {selectedPlace && (
-                <DetailsModal place={selectedPlace} onClose={() => setSelectedPlace(null)}
+                <PlaceModal closeOnClickOutside={false} place={selectedPlace} onClose={() => setSelectedPlace(null)}
                         onDelete={handleDeletePlace} onUpdate={handleUpdate} modalStatus={modalStatus}/>
             )}
         </div>
