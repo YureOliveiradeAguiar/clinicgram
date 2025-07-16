@@ -6,15 +6,16 @@ import CancelIcon from '@/assets/icons/cancelIcon';
 import ArrowRight from '@/assets/icons/arrowRight';
 import styles from './PlaceModal.module.css';
 
-import ModalButton from '../ModalButton/ModalButton';
-import EmojiModal from '../../EmojiModal/EmojiModal';
+import ModalButton from '@/components/ModalButton/ModalButton.jsx';
+import EmojiModal from '../EmojiModal/EmojiModal.jsx';
 
 import { useRef, useState, useEffect } from 'react';
 
-export default function DetailsModal({ closeOnClickOutside=true, place, onDelete, onClose, onUpdate, modalStatus}) {
+export default function PlaceModal({ closeOnClickOutside=true, place, onDelete, onClose, onUpdate, modalStatus}) {
     const modalRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
+    
     const [editedName, setEditedName] = useState(place.name);
 
     const [isEditEmojiModalOpen, setIsEditEmojiModalOpen] = useState(false);
@@ -110,31 +111,3 @@ export default function DetailsModal({ closeOnClickOutside=true, place, onDelete
         </div>
     );
 }
-// <button onClick={handleSave}>💾</button>
-// <button onClick={() => { setIsEditing(false);
-//     setEditedName(place.name); // Resets on cancel.
-// }}>✖️</button>
-
-
-
-//<div className={styles.cardBody}>
-//        <div className={styles.infoRow}>
-//            <span className={styles.label}>Nome:</span>
-//            <span>{place.name}</span>
-//        </div>
-//        <div className={styles.infoRow}>
-//            <span className={styles.label}>Disponibilidade:</span>
-//            <div className={styles.weekOptions}>
-//                {daysOfWeek.map((day) => (
-//                    <label key={day.value} className={styles.dayToggle}>
-//                        <input type="checkbox" value={day.value} />
-//                        <span>{day.label}</span>
-//                    </label>
-//                ))}
-//            </div>
-//        </div>
-//        <div className={styles.buttonRow}>
-//            <DeleteButton onClick={() => onDelete(place.id)} />
-//        </div>
-//    </div>
-//)}

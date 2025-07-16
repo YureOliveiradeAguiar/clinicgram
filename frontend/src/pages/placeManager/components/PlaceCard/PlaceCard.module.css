@@ -1,22 +1,17 @@
-.clientCard {
+.placeCard {
     border-radius: 6px;
     width: 100%;
     padding: 2px 0;
-
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
     border: 1px solid #ccc;
-}
-
-.returnButton:hover {
-    background-color: var(--primaryHover);
 }
 
 .cardHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2px 12px;
+    padding: 6px 12px;
     font-size: 1rem;
 }
 
@@ -30,23 +25,10 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    padding: 5px;
     gap: 10px;
 }
 
-.scheduleButton {
-    color: var(--font);
-    opacity: 0.8;
-    border: none;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 20px;
-    font-size: 16px;
-    background-color: transparent;
-    transition: background 0s;
-}
-
-.infoButton {
+.cardButton {
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -56,15 +38,13 @@
     box-sizing: content-box;
     cursor: pointer;
 }
-
-.infoIcon {
+.cardButton:hover {
+    background-color: #ebebeb;
+}
+.buttonIcon {
     width: inherit;
     height: inherit;
     color: var(--font);
-}
-
-.infoButton:hover {
-    background-color: #ebebeb;
 }
 
 .cardBody {

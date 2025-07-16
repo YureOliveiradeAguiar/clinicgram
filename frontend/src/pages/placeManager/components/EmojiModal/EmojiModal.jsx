@@ -1,10 +1,16 @@
-import { useRef, useEffect } from 'react';
+import XIcon from '@/assets/icons/xIcon';
 import styles from './EmojiModal.module.css';
 
-const emojiList = ['🏥', '👨‍⚕️', '🎸', '📚', '💼', '🏫', '🧪', '🎤', '🎮', '📅', '💻', '🔬', '🧘‍♂️'];
+import { useRef, useEffect } from 'react';
+
+import ModalButton from '@/components/ModalButton/ModalButton.jsx';
 
 export default function EmojiModal({ onSelect, onClose }) {
     const modalRef = useRef();
+
+    const emojiList = ['🏥', '👨‍⚕️', '🦷', '🧠', '🐶', '🎸', '📚', '💼', '🏫', '🧪',
+    '🎤', '🎮', '📅', '💻', '🔬', '🧘‍♂️', '⚖️', '📊', '🚒',
+    '🍎', '🎨', '📸', '🧹', '🛠️', '🩺', '🥁', '📖'];
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -40,9 +46,7 @@ export default function EmojiModal({ onSelect, onClose }) {
                         </button>
                     ))}
                 </div>
-                <button className={styles.closeButton} onClick={() => onClose()}>
-                    Fechar
-                </button>
+                <ModalButton Icon={XIcon} variant="close" onClick={() => onClose()}/>
             </div>
         </div>
     );

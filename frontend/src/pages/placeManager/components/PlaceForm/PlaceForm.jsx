@@ -6,9 +6,9 @@ import UserAddIcon from '@/assets/icons/userAddIcon';
 import styles from './PlaceForm.module.css'
 
 import Navbar from '@/components/Navbar/Navbar.jsx';
-import EmojiModal from '../EmojiModal/EmojiModal';
+import EmojiModal from '../EmojiModal/EmojiModal.jsx';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
-import PlaceModal from '@/pages/placeManager/components/PlaceModal/PlaceModal/PlaceModal';
+import PlaceModal from '../PlaceModal/PlaceModal.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import { useState, useEffect } from 'react';
@@ -28,10 +28,10 @@ export default function PlaceForm() {
     const [places, setPlaces] = useState([]);
     const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
 
+    const [listMessage, setListMessage] = useState('');
+
     const [isCreateEmojiModalOpen, setIsCreateEmojiModalOpen] = useState(false);
     const [selectedCreateEmoji, setSelectedCreateEmoji] = useState('');
-
-    const [listMessage, setListMessage] = useState('');
 
     const [selectedPlace, setSelectedPlace] = useState(null);
     const [modalStatus, setModalStatus] = useState("");
@@ -168,10 +168,10 @@ export default function PlaceForm() {
             <section className={styles.placesList}>
                 {places.length > 0 ? (
                     places.map(place => (
-                        <PlaceCard key={place.id} place={place} 
+                        <PlaceCard key={place.id} place={place}
                             modalStatus={modalStatus} setModalStatus={setModalStatus}
-                            selectedPlace = {selectedPlace} setSelectedPlace={setSelectedPlace}/>
-                ))
+                            selectedPlace={selectedPlace} setSelectedPlace={setSelectedPlace} />
+                    ))
                 ) : (
                     <p className="listMessage">{listMessage || 'Nenhuma sala registrada.'}</p>
                 )}

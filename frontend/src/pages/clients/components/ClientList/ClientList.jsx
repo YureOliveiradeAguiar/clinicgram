@@ -6,10 +6,9 @@ import styles from './ClientList.module.css'
 import Navbar from '@/components/Navbar/Navbar.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton';
 import ClientCard from '../ClientCard/ClientCard.jsx';
+import ClientModal from '../ClientModal/ClientModal';
 
 import React, { useEffect, useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
 
 import { getCookie } from '@/utils/csrf.js';
 
@@ -23,9 +22,8 @@ function ClientList() {
     const [clients, setClients] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
 
-    const navigate = useNavigate();
-
-    const [openCardId, setOpenCardId] = useState(null);
+    const [selectedClient, setSelectedClient] = useState(null);
+    const [modalStatus, setModalStatus] = useState("");
 
     // Fetching for rendering clients card in the page.
     useEffect(() => {
@@ -49,25 +47,69 @@ function ClientList() {
     }, []);
 
     // Fetching for deleting a client.
-    const handleDelete = async (clientId) => {
-        if (!window.confirm('Tem certeza que deseja excluir esse cliente?')) return;
-
+    const handleDeleteClient = async () => { // Viewing.
+        if (!selectedPlace) return;
+        if (!window.confirm('Tem certeza que deseja excluir esse recipiente?')) return;
         try {
-            const res = await fetch(`/api/clients/delete/${clientId}/`, {
+            const res = await fetch(`/api/places/delete/${selectedPlace.id}/`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken')
                 }
             });
-
             if (res.ok) {
-                setClients(prev => prev.filter(c => c.id !== clientId));
+                setStatus({ message: "Recipiente excluído com sucesso", type: "success" });
+                setPlaces(prev => // Filters out the deleted place.
+                    prev.filter(place => place.id !== selectedPlace.id)
+                );
+                setSelectedPlace(null); // Closes the modal.
             } else {
-                setStatusMessage('Erro ao excluir cliente.');
+                setStatus({
+                    type: "error", message: <>
+                        <AlertIcon className={styles.icon} />
+                        Erro ao excluir o recipiente</>
+                });
             }
         } catch {
-            setStatusMessage('Erro de conexão ao excluir cliente.');
+            setStatus({
+                type: "error", message: <>
+                    <AlertIcon className={styles.icon} />
+                    Erro de conexão com o servidor</>
+            });
+        }
+    };
+    
+    const handleUpdate = async (patchData) => {
+        try {
+            const res = await fetch(`/api/places/${patchData.id}/`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...(patchData.name !== undefined && { name: patchData.name }),
+                    ...(patchData.icon !== undefined && { icon: patchData.icon }),
+                }),
+            });
+
+            if (res.ok) {
+                const updatedPlace = await res.json();
+                setPlaces(prev =>
+                    prev.map(place =>
+                        place.id === updatedPlace.id ? updatedPlace : place
+                    )
+                );
+                setSelectedPlace(updatedPlace);
+                setModalStatus("Atualizado com sucesso!");
+            } else {
+                setModalStatus("Erro ao atualizar");
+            }
+        } catch (err) {
+            console.error("Erro ao atualizar:", err);
+            setModalStatus("Erro na comunicação com o servidor");
         }
     };
 
@@ -80,15 +122,21 @@ function ClientList() {
             <section className={styles.clientList}>
                 {clients.length > 0 ? (
                     clients.map(client => (
-                        <ClientCard key={client.id} client={client} onDelete={handleDelete}
-                            isOpen={openCardId === client.id} setOpenCardId={setOpenCardId}/>
-                ))
+                        <ClientCard key={client.id} client={client}
+                                modalStatus={modalStatus} setModalStatus={setModalStatus}
+                                selectedClient={selectedClient} setSelectedClient={setSelectedClient} />
+                    ))
                 ) : (
                     <p className="statusMessage">{statusMessage || 'Nenhum cliente registrado.'}</p>
                 )}
             </section>
 
             <ReturnButton containerClass={styles.returnButtonContainer}/>
+
+            {selectedClient && (
+                <ClientModal closeOnClickOutside={false} client={selectedClient} onClose={() => setSelectedClient(null)}
+                        onDelete={handleDeleteClient} onUpdate={handleUpdate} modalStatus={modalStatus} />
+            )}
         </div>
     );
 }
