@@ -27,7 +27,6 @@ export default function ScheduleViewing() {
     const [startOffset, setStartOffset] = useState(0);
 
     const [listMessage, setListMessage] = useState('');
-    const [openCardId, setOpenCardId] = useState(null);
 
     // Centralized base date info.
     const startDate = useMemo(() => {
@@ -120,8 +119,7 @@ export default function ScheduleViewing() {
                     {appointments.length > 0 ? (
                         appointments.map(appointment => (
                             <AppointmentCard key={appointment.id} appointment={appointment} onDelete={handleDelete}
-                                labelColor={appointmentColors[appointment.id]}
-                                isOpen={openCardId === appointment.id} setOpenCardId={setOpenCardId}/>
+                                labelColor={appointmentColors[appointment.id]}/>
                     ))
                     ) : (
                         <p className="listMessage">{listMessage || 'Nenhum agendamento registrado.'}</p>

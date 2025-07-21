@@ -42,6 +42,31 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
         };
     }, [closeOnClickOutside, onClose]);
 
+    const formatPhone = (value) => {
+        if (!value) return "";
+        const cleaned = value.replace(/\D/g, '');
+        if (cleaned.length <= 2) {
+            return `(${cleaned}`;
+        } else if (cleaned.length <= 6) {
+            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
+        } else if (cleaned.length <= 10) {
+            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+        } else {
+            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`;
+        }
+    };
+    
+    const normalizePhone = (formatted) => {
+        if (!formatted) return "";
+        const cleaned = formatted.replace(/\D/g, '');
+        const ddd = cleaned.slice(0, 2);
+        let number = cleaned.slice(2);
+        if (number.length === 8 && number[0] !== '9') {
+            number = '9' + number;
+        }
+        return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
+    }
+
     return (
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
@@ -62,12 +87,9 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
                     <div className={styles.infoRow}>
                         <span className={styles.label}>WhatsApp:</span>
                         {isEditing ? (
-                            <input
-                                type="tel"
-                                value={editedWhatsapp}
-                                className={styles.input}
-                                onChange={(e) => setEditedWhatsapp(e.target.value)}
-                            />
+                            <input type="tel" value={editedWhatsapp} className={styles.input} maxLength={14}
+                                    placeholder="(99) 9999-9999"
+                                    onChange={(e) => {setEditedWhatsapp(formatPhone(e.target.value));}}/>
                         ) : (
                             <span>{client.whatsapp}</span>
                         )}

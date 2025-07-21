@@ -34,7 +34,7 @@ export default function PlaceCard({ place, selectedPlace, setSelectedPlace,
                     {place.icon} {place.name}
                 </p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.cardButton}>
+                    <button className={styles.cardButton} style={{opacity:0.1, cursor:'default',}}>
                         <HistoryIcon className={styles.buttonIcon}/>
                     </button>
                     <button className={styles.cardButton} onClick={() => {setSelectedPlace(place);

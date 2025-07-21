@@ -6,7 +6,7 @@ import { useRef, useEffect } from 'react';
 
 import { useTime } from '../../hooks/useTime';
 
-export default function AppointmentCard({ appointment, onDelete, isOpen, setOpenCardId, labelColor }) {
+export default function AppointmentCard({ appointment, onDelete, labelColor }) {
     const now = useTime(5000);
     const start = new Date(appointment.startTime);
     const end = new Date(appointment.endTime);
@@ -20,18 +20,6 @@ export default function AppointmentCard({ appointment, onDelete, isOpen, setOpen
     }
 
     const cardRef = useRef(null);
-    const toggleCard = () => {
-        setOpenCardId(prev => (prev === appointment.id ? null : appointment.id));
-    };
-
-    useEffect(() => {
-        if (isOpen && cardRef.current) {
-            cardRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-            });
-        }
-    }, [isOpen]);
 
     const formatDateRange = (startIso, endIso) => {
         const start = new Date(startIso);
@@ -69,21 +57,9 @@ export default function AppointmentCard({ appointment, onDelete, isOpen, setOpen
                     <p className={styles.cardDeets}>{formatDateRange(appointment.startTime, appointment.endTime)}</p>
                 </div>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.expandButton} onClick={() => toggleCard()}>
-                        {isOpen ? (
-                            <ArrowUpIcon className={styles.expandIcon} />
-                        ) : (
-                            <ArrowDownIcon className={styles.expandIcon} />
-                        )}
-                    </button>
+
                 </div>
             </div>
-            {isOpen && (
-                <div className={styles.cardBody}>
-                    <p>Sala registrada.</p>
-                    <button className={styles.deleteButton} onClick={() => onDelete(appointment.id)}>Excluir</button>
-                </div>
-            )}
         </div>
     )
 }

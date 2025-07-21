@@ -31,7 +31,7 @@ body {
     cursor: default;
     line-height: 1.6;
     color: var(--font);
-    background-color: var(--lightBackground);
+    background-color: var(--darkBackground);
 }
 
 body h2 {
@@ -42,6 +42,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 12px;
+    padding: 16px;
     background-color: var(--lightBackground);
     text-align: center;
     height: 100%;

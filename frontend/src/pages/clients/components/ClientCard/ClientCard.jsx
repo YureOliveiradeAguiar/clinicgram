@@ -24,7 +24,7 @@ export default function ClientCard({ client, selectedClient, setSelectedClient,
                     {client.icon} {client.name}
                 </p>
                 <div className={styles.cardButtonSection}>
-                    <button className={styles.cardButton}>
+                    <button className={styles.cardButton} style={{opacity:0.1, cursor:'default',}}>
                         <HistoryIcon className={styles.buttonIcon}/>
                     </button>
                     <button className={styles.cardButton} onClick={() => {setSelectedClient(client);

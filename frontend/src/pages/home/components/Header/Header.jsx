@@ -1,4 +1,4 @@
-import LogoImg from '../../assets/images/Logo.png'
+import LogoImg from '@/assets/images/Logo.png'
 import styles from './Header.module.css'
 
 function Header({showNavbar}) {
@@ -9,7 +9,6 @@ function Header({showNavbar}) {
                     <img src={LogoImg} alt="Clinicgram"/>
                     <h1>Clinicgram</h1>
                 </div>
-                {showNavbar && (
                     <nav>
                         <ul>
                             <li><a href="#about">Sobre</a></li>
@@ -17,7 +16,6 @@ function Header({showNavbar}) {
                             <li><a href="#contact">Contato</a></li>
                         </ul>
                     </nav>
-                )}
             </div>
         </header>
     )
