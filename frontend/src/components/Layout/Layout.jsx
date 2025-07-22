@@ -1,4 +1,5 @@
 import LogoImg from '@/assets/images/Logo.png'
+import ProfileCircle from '@/assets/icons/profileCircle'
 import ListIcon from '@/assets/icons/listIcon'
 import userAddIcon from '@/assets/icons/userAddIcon.jsx'
 import usersIcon from '@/assets/icons/usersIcon.jsx'
@@ -13,11 +14,29 @@ import styles from './Layout.module.css';
 
 import { Link, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
+import { getCookie } from '@/utils/csrf.js';
 import handleLogout from '@/utils/handleLogout.js'
 
 export default function Layout() {
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        fetch('/api/profile', {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            credentials: 'include',
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao carregar usuário');
+                return res.json();
+            })
+            .then(data => { setUser(data); })
+            .catch(err => { console.error('Erro ao buscar perfil do usuário:', err); });
+    }, []);
+
     const panelOptions = [
         { title: "Registrar Cliente", Icon: userAddIcon, link: "/clients/new" },
         { title: "Clientes", Icon: usersIcon, link: "/clients" },
@@ -48,7 +67,10 @@ export default function Layout() {
                         <h1>Clinicgram</h1>
                     </div>
                 </div>
-                <div>user</div>
+                <div className={styles.userHeading}>
+                    {user?.username ? user.username.charAt(0).toUpperCase() + user.username.slice(1) : 'Usuário'}
+                    <ProfileCircle className={styles.userIcon} />
+                </div>
             </header>
             <div className={styles.mainContent}>
                 <div className={styles.sidePanel}>
@@ -62,10 +84,10 @@ export default function Layout() {
                             </Link>
                         );
                     })}
-                    <button onClick={handleLogout} className={styles.panelOption}>
+                    <a onClick={handleLogout} className={styles.panelOption}>
                         {LogOutIcon && <LogOutIcon className={styles.icon} />}
                         {sidebarExpanded && <span>Sair</span>}
-                    </button>
+                    </a>
                 </div>
                 <div className={styles.pageContent}>
                     <Outlet />

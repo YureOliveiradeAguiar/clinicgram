@@ -54,31 +54,49 @@
 .brand h1 {
     font-size: 1.6rem;
 }
+/* USER HEADING */
+.userHeading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+}
+.userIcon {
+    width: 48px;
+    height: 48px;
+}
 
 /* SIDE PANEL */
 .sidePanel {
-    background-color: var(--lightBackground);
+    background-color: var(--primary);
     height: 100%;
     padding: 12px;
     border-radius: 0 0 0 30px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 .panelOption {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
+    padding: 12px 14px;
     width: 100%;
 
     font-size: 1rem;
     text-decoration: none;
-    color: var(--font);
+    font-weight: normal;
+    color: var(--darkBackground);
 
-    background-color: var(--lightBackground);
-    transition: color 0.2s ease;
+    cursor: pointer;
+    background-color: var(--primary);
+    transition: background-color 2s ease;
     border: none;
-    border-radius: 14px;
+    border-radius: 12px;
+}
+.sidePanel .icon {
+    width: 24px;
+    height: 24px;
 }
 .panelOption span {
+    padding: 0 10px;
     display: inline-block;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -86,17 +104,15 @@
 .panelButton, .panelOption {
     transition: background-color 0.2s ease
 }
-.panelButton:hover, .panelOption:hover {
-    filter: brightness(95%);
+.panelOption:hover:not(.activeOption) {
+    background-color: #469a81;
 }
-.panelButton:active, .panelOption:active {
-    filter: brightness(90%);
+.panelOption:active:not(.activeOption) {
+    background-color: #3a826d;
 }
-
 .activeOption {
-    background-color: #ebebeb;
+    background-color: #418f78;
     font-weight: 500;
-    color: #000;
 }
 
 /* MAIN OUTLET = CONTENT AREA */
@@ -109,14 +125,6 @@
 
 .pageContent {
     flex: 1;
-    padding: 8px;
     overflow-y: auto;
     background-color: var(--darkBackground);
-}
-
-.icon {
-    width: 24px;
-    height: 24px;
-    stroke: var(--font);
-    fill: var(--font);
 }
