@@ -70,7 +70,7 @@
 .sidePanel {
     background-color: var(--primary);
     height: 100%;
-    padding: 12px;
+    padding: 12px 8px;
     border-radius: 0 0 0 30px;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }

@@ -23,8 +23,17 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
         if (editedName !== client.name) {
             updatedFields.name = editedName;
         }
+        if (normalizePhone(editedWhatsapp)  !== normalizePhone(client.whatsapp)) {
+            updatedFields.whatsapp = editedWhatsapp;
+        }
+        console.log("client.dateOfBirth: ", client.dateOfBirth);
+        //console.log("editedDateOfBirth: ", editedDateOfBirth);
+        if (editedDateOfBirth !== formatDate(client.dateOfBirth)) {
+            updatedFields.dateOfBirth = normalizeDate(editedDateOfBirth);
+            console.log(normalizeDate(editedDateOfBirth));
+        }
         if (Object.keys(updatedFields).length > 0) {
-            onUpdate({ ...client, ...updatedFields });
+            onUpdate({ id: client.id, ...updatedFields });
         }
         setIsEditing(false);
     };
@@ -55,7 +64,17 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
             return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`;
         }
     };
-    
+    const formatDate = (value) => {
+        const digits = value.replace(/\D/g, '').slice(0, 8);
+        if (digits.length <= 2) {
+            return digits;
+        } else if (digits.length <= 4) {
+            return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+        } else {
+            return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+        }
+    };
+
     const normalizePhone = (formatted) => {
         if (!formatted) return "";
         const cleaned = formatted.replace(/\D/g, '');
@@ -66,6 +85,13 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
         }
         return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
     }
+    const normalizeDate = (dateStr) => {
+        if (!dateStr) return null;
+        const parts = dateStr.split('/');
+        if (parts.length !== 3) return null;
+        const [day, month, year] = parts;
+        return `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
 
     return (
         <div className={styles.overlay}>
@@ -97,12 +123,8 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Nascimento:</span>
                         {isEditing ? (
-                            <input
-                                type="date"
-                                value={editedDateOfBirth}
-                                className={styles.input}
-                                onChange={(e) => setEditedDateOfBirth(e.target.value)}
-                            />
+                            <input type="text" value={editedDateOfBirth} className={styles.input}
+                                    onChange={(e) => {setEditedDateOfBirth(formatDate(e.target.value));}}/>
                         ) : (
                             <span>{client.dateOfBirth}</span>
                         )}
@@ -117,7 +139,9 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
                             <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
                             <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
                                 setIsEditing(false);
-                                setEditedName(client.name);}}/>
+                                setEditedName(client.name);
+                                setEditedWhatsapp(client.whatsapp);
+                                setEditedDateOfBirth(client.dateOfBirth);}}/>
                         </div>)}
                 </div>
                 <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>

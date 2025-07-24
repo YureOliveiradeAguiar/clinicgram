@@ -1,3 +1,4 @@
+import AlertIcon from '@/assets/icons/alertSign';
 import AppointsIcon from '@/assets/icons/appointsIcon';
 import CalendarIcon from '@/assets/icons/calendarIcon';
 import UserAddIcon from '@/assets/icons/userAddIcon';
@@ -42,16 +43,16 @@ function ClientList() {
             setClients(data);
         })
         .catch(() => {
-            setStatus({message: "Erro de conexão com o servidor", type: "error" });
+            setStatusMessage({message: "Erro de conexão com o servidor", type: "error" });
         });
     }, []);
 
     // Fetching for deleting a client.
     const handleDeleteClient = async () => { // Viewing.
-        if (!selectedPlace) return;
-        if (!window.confirm('Tem certeza que deseja excluir esse recipiente?')) return;
+        if (!selectedClient) return;
+        if (!window.confirm('Tem certeza que deseja excluir esse cliente?')) return;
         try {
-            const res = await fetch(`/api/places/delete/${selectedPlace.id}/`, {
+            const res = await fetch(`/api/clients/delete/${selectedClient.id}/`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -59,20 +60,20 @@ function ClientList() {
                 }
             });
             if (res.ok) {
-                setStatus({ message: "Recipiente excluído com sucesso", type: "success" });
-                setPlaces(prev => // Filters out the deleted place.
-                    prev.filter(place => place.id !== selectedPlace.id)
+                setStatusMessage({ message: "Cliente excluído com sucesso", type: "success" });
+                setClients(prev => // Filters out the deleted client.
+                    prev.filter(client => client.id !== selectedClient.id)
                 );
-                setSelectedPlace(null); // Closes the modal.
+                setSelectedClient(null); // Closes the modal.
             } else {
-                setStatus({
+                setStatusMessage({
                     type: "error", message: <>
                         <AlertIcon className={styles.icon} />
-                        Erro ao excluir o recipiente</>
+                        Erro ao excluir o cliente</>
                 });
             }
         } catch {
-            setStatus({
+            setStatusMessage({
                 type: "error", message: <>
                     <AlertIcon className={styles.icon} />
                     Erro de conexão com o servidor</>
@@ -82,7 +83,7 @@ function ClientList() {
     
     const handleUpdate = async (patchData) => {
         try {
-            const res = await fetch(`/api/places/${patchData.id}/`, {
+            const res = await fetch(`/api/clients/${patchData.id}/`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -91,18 +92,16 @@ function ClientList() {
                 },
                 body: JSON.stringify({
                     ...(patchData.name !== undefined && { name: patchData.name }),
-                    ...(patchData.icon !== undefined && { icon: patchData.icon }),
+                    ...(patchData.whatsapp !== undefined && { whatsapp: patchData.whatsapp }),
+                    ...(patchData.dateOfBirth !== undefined && { dateOfBirth: patchData.dateOfBirth }),
                 }),
             });
-
             if (res.ok) {
-                const updatedPlace = await res.json();
-                setPlaces(prev =>
-                    prev.map(place =>
-                        place.id === updatedPlace.id ? updatedPlace : place
-                    )
+                const updatedClient = await res.json();
+                setClients(prev =>
+                    prev.map(client => client.id === updatedClient.id ? updatedClient : client)
                 );
-                setSelectedPlace(updatedPlace);
+                setSelectedClient(updatedClient);
                 setModalStatus("Atualizado com sucesso!");
             } else {
                 setModalStatus("Erro ao atualizar");
@@ -112,6 +111,14 @@ function ClientList() {
             setModalStatus("Erro na comunicação com o servidor");
         }
     };
+
+    useEffect(() => {
+        if (!statusMessage?.message) return;
+        const timeout = setTimeout(() => {
+            setStatusMessage(null);
+        }, 3000);
+        return () => clearTimeout(timeout);
+    }, [statusMessage]);
 
     return (
         <div className={styles.clientsWrapper}>
@@ -127,7 +134,7 @@ function ClientList() {
                                 selectedClient={selectedClient} setSelectedClient={setSelectedClient} />
                     ))
                 ) : (
-                    <p className="statusMessage">{statusMessage || 'Nenhum cliente registrado.'}</p>
+                    <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
                 )}
             </section>
 
@@ -136,6 +143,11 @@ function ClientList() {
             {selectedClient && (
                 <ClientModal closeOnClickOutside={false} client={selectedClient} onClose={() => setSelectedClient(null)}
                         onDelete={handleDeleteClient} onUpdate={handleUpdate} modalStatus={modalStatus} />
+            )}
+            {statusMessage?.message && (
+                <div className={`statusMessage ${statusMessage.type}`}>
+                    {statusMessage.message}
+                </div>
             )}
         </div>
     );

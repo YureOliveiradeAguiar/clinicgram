@@ -70,3 +70,16 @@ class ClientDeleteAPIView(APIView):
         client = get_object_or_404(Client, id=client_id)
         client.delete()
         return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+    
+class ClientUpdateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, client_id):
+        client = get_object_or_404(Client, id=client_id)
+        serializer = ClientSerializer(client, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(request.data)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
