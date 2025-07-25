@@ -9,7 +9,8 @@ import { useState, useEffect } from 'react';
 import { getCookie } from '@/utils/csrf';
 
 export default function ScheduleTable({ mode = 'viewing',
-        occupiedMap, setStatus, setAppointments, appointmentColors, // < Viewing.
+        occupiedMap, setStatus, setAppointments, appointmentColors, // Viewing.
+        selectedAppointment, setSelectedAppointment, // Viewing.
         // Scheduling >.
         occupiedIndexes,
         days, indexedCells,
@@ -23,7 +24,6 @@ export default function ScheduleTable({ mode = 'viewing',
     const [isDragging, setIsDragging] = useState(false); // Scheduling.
     const [selectedDay, setSelectedDay] = useState(null); // Scheduling.
     const [lastSelectedIndex, setLastSelectedIndex] = useState(null); // Scheduling.
-    const [selectedAppointment, setSelectedAppointment] = useState(null); // Viewing.
 
     const numColumns = days.length;
     const isAdjacentInColumn = (a, b) => Math.abs(a - b) === numColumns;

@@ -41,7 +41,7 @@ export default function AppointmentModal({ appointment, onDelete, onClose }) {
                 </div>
                 <div className={styles.infoRow}>
                     <span className={styles.label}>Local:</span>
-                    <span>{appointment.place.name}</span>
+                    <span>{appointment.place.name} {appointment.place.icon}</span>
                 </div>
                 <div className={styles.infoRow}>
                     <span className={styles.label}>Início:</span>

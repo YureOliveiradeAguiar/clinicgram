@@ -51,16 +51,8 @@ class ClientListAPIView(APIView):
 
     def get(self, request):
         clients = Client.objects.all().order_by('name')
-        clientData = [
-            {
-                'id': client.id,
-                'name': client.name,
-                'whatsapp': client.whatsapp,
-                'dateOfBirth': client.dateOfBirth.strftime('%d/%m/%Y')
-            }
-            for client in clients
-        ]
-        return Response(clientData)
+        serializer = ClientSerializer(clients, many=True)
+        return Response(serializer.data)
 
 
 class ClientDeleteAPIView(APIView):

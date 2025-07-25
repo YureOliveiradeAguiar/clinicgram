@@ -25,6 +25,7 @@ export default function ScheduleViewing() {
     const [appointments, setAppointments] = useState([]);
     const [occupiedMap, setOccupiedMap] = useState(new Map());
     const [startOffset, setStartOffset] = useState(0);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
     const [listMessage, setListMessage] = useState('');
 
@@ -113,13 +114,14 @@ export default function ScheduleViewing() {
                             appointmentColors={appointmentColors} occupiedMap={occupiedMap}
                             days={days} times={times} indexedCells={matrix}
                             startOffset={startOffset} setStartOffset={setStartOffset}
-                            monthName={monthName} year={year}/>
+                            monthName={monthName} year={year}
+                            selectedAppointment={selectedAppointment} setSelectedAppointment={setSelectedAppointment}/>
                 </div>
                 <div className={styles.appointmentList}>
                     {appointments.length > 0 ? (
                         appointments.map(appointment => (
                             <AppointmentCard key={appointment.id} appointment={appointment} onDelete={handleDelete}
-                                labelColor={appointmentColors[appointment.id]}/>
+                                labelColor={appointmentColors[appointment.id]} setSelectedAppointment={setSelectedAppointment}/>
                     ))
                     ) : (
                         <p className="listMessage">{listMessage || 'Nenhum agendamento registrado.'}</p>

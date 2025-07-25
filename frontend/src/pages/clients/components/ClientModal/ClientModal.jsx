@@ -16,7 +16,13 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
     
     const [editedName, setEditedName] = useState(client.name);
     const [editedWhatsapp, setEditedWhatsapp] = useState(client.whatsapp);
-    const [editedDateOfBirth, setEditedDateOfBirth] = useState(client.dateOfBirth);
+
+    const displayDate = (isoDate) => {
+        if (!isoDate) return '';
+        const [y, m, d] = isoDate.split('-');
+        return `${d}/${m}/${y}`;
+    };
+    const [editedDateOfBirth, setEditedDateOfBirth] = useState(displayDate(client.dateOfBirth));
 
     const handleSave = () => {
         const updatedFields = {};
@@ -26,11 +32,10 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
         if (normalizePhone(editedWhatsapp)  !== normalizePhone(client.whatsapp)) {
             updatedFields.whatsapp = editedWhatsapp;
         }
-        console.log("client.dateOfBirth: ", client.dateOfBirth);
-        //console.log("editedDateOfBirth: ", editedDateOfBirth);
-        if (editedDateOfBirth !== formatDate(client.dateOfBirth)) {
-            updatedFields.dateOfBirth = normalizeDate(editedDateOfBirth);
-            console.log(normalizeDate(editedDateOfBirth));
+        const normalizedEditedDate = normalizeDate(editedDateOfBirth);
+        if (normalizedEditedDate !== client.dateOfBirth) {
+            updatedFields.dateOfBirth = normalizedEditedDate;
+            setEditedDateOfBirth(displayDate(updatedFields.dateOfBirth));
         }
         if (Object.keys(updatedFields).length > 0) {
             onUpdate({ id: client.id, ...updatedFields });
@@ -97,7 +102,11 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
                 <h2>Detalhes do Cliente</h2>
-                <p className={styles.statusMessage}>{modalStatus}</p>
+                <div className={styles.modalStatusContainer}>
+                    <span className={`${styles.modalStatusMessage} ${modalStatus ? styles[modalStatus.type] : ''}`}>
+                        {modalStatus?.message}
+                    </span>
+                </div>
                 <div className={styles.infoContent}>
                     <div className={styles.infoRow}>
                         <span className={styles.label}>Nome:</span>
@@ -126,7 +135,7 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
                             <input type="text" value={editedDateOfBirth} className={styles.input}
                                     onChange={(e) => {setEditedDateOfBirth(formatDate(e.target.value));}}/>
                         ) : (
-                            <span>{client.dateOfBirth}</span>
+                            <span>{displayDate(client.dateOfBirth)}</span>
                         )}
                     </div>
                 </div>
@@ -141,7 +150,7 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
                                 setIsEditing(false);
                                 setEditedName(client.name);
                                 setEditedWhatsapp(client.whatsapp);
-                                setEditedDateOfBirth(client.dateOfBirth);}}/>
+                                setEditedDateOfBirth(displayDate(client.dateOfBirth));}}/>
                         </div>)}
                 </div>
                 <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>

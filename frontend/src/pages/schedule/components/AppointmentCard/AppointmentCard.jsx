@@ -1,12 +1,10 @@
-import ArrowDownIcon from '@/assets/icons/arrowDown.jsx'
-import ArrowUpIcon from '@/assets/icons/arrowUp.jsx'
 import styles from './AppointmentCard.module.css';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 
 import { useTime } from '../../hooks/useTime';
 
-export default function AppointmentCard({ appointment, onDelete, labelColor }) {
+export default function AppointmentCard({ appointment, labelColor, setSelectedAppointment }) {
     const now = useTime(5000);
     const start = new Date(appointment.startTime);
     const end = new Date(appointment.endTime);
@@ -48,7 +46,7 @@ export default function AppointmentCard({ appointment, onDelete, labelColor }) {
     }
 
     return (
-        <div className={`${styles.appointmentCard} ${statusClass}`} ref={cardRef}>
+        <div className={`${styles.appointmentCard} ${statusClass}`} ref={cardRef} onClick={() => setSelectedAppointment(appointment)}>
             <div className={styles.cardHeader}>
                 <div className={styles.cardColorLabel} style={{ backgroundColor: labelColor }}/>
 

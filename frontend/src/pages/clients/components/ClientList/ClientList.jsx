@@ -24,7 +24,7 @@ function ClientList() {
     const [statusMessage, setStatusMessage] = useState('');
 
     const [selectedClient, setSelectedClient] = useState(null);
-    const [modalStatus, setModalStatus] = useState("");
+    const [modalStatus, setModalStatus] = useState(null);
 
     // Fetching for rendering clients card in the page.
     useEffect(() => {
@@ -102,13 +102,14 @@ function ClientList() {
                     prev.map(client => client.id === updatedClient.id ? updatedClient : client)
                 );
                 setSelectedClient(updatedClient);
-                setModalStatus("Atualizado com sucesso!");
+                //console.log(patchData);
+                setModalStatus({ message: "Atualizado com sucesso!", type: "success" });
             } else {
-                setModalStatus("Erro ao atualizar");
+                setModalStatus({ message: "Erro ao atualizar", type: "error" });
             }
         } catch (err) {
             console.error("Erro ao atualizar:", err);
-            setModalStatus("Erro na comunicação com o servidor");
+            setModalStatus({ message: "Erro na comunicação com o servidor", type: "error" });
         }
     };
 

@@ -28,7 +28,7 @@ export default function ClientCard({ client, selectedClient, setSelectedClient,
                         <HistoryIcon className={styles.buttonIcon}/>
                     </button>
                     <button className={styles.cardButton} onClick={() => {setSelectedClient(client);
-                            modalStatus !== null && setModalStatus("");}}>
+                            modalStatus !== null && setModalStatus(null);}}>
                         <InfoIcon className={styles.buttonIcon}/>
                     </button>
                 </div>
