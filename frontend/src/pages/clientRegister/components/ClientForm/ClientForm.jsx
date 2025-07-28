@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 function ClientForm() {
     const navItems = [
@@ -18,7 +19,8 @@ function ClientForm() {
     ];
     
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
-    const [status, setStatus] = useState({ message: "Registre um cliente", type: "info" });
+    const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
 
     const [days, setDays] = useState([]);
     const [months, setMonths] = useState([]);
@@ -68,10 +70,6 @@ function ClientForm() {
         setSelectedYear('');
     };
 
-    const resetStatus = () => {
-        setStatus({ message: "Registre um cliente", type: "info" });
-    }
-
     useEffect(() => {
         fetch('/api/clients/date-options/', {
             method: 'GET',
@@ -84,7 +82,7 @@ function ClientForm() {
                 setYears(data.years);
             })
             .catch(() => {
-                setStatus({ message: "Erro ao carregar opções de data", type: "error" });
+                setStatusMessage({ message: "Erro ao carregar opções de data", type: "error" });
             });
     }, []);
     
@@ -111,16 +109,16 @@ function ClientForm() {
 
             const result = await response.json();
             if (response.ok) {
-                setStatus({message: result.message, type: "success"});
+                setStatusMessage({message: result.message, type: "success"});
                 resetForm();
             }
         } catch (error) {
-            setStatus({message: "Erro de conexão com o servidor", type: "error"});
+            setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
         }
     };
 
     const handleError = () => {
-        // setStatus({message: "Dados inválidos!", type: "error" });
+        setStatusMessage({message: "Dados inválidos!", type: "error" });
         const dateOfBirth = formatDateOfBirth();
         if (!dateOfBirth) {
             setError("dateOfBirth", {type: "manual", message: "Informe a data de nascimento completa"});
@@ -134,8 +132,6 @@ function ClientForm() {
                 <Navbar items={navItems}/>
             </div>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
-                <p className={`statusMessage ${status.type}`}>{status.message}</p>
-                
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Nome Completo</label>
                     <input type="text" id="name" name="name"  autoComplete="off"
@@ -147,8 +143,7 @@ function ClientForm() {
 
                 <div className={styles.formGroup}>
                     <label htmlFor="whatsapp">WhatsApp</label>
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14"
-                        placeholder="(99) 9999-9999" onFocus={resetStatus}
+                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder="(99) 9999-9999"
                         className={errors.whatsapp ? styles.formInputError : 'formInput'} value={whatsappValue || ""}
                         {...register('whatsapp', {required: "WhatsApp é obrigatório",
                             validate: (value) => {
@@ -188,6 +183,11 @@ function ClientForm() {
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
             </form>
+            {statusMessage?.message && (
+                <div className={`statusMessage ${statusMessage.type}`}>
+                    {statusMessage.message}
+                </div>
+            )}
         </div>
     );
 }

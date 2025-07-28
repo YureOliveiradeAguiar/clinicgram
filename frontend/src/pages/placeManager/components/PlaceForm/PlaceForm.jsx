@@ -14,8 +14,9 @@ import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
-import { placesFetch } from '@/utils/placesFetch.js';
 import { getCookie } from '@/utils/csrf.js';
+import { placesFetch } from '@/utils/placesFetch.js';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 export default function PlaceForm() {
     const navItems = [
@@ -26,9 +27,8 @@ export default function PlaceForm() {
 
     const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({mode:'onBlur'});
     const [places, setPlaces] = useState([]);
-    const [status, setStatus] = useState({ message: "Registre uma sala", type: "info" });
-
-    const [listMessage, setListMessage] = useState('');
+    const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
 
     const [isCreateEmojiModalOpen, setIsCreateEmojiModalOpen] = useState(false);
     const [selectedCreateEmoji, setSelectedCreateEmoji] = useState('');
@@ -40,7 +40,7 @@ export default function PlaceForm() {
         placesFetch() // Fetching for rendering places.
             .then(data => setPlaces(data))
             .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
             });
     }, []);
 
@@ -55,18 +55,18 @@ export default function PlaceForm() {
             body: JSON.stringify(data)});
 
             if (!response.ok) {
-                setStatus({ message: "Erro ao registrar lugar", type: "error" });
+                setStatusMessage({ message: "Erro ao registrar lugar", type: "error" });
                 return;
             }
             placesFetch()
                 .then(data => setPlaces(data))
                 .catch(() => {
-                    setStatus({ message: "Erro ao atualizar lista de lugares", type: "error" });
+                    setStatusMessage({ message: "Erro ao atualizar lista de lugares", type: "error" });
             });
-            setStatus({ message: "Sala registrada com sucesso", type: "success" });
+            setStatusMessage({ message: "Sala registrada com sucesso", type: "success" });
             reset();
         } catch (err) {
-            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
         }
     };
 
@@ -83,18 +83,18 @@ export default function PlaceForm() {
                 }
             });
             if (res.ok) {
-                setStatus({ message: "Recipiente excluído com sucesso", type: "success" });
+                setStatusMessage({ message: "Recipiente excluído com sucesso", type: "success" });
                 setPlaces(prev => // Filters out the deleted place.
                     prev.filter(place => place.id !== selectedPlace.id)
                 );
                 setSelectedPlace(null); // Closes the modal.
             } else {
-                setStatus({ type: "error", message:<>
+                setStatusMessage({ type: "error", message:<>
                     <AlertIcon className={styles.icon}/>
                     Erro ao excluir o recipiente</>});
             }
         } catch {
-            setStatus({ type: "error", message:<>
+            setStatusMessage({ type: "error", message:<>
                     <AlertIcon className={styles.icon} />
                     Erro de conexão com o servidor</>});
         }
@@ -140,7 +140,6 @@ export default function PlaceForm() {
                 <Navbar items={navItems}/>
             </div>
             
-            <p className={`statusMessage ${status.type}`}>{status.message}</p>
             <form className={styles.placeForm} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.addPlaceGroup}>
                     <input type="text" id="name" name="name"  autoComplete="off"
@@ -173,7 +172,7 @@ export default function PlaceForm() {
                             selectedPlace={selectedPlace} setSelectedPlace={setSelectedPlace} />
                     ))
                 ) : (
-                    <p className="listMessage">{listMessage || 'Nenhuma sala registrada.'}</p>
+                    <p className="listMessage">Nenhuma sala registrada</p>
                 )}
             </section>
             <ReturnButton containerClass={styles.returnButton}/>
@@ -181,6 +180,11 @@ export default function PlaceForm() {
             {selectedPlace && (
                 <PlaceModal closeOnClickOutside={false} place={selectedPlace} onClose={() => setSelectedPlace(null)}
                         onDelete={handleDeletePlace} onUpdate={handleUpdate} modalStatus={modalStatus}/>
+            )}
+            {statusMessage?.message && (
+                <div className={`statusMessage ${statusMessage.type}`}>
+                    {statusMessage.message}
+                </div>
             )}
         </div>
     );

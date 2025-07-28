@@ -48,7 +48,7 @@ function Login () {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-                <p className={`statusMessage ${status.type}`}>{status.message}</p>
+                <p className={`loginStatusMessage ${status.type}`}>{status.message}</p>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="username">Usuário</label>

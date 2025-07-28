@@ -15,6 +15,7 @@ import { getCookie } from '@/utils/csrf.js';
 import { clientsFetch } from '../utils/clientsFetch.js';
 import { placesFetch } from '@/utils/placesFetch.js';
 import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
@@ -27,7 +28,8 @@ export default function ScheduleForm() {
     ];
 
     const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({ mode: 'onBlur' });
-    const [status, setStatus] = useState({ message: "Registre um atendimento", type: "info" });
+    const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
 
     const [clients, setClients] = useState([]);
     const [places, setPlaces] = useState([]);
@@ -63,17 +65,17 @@ export default function ScheduleForm() {
         appointmentsFetch() // Fetching for rendering appointments in the table.
             .then(data => setAppointments(data))
             .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
             });
         clientsFetch() // Fetching for rendering clients in the dropdown.
             .then(data => setClients(data))
             .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
             });
         placesFetch() // Fetching for rendering places in the dropdown.
             .then(data => setPlaces(data))
             .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
             });
     }, []);
 
@@ -143,7 +145,7 @@ export default function ScheduleForm() {
             setError("schedule", { type: "manual", message: "Selecione um horário válido" });
         }
         if (!selectedClient || !selectedPlace || !schedule?.day || !schedule?.start || !schedule?.end) {
-            setStatus({ message: "Dados inválidos!", type: "error" });
+            setStatusMessage({ message: "Dados inválidos!", type: "error" });
             return;
         }
 
@@ -176,7 +178,7 @@ export default function ScheduleForm() {
                     minute: '2-digit',
                     hourCycle: 'h23',
                 });
-                setStatus({
+                setStatusMessage({
                     message: `Agendado | ${result.firstName} | dia ${startLocal.getDate()} | ${timeFormatter.format(startLocal)} às ${timeFormatter.format(endLocal)} | ${result.placeName}.` || "Agendamento confirmado!",
                     type: "success"
                 });
@@ -184,14 +186,13 @@ export default function ScheduleForm() {
                 appointmentsFetch()
                     .then(data => setAppointments(data))
                     .catch(() => {
-                        setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                        setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
                     });
             } else {
-                setStatus({ message: result.message || "Erro ao agendar", type: "error" });
+                setStatusMessage({ message: result.message || "Erro ao agendar", type: "error" });
             }
         } catch (error) {
-            console.error("Erro real:", error);
-            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+            setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
         }
     };
 
@@ -199,9 +200,6 @@ export default function ScheduleForm() {
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
                 <h2>Agendamento</h2>
-                <div className={styles.statusContainer}>
-                    <p className={`statusMessage ${status.type}`}>{status.message}</p>
-                </div>
                 <Navbar items={navItems} />
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
@@ -248,6 +246,11 @@ export default function ScheduleForm() {
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
             </form>
+            {statusMessage?.message && (
+                <div className={`statusMessage ${statusMessage.type}`}>
+                    {statusMessage.message}
+                </div>
+            )}
         </div>
     );
 }

@@ -12,6 +12,7 @@ import ClientModal from '../ClientModal/ClientModal';
 import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 function ClientList() {
     const navItems = [
@@ -22,6 +23,7 @@ function ClientList() {
     
     const [clients, setClients] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
 
     const [selectedClient, setSelectedClient] = useState(null);
     const [modalStatus, setModalStatus] = useState(null);
@@ -112,14 +114,6 @@ function ClientList() {
             setModalStatus({ message: "Erro na comunicação com o servidor", type: "error" });
         }
     };
-
-    useEffect(() => {
-        if (!statusMessage?.message) return;
-        const timeout = setTimeout(() => {
-            setStatusMessage(null);
-        }, 3000);
-        return () => clearTimeout(timeout);
-    }, [statusMessage]);
 
     return (
         <div className={styles.clientsWrapper}>

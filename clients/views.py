@@ -38,7 +38,7 @@ class RegisterClientAPIView(APIView):
             return Response({
                 'success': True,
                 'client_id': client.id,
-                'message': f'{firstName} registrado!'
+                'message': f'{firstName} registrado com sucesso!'
             })
         return Response({
             'success': False,

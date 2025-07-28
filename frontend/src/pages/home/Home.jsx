@@ -10,7 +10,7 @@ export default function Home() {
 	return(
         <>
 			<Header/>
-            <main>
+            <main style={{borderRadius:"0px"}}>
 		    	<Hero/>
 		    	<Banner/>
 		    	<About/>

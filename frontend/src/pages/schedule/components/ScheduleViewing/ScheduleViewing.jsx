@@ -13,6 +13,7 @@ import { useMemo, useState, useEffect} from 'react';
 
 import { appointmentsFetch } from '@/utils/appointmentsFetch.js';
 import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 export default function ScheduleViewing() {
     const navItems = [
@@ -21,13 +22,13 @@ export default function ScheduleViewing() {
         { to: '/places', Icon: PlacesIcon, label: "Salas" },
     ];
 
-    const [status, setStatus] = useState({ message: "Selecione um horário", type: "info" });
+    const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
+
     const [appointments, setAppointments] = useState([]);
     const [occupiedMap, setOccupiedMap] = useState(new Map());
     const [startOffset, setStartOffset] = useState(0);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
-
-    const [listMessage, setListMessage] = useState('');
 
     // Centralized base date info.
     const startDate = useMemo(() => {
@@ -47,7 +48,7 @@ export default function ScheduleViewing() {
         appointmentsFetch() // Fetching for rendering appointments.
             .then(data => setAppointments(data))
             .catch(() => {
-                setStatus({ message: "Erro de conexão com o servidor", type: "error" });
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
             });
     }, []);
 
@@ -65,27 +66,6 @@ export default function ScheduleViewing() {
         //console.log(map);
     }, [appointments, matrix]);
 
-    // Fetching for deleting a client.
-    const handleDelete = async (placeId) => {
-        if (!window.confirm('Tem certeza que deseja excluir essa sala?')) return;
-        try {
-            const res = await fetch(`/api/places/delete/${placeId}/`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken')
-                }
-            });
-            if (res.ok) {
-                setPlaces(prev => prev.filter(p => p.id !== placeId));
-            } else {
-                setStatus({ message: "Erro ao excluir sala", type: "error" });
-            }
-        } catch {
-            setStatus({ message: "Erro de conexão com o servidor", type: "error" });
-        }
-    };
-
     const colorPalette = ["#49ccc3ff", "#ffde58ff", "#b485ffff", "#ffab24ff",
         "#9d15a7ff", "#53b64bff", "#FF5E78", "#3C91E6",
     ];
@@ -101,16 +81,13 @@ export default function ScheduleViewing() {
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
-                <h2>Agenda</h2>
-                <div className={styles.statusContainer}>
-                    <p className={`statusMessage ${status.type}`}>{status.message}</p>
-                </div>
+                <h2>Agenda</h2> 
                 <Navbar items={navItems} />
             </div>
             <div className={styles.contentWrapper}>
                 <div className={styles.TableWrapper}>
                     <ScheduleTable
-                            setAppointments={setAppointments} setStatus={setStatus}
+                            setAppointments={setAppointments} setStatus={setStatusMessage}
                             appointmentColors={appointmentColors} occupiedMap={occupiedMap}
                             days={days} times={times} indexedCells={matrix}
                             startOffset={startOffset} setStartOffset={setStartOffset}
@@ -120,17 +97,22 @@ export default function ScheduleViewing() {
                 <div className={styles.appointmentList}>
                     {appointments.length > 0 ? (
                         appointments.map(appointment => (
-                            <AppointmentCard key={appointment.id} appointment={appointment} onDelete={handleDelete}
+                            <AppointmentCard key={appointment.id} appointment={appointment}
                                 labelColor={appointmentColors[appointment.id]} setSelectedAppointment={setSelectedAppointment}/>
                     ))
                     ) : (
-                        <p className="listMessage">{listMessage || 'Nenhum agendamento registrado.'}</p>
+                        <p className="listMessage">Nenhum agendamento registrado</p>
                     )}
                 </div>
                 <div className={styles.returnButtonContainer}>
                     <ReturnButton/>
                 </div>
             </div>
+            {statusMessage?.message && (
+                <div className={`statusMessage ${statusMessage.type}`}>
+                    {statusMessage.message}
+                </div>
+            )}
         </div>
     );
 }
