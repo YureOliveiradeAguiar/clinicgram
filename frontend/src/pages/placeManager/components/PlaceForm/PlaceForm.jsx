@@ -64,10 +64,15 @@ export default function PlaceForm() {
                     setStatusMessage({ message: "Erro ao atualizar lista de lugares", type: "error" });
             });
             setStatusMessage({ message: "Sala registrada com sucesso", type: "success" });
-            reset();
+            resetForm();
         } catch (err) {
             setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
         }
+    };
+
+    const resetForm = () => {
+        reset(); // Reset from the react-hook-form.
+        setSelectedCreateEmoji(null);
     };
 
     // Fetching for deleting a place.

@@ -11,6 +11,7 @@ import Clients from '@/pages/clients/Clients.jsx';
 import Scheduling from '@/pages/scheduling/Scheduling.jsx';
 import Schedule from '@/pages/schedule/Schedule.jsx';
 import PlaceManager from '@/pages/placeManager/PlaceManager.jsx';
+import History from '@/pages/history/History.jsx';
 
 export default function App() {
 	return (
@@ -26,6 +27,7 @@ export default function App() {
 						<Route path="/schedule/new" element={<RequireAuth><Scheduling /></RequireAuth>} />
 						<Route path="/schedule" element={<RequireAuth><Schedule /></RequireAuth>} />
 						<Route path="/places" element={<RequireAuth><PlaceManager /></RequireAuth>} />
+						<Route path="/history" element={<RequireAuth><History /></RequireAuth>} />
 					</Route>
 				</Routes>
 			</Router>

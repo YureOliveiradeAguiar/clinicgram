@@ -1,14 +1,15 @@
 import LogoImg from '@/assets/images/Logo.png'
 import ProfileCircle from '@/assets/icons/profileCircle'
 import ListIcon from '@/assets/icons/listIcon'
-import userAddIcon from '@/assets/icons/userAddIcon.jsx'
-import usersIcon from '@/assets/icons/usersIcon.jsx'
-import scheduleIcon from '@/assets/icons/calendarIcon.jsx'
-import appointsIcon from '@/assets/icons/appointsIcon.jsx'
-import placesIcon from '@/assets/icons/placesIcon.jsx'
+import UserAddIcon from '@/assets/icons/userAddIcon.jsx'
+import UsersIcon from '@/assets/icons/usersIcon.jsx'
+import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
+import AppointsIcon from '@/assets/icons/appointsIcon.jsx'
+import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 //import waitingIcon from '@/assets/icons/clockIcon.jsx'
 //import suppliesIcon from '@/assets/icons/boxes.jsx'
 import LogOutIcon from '@/assets/icons/logOutIcon.jsx'
+import HistoryIcon from '@/assets/icons/historyIcon'
 
 import styles from './Layout.module.css';
 
@@ -38,13 +39,14 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
-        { title: "Registrar Cliente", Icon: userAddIcon, link: "/clients/new" },
-        { title: "Clientes", Icon: usersIcon, link: "/clients" },
-        { title: "Agendamento", Icon: appointsIcon, link: "/schedule/new" },
-        { title: "Agenda", Icon: scheduleIcon, link: "/schedule" },
+        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/clients/new" },
+        { title: "Clientes", Icon: UsersIcon, link: "/clients" },
+        { title: "Agendamento", Icon: AppointsIcon, link: "/schedule/new" },
+        { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
         //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
-        { title: "Salas", Icon: placesIcon, link: "/places" },
+        { title: "Salas", Icon: PlacesIcon, link: "/places" },
+        { title: "Histórico", Icon: HistoryIcon, link: "/history" },
     ];
 
     const location = useLocation();
