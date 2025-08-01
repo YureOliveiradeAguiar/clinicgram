@@ -1,7 +1,7 @@
 import styles from './HistoryList.module.css'
 
-import HistoryItem from '../HistoryItem/HistoryItem';
-import ReturnButton from '@/components/ReturnButton/ReturnButton';
+import HistoryCard from '../HistoryCard/HistoryCard.jsx';
+import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
 
 import React, { useEffect, useState } from 'react';
 
@@ -44,7 +44,7 @@ export default function HistoryList() {
             <section className={styles.historyList}>
                 {history.length > 0 ? (
                     history.map(record => (
-                        <HistoryItem key={`${record.model}-${record.id}-${record.history_date}`} record={record} />
+                        <HistoryCard key={`${record.model}-${record.id}-${record.history_date}`} record={record}/>
                     ))
                 ) : (
                     <p>Histórico vazio</p>

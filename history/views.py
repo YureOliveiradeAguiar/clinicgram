@@ -14,12 +14,12 @@ class HistoryAPIView(APIView):
     def get(self, request):
         records = []
 
-        # Collect history for each model
+        # Collects history for each model.
         for model in [Client, Appointment, Place]:
             for obj in model.objects.all():
                 records.extend(obj.history.all())
 
-        # Sort by history_date (descending)
+        # Sorts by history_date (descending).
         records.sort(key=lambda h: h.history_date, reverse=True)
 
         serializer = HistorySerializer(records, many=True)
