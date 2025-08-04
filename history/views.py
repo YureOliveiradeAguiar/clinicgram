@@ -6,21 +6,28 @@ from clients.models import Client
 from appointments.models import Appointment
 from places.models import Place
 
+from reversion.models import Version
+
 from .serializers import HistorySerializer
 
 class HistoryAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def __str__(self):
+        return f"Appointsment for {self.client.name} at {self.startTime.strftime('%d/%m/%Y %H:%M')} in {self.place.name}"
+
     def get(self, request):
-        records = []
+        # Collects versions for specific models.
+        versions = Version.objects.filter(
+            content_type__model__in=[
+                Client._meta.model_name,
+                Appointment._meta.model_name,
+                Place._meta.model_name,
+            ]
+        ).select_related("revision", "content_type")
 
-        # Collects history for each model.
-        for model in [Client, Appointment, Place]:
-            for obj in model.objects.all():
-                records.extend(obj.history.all())
+        # Sorts by revision date (descending).
+        versions = versions.order_by("-revision__date_created")
 
-        # Sorts by history_date (descending).
-        records.sort(key=lambda h: h.history_date, reverse=True)
-
-        serializer = HistorySerializer(records, many=True)
+        serializer = HistorySerializer(versions, many=True)
         return Response(serializer.data)

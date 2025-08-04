@@ -12,9 +12,11 @@ from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware, is_naive
 from django.shortcuts import get_object_or_404
 
+import reversion
+
 class RegisterAppointmentAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
+    # Data is received from API, formatted for saving, saved, and then some info is formated back to front.
     def post(self, request):
         data = request.data
 
@@ -51,13 +53,16 @@ class RegisterAppointmentAPIView(APIView):
                 "message": "Lugar não encontrado."
             }, status=status.HTTP_404_NOT_FOUND)
         
-        appointment = Appointment.objects.create(
-            client=client,
-            startTime=startDateTime,
-            endTime=endDateTime,
-            place=place,
-            note=note,
-        )
+        with reversion.create_revision():
+            appointment = Appointment.objects.create(
+                client=client,
+                startTime=startDateTime,
+                endTime=endDateTime,
+                place=place,
+                note=note,
+            )
+            reversion.set_user(self.request.user)
+            reversion.set_comment("Created via API")
 
         firstName = client.name.split()[0] if client.name else ''
         startUTC = appointment.startTime

@@ -1,48 +1,47 @@
 from rest_framework import serializers
+from reversion.models import Version
 
 class HistorySerializer(serializers.Serializer):
-    description = serializers.SerializerMethodField()
+    description = serializers.CharField(source="object_repr")
     action = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    history_date = serializers.DateTimeField()
-
+    history_date = serializers.DateTimeField(source="revision.date_created")
     changes = serializers.SerializerMethodField()
 
-    def get_user(self, obj):
-        return obj.history_user.username if obj.history_user else None
+    def get_user(self, obj: Version):
+        return obj.revision.user.username if obj.revision.user else None
 
-    def get_changes(self, obj):
-        prev_record = obj.prev_record
-        if not prev_record:
+    def get_action(self, obj: Version):
+        previous_versions = Version.objects.get_for_object_reference(
+            obj.content_type.model_class(), obj.object_id
+        ).order_by("revision__date_created")
+        
+        first = previous_versions.first()
+        if first and first.id == obj.id:
+            return "criado"
+        # If this revision has a comment like "delete", you can customize this.
+        if obj.revision.comment == "delete":
+            return "excluído"
+        return "atualizado"
+
+    def get_changes(self, obj: Version):
+        # Find the previous version to diff against
+        previous_versions = Version.objects.get_for_object_reference(
+            obj.content_type.model_class(), obj.object_id
+        ).order_by("revision__date_created")
+
+        # Get index of current version
+        versions = list(previous_versions)
+        idx = versions.index(obj)
+        if idx + 1 >= len(versions):
             return {}
-        delta = obj.diff_against(prev_record)
-        return {change.field: [change.old, change.new] for change in delta.changes}
 
-    def get_description(self, obj):
-        instance = obj.instance
-        modelName = instance.__class__.__name__
+        previous = versions[idx + 1]
 
-        # Add custom summaries depending on model.
-        if modelName == "Appointment":
-            # Assuming Appointment has fields: client (FK) and date.
-            clientName = getattr(instance.client, "name", "Sem cliente")
-            startTime = getattr(instance, "startTime", None)
-            if startTime:
-                startTime = startTime.strftime("%d/%m/%Y às %H:%M")
-            else:
-               startTime = "horário indefinido"
-            return f"Agendamento de {clientName} em {startTime}"
-        elif modelName == "Client":
-            return f"Cliente: {getattr(instance, 'name', '')}"
-        elif modelName == "Place":
-            return f"Local: {getattr(instance, 'name', '')}"
-        return f"{modelName}"
-    
-    def get_action(self, obj):
-        if obj.history_type == "+":
-            return "Criado"
-        elif obj.history_type == "~":
-            return "Modificado"
-        elif obj.history_type == "-":
-            return "Excluído"
-        return "Alterado"
+        changes = {}
+        for field, new_value in obj.field_dict.items():
+            old_value = previous.field_dict.get(field)
+            if old_value != new_value:
+                changes[field] = [old_value, new_value]
+
+        return changes
