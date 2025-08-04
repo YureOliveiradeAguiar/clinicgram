@@ -7,4 +7,5 @@ class AppointmentsConfig(AppConfig):
 
     def ready(self):
         from .models import Appointment
-        reversion.register(Appointment)
+        if not reversion.is_registered(Appointment):
+            reversion.register(Appointment)

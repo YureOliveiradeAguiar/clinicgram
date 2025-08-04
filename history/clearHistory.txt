@@ -1,0 +1,4 @@
+from reversion.models import Version, Revision
+
+Version.objects.all().delete()
+Revision.objects.all().delete()

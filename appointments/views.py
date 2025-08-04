@@ -88,5 +88,11 @@ class AppointmentDeleteAPIView(APIView):
 
     def delete(self, request, appointment_id):
         appointment = get_object_or_404(Appointment, id=appointment_id)
+
+        with reversion.create_revision():
+            reversion.set_user(request.user)
+            reversion.set_comment("Deleted via API")
+            appointment.save()
         appointment.delete()
+        
         return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
