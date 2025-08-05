@@ -92,7 +92,7 @@ class AppointmentDeleteAPIView(APIView):
         with reversion.create_revision():
             reversion.set_user(request.user)
             reversion.set_comment("Deleted via API")
-            appointment.save()
+            appointment.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
         appointment.delete()
         
         return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
