@@ -1,4 +1,7 @@
 from django.contrib import admin
+from reversion.admin import VersionAdmin
 from .models import Client
 
-admin.site.register(Client)
+@admin.register(Client)
+class ClientAdmin(VersionAdmin):
+    pass

@@ -7,4 +7,5 @@ class ClientsConfig(AppConfig):
 
     def ready(self):
         from .models import Client
-        reversion.register(Client)
+        if not reversion.is_registered(Client):
+            reversion.register(Client)

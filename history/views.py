@@ -54,8 +54,8 @@ class RollbackAPIView(APIView):
             ).order_by("revision__date_created").first() # Not a loop, just a query limited to one row in SQL.
             print("version.id: ", version.id)
             print("firstVersion.id: ", firstVersion.id)
-
-            isFirst = version.id == firstVersion.id
+            # The revision comment check is enough, I left the id check in case of typos in the comment.
+            isFirst = version.id == firstVersion.id and version.revision.comment == "Created via API"
             if (isFirst): # If the version checked is the first, then deletion.
                 modelClass = version.content_type.model_class()
                 try:

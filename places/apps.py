@@ -7,4 +7,5 @@ class PlacesConfig(AppConfig):
 
     def ready(self):
         from .models import Place
-        reversion.register(Place)
+        if not reversion.is_registered(Place):
+            reversion.register(Place)
