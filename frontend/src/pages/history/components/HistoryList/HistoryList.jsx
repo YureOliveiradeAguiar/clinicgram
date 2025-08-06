@@ -61,10 +61,10 @@ export default function HistoryList() {
         }
     };
 
-    const handleRollback = async (versionId) => {
+    const handleRollback = async (version_id) => {
         if (!window.confirm("Deseja realmente reverter para este ponto?")) return;
         try {
-            const response = await fetch(`/api/history/rollback/${versionId}/`, {
+            const response = await fetch(`/api/history/rollback/${version_id}/`, {
                 method: "POST",
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken'),

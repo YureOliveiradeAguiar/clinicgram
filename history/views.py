@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -7,7 +8,6 @@ from appointments.models import Appointment
 from places.models import Place
 
 from reversion.models import Version, Revision
-import reversion
 
 from .serializers import HistorySerializer
 
@@ -37,23 +37,38 @@ class ClearHistoryAPIView(APIView):
 
 class RollbackAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
+    # Terms: reversion("reverter"), versions(snapshots)(by object), object(model object), revision(act of creating a version for a object).
     def post(self, request, version_id):
-        target_version = Version.objects.get(id=version_id)
-        obj = target_version._object_version.object
-        obj.pk = target_version.object_id  # keep same primary key
+        targetVersion = Version.objects.get(id=version_id)
+        targetDate = targetVersion.revision.date_created
 
-        # Actually restore the object
-        with reversion.create_revision():
-            obj.save()
-            reversion.set_user(request.user)
-            reversion.set_comment(f"Rollback to version {version_id}")
-        
-        # Optionally remove newer versions
-        Version.objects.filter(
-            content_type=target_version.content_type,
-            object_id=target_version.object_id,
-            revision__date_created__gt=target_version.revision.date_created
-        ).delete()
+        vertionsToRevert = Version.objects.all().filter(
+            revision__date_created__gte=targetDate # gte = greater than or equal => X
+        ).select_related("revision").order_by("-revision__date_created")
+        print("vertionsToRevert: ", vertionsToRevert)
+
+        for version in vertionsToRevert:
+            firstVersion = Version.objects.filter(
+                object_id=version.object_id,
+                content_type=targetVersion.content_type
+            ).order_by("revision__date_created").first() # Not a loop, just a query limited to one row in SQL.
+            print("version.id: ", version.id)
+            print("firstVersion.id: ", firstVersion.id)
+
+            isFirst = version.id == firstVersion.id
+            if (isFirst): # If the version checked is the first, then deletion.
+                modelClass = version.content_type.model_class()
+                try:
+                    instance = modelClass.objects.get(pk=version.object_id)
+                    instance.delete()
+                    print(f"Deleted {modelClass.__name__} id={version.object_id}")
+                except:
+                    print(f"{modelClass.__name__} id={version.object_id} already deleted")
+            else:
+                obj = version._object_version.object # Reverts the tracked object properties to the version (snapshot)(obj = targetVersion._object_version.object).
+                obj.pk = version.object_id # Keeps the same primary key it had before (each version has a history id based on the history model table).
+                obj.save() # Actually writes the rollback to the database.
+                print(f"{obj} reverted.")
+            version.delete()
 
         return Response({"message": "Rollback successful."})

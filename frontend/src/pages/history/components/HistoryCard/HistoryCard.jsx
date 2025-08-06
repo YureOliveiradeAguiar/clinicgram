@@ -11,7 +11,7 @@ export default function HistoryCard({ record, handleRollback }) {
                 </p>
             </div>
             <button onClick={() => handleRollback(record.id)} className={styles.rollbackButton}>
-                Reverter
+                Reverter até aqui
             </button>
         </div>
     );
