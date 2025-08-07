@@ -58,10 +58,10 @@ class HistorySerializer(serializers.ModelSerializer):
 
         changedFields = [] # Compare field-by-field.
         for field in model_class._meta.fields:
-            field_name = field.name
-            oldValue = getattr(nonModifiedObject, field_name, None)
-            newValue = getattr(modifiedObject, field_name, None)
+            fieldName = field.name
+            oldValue = getattr(nonModifiedObject, fieldName, None)
+            newValue = getattr(modifiedObject, fieldName, None)
             if oldValue != newValue:
-                changedFields.append(f"{oldValue} → {newValue}")
+                changedFields.append(f"{oldValue or "🛇"} → {newValue}")
 
         return changedFields

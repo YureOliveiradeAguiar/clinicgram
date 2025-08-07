@@ -10,6 +10,15 @@ from datetime import datetime
 from .serializers import ClientSerializer
 
 
+class ClientListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        clients = Client.objects.all().order_by('name')
+        serializer = ClientSerializer(clients, many=True)
+        return Response(serializer.data)
+
+
 class DateOptionsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -45,15 +54,6 @@ class RegisterClientAPIView(APIView):
             'success': False,
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-     
-        
-class ClientListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        clients = Client.objects.all().order_by('name')
-        serializer = ClientSerializer(clients, many=True)
-        return Response(serializer.data)
 
 
 class ClientDeleteAPIView(APIView):
@@ -68,8 +68,8 @@ class ClientDeleteAPIView(APIView):
             client.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
         client.delete()
         return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
-    
-    
+
+
 class ClientUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -80,7 +80,7 @@ class ClientUpdateAPIView(APIView):
             with reversion.create_revision():
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Updated via API")
-                client.save()
+                client.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

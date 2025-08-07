@@ -11,7 +11,7 @@ export default function HistoryCard({ record, handleRollback }) {
                 </p>
                 {record.changes && record.changes.length > 0 && (
                     <p>
-                        <i>Campos alterados: {record.changes.join(", ")}</i>
+                        <i>Alterações: {record.changes.join(", ")}</i>
                     </p>
                 )}
             </div>
