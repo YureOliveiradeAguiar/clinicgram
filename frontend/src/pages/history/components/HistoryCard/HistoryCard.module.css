@@ -1,0 +1,72 @@
+.historyItem {
+    display: flex;
+    background-color: #fff;
+
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 6px;
+    width: 100%;
+
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+.sideLine {
+    height: 100%;
+    width: 6px;
+    background-color: #d1d5db;
+}
+.historyContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 4px 12px 4px 0;
+}
+.textBlock {
+    flex: 1;
+    padding-right: 1rem;
+}
+
+.title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: #111827;
+}
+
+.meta {
+    color: #6b7280;
+    margin: 0;
+}
+
+.changes {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.rollbackButton {
+    background-color: #ffe5e5;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rollbackButton:hover {
+    background-color: #ffcccc;
+    transform: scale(1.01);
+}
+.rollbackButton:active {
+    background-color: #ffb3b3;
+    transform: scale(0.98);
+}
+.rollbackButton {
+    color: #d93025;
+}
