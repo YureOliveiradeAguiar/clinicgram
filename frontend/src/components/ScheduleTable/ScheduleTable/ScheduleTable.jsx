@@ -112,11 +112,12 @@ export default function ScheduleTable({ mode = 'viewing',
                 }
             });
             if (res.ok) {
+                const idToDelete = selectedAppointment.id;
                 setStatus({ message: "Agendamento excluído com sucesso", type: "success" });
-                setAppointments(prev => // Filters out the deleted appointment.
-                    prev.filter(appt => appt.id !== selectedAppointment.id)
-                );
                 setSelectedAppointment(null); // Closes the modal.
+                setAppointments(prev => // Filters out the deleted appointment.
+                    prev.filter(appt => appt.id !== idToDelete)
+                );
             } else {
                 setStatus({ type: "error", message:<>
                     <AlertIcon className={styles.icon} />

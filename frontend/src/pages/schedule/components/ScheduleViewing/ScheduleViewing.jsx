@@ -53,7 +53,11 @@ export default function ScheduleViewing() {
     }, []);
 
     useEffect(() => {
-        if (!appointments.length || !matrix.length) return;
+        if (!matrix.length) return;
+        if (!appointments.length) {
+            setOccupiedMap(new Map());
+            return;
+        }
         const map = new Map();
         for (const appt of appointments) {
             const apptIndexes = getIndexesFromTimeRange(appt.startTime, appt.endTime, matrix);
@@ -63,7 +67,6 @@ export default function ScheduleViewing() {
             });
         }
         setOccupiedMap(map);
-        //console.log(map);
     }, [appointments, matrix]);
 
     const colorPalette = ["#49ccc3ff", "#ffde58ff", "#b485ffff", "#ffab24ff",
