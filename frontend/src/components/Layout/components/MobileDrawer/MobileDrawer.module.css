@@ -1,0 +1,62 @@
+@import '../Sidebar.module.css';
+
+/* Full mobile width (or adjust to 80%) */
+.sidePanel {
+  width: 80%;
+  left: -100%; /* hidden by default */
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+  z-index: 1001; /* above overlay */
+}
+
+/* When drawer is open */
+.sidePanel.open {
+  left: 0;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+/* Optional mobile tweaks */
+.panelOption {
+  padding: 1rem;
+  font-size: 1rem;
+}
+
+.panelOption .icon {
+  margin-right: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.brand img {
+  height: 36px;
+  margin-right: 0.5rem;
+}
+
+.brand h1 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.panelButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.panelButtonIcon {
+  font-size: 1.5rem;
+}

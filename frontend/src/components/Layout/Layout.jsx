@@ -8,17 +8,20 @@ import AppointsIcon from '@/assets/icons/appointsIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 //import waitingIcon from '@/assets/icons/clockIcon.jsx'
 //import suppliesIcon from '@/assets/icons/boxes.jsx'
-import LogOutIcon from '@/assets/icons/logOutIcon.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
+
+import DesktopSidebar from './components/DesktopSidebar/DesktopSideBar.jsx'
+import MobileDrawer from './components/MobileDrawer/MobileDrawer.jsx'
+import ProfileMenu from './components/ProfileMenu/ProfileMenu.jsx'
 
 import styles from './Layout.module.css';
 
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
-import handleLogout from '@/utils/handleLogout.js'
+
 
 export default function Layout() {
     const [user, setUser] = useState(null);
@@ -57,6 +60,19 @@ export default function Layout() {
         setSidebarExpanded(prev => !prev);
     };
 
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const media = window.matchMedia("(max-width: 768px)");
+
+        // Set initial value
+        setIsMobile(media.matches);
+
+        const listener = (e) => setIsMobile(e.matches);
+
+        media.addEventListener("change", listener);
+        return () => media.removeEventListener("change", listener);
+    }, []);
+
     return (
         <div className={styles.appContainer}>
             <header className={styles.masthead}>
@@ -70,27 +86,17 @@ export default function Layout() {
                     </div>
                 </div>
                 <div className={styles.userHeading}>
-                    {user?.username ? user.username.charAt(0).toUpperCase() + user.username.slice(1) : 'Usuário'}
-                    <ProfileCircle className={styles.userIcon} />
+                    <ProfileMenu isMobile={isMobile} user={user}/>
                 </div>
             </header>
             <div className={styles.mainContent}>
-                <div className={styles.sidePanel}>
-                    {panelOptions.map(({ title, Icon, link }, index) => {
-                        const isActive = currentPath === link;
-                        return (
-                            <Link to={link} key={index} href={link}
-                                className={`${styles.panelOption} ${isActive ? styles.activeOption : ''}`}>
-                                {Icon && <Icon className={styles.icon} />}
-                                {sidebarExpanded && <span>{title}</span>}
-                            </Link>
-                        );
-                    })}
-                    <a onClick={handleLogout} className={styles.panelOption}>
-                        {LogOutIcon && <LogOutIcon className={styles.icon} />}
-                        {sidebarExpanded && <span>Sair</span>}
-                    </a>
-                </div>
+                {isMobile ? (
+                    <MobileDrawer panelOptions={panelOptions} currentPath={currentPath}
+                        isOpen={sidebarExpanded} onClose={() => setSidebarExpanded(false)} />
+                ) : (
+                    <DesktopSidebar panelOptions={panelOptions} currentPath={currentPath}
+                        sidebarExpanded={sidebarExpanded} />
+                )}
                 <div className={styles.pageContent}>
                     <Outlet />
                 </div>
