@@ -1,5 +1,4 @@
 import LogoImg from '@/assets/images/Logo.png'
-import ProfileCircle from '@/assets/icons/profileCircle'
 import ListIcon from '@/assets/icons/listIcon'
 import UserAddIcon from '@/assets/icons/userAddIcon.jsx'
 import UsersIcon from '@/assets/icons/usersIcon.jsx'
@@ -72,6 +71,12 @@ export default function Layout() {
         media.addEventListener("change", listener);
         return () => media.removeEventListener("change", listener);
     }, []);
+
+    useEffect(() => {
+        if (isMobile) {
+            setSidebarExpanded(false);
+        }
+    }, [isMobile]);
 
     return (
         <div className={styles.appContainer}>

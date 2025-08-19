@@ -1,62 +1,58 @@
 @import '../Sidebar.module.css';
+@import '../../Layout.module.css';
 
-/* Full mobile width (or adjust to 80%) */
-.sidePanel {
-  width: 80%;
-  left: -100%; /* hidden by default */
-  transition: left 0.3s ease;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.3);
-  z-index: 1001; /* above overlay */
-}
-
-/* When drawer is open */
-.sidePanel.open {
-  left: 0;
-}
-
-/* Overlay */
 .overlay {
-  position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0; */
-  background: rgba(0,0,0,0.6);
-  z-index: 1000;
-  transition: opacity 0.3s ease;
+    position: fixed;
+	opacity: 1;
+    pointer-events: all;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
 }
 
-/* Optional mobile tweaks */
+.sidePanel {
+    position: absolute;
+    top: 0.5rem;
+    left: -100%; /* start hidden off-screen */
+    height: 100%;
+    width: fit-content;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    z-index: 1001;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+	border-radius: 0 14px 14px 0;
+	padding: 0;
+	overflow: hidden;
+}
+.sidePanel.open {
+    left: 0; /* slide into view */
+}
+
+.heading {
+	min-width: 300px;
+	padding: 8px 0 0 2px;
+	background: #fff;
+}
+
+.optionsList {
+	display: flex;
+	flex-direction: column;
+	margin-top: 12px;
+}
+
 .panelOption {
-  padding: 1rem;
-  font-size: 1rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transform: translateX(-20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.panelOption .icon {
-  margin-right: 1rem;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #ddd;
-}
-
-.brand img {
-  height: 36px;
-  margin-right: 0.5rem;
-}
-
-.brand h1 {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.panelButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.5rem;
-}
-
-.panelButtonIcon {
-  font-size: 1.5rem;
+.sidePanel.open .panelOption {
+    transform: translateX(0);
+    opacity: 1;
 }
