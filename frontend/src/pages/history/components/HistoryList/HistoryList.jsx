@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
+import TrashCan from '@/assets/icons/trashCan';
 
 export default function HistoryList() {
     const [history, setHistory] = useState([]);
@@ -88,7 +89,9 @@ export default function HistoryList() {
             <div className={styles.formHeader}>
                 <h2>Histórico</h2>
             </div>
-            <button onClick={handleHistoryClear}>Limpar</button>
+            <button className={styles.deleteHistoryButton} onClick={handleHistoryClear}>
+                <TrashCan className={styles.icon}/>Excluir histórico
+            </button>
             <section className={styles.historyList}>
                 {history.length > 0 ? (
                     history.map(record => (

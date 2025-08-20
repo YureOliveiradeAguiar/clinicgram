@@ -79,13 +79,15 @@ export default function ScheduleForm() {
             });
     }, []);
 
-    useEffect(() => { // For rendering the occupied cells based on the selected place.
-        if (!selectedPlace || !appointments.length || !matrix.length) return;
-        const placeAppointments = appointments.filter(
-            (appt) => appt.place.id === selectedPlace.id
-        );
+    useEffect(() => { // For rendering the occupied cells based on the selected place and client.
+        if ((!selectedPlace && !selectedClient) || !appointments.length || !matrix.length) return;
+        const filteredAppointments = appointments.filter( (appt) => {
+            const samePlace = selectedPlace && appt.place.id === selectedPlace.id;
+            const sameClient = selectedClient && appt.client.id === selectedClient.id;
+            return samePlace || sameClient;
+        });
         const indexes = new Set();
-        for (const appt of placeAppointments) {
+        for (const appt of filteredAppointments) {
             const start = appt.startTime;
             const end = appt.endTime;
             const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
@@ -95,7 +97,7 @@ export default function ScheduleForm() {
             // console.log("appt.startTime (locale) ", start);
         }
         setOccupiedIndexes(indexes);
-    }, [selectedPlace, appointments, matrix]);
+    }, [selectedClient, selectedPlace, appointments, matrix]);
 
     useEffect(() => {
         if (startTime && endTime && scheduledDay) {
@@ -109,14 +111,28 @@ export default function ScheduleForm() {
         }
     }, [startTime, endTime, scheduledDay, setValue, clearErrors]);
 
-    useEffect(()=> { // Resets selection when a new place is selected.
+    useEffect(() => {
+        console.log("occupiedIndexes: ", occupiedIndexes);
+        console.log("selectedIndexes: ", selectedIndexes);
+        const hasConflict = [...selectedIndexes].some(idx => occupiedIndexes.has(idx));
+        console.log("conflict? ", hasConflict);
+        if (hasConflict) {
+            resetScheduleTime();
+            setStatusMessage({ message: "O horário selecionado já está ocupado. Selecione outro horário.", type: "error" });
+        }
+    }, [occupiedIndexes]);
+
+    useEffect(() => { // Resets when user moves table forwards or backwards in time.
+        selectedIndexes.size && resetScheduleTime();
+    }, [startOffset]);
+    const resetScheduleTime = () => { // Reset for schedule table and selected time logic.
         setSelectedIndexes(new Set());
         setStartTime(null);
         setEndTime(null);
         setScheduledDay(null);
         setValue("schedule", null);
         clearErrors("schedule");
-    }, [selectedPlace, startOffset]);
+    }
 
     const resetForm = () => {
         reset(); // Reset from the react-hook-form.
