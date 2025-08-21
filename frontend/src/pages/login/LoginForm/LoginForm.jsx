@@ -62,13 +62,24 @@ function Login () {
                     <input type="password" id="password" name="password" minlenght="8"
                         maxLength="32" placeholder="Digite sua senha" className="formInput"
                         {...register("password", {required: "Senha é obrigatória"})}/>
+                    <div className={styles.forgotPassword}>
+                        <a href="/forgot-password">esqueceu a senha?</a>
+                    </div>
                 </div>
-
+                
                 <input type="submit" name="login" value="Login" className={styles.loginButton}/>
+
+                <div className={styles.rememberMe}>
+                    <label className={styles.rememberMeLabel}><input type="checkbox" name="remember" />Lembre-se de mim</label>
+                </div>
             </form>
 
-            <div className={styles.observation}>
-                <p>Entre em contato se houver problemas.</p>
+            <div className={styles.registration}>
+                <p>Ainda não possui acesso?{" "}
+                    <a href="/register" className={styles.registerLink}>
+                        CADASTRE-SE
+                    </a>
+                </p>
             </div>
         </section>
     )

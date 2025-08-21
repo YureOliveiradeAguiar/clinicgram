@@ -9,7 +9,7 @@ import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 //import suppliesIcon from '@/assets/icons/boxes.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
 
-import DesktopSidebar from './components/DesktopSidebar/DesktopSideBar.jsx'
+import Sidebar from './components/Sidebar/SideBar.jsx'
 import MobileDrawer from './components/MobileDrawer/MobileDrawer.jsx'
 import ProfileMenu from './components/ProfileMenu/ProfileMenu.jsx'
 
@@ -41,6 +41,9 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
+        {title: "Registrar", Icon: UserAddIcon, dropdown: [
+            { title: "Paciente", link: "/clients/new" },
+            { title: "Profissional", link: "/clients/new/profissional" },]},
         { title: "Registrar Cliente", Icon: UserAddIcon, link: "/clients/new" },
         { title: "Clientes", Icon: UsersIcon, link: "/clients" },
         { title: "Agendamento", Icon: AppointsIcon, link: "/schedule/new" },
@@ -80,28 +83,31 @@ export default function Layout() {
 
     return (
         <div className={styles.appContainer}>
-            <header className={styles.masthead}>
-                <div className={styles.heading}>
-                    <button className={styles.panelButton} onClick={toggleSidebar}>
-                        <ListIcon className={styles.panelButtonIcon}/>
-                    </button>
-                    <div className={styles.brand}>
-                        <img src={LogoImg} alt="Clinicgram" />
-                        <h1>Clinicgram</h1>
-                    </div>
-                </div>
-                <div className={styles.userHeading}>
-                    <ProfileMenu isMobile={isMobile} user={user}/>
-                </div>
-            </header>
-            <div className={styles.mainContent}>
+            <div className={styles.sideContent}>
                 {isMobile ? (
                     <MobileDrawer panelOptions={panelOptions} currentPath={currentPath}
                         isOpen={sidebarExpanded} onClose={() => setSidebarExpanded(false)} />
                 ) : (
-                    <DesktopSidebar panelOptions={panelOptions} currentPath={currentPath}
-                        sidebarExpanded={sidebarExpanded} />
+                    <Sidebar panelOptions={panelOptions} currentPath={currentPath}
+                        setSidebarExpanded = {setSidebarExpanded} sidebarExpanded={sidebarExpanded} />
                 )}
+            </div>
+
+            <div className={styles.mainContent}>
+                <header className={styles.masthead}>
+                    <div className={styles.heading}>
+                        <button className={styles.panelButton} onClick={toggleSidebar}>
+                            <ListIcon className={styles.panelButtonIcon}/>
+                        </button>
+                        <div className={styles.brand}>
+                            <img src={LogoImg} alt="Clinicgram" />
+                            <h1>Clinicgram</h1>
+                        </div>
+                    </div>
+                    <div className={styles.userHeading}>
+                        <ProfileMenu isMobile={isMobile} user={user}/>
+                    </div>
+                </header>
                 <div className={styles.pageContent}>
                     <Outlet />
                 </div>

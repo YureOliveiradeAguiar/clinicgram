@@ -1,14 +1,18 @@
+@import '../../Layout.module.css';
+
 .sidePanel {
+	border-radius: 18px 18px 0 0;
 	background-color: var(--primary);
 	height: 100%;
 	padding: 12px 8px 12px 0.5%;
-	border-radius: 0 0 0 30px;
 	box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
 .panelOption {
+	user-select: none;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	padding: 12px 14px;
 	height: 50px;
 	width: 100%;
@@ -22,7 +26,29 @@
 	background-color: var(--primary);
 	transition: background-color 2s ease;
 	border: none;
-	border-radius: 12px;
+	border-radius: 8px;
+}
+
+.panelSubOption {
+  	user-select: none;
+  	display: flex;
+  	align-items: center;
+  	padding: 10px 24px; /* more left padding for nesting */
+  	height: 40px;
+  	width: 100%;
+  	font-size: 0.95rem;
+  	font-weight: normal;
+  	color: var(--darkBackground);
+  	text-decoration: none;
+  	cursor: pointer;
+  	background-color: var(--primaryLight); /* slightly lighter for sub-options */
+  	border-radius: 8px;
+  	transition: background-color 0.2s ease;
+}
+
+.iconWithTitle {
+	display: flex;
+	align-items: center;
 }
 
 .sidePanel .icon {
