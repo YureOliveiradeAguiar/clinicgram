@@ -44,7 +44,6 @@ export default function Layout() {
         {title: "Registrar", Icon: UserAddIcon, dropdown: [
             { title: "Paciente", link: "/clients/new" },
             { title: "Profissional", link: "/clients/new/profissional" },]},
-        { title: "Registrar Cliente", Icon: UserAddIcon, link: "/clients/new" },
         { title: "Clientes", Icon: UsersIcon, link: "/clients" },
         { title: "Agendamento", Icon: AppointsIcon, link: "/schedule/new" },
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },

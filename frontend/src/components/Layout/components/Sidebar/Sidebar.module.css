@@ -1,77 +1,127 @@
-@import '../../Layout.module.css';
-
+/* SIDEBAR */
 .sidePanel {
-	border-radius: 18px 18px 0 0;
-	background-color: var(--primary);
+	--sidePanelBackground: #062335;
+
+	position: relative;
+	margin: 16px;
+	border-radius: 18px;
+	background-color: var(--sidePanelBackground);
 	height: 100%;
-	padding: 12px 8px 12px 0.5%;
+	padding: 30px 20px;
 	box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
-.panelOption {
+/* SIDEBAR HEADING */
+.heading {
+    display: flex;
+    align-items: center;
+	justify-content: center;
+    gap: 10px;
+	margin-bottom: 30px;
+}
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.brand img {
+    max-width: 34px;
+}
+.brand h1 {
+    font-size: 1.6rem;
+}
+.panelButtonWrapper {
+	position: absolute;
+	right: 0;
+	transform: translateX(50%);
+	background-color: #062335;
+	border-radius: 50%;
+}
+.panelButton {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    padding: 1px;
+    margin: 6px;
+    background-color: var(--primary);
+	color: white;
+    border: none;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+.panelButton:hover {
+    background-color: #ebebeb;
+}
+
+/* SIDEBAR DROPDOWNS */
+.dropdownContent {
+	display: flex;
+	align-items: stretch;
+	justify-content: right;
+	margin-bottom: 4px;
+}
+.dropdownColumn {
+	background-color: var(--primaryActive);
+	margin-left: 22px;
+	width: 4px;
+	border-radius: 16px;
+}
+
+/* SIDEBAR OPTIONS */
+.panelOption,
+.panelSubOption {
 	user-select: none;
 	display: flex;
 	align-items: center;
+	text-decoration: none;
+	color: var(--darkBackground);
+	cursor: pointer;
+	border-radius: 8px;
+	background-color: var(--sidePanelBackground);
+}
+.panelOption {
 	justify-content: space-between;
 	padding: 12px 14px;
 	height: 50px;
 	width: 100%;
-
 	font-size: 1rem;
-	text-decoration: none;
 	font-weight: normal;
-	color: var(--darkBackground);
-
-	cursor: pointer;
-	background-color: var(--primary);
-	transition: background-color 2s ease;
 	border: none;
-	border-radius: 8px;
 }
-
+.dropdownOptions {
+	width: 100%;
+}
 .panelSubOption {
-  	user-select: none;
-  	display: flex;
-  	align-items: center;
-  	padding: 10px 24px; /* more left padding for nesting */
+	margin-left: 8px;
+	padding: 0 12px;
   	height: 40px;
-  	width: 100%;
   	font-size: 0.95rem;
   	font-weight: normal;
-  	color: var(--darkBackground);
-  	text-decoration: none;
-  	cursor: pointer;
-  	background-color: var(--primaryLight); /* slightly lighter for sub-options */
-  	border-radius: 8px;
-  	transition: background-color 0.2s ease;
 }
 
 .iconWithTitle {
 	display: flex;
 	align-items: center;
+	gap:2px
 }
 
-.sidePanel .icon {
-	width: 24px;
-	height: 24px;
+.icon {
+	width: 22px;
+	height: 22px;
 }
 
 .panelOption span {
 	padding: 0 10px;
 	display: inline-block;
-	transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.panelButton,
-.panelOption {
-	transition: background-color 0.2s ease
-}
-
-.panelOption:hover:not(.activeOption) {
+.panelOption:hover:not(.activeOption),
+.panelSubOption:hover:not(.activeOption) {
 	background-color: #469a81;
 }
 
-.panelOption:active:not(.activeOption) {
+.panelOption:active:not(.activeOption),
+.panelSubOption:active:not(.activeOption) {
 	background-color: #3a826d;
 }
 
