@@ -1,7 +1,15 @@
 .appContainer {
     display: flex;
     flex-direction: row;
+    align-items: stretch;
     height: 100vh;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--lightBackground);
 }
 
 .masthead {
@@ -61,16 +69,6 @@
     flex-direction: row;
     align-items: center;
     gap: 2px;
-}
-
-/* MAIN OUTLET = CONTENT AREA */
-.mainContent {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
-    background-color: #f5f6fa;
-    /* very light background */
 }
 
 .pageContent {

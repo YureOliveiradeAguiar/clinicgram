@@ -95,11 +95,7 @@ export default function Layout() {
             <div className={styles.mainContent}>
                 <header className={styles.masthead}>
                     <div className={styles.heading}>
-                        <button className={styles.panelButton} onClick={toggleSidebar}>
-                            <ListIcon className={styles.panelButtonIcon}/>
-                        </button>
                         <div className={styles.brand}>
-                            <img src={LogoImg} alt="Clinicgram" />
                             <h1>Clinicgram</h1>
                         </div>
                     </div>

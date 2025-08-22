@@ -12,21 +12,16 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 	return (
 		<div className={styles.sidePanel}>
 			<div className={styles.heading}>
-						<div className={styles.brand}>
-							<img src={LogoImg} alt="Clinicgram" />
-							{sidebarExpanded && (
-								<h1>Clinicgram</h1>
-							)}
-						</div>
-				<div className={styles.panelButtonWrapper}>
-					<button className={styles.panelButton} onClick={() => setSidebarExpanded(prev => !prev)}>
-						{sidebarExpanded ? (
-							<ArrowLeft className={styles.icon} />
-						) : (
-							<ArrowRight className={styles.icon} />
-						)}
-					</button>
+				<div className={styles.brand}>
+					<img className={styles.brandLogo} src={LogoImg} alt="Clinicgram" />
 				</div>
+				<button className={styles.panelButton} onClick={() => setSidebarExpanded(prev => !prev)}>
+					{sidebarExpanded ? (
+						<ArrowLeft className={styles.icon} />
+					) : (
+						<ArrowRight className={styles.icon} />
+					)}
+				</button>
 			</div>
 			{panelOptions.map((item, index) => {
 				const { title, Icon, link, dropdown } = item;
@@ -43,7 +38,7 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 									}}>
 								<div className={styles.iconWithTitle}>
 								{Icon && <Icon className={styles.icon} />}
-									{sidebarExpanded && <span>{title}</span>}
+									<span>{title}</span>
 								</div>
 								{sidebarExpanded && (
 									isOpen ? (
@@ -58,12 +53,12 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 								<div className={styles.dropdownContent}>
 									<div className={styles.dropdownColumn}/>
 									<div className={styles.dropdownOptions}>
-									{dropdown.map((subItem, subIndex) => (
-										<Link to={subItem.link} key={subIndex}
-												className={`${styles.panelSubOption} ${currentPath === subItem.link ? styles.activeOption : ""}`}>
-											<span>{subItem.title}</span>
-										</Link>
-									))}
+										{dropdown.map((subItem, subIndex) => (
+											<Link to={subItem.link} key={subIndex}
+													className={`${styles.panelSubOption} ${currentPath === subItem.link ? styles.activeOption : ""}`}>
+												<span>{subItem.title}</span>
+											</Link>
+										))}
 									</div>
 								</div>
 							)}
@@ -71,10 +66,10 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 					);
 				}
 				return (
-					<Link to={link} key={index} className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}>
+					<Link to={link} key={index} draggable={false} className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}>
 						<div className={styles.iconWithTitle}>
 							{Icon && <Icon className={styles.icon} />}
-							{sidebarExpanded && <span>{title}</span>}
+							<span>{title}</span>
 						</div>
 					</Link>
 				);

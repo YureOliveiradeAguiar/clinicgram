@@ -1,56 +1,44 @@
 /* SIDEBAR */
 .sidePanel {
-	--sidePanelBackground: #062335;
-
 	position: relative;
-	margin: 16px;
-	border-radius: 18px;
-	background-color: var(--sidePanelBackground);
-	height: 100%;
-	padding: 30px 20px;
+	width: 280px;
+	padding: 18px 20px;
 	box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+	transition: width 0.3s ease;
 }
 
 /* SIDEBAR HEADING */
 .heading {
     display: flex;
     align-items: center;
-	justify-content: center;
+	justify-content: space-between;
     gap: 10px;
 	margin-bottom: 30px;
 }
-.brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+.brand,
+.panelButton {
+	box-sizing: content-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 24px;
+    height: 24px;
+	padding: 8px;
+	border-radius: 10px;
 }
-.brand img {
-    max-width: 34px;
-}
-.brand h1 {
-    font-size: 1.6rem;
-}
-.panelButtonWrapper {
-	position: absolute;
-	right: 0;
-	transform: translateX(50%);
-	background-color: #062335;
-	border-radius: 50%;
+.brandLogo{
+	width: 30px;
 }
 .panelButton {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    padding: 1px;
     margin: 6px;
-    background-color: var(--primary);
-	color: white;
+
+	background-color: transparent;
+	color: #000;
     border: none;
-    box-sizing: content-box;
-    cursor: pointer;
 }
-.panelButton:hover {
-    background-color: #ebebeb;
+.panelButton:hover,
+.brand:hover {
+    background-color: rgb(230,230,230);
 }
 
 /* SIDEBAR DROPDOWNS */
@@ -61,33 +49,34 @@
 	margin-bottom: 4px;
 }
 .dropdownColumn {
-	background-color: var(--primaryActive);
+	background-color: rgb(200,200,200);
 	margin-left: 22px;
 	width: 4px;
 	border-radius: 16px;
 }
 
-/* SIDEBAR OPTIONS */
+/* SIDEBAR OPTIONS*/
 .panelOption,
 .panelSubOption {
 	user-select: none;
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	color: var(--darkBackground);
 	cursor: pointer;
-	border-radius: 8px;
-	background-color: var(--sidePanelBackground);
+	border-radius: 12px;
+
+	font-size: 0.95rem;
+	color: rgb(40,40,40);
 }
 .panelOption {
 	justify-content: space-between;
-	padding: 12px 14px;
-	height: 50px;
+	padding: 0 14px;
+	height: 44px;
 	width: 100%;
-	font-size: 1rem;
 	font-weight: normal;
 	border: none;
 }
+/* DROPDOWNS */
 .dropdownOptions {
 	width: 100%;
 }
@@ -98,34 +87,30 @@
   	font-size: 0.95rem;
   	font-weight: normal;
 }
-
+/* STRUCTURE */
 .iconWithTitle {
 	display: flex;
 	align-items: center;
 	gap:2px
 }
-
 .icon {
 	width: 22px;
 	height: 22px;
 }
-
 .panelOption span {
 	padding: 0 10px;
 	display: inline-block;
 }
-
+/* COLORING */
 .panelOption:hover:not(.activeOption),
 .panelSubOption:hover:not(.activeOption) {
-	background-color: #469a81;
+	background-color: rgb(235,235,235);
 }
-
 .panelOption:active:not(.activeOption),
 .panelSubOption:active:not(.activeOption) {
-	background-color: #3a826d;
+	background-color: rgb(225,225,225);
 }
-
 .activeOption {
-	background-color: #418f78;
+	background-color: rgb(225,225,225);
 	font-weight: 500;
 }

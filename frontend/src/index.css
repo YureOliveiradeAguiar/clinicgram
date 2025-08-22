@@ -6,10 +6,14 @@
     --complementary: #d6f0e8;
     --font: #1f3a57;
     --h2Font: #195154;
-    --lightBackground: #fcfdfa;
-    --darkBackground: #f5f9f5;
+    --lightBackground: #f7fcfb;
+    --darkBackground: #f2f9f7;
     --gradientBackground: linear-gradient(to bottom, #fcfdfa 0%, #ddd 100%);
-    --error: rgba(220, 60, 75, 0.9)
+    --error: rgba(220, 60, 75, 0.9);
+
+    --modernWhite: #F8F9FA; /* Cloud White */
+    --slightGray: #E9ECEF; /* Ash Gray */
+    --deepGray: #212529; /* Charcoal */
 }
 
 * {
@@ -42,7 +46,6 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 12px;
     padding: 2% 16px;
     background-color: var(--lightBackground);
     text-align: center;
