@@ -1,6 +1,6 @@
 import XIcon from '@/assets/icons/xIcon';
 import TrashCan from '@/assets/icons/trashCan';
-import EditIcon from '@/assets/icons/editIcon.com';
+import EditIcon from '@/assets/icons/editIcon';
 import SaveIcon from '@/assets/icons/saveIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
 import styles from './ClientModal.module.css';
