@@ -1,26 +1,17 @@
 import AlertIcon from '@/assets/icons/alertSign';
-import AppointsIcon from '@/assets/icons/appointsIcon';
-import CalendarIcon from '@/assets/icons/calendarIcon';
 import UserAddIcon from '@/assets/icons/userAddIcon';
 import styles from './ClientList.module.css'
 
-import Navbar from '@/components/Navbar/Navbar.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton';
 import ClientCard from '../ClientCard/ClientCard.jsx';
-import ClientModal from '../ClientModal/ClientModal';
+import ClientModal from '../ClientDeetsModal/ClientDeetsModal';
 
 import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-function ClientList() {
-    const navItems = [
-        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
-        { to: '/schedule', Icon: CalendarIcon, label: "Agenda" },
-        { to: '/clients/new', Icon: UserAddIcon, label: "Novo Cliente" },
-    ];
-    
+export default function ClientList() {
     const [clients, setClients] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
@@ -118,8 +109,11 @@ function ClientList() {
     return (
         <div className={styles.clientsWrapper}>
             <div className={styles.formHeader}>
-                <h2>Clientes</h2>
-                <Navbar items={navItems}/>
+                <h2>Pacientes</h2>
+                <button className={styles.newClientButton}>
+                    {UserAddIcon && <UserAddIcon className={styles.icon} />}
+                    <span>Novo</span>
+                </button>
             </div>
             <section className={styles.clientList}>
                 {clients.length > 0 ? (
@@ -147,5 +141,3 @@ function ClientList() {
         </div>
     );
 }
-
-export default ClientList

@@ -43,14 +43,15 @@ export default function Layout() {
         {title: "Estagiários", Icon: MedicalSuitcase, dropdown: [
             { icon: UserAddIcon, title: "Novo Estagiário", link: "/staff/new" },
             { title: "Estagiários", link: "/staff/new" },]},
-        {title: "Pacientes", Icon: UsersIcon, dropdown: [
-            { title: "Novo Paciente", link: "/clients/new" },
-            { title: "Pacientes", link: "/clients" },]},
-        { title: "Agendamento", Icon: AppointsIcon, link: "/schedule/new" },
+        { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
+        { title: "Salas", Icon: PlacesIcon, link: "/places" },
+        {title: "Agendamento", Icon: UsersIcon, dropdown: [
+            { title: "Registrar Consulta", link: "/schedule/new" },
+            { title: "Lista de Espera", link: "/schedule/new" },
+            { title: "Agendar consulta", link: "/schedule/new" },]},
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
         //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
-        { title: "Salas", Icon: PlacesIcon, link: "/places" },
         { title: "Histórico", Icon: HistoryIcon, link: "/history" },
     ];
 
