@@ -1,0 +1,91 @@
+.clientCard {
+    border-radius: 6px;
+    width: 100%;
+    padding: 2px 0;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 1rem;
+}
+
+.cardName {
+    color: var(--font);
+    font-size: 1.1rem;
+}
+
+.cardButtonSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.cardButton {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    padding: 6px;
+    background-color: transparent;
+    border: none;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+.cardButton:hover {
+    background-color: #ebebeb;
+}
+.buttonIcon {
+    width: inherit;
+    height: inherit;
+    color: var(--font);
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 12px 8px;
+    border-top: 1px solid #ddd;
+    background: #f5f5f5;
+}
+
+/* WEEK AVAILABILITY */
+.weekOptions {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    border-radius: 999px;
+    background-color: var(--darkBackground);
+    border: 1px solid #ccc;
+}
+.weekOptions span {
+    font-weight: 600;
+}
+.dayToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    background-color: var(--darkBackground);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.dayToggle:hover {
+    background-color: #ccc;
+}
+.dayToggle input {
+    display: none;
+}
+.dayToggle input:checked {
+    background-color: red;
+}

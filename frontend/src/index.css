@@ -10,10 +10,6 @@
     --darkBackground: #f2f9f7;
     --gradientBackground: linear-gradient(to bottom, #fcfdfa 0%, #ddd 100%);
     --error: rgba(220, 60, 75, 0.9);
-
-    --modernWhite: #F8F9FA; /* Cloud White */
-    --slightGray: #E9ECEF; /* Ash Gray */
-    --deepGray: #212529; /* Charcoal */
 }
 
 * {
@@ -64,7 +60,7 @@ section {
     scroll-margin-top: 20vh;
 }
 
-/* Forms */
+/* FORMS */
 .formInput {
     width: 100%;
     font-size: 16px;
@@ -72,16 +68,52 @@ section {
     border-radius: 4px;
     border: 1px solid #ccc;
 }
-
 input:focus {
     outline: var(--primary);
 }
-
 Form label, .fieldLabel, Form input, .fieldLabel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
+.errorMessage { /* input error message */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-weight: bold;
+    height: 1rem;
+    font-size: 0.8rem;
+    vertical-align: middle;
+    color: var(--error);
+}
+
+.inputContainer {
+    position: relative;
+    width: 100%;
+    margin: 4px 0;
+}
+.inputContainer input {
+    width: 100%;
+    padding: 26px 10px 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.inputContainer label {
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    color: rgb(100,100,100);
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+.inputContainer input:focus + label,
+.inputContainer input:not(:placeholder-shown) + label {
+    top: 4px; 
+    font-size: 14px;
+}
+
 /* STATUS MESSAGE */
 .loginStatusMessage {
     display: flex;
@@ -130,18 +162,6 @@ Form label, .fieldLabel, Form input, .fieldLabel {
     10% { opacity: 1; transform: translate(-50%, 0); }
     90% { opacity: 1; transform: translate(-50%, 0); }
     100% { opacity: 0; transform: translate(-50%, -10px); }
-}
-
-/* INPUT ERROR MESSAGE */
-.errorMessage {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    font-weight: bold;
-    height: 1rem;
-    font-size: 0.8rem;
-    vertical-align: middle;
-    color: var(--error);
 }
 
 /* SCROLL-BAR */

@@ -9,10 +9,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px;
+    padding: 8px 0;
 }
 .formHeader h2 {
     white-space: nowrap;
+    font-size: 1.4rem;
 }
 
 .formGroup {

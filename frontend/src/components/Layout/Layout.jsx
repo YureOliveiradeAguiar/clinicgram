@@ -1,5 +1,4 @@
-import LogoImg from '@/assets/images/Logo.png'
-import ListIcon from '@/assets/icons/listIcon'
+import MedicalSuitcase from '@/assets/icons/medicalSuitcase.jsx'
 import UserAddIcon from '@/assets/icons/userAddIcon.jsx'
 import UsersIcon from '@/assets/icons/usersIcon.jsx'
 import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
@@ -41,10 +40,12 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
-        {title: "Registrar", Icon: UserAddIcon, dropdown: [
+        {title: "Estagiários", Icon: MedicalSuitcase, dropdown: [
+            { icon: UserAddIcon, title: "Novo Estagiário", link: "/staff/new" },
+            { title: "Estagiários", link: "/staff/new" },]},
+        {title: "Pacientes", Icon: UsersIcon, dropdown: [
             { title: "Novo Paciente", link: "/clients/new" },
-            { title: "Novo Profissional", link: "/clients/new/profissional" },]},
-        { title: "Clientes", Icon: UsersIcon, link: "/clients" },
+            { title: "Pacientes", link: "/clients" },]},
         { title: "Agendamento", Icon: AppointsIcon, link: "/schedule/new" },
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
@@ -57,9 +58,6 @@ export default function Layout() {
     const currentPath = location.pathname;
 
     const [sidebarExpanded, setSidebarExpanded] = useState(true);
-    const toggleSidebar = () => {
-        setSidebarExpanded(prev => !prev);
-    };
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -95,9 +93,7 @@ export default function Layout() {
             <div className={styles.mainContent}>
                 <header className={styles.masthead}>
                     <div className={styles.heading}>
-                        <div className={styles.brand}>
-                            <h1>Clinicgram</h1>
-                        </div>
+                        <h1 className={styles.brandName}>Clinicgram</h1>
                     </div>
                     <div className={styles.userHeading}>
                         <ProfileMenu isMobile={isMobile} user={user}/>

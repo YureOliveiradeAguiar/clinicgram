@@ -1,0 +1,74 @@
+.clientForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+.formHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+.formHeader h2 {
+    white-space: nowrap;
+    font-size: 1.4rem;
+}
+
+.formGroup {
+    width: 100%;
+}
+
+.dateWrapper {
+    display: grid;
+    grid-template-columns: 3fr 5fr 4fr;
+    gap: 5px;
+    width: 100%;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.formButton {
+    background-color: var(--primary);
+    color: var(--darkBackground);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.formButton:hover {
+    background-color: var(--primaryHover);
+}
+
+.formInputError  {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--error);
+    box-shadow: 0 0 0 1px var(--error);
+}
+
+@media (min-width: 375px) {
+    .mainWrapper {
+        padding: 10px 24px;
+        background-color: white;
+        
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+}

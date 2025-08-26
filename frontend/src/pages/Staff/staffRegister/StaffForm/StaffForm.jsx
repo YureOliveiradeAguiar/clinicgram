@@ -1,9 +1,8 @@
 import AppointsIcon from '@/assets/icons/appointsIcon';
 import UsersIcon from '@/assets/icons/usersIcon';
-import styles from './ClientForm.module.css'
+import styles from './StaffForm.module.css'
 
 import Navbar from '@/components/Navbar/Navbar.jsx';
-import DateDropdown from '../DateDropdown/DateDropdown.jsx';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import { useState, useEffect } from 'react';
@@ -128,22 +127,21 @@ function ClientForm() {
     return (
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
-                <h2>Novo Cliente</h2>
+                <h2>Novo Estagiário</h2>
                 <Navbar items={navItems}/>
             </div>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
-                <div className={styles.formGroup}>
-                    <label htmlFor="name">Nome Completo</label>
-                    <input type="text" id="name" name="name"  autoComplete="off"
-                        maxLength="70" placeholder="Digite aqui"
+                <div className="inputContainer">
+                    <input type="text" id="name" name="name" autoComplete="off"
+                        maxLength="70" placeholder=" "
                         className={errors.name ? styles.formInputError : 'formInput'}
                         {...register('name', { required: "O nome é obrigatório" })}/>
+                    <label htmlFor="name">Nome Completo</label>
                     <p className="errorMessage">{errors.name?.message || " "}</p>
                 </div>
 
-                <div className={styles.formGroup}>
-                    <label htmlFor="whatsapp">WhatsApp</label>
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder="(99) 9999-9999"
+                <div className="inputContainer">
+                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
                         className={errors.whatsapp ? styles.formInputError : 'formInput'} value={whatsappValue || ""}
                         {...register('whatsapp', {required: "WhatsApp é obrigatório",
                             validate: (value) => {
@@ -155,30 +153,8 @@ function ClientForm() {
                             const formatted = formatPhone(e.target.value);
                             setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
                         }}/>
+                    <label htmlFor="whatsapp">WhatsApp</label>
                     <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
-                </div>
-
-                <div className={styles.formGroup}>
-                    <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
-                    <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <DateDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
-                            onSelect={(day) => {
-                                setSelectedDay(day);
-                                if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
-                            }}/>
-                        <DateDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
-                            onSelect={(name) => {
-                                const monthNumber = months.indexOf(name) + 1;
-                                setSelectedMonth(monthNumber);
-                                if (selectedDay && monthNumber && selectedYear) {clearErrors('dateOfBirth');}
-                            }}/>
-                        <DateDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
-                            onSelect={(year)=> {
-                                setSelectedYear(year);
-                                if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
-                            }}/>
-                    </div>
-                    <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>

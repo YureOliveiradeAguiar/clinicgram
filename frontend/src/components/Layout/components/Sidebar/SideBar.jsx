@@ -1,5 +1,4 @@
-import ArrowDownIcon from '@/assets/icons/arrowDown';
-import ArrowUpIcon from '@/assets/icons/arrowUp';
+import DropdownArrow from '@/assets/icons/dropdownArrow';
 import LogoImg from '@/assets/images/Logo.png';
 import SidebarIcon from '@/assets/icons/sidebarIcon';
 import styles from './Sidebar.module.css';
@@ -8,9 +7,14 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 
 export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded, sidebarExpanded }) {
+	const [openDropdown, setOpenDropdown] = useState(null);
+	const toggleDropdown = (id) => {
+	  	setOpenDropdown(openDropdown === id ? null : id);
+	};
+
 	return (
 		<div className={`${styles.sidePanel} ${!sidebarExpanded ? styles.retracted: ""}`}>
-			<div className={styles.heading}>
+			<div className={`${styles.heading} ${!sidebarExpanded ? styles.retracted: ""}`}>
 				{sidebarExpanded && (
 					<div className={styles.brand}>
 						<img className={styles.brandLogo} src={LogoImg} alt="Clinicgram" />
@@ -35,28 +39,21 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 					const isActive = currentPath === link;
 
 					if (dropdown) {
-						const [isOpen, setIsOpen] = useState(false);
 						return (
 							<div key={index} className={styles.dropdown}>
 								<div className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}
 										onClick={() => {
-											setIsOpen(!isOpen);
+											toggleDropdown(title);
 											if (!sidebarExpanded) setSidebarExpanded(true);
 										}}>
+									{sidebarExpanded && <DropdownArrow className={`${styles.dropdownIcon} ${openDropdown===title ? styles.rightArrow : styles.downArrow}`} />}
 									{Icon && <Icon className={styles.icon} />}
-									{sidebarExpanded && <span className={styles.title}>{title}</span>}
-									{!sidebarExpanded && <span className={`${styles.tooltip} ${styles.adapted}`}>{title}</span>}
-
-									{sidebarExpanded && (
-										isOpen ? (
-											<ArrowUpIcon className={styles.icon} />
-										) : (
-											<ArrowDownIcon className={styles.icon} />
-										)
-									)}
+									{sidebarExpanded ? ( <span className={styles.title}>{title}</span>
+									) :
+									<span className={`${styles.tooltip} ${styles.adapted}`}>{title}</span>}
 								</div>
 
-								{isOpen && (
+								{openDropdown===title && (
 									<div className={styles.dropdownContent}>
 										<div className={styles.dropdownColumn} />
 										<div className={styles.dropdownOptions}>
