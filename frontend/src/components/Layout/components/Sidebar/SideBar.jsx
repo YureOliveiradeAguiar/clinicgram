@@ -44,7 +44,8 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 											if (!sidebarExpanded) setSidebarExpanded(true);
 										}}>
 									{Icon && <Icon className={styles.icon} />}
-									{sidebarExpanded && <span>{title}</span>}
+									{sidebarExpanded && <span className={styles.title}>{title}</span>}
+									{!sidebarExpanded && <span className={`${styles.tooltip} ${styles.adapted}`}>{title}</span>}
 
 									{sidebarExpanded && (
 										isOpen ? (
@@ -62,7 +63,7 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 											{dropdown.map((subItem, subIndex) => (
 												<Link to={subItem.link} key={subIndex}
 													className={`${styles.panelSubOption} ${currentPath === subItem.link ? styles.activeOption : ""}`}>
-													{sidebarExpanded && <span>{subItem.title}</span>}
+													{sidebarExpanded && <span className={styles.title}>{subItem.title}</span>}
 												</Link>
 											))}
 										</div>
@@ -74,11 +75,13 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 					return (
 						<Link to={link} key={index} draggable={false} className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}>
 							{Icon && <Icon className={styles.icon} />}
-							{sidebarExpanded && <span>{title}</span>}
+							{sidebarExpanded && <span className={styles.title}>{title}</span>}
+							{!sidebarExpanded && <span className={`${styles.tooltip} ${styles.adapted}`}>{title}</span>}
 						</Link>
 					);
 				})}
 			</div>
+			<div onClick={() => setSidebarExpanded(prev => prev === false ? true : prev)} className={styles.filler}></div>
 		</div>
 	);
 }
