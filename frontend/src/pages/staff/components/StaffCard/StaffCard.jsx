@@ -1,10 +1,10 @@
 import InfoIcon from '@/assets/icons/infoIcon';
 import HistoryIcon from '@/assets/icons/historyIcon';
-import styles from './ClientCard.module.css';
+import styles from './StaffCard.module.css';
 
 import { React, useRef, useEffect } from 'react';
 
-export default function ClientCard({ client, selectedClient, setSelectedClient,
+export default function StaffCard({ client, selectedClient, setSelectedClient,
         modalStatus, setModalStatus }) {
     const cardRef = useRef(null);
 

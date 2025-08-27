@@ -3,13 +3,13 @@ import TrashCan from '@/assets/icons/trashCan';
 import EditIcon from '@/assets/icons/editIcon';
 import SaveIcon from '@/assets/icons/saveIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
-import styles from './ClientModal.module.css';
+import styles from './StaffModal.module.css';
 
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
 
 import { useRef, useState, useEffect } from 'react';
 
-export default function ClientModal({ closeOnClickOutside=true, client, onDelete, onClose, onUpdate, modalStatus}) {
+export default function StaffModal({ closeOnClickOutside=true, client, onDelete, onClose, onUpdate, modalStatus}) {
     const modalRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);

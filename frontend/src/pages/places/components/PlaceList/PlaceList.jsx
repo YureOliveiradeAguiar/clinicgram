@@ -1,8 +1,7 @@
 import AlertIcon from '@/assets/icons/alertSign';
 import styles from './PlaceList.module.css'
 
-import NewElementButton from '@/components/NewElementButton/NewElementButton.jsx';
-import PlusIcon from '@/assets/icons/plus';
+import List from '@/components/List/List';
 import PlaceCard from '../PlaceCard/PlaceCard.jsx';
 import PlaceRegisterModal from '../PlaceRegisterModal/PlaceRegisterModal';
 import PlaceModal from '../PlaceModal/PlaceModal.jsx';
@@ -13,10 +12,13 @@ import { getCookie } from '@/utils/csrf.js';
 import { placesFetch } from '@/utils/placesFetch.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
+
 export default function PlaceList() {
     const [places, setPlaces] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
+
+    const [searchTerm, setSearchTerm] = useState("");
 
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
@@ -99,20 +101,21 @@ export default function PlaceList() {
         }
     };
 
-    return (
-        <div className={styles.mainWrapper}>
-            <div className={styles.formHeader}>
-                <h2>Salas</h2>
-                <NewElementButton Icon={PlusIcon} title="Nova" onClick={() => setIsRegisterModalOpen(true)}/>
-            </div>
-
+    return (<>
+        <List title="Salas"
+                NewElementMessage="Nova" onNewElement={() => setIsRegisterModalOpen(true)}
+                searchPlaceholder="Pesquisar sala" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             <section className={styles.placesList}>
                 {places.length > 0 ? (
-                    places.map(place => (
-                        <PlaceCard key={place.id} place={place}
-                            modalStatus={modalStatus} setModalStatus={setModalStatus}
-                            selectedPlace={selectedPlace} setSelectedPlace={setSelectedPlace} />
-                    ))
+                    places
+                        .filter((place) =>
+                            place.name.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .map(place => (
+                            <PlaceCard key={place.id} place={place}
+                                modalStatus={modalStatus} setModalStatus={setModalStatus}
+                                selectedPlace={selectedPlace} setSelectedPlace={setSelectedPlace} />
+                        ))
                 ) : (
                     <p className="listMessage">Nenhuma sala registrada</p>
                 )}
@@ -124,7 +127,7 @@ export default function PlaceList() {
             )}
 
             {selectedPlace && (
-                <PlaceModal closeOnClickOutside={false} place={selectedPlace} onClose={() => setSelectedPlace(null)}
+                <PlaceModal closeOnClickOutside={false} place={selectedPlace} isOpen={selectedPlace !== null} onClose={() => setSelectedPlace(null)}
                         onDelete={handleDeletePlace} onUpdate={handleUpdate} modalStatus={modalStatus}/>
             )}
             {statusMessage?.message && (
@@ -132,6 +135,6 @@ export default function PlaceList() {
                     {statusMessage.message}
                 </div>
             )}
-        </div>
-    );
+        </List>
+    </>);
 }

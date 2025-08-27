@@ -6,12 +6,13 @@ import CancelIcon from '@/assets/icons/cancelIcon';
 import ArrowRight from '@/assets/icons/arrowRight';
 import styles from './PlaceModal.module.css';
 
+import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
 import EmojiModal from '../EmojiModal/EmojiModal.jsx';
 
 import { useRef, useState, useEffect } from 'react';
 
-export default function PlaceModal({ closeOnClickOutside=true, place, onDelete, onClose, onUpdate, modalStatus}) {
+export default function PlaceModal({ closeOnClickOutside=true, place, onDelete, isOpen, onClose, onUpdate, modalStatus}) {
     const modalRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -49,65 +50,64 @@ export default function PlaceModal({ closeOnClickOutside=true, place, onDelete, 
     }, [closeOnClickOutside, onClose]);
 
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal} ref={modalRef}>
-                <h2>{isEditing ? "Edição da Sala" : "Detalhes da Sala"}</h2>
-                <p className={styles.statusMessage}>{modalStatus}</p>
-                <div className={styles.infoContent}>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Nome:</span>
-                        {isEditing ? (
-                            <>
-                                <input type="text" value={editedName} className={styles.input}
-                                    onChange={(e) => setEditedName(e.target.value)} />
-                            </>
-                        ) : (<>
-                            <span>{place.name}</span>
-                        </>)}
-                    </div>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Ícone:</span>
-                        {isEditing ? (
-                            <>
-                                <button type="button" className={styles.emojiPickerButton}
-                                        onClick={() => setIsEditEmojiModalOpen(true)}>
-                                    {(selectedEditEmoji || '🛇') === (place.icon || '🛇') ? (
-                                        <span className={styles.emojiPickerBtnLabel}>{selectedEditEmoji || '🛇'}</span>
-                                    ) : (
-                                        <span className={styles.emojiPickerBtnLabel}>
-                                            {place.icon || '🛇'}
-                                            <ArrowRight className={styles.icon} />
-                                            {selectedEditEmoji || '🛇'}
-                                        </span>
-                                    )}
-                                </button>
-                            </>
-                        ) : (<>
-                            <span>{place.icon || "nenhum"}</span>
-                        </>)}
-                    </div>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <h2>{isEditing ? "Edição da Sala" : "Detalhes da Sala"}</h2>
+            <p className={styles.statusMessage}>{modalStatus}</p>
+            <div className={styles.infoContent}>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Nome:</span>
+                    {isEditing ? (
+                        <>
+                            <input type="text" value={editedName} className={styles.input}
+                                onChange={(e) => setEditedName(e.target.value)} />
+                        </>
+                    ) : (<>
+                        <span>{place.name}</span>
+                    </>)}
                 </div>
-
-                <div className={styles.buttonRow}>
-                    <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
-                    {!isEditing ? (
-                        <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
-                    ) : (<div className={styles.editButtonsRow}>
-                            <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
-                            <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
-                                setIsEditing(false);
-                                setEditedName(place.name);
-                                setSelectedEditEmoji(place.icon);}}/>
-                        </div>)}
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Ícone:</span>
+                    {isEditing ? (
+                        <>
+                            <button type="button" className={styles.emojiPickerButton}
+                                    onClick={() => setIsEditEmojiModalOpen(true)}>
+                                {(selectedEditEmoji || '🛇') === (place.icon || '🛇') ? (
+                                    <span className={styles.emojiPickerBtnLabel}>{selectedEditEmoji || '🛇'}</span>
+                                ) : (
+                                    <span className={styles.emojiPickerBtnLabel}>
+                                        {place.icon || '🛇'}
+                                        <ArrowRight className={styles.icon} />
+                                        {selectedEditEmoji || '🛇'}
+                                    </span>
+                                )}
+                            </button>
+                        </>
+                    ) : (<>
+                        <span>{place.icon || "nenhum"}</span>
+                    </>)}
                 </div>
-                <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>
             </div>
+
+            <div className={styles.buttonRow}>
+                <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
+                {!isEditing ? (
+                    <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
+                ) : (<div className={styles.editButtonsRow}>
+                        <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
+                        <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
+                            setIsEditing(false);
+                            setEditedName(place.name);
+                            setSelectedEditEmoji(place.icon);}}/>
+                    </div>)}
+            </div>
+            <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>
+          
             {isEditEmojiModalOpen && (
                 <EmojiModal onClose={() => setIsEditEmojiModalOpen(false)}
                     onSelect={(emoji) => {
                         setSelectedEditEmoji(emoji);
                         setIsEditEmojiModalOpen(false);}}/>
             )}
-        </div>
+        </Modal>
     );
 }

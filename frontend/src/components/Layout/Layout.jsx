@@ -40,9 +40,7 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
-        {title: "Estagiários", Icon: MedicalSuitcase, dropdown: [
-            { icon: UserAddIcon, title: "Novo Estagiário", link: "/staff/new" },
-            { title: "Estagiários", link: "/staff/new" },]},
+        { title: "Estagiários", Icon: MedicalSuitcase, link: "/staff" },
         { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
         { title: "Salas", Icon: PlacesIcon, link: "/places" },
         {title: "Agendamento", Icon: UsersIcon, dropdown: [

@@ -1,19 +1,19 @@
 import AlertIcon from '@/assets/icons/alertSign';
 import UserAddIcon from '@/assets/icons/userAddIcon';
-import styles from './ClientList.module.css';
+import styles from './StaffList.module.css';
 
 import List from '@/components/List/List';
-import ClientCard from '../ClientCard/ClientCard.jsx';
-import ClientRegisterModal from '../ClientRegisterModal/ClientRegisterModal';
-import ClientDetailsModal from '../ClientDetailsModal/ClientDetailsModal.jsx';
+import StaffCard from '../StaffCard/StaffCard.jsx';
+import StaffRegisterModal from '../StaffRegisterModal/StaffRegisterModal';
+import StaffDetailsModal from '../StaffModal/StaffModal.jsx';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-export default function ClientList() {
-    const [clients, setClients] = useState([]);
+export default function StaffList() {
+    const [staffs, setStaffs] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
 
@@ -21,17 +21,17 @@ export default function ClientList() {
 
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
-    const [selectedClient, setSelectedClient] = useState(null);
+    const [selectedStaff, setSelectedStaff] = useState(null);
     const [modalStatus, setModalStatus] = useState(null);
 
-    const handleClientAdded = (newClient) => {
-        setClients((prev) => [...prev, newClient]);
+    const handleStaffAdded = (newStaff) => {
+        setStaffs((prev) => [...prev, newStaff]);
         setIsRegisterModalOpen(false);
     };
 
-    // Fetching for rendering clients card in the page.
+    // Fetching for rendering staffs card in the page.
     useEffect(() => {
-        fetch('/api/clients/list/', {
+        fetch('/api/staffs/list/', {
             method: 'GET',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -39,23 +39,23 @@ export default function ClientList() {
             credentials: 'include',
         })
         .then(res => {
-            if (!res.ok) throw new Error('Erro ao carregar clientes');
+            if (!res.ok) throw new Error('Erro ao carregar estagiários');
             return res.json();
         })
         .then(data => {
-            setClients(data);
+            setStaffs(data);
         })
         .catch(() => {
             setStatusMessage({message: "Erro de conexão com o servidor", type: "error" });
         });
     }, []);
 
-    // Fetching for deleting a client.
-    const handleDeleteClient = async () => { // Viewing.
-        if (!selectedClient) return;
-        if (!window.confirm('Tem certeza que deseja excluir esse cliente?')) return;
+    // Fetching for deleting a staff member.
+    const handleDeleteStaff = async () => { // Viewing.
+        if (!selectedStaff) return;
+        if (!window.confirm('Tem certeza que deseja excluir esse estagiário?')) return;
         try {
-            const res = await fetch(`/api/clients/delete/${selectedClient.id}/`, {
+            const res = await fetch(`/api/staffs/delete/${selectedStaff.id}/`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -63,16 +63,16 @@ export default function ClientList() {
                 }
             });
             if (res.ok) {
-                setStatusMessage({ message: "Cliente excluído com sucesso", type: "success" });
-                setClients(prev => // Filters out the deleted client.
-                    prev.filter(client => client.id !== selectedClient.id)
+                setStatusMessage({ message: "Estagiário excluído com sucesso", type: "success" });
+                setStaffs(prev => // Filters out the deleted staff member.
+                    prev.filter(staff => staff.id !== selectedStaff.id)
                 );
-                setSelectedClient(null); // Closes the modal.
+                setSelectedStaff(null); // Closes the modal.
             } else {
                 setStatusMessage({
                     type: "error", message: <>
                         <AlertIcon className={styles.icon} />
-                        Erro ao excluir o cliente</>
+                        Erro ao excluir o staffe</>
                 });
             }
         } catch {
@@ -86,7 +86,7 @@ export default function ClientList() {
     
     const handleUpdate = async (patchData) => {
         try {
-            const res = await fetch(`/api/clients/${patchData.id}/`, {
+            const res = await fetch(`/api/staffs/${patchData.id}/`, {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -96,15 +96,14 @@ export default function ClientList() {
                 body: JSON.stringify({
                     ...(patchData.name !== undefined && { name: patchData.name }),
                     ...(patchData.whatsapp !== undefined && { whatsapp: patchData.whatsapp }),
-                    ...(patchData.dateOfBirth !== undefined && { dateOfBirth: patchData.dateOfBirth }),
                 }),
             });
             if (res.ok) {
-                const updatedClient = await res.json();
-                setClients(prev =>
-                    prev.map(client => client.id === updatedClient.id ? updatedClient : client)
+                const updatedStaff = await res.json();
+                setStaffs(prev =>
+                    prev.map(staff => staff.id === updatedStaff.id ? updatedStaff : staff)
                 );
-                setSelectedClient(updatedClient);
+                setSelectedStaff(updatedStaff);
                 //console.log(patchData);
                 setModalStatus({ message: "Atualizado com sucesso!", type: "success" });
             } else {
@@ -117,33 +116,33 @@ export default function ClientList() {
     };
 
     return (
-        <List title="Pacientes"
+        <List title="Estagiários"
                 NewElementIcon={UserAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
-                searchPlaceholder="Pesquisar paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <section className={styles.clientList}>
-                {clients.length > 0 ? (
-                    clients
-                        .filter((client) =>
-                            client.name.toLowerCase().includes(searchTerm.toLowerCase())
+                searchPlaceholder="Pesquisar estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+            <section className={styles.staffList}>
+                {staffs.length > 0 ? (
+                    staffs
+                        .filter((staff) =>
+                            staff.name.toLowerCase().includes(searchTerm.toLowerCase())
                         )
-                        .map(client => (
-                        <ClientCard key={client.id} client={client}
+                        .map(staff => (
+                        <StaffCard key={staff.id} staff={staff}
                                 modalStatus={modalStatus} setModalStatus={setModalStatus}
-                                selectedClient={selectedClient} setSelectedClient={setSelectedClient} />
+                                selectedStaff={selectedStaff} setSelectedStaff={setSelectedStaff} />
                     ))
                 ) : (
-                    <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
+                    <p>{statusMessage?.message || 'Nenhum estagiário registrado'}</p>
                 )}
             </section>
 
             {isRegisterModalOpen && (
-                <ClientRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleClientAdded}
+                <StaffRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleStaffAdded}
                         statusMessage={statusMessage} setStatusMessage={setStatusMessage} onClose={() => setIsRegisterModalOpen(false)} />
             )}
 
-            {selectedClient && (
-                <ClientDetailsModal closeOnClickOutside={false} client={selectedClient} isOpen={selectedClient !== null} onClose={() => setSelectedClient(null)}
-                        onDelete={handleDeleteClient} onUpdate={handleUpdate} modalStatus={modalStatus} />
+            {selectedStaff && (
+                <StaffDetailsModal closeOnClickOutside={false} staff={selectedStaff} isOpen={selectedStaff !== null} onClose={() => setSelectedStaff(null)}
+                        onDelete={handleDeleteStaff} onUpdate={handleUpdate} modalStatus={modalStatus} />
             )}
 
             {statusMessage?.message && (

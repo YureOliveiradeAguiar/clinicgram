@@ -1,8 +1,8 @@
 import AppointsIcon from '@/assets/icons/appointsIcon';
 import UsersIcon from '@/assets/icons/usersIcon';
-import styles from './StaffForm.module.css'
+import styles from './StaffRegisterModal.module.css'
 
-import Navbar from '@/components/Navbar/Navbar.jsx';
+import Modal from '@/components/Modal/Modal';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import { useState, useEffect } from 'react';
@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-function ClientForm() {
+export default function ClientForm() {
     const navItems = [
         { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
         { to: '/clients', Icon: UsersIcon, label: "Clientes" },
@@ -125,10 +125,9 @@ function ClientForm() {
     };
 
     return (
-        <div className={styles.mainWrapper}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <div className={styles.formHeader}>
                 <h2>Novo Estagiário</h2>
-                <Navbar items={navItems}/>
             </div>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
                 <div className="inputContainer">
@@ -164,8 +163,6 @@ function ClientForm() {
                     {statusMessage.message}
                 </div>
             )}
-        </div>
+        </Modal>
     );
 }
-
-export default ClientForm
