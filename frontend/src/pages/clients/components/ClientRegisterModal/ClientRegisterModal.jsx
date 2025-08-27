@@ -1,26 +1,18 @@
-import AppointsIcon from '@/assets/icons/appointsIcon';
-import UsersIcon from '@/assets/icons/usersIcon';
-import styles from './ClientForm.module.css'
+import SaveIcon from '@/assets/icons/saveIcon';
+import styles from './ClientRegisterModal.module.css'
 
-import Navbar from '@/components/Navbar/Navbar.jsx';
-import DateDropdown from '../DateDropdown/DateDropdown.jsx';
-import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
+import Modal from '@/components/Modal/Modal';
+import ModalButton from '@/components/ModalButton/ModalButton';
+import DateDropdown from './DateDropdown/DateDropdown.jsx';
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
-import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-function ClientForm() {
-    const navItems = [
-        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
-        { to: '/clients', Icon: UsersIcon, label: "Clientes" },
-    ];
-    
+
+export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
-    const [statusMessage, setStatusMessage] = useState('');
-    useAutoClearStatus(statusMessage, setStatusMessage);
 
     const [days, setDays] = useState([]);
     const [months, setMonths] = useState([]);
@@ -111,6 +103,9 @@ function ClientForm() {
             if (response.ok) {
                 setStatusMessage({message: result.message, type: "success"});
                 resetForm();
+                onSuccess(result.client);
+            } else {
+                setStatusMessage({ message: "Erro ao registrar cliente", type: "error" });
             }
         } catch (error) {
             setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
@@ -126,10 +121,9 @@ function ClientForm() {
     };
 
     return (
-        <div className={styles.mainWrapper}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <div className={styles.formHeader}>
                 <h2>Novo Paciente</h2>
-                <Navbar items={navItems}/>
             </div>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
                 <div className="inputContainer">
@@ -181,15 +175,10 @@ function ClientForm() {
                     <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
                 </div>
 
-                <ConfirmBackButtons containerClass={styles.buttonsContainer}/>
-            </form>
-            {statusMessage?.message && (
-                <div className={`statusMessage ${statusMessage.type}`}>
-                    {statusMessage.message}
+                <div className={styles.buttonSection}>
+                    <ModalButton Icon={SaveIcon} variant="save" type="submit" name="registrar" buttonTitle="Registrar"/>
                 </div>
-            )}
-        </div>
+            </form>
+        </Modal>
     );
 }
-
-export default ClientForm

@@ -58,3 +58,29 @@
     border: 1px solid var(--error);
     box-shadow: 0 0 0 1px var(--error);
 }
+
+/* EMOJI PICKER BUTTON */
+.emojiPickerButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 100%;
+    height: 40px;
+    
+    border: none;
+    border-radius: 8px;
+    
+    background-color: #f1f3f4;
+    cursor: pointer;
+    
+    font-size: 1.2rem;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.emojiPickerButton:hover {
+    background-color: #e2e5e7;
+}
+.emojiPickerButton:active {
+    background-color: #d7dadc;
+    transform: translateY(0);
+}

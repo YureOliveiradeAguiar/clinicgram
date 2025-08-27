@@ -34,7 +34,7 @@ function Dropdown ({ label, options, onSelect, hasError=false }) {
     };
 
     return (
-        <div className={hasError ? styles.dropdownError : styles.dropdown} ref={dropdownRef}>
+        <div className={`${styles.dropdown} ${hasError ? styles.dropdownError : ""}`} ref={dropdownRef}>
             <div className={styles.dropdownToggle} onClick={toggleDropdown}>
                 <p className={styles.selectedOption}>{selected}</p>
                 {isOpen ? (

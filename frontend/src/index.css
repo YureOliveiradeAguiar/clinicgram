@@ -60,6 +60,11 @@ section {
     scroll-margin-top: 20vh;
 }
 
+/* BUTTONS */
+button:focus {
+    outline: none;
+}
+
 /* FORMS */
 .formInput {
     width: 100%;

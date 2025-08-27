@@ -103,10 +103,14 @@
 }
 .panelOption {
 	padding: 10px 20px;
-
 	width: 100%;
 	font-weight: normal;
 	border: none;
+}
+.panelOption.adapted {
+	justify-content: center;
+	padding: 0;
+	border-radius: 8px;
 }
 /* DROPDOWNS */
 .dropdownIcon {

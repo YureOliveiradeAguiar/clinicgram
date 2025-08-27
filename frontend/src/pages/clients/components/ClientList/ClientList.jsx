@@ -2,9 +2,10 @@ import AlertIcon from '@/assets/icons/alertSign';
 import UserAddIcon from '@/assets/icons/userAddIcon';
 import styles from './ClientList.module.css'
 
-import ReturnButton from '@/components/ReturnButton/ReturnButton';
+import NewElementButton from '../../../../components/NewElementButton/NewElementButton';
 import ClientCard from '../ClientCard/ClientCard.jsx';
-import ClientModal from '../ClientDeetsModal/ClientDeetsModal';
+import ClientRegisterModal from '../ClientRegisterModal/ClientRegisterModal';
+import ClientDetailsModal from '../ClientDetailsModal/ClientDetailsModal.jsx';
 
 import React, { useEffect, useState } from 'react';
 
@@ -16,8 +17,15 @@ export default function ClientList() {
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
 
+    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
     const [selectedClient, setSelectedClient] = useState(null);
     const [modalStatus, setModalStatus] = useState(null);
+
+    const handleClientAdded = (newClient) => {
+        setClients((prev) => [...prev, newClient]);
+        setIsRegisterModalOpen(false);
+    };
 
     // Fetching for rendering clients card in the page.
     useEffect(() => {
@@ -110,10 +118,7 @@ export default function ClientList() {
         <div className={styles.clientsWrapper}>
             <div className={styles.formHeader}>
                 <h2>Pacientes</h2>
-                <button className={styles.newClientButton}>
-                    {UserAddIcon && <UserAddIcon className={styles.icon} />}
-                    <span>Novo</span>
-                </button>
+                <NewElementButton Icon={UserAddIcon} title="Novo" onClick={() => setIsRegisterModalOpen(true)}/>
             </div>
             <section className={styles.clientList}>
                 {clients.length > 0 ? (
@@ -127,12 +132,16 @@ export default function ClientList() {
                 )}
             </section>
 
-            <ReturnButton containerClass={styles.returnButtonContainer}/>
+            {isRegisterModalOpen && (
+                <ClientRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleClientAdded}
+                        statusMessage={statusMessage} setStatusMessage={setStatusMessage} onClose={() => setIsRegisterModalOpen(false)} />
+            )}
 
             {selectedClient && (
-                <ClientModal closeOnClickOutside={false} client={selectedClient} onClose={() => setSelectedClient(null)}
+                <ClientDetailsModal closeOnClickOutside={false} client={selectedClient} isOpen={selectedClient !== null} onClose={() => setSelectedClient(null)}
                         onDelete={handleDeleteClient} onUpdate={handleUpdate} modalStatus={modalStatus} />
             )}
+
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>
                     {statusMessage.message}

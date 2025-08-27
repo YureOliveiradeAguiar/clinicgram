@@ -1,0 +1,27 @@
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9998;
+}
+
+.modal {
+    position: relative;
+    background: var(--lightBackground);
+	border: 1px solid #ccc;
+    padding: 24px 32px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 24px 16px;
+  }
+}

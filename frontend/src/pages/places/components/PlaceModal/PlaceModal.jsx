@@ -51,7 +51,7 @@ export default function PlaceModal({ closeOnClickOutside=true, place, onDelete, 
     return (
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
-                <h2>Detalhes do Recipiente</h2>
+                <h2>{isEditing ? "Edição da Sala" : "Detalhes da Sala"}</h2>
                 <p className={styles.statusMessage}>{modalStatus}</p>
                 <div className={styles.infoContent}>
                     <div className={styles.infoRow}>

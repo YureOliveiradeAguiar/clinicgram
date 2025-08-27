@@ -3,13 +3,14 @@ import TrashCan from '@/assets/icons/trashCan';
 import EditIcon from '@/assets/icons/editIcon';
 import SaveIcon from '@/assets/icons/saveIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
-import styles from './ClientModal.module.css';
+import styles from './ClientDetailsModal.module.css';
 
+import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
 
 import { useRef, useState, useEffect } from 'react';
 
-export default function ClientModal({ closeOnClickOutside=true, client, onDelete, onClose, onUpdate, modalStatus}) {
+export default function ClientDetailsModal({ closeOnClickOutside=true, client, onDelete, isOpen, onClose, onUpdate, modalStatus}) {
     const modalRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -99,62 +100,60 @@ export default function ClientModal({ closeOnClickOutside=true, client, onDelete
     };
 
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal} ref={modalRef}>
-                <h2>Detalhes do Cliente</h2>
-                <div className={styles.modalStatusContainer}>
-                    <span className={`${styles.modalStatusMessage} ${modalStatus ? styles[modalStatus.type] : ''}`}>
-                        {modalStatus?.message}
-                    </span>
-                </div>
-                <div className={styles.infoContent}>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Nome:</span>
-                        {isEditing ? (
-                            <>
-                                <input type="text" value={editedName} className={styles.input}
-                                    onChange={(e) => setEditedName(e.target.value)} />
-                            </>
-                        ) : (<>
-                            <span>{client.name}</span>
-                        </>)}
-                    </div>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>WhatsApp:</span>
-                        {isEditing ? (
-                            <input type="tel" value={editedWhatsapp} className={styles.input} maxLength={14}
-                                    placeholder="(99) 9999-9999"
-                                    onChange={(e) => {setEditedWhatsapp(formatPhone(e.target.value));}}/>
-                        ) : (
-                            <span>{client.whatsapp}</span>
-                        )}
-                    </div>
-                    <div className={styles.infoRow}>
-                        <span className={styles.label}>Nascimento:</span>
-                        {isEditing ? (
-                            <input type="text" value={editedDateOfBirth} className={styles.input}
-                                    onChange={(e) => {setEditedDateOfBirth(formatDate(e.target.value));}}/>
-                        ) : (
-                            <span>{displayDate(client.dateOfBirth)}</span>
-                        )}
-                    </div>
-                </div>
-
-                <div className={styles.buttonRow}>
-                    <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
-                    {!isEditing ? (
-                        <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
-                    ) : (<div className={styles.editButtonsRow}>
-                            <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
-                            <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
-                                setIsEditing(false);
-                                setEditedName(client.name);
-                                setEditedWhatsapp(client.whatsapp);
-                                setEditedDateOfBirth(displayDate(client.dateOfBirth));}}/>
-                        </div>)}
-                </div>
-                <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <h2>{isEditing ? "Edição do Paciente" : "Detalhes do Paciente"}</h2>
+            <div className={styles.modalStatusContainer}>
+                <span className={`${styles.modalStatusMessage} ${modalStatus ? styles[modalStatus.type] : ''}`}>
+                    {modalStatus?.message}
+                </span>
             </div>
-        </div>
+            <div className={styles.infoContent}>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Nome:</span>
+                    {isEditing ? (
+                        <>
+                            <input type="text" value={editedName} className={styles.input}
+                                onChange={(e) => setEditedName(e.target.value)} />
+                        </>
+                    ) : (<>
+                        <span>{client.name}</span>
+                    </>)}
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>WhatsApp:</span>
+                    {isEditing ? (
+                        <input type="tel" value={editedWhatsapp} className={styles.input} maxLength={14}
+                                placeholder="(99) 9999-9999"
+                                onChange={(e) => {setEditedWhatsapp(formatPhone(e.target.value));}}/>
+                    ) : (
+                        <span>{client.whatsapp}</span>
+                    )}
+                </div>
+                <div className={styles.infoRow}>
+                    <span className={styles.label}>Nascimento:</span>
+                    {isEditing ? (
+                        <input type="text" value={editedDateOfBirth} className={styles.input}
+                                onChange={(e) => {setEditedDateOfBirth(formatDate(e.target.value));}}/>
+                    ) : (
+                        <span>{displayDate(client.dateOfBirth)}</span>
+                    )}
+                </div>
+            </div>
+
+            <div className={styles.buttonRow}>
+                <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
+                {!isEditing ? (
+                    <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
+                ) : (<div className={styles.editButtonsRow}>
+                        <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
+                        <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
+                            setIsEditing(false);
+                            setEditedName(client.name);
+                            setEditedWhatsapp(client.whatsapp);
+                            setEditedDateOfBirth(displayDate(client.dateOfBirth));}}/>
+                    </div>)}
+            </div>
+            <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>
+        </Modal>
     );
 }

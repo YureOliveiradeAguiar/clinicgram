@@ -20,7 +20,9 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 						<img className={styles.brandLogo} src={LogoImg} alt="Clinicgram" />
 					</div>
 				)}
-				<button className={styles.panelButton} onClick={() => setSidebarExpanded(prev => !prev)}>
+				<button className={styles.panelButton} onClick={() => {
+						setSidebarExpanded(prev => !prev);
+						if (sidebarExpanded && openDropdown !== null) setOpenDropdown(null);}}>
 					{sidebarExpanded ? (<>
 						<SidebarIcon className={styles.icon} />
 						<span className={styles.tooltip}>Fechar barra lateral</span>
@@ -41,7 +43,7 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 					if (dropdown) {
 						return (
 							<div key={index} className={styles.dropdown}>
-								<div className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}
+								<div className={`${styles.panelOption} ${!sidebarExpanded ? styles.adapted : ""} ${isActive ? styles.activeOption : ""}`}
 										onClick={() => {
 											toggleDropdown(title);
 											if (!sidebarExpanded) setSidebarExpanded(true);
@@ -70,7 +72,8 @@ export default function Sidebar({ panelOptions, currentPath, setSidebarExpanded,
 						);
 					}
 					return (
-						<Link to={link} key={index} draggable={false} className={`${styles.panelOption} ${isActive ? styles.activeOption : ""}`}>
+						<Link to={link} key={index} draggable={false}
+								className={`${styles.panelOption} ${!sidebarExpanded ? styles.adapted : ""} ${isActive ? styles.activeOption : ""}`}>
 							{Icon && <Icon className={styles.icon} />}
 							{sidebarExpanded && <span className={styles.title}>{title}</span>}
 							{!sidebarExpanded && <span className={`${styles.tooltip} ${styles.adapted}`}>{title}</span>}

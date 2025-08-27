@@ -47,7 +47,7 @@ class RegisterClientAPIView(APIView):
             firstName = client.name.split()[0] if client.name else ''
             return Response({
                 'success': True,
-                'client_id': client.id,
+                'client': serializer.data,
                 'message': f'{firstName} registrado com sucesso!'
             })
         return Response({

@@ -31,6 +31,7 @@ class RegisterPlaceAPIView(APIView):
             return Response({
                 'id': place.id,
                 'name': place.name,
+                'place': serializer.data,
             })
         return Response(serializer.errors)
 
