@@ -19,7 +19,9 @@ export default function List({ children, title,
                 </div>
                 <NewElementButton Icon={NewElementIcon} title={NewElementMessage} onClick={onNewElement} />
             </div>
-            {children}
+            <section className={styles.elementsList}>
+                {children}
+            </section>
         </div>
     );
 }

@@ -1,6 +1,5 @@
 import AlertIcon from '@/assets/icons/alertSign';
 import UserAddIcon from '@/assets/icons/userAddIcon';
-import styles from './StaffList.module.css';
 
 import List from '@/components/List/List';
 import StaffCard from '../StaffCard/StaffCard.jsx';
@@ -119,21 +118,19 @@ export default function StaffList() {
         <List title="Estagiários"
                 NewElementIcon={UserAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
                 searchPlaceholder="Pesquisar estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <section className={styles.staffList}>
-                {staffs.length > 0 ? (
-                    staffs
-                        .filter((staff) =>
-                            staff.name.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map(staff => (
-                        <StaffCard key={staff.id} staff={staff}
-                                modalStatus={modalStatus} setModalStatus={setModalStatus}
-                                selectedStaff={selectedStaff} setSelectedStaff={setSelectedStaff} />
-                    ))
-                ) : (
-                    <p>{statusMessage?.message || 'Nenhum estagiário registrado'}</p>
-                )}
-            </section>
+            {staffs.length > 0 ? (
+                staffs
+                    .filter((staff) =>
+                        staff.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map(staff => (
+                    <StaffCard key={staff.id} staff={staff}
+                            modalStatus={modalStatus} setModalStatus={setModalStatus}
+                            selectedStaff={selectedStaff} setSelectedStaff={setSelectedStaff} />
+                ))
+            ) : (
+                <p>{statusMessage?.message || 'Nenhum estagiário registrado'}</p>
+            )}
 
             {isRegisterModalOpen && (
                 <StaffRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleStaffAdded}

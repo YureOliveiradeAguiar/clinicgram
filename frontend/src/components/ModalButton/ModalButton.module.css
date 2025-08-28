@@ -13,15 +13,12 @@
     border-radius: 8px;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
-
 .button:hover {
     transform: scale(1.05);
 }
-
 .button:active {
     transform: scale(0.98);
 }
-
 .buttonIcon {
     width: 22px;
     height: 22px;

@@ -1,9 +1,9 @@
 import AlertIcon from '@/assets/icons/alertSign';
 import UserAddIcon from '@/assets/icons/userAddIcon';
-import styles from './ClientList.module.css';
+import styles from './ClientList.module.css'
 
 import List from '@/components/List/List';
-import ClientCard from '../ClientCard/ClientCard.jsx';
+import Card from '@/components/Card/Card.jsx';
 import ClientRegisterModal from '../ClientRegisterModal/ClientRegisterModal';
 import ClientDetailsModal from '../ClientDetailsModal/ClientDetailsModal.jsx';
 
@@ -120,21 +120,23 @@ export default function ClientList() {
         <List title="Pacientes"
                 NewElementIcon={UserAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
                 searchPlaceholder="Pesquisar paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <section className={styles.clientList}>
-                {clients.length > 0 ? (
-                    clients
-                        .filter((client) =>
-                            client.name.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map(client => (
-                        <ClientCard key={client.id} client={client}
+            {clients.length > 0 ? (
+                clients
+                    .filter((client) =>
+                        client.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map(client => (
+                        <Card key={client.id} element={client}
                                 modalStatus={modalStatus} setModalStatus={setModalStatus}
-                                selectedClient={selectedClient} setSelectedClient={setSelectedClient} />
-                    ))
-                ) : (
-                    <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
-                )}
-            </section>
+                                selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
+                            <p className={styles.cardName} aria-label={client.name}>
+                                {client.name}
+                            </p>
+                        </Card>
+                ))
+            ) : (
+                <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
+            )}
 
             {isRegisterModalOpen && (
                 <ClientRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleClientAdded}

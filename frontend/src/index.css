@@ -171,15 +171,15 @@ Form label, .fieldLabel, Form input, .fieldLabel {
 
 /* SCROLL-BAR */
 ::-webkit-scrollbar {
-    width: 16px;
+    width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
+    border-radius: 8px;
     border: 2px solid transparent;
     background-clip: content-box;
     background-color: #c1c1c1;

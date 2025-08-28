@@ -2,7 +2,7 @@ import AlertIcon from '@/assets/icons/alertSign';
 import styles from './PlaceList.module.css'
 
 import List from '@/components/List/List';
-import PlaceCard from '../PlaceCard/PlaceCard.jsx';
+import Card from '@/components/Card/Card.jsx';
 import PlaceRegisterModal from '../PlaceRegisterModal/PlaceRegisterModal';
 import PlaceModal from '../PlaceModal/PlaceModal.jsx';
 
@@ -105,21 +105,23 @@ export default function PlaceList() {
         <List title="Salas"
                 NewElementMessage="Nova" onNewElement={() => setIsRegisterModalOpen(true)}
                 searchPlaceholder="Pesquisar sala" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <section className={styles.placesList}>
-                {places.length > 0 ? (
-                    places
-                        .filter((place) =>
-                            place.name.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map(place => (
-                            <PlaceCard key={place.id} place={place}
+            {places.length > 0 ? (
+                places
+                    .filter((place) =>
+                        place.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map(place => (
+                        <Card key={place.id} element={place}
                                 modalStatus={modalStatus} setModalStatus={setModalStatus}
-                                selectedPlace={selectedPlace} setSelectedPlace={setSelectedPlace} />
-                        ))
-                ) : (
-                    <p className="listMessage">Nenhuma sala registrada</p>
-                )}
-            </section>
+                                selectedElement={selectedPlace} setSelectedElement={setSelectedPlace}>
+                            <p className={styles.cardName} aria-label={`${place.icon || ''} ${place.name}`}>
+                                {place.icon} {place.name}
+                            </p>
+                        </Card>
+                    ))
+            ) : (
+                <p className="listMessage">Nenhuma sala registrada</p>
+            )}
 
             {isRegisterModalOpen && (
                 <PlaceRegisterModal isOpen={isRegisterModalOpen} onSuccess={handlePlaceAdded}
