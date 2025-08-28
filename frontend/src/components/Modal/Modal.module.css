@@ -35,3 +35,15 @@
     padding: 24px 16px;
   }
 }
+
+/* MODAL HEADER */
+.modalHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8px;
+}
+.modalHeader h2 {
+    white-space: nowrap;
+    font-size: 1.4rem;
+}

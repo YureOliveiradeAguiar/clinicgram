@@ -66,22 +66,99 @@ button:focus {
 }
 
 /* FORMS */
-.formInput {
-    width: 100%;
-    font-size: 16px;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-input:focus {
-    outline: var(--primary);
-}
 Form label, .fieldLabel, Form input, .fieldLabel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
-.errorMessage { /* input error message */
+input:focus {
+    outline: var(--primary);
+}
+
+.formInput {
+    width: 100%;
+    padding: 26px 10px 6px 10px;
+    font-size: 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.readOnly {
+    background-color: #e6e6e6;
+    color: #555;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.inputContainer {
+    position: relative;
+    width: 100%;
+    margin: 4px 0;
+}
+.inputContainer label {
+    position: absolute;
+    z-index: 10;
+    top: 14px;
+    left: 10px;
+    color: rgb(100,100,100);
+    font-size: 16px;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+.inputContainer .formInput:focus + label,
+.inputContainer .formInput:not(:placeholder-shown) + label {
+    top: 4px; 
+    font-size: 14px;
+}
+/*form texarea */
+.formTexarea {
+    resize: none;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    padding: 26px 0 6px 10px;
+    height: 140px;
+    line-height: 1.4;
+    font-size: 1rem;
+    font-family: inherit;
+    color: inherit;
+    text-align: justify;
+}
+.formTexarea:focus {
+    outline: none;
+}
+.textareaCounter {
+    pointer-events: none;
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    font-size: 0.8rem;
+    color: #666;
+}
+.textareaCounter {
+    pointer-events: none;
+    position: absolute;
+    z-index: 9;
+    top: 1px;
+    right: 12px;
+    width: 96%;
+    height: 24px;
+    background-color: inherit;
+    color: #666;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 4px 0 0 0;
+    border-top-right-radius: 6px;
+}
+/* input errors */
+.formInputError  {
+    border: 1px solid var(--error);
+    box-shadow: 0 0 0 1px var(--error);
+}
+.errorMessage { 
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -92,32 +169,6 @@ Form label, .fieldLabel, Form input, .fieldLabel {
     color: var(--error);
 }
 
-.inputContainer {
-    position: relative;
-    width: 100%;
-    margin: 4px 0;
-}
-.inputContainer input {
-    width: 100%;
-    padding: 26px 10px 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-.inputContainer label {
-    position: absolute;
-    top: 14px;
-    left: 10px;
-    color: rgb(100,100,100);
-    font-size: 16px;
-    pointer-events: none;
-    transition: all 0.2s ease-in-out;
-}
-.inputContainer input:focus + label,
-.inputContainer input:not(:placeholder-shown) + label {
-    top: 4px; 
-    font-size: 14px;
-}
 
 /* STATUS MESSAGE */
 .loginStatusMessage {

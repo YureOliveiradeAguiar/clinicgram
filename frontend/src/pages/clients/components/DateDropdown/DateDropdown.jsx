@@ -4,7 +4,7 @@ import styles from './DateDropdown.module.css';
 
 import { useState, useRef, useEffect } from 'react';
 
-function Dropdown ({ label, options, onSelect, hasError=false }) {
+export default function DateDropdown ({ label, options, onSelect, hasError=false }) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState(label);
 
@@ -36,7 +36,7 @@ function Dropdown ({ label, options, onSelect, hasError=false }) {
     return (
         <div className={`${styles.dropdown} ${hasError ? styles.dropdownError : ""}`} ref={dropdownRef}>
             <div className={styles.dropdownToggle} onClick={toggleDropdown}>
-                <p className={styles.selectedOption}>{selected}</p>
+                <span className={styles.selectedOption}>{selected}</span>
                 {isOpen ? (
                     <ArrowUpIcon className={styles.icon} />
                 ) : (
@@ -54,5 +54,3 @@ function Dropdown ({ label, options, onSelect, hasError=false }) {
         </div>
     )
 }
-
-export default Dropdown

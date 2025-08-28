@@ -97,6 +97,7 @@ export default function ClientList() {
                     ...(patchData.name !== undefined && { name: patchData.name }),
                     ...(patchData.whatsapp !== undefined && { whatsapp: patchData.whatsapp }),
                     ...(patchData.dateOfBirth !== undefined && { dateOfBirth: patchData.dateOfBirth }),
+                    ...(patchData.observation !== undefined && { observation: patchData.observation }),
                 }),
             });
             if (res.ok) {

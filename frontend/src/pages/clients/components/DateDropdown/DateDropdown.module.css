@@ -32,6 +32,7 @@
 }
 
 .selectedOption {
+    color: rgb(60,60,60);
     margin-left: 6px;
 }
 

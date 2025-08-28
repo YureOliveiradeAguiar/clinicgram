@@ -3,7 +3,7 @@ import styles from './ClientRegisterModal.module.css'
 
 import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton';
-import DateDropdown from './DateDropdown/DateDropdown.jsx';
+import DateDropdown from '../DateDropdown/DateDropdown.jsx';
 
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
@@ -23,6 +23,8 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     const [selectedYear, setSelectedYear] = useState(null);
 
     const whatsappValue = watch('whatsapp');
+
+    const observationsValue = watch('observations') || '';
 
     const formatDateOfBirth = () => {
         if (!selectedYear || !selectedMonth || !selectedDay) return null;
@@ -121,15 +123,12 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <div className={styles.formHeader}>
-                <h2>Novo Paciente</h2>
-            </div>
+        <Modal title="Novo Paciente" isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
                 <div className="inputContainer">
                     <input type="text" id="name" name="name" autoComplete="off"
                         maxLength="70" placeholder=" "
-                        className={errors.name ? styles.formInputError : 'formInput'}
+                        className={`formInput ${errors.name ? "formInputError" : ""}`}
                         {...register('name', { required: "O nome é obrigatório" })}/>
                     <label htmlFor="name">Nome Completo</label>
                     <p className="errorMessage">{errors.name?.message || " "}</p>
@@ -137,7 +136,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
 
                 <div className="inputContainer">
                     <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
-                        className={errors.whatsapp ? styles.formInputError : 'formInput'} value={whatsappValue || ""}
+                        className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
                         {...register('whatsapp', {required: "WhatsApp é obrigatório",
                             validate: (value) => {
                                 const digits = value.replace(/\D/g, '');
@@ -173,6 +172,15 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                             }}/>
                     </div>
                     <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
+                </div>
+
+                <div className="inputContainer">
+                    <div className="floatingBar"></div>
+                    <textarea  id="observations" name="observations" autoComplete="off"
+                        maxLength="200" placeholder=" " className={"formInput formTexarea"}
+                        {...register('observations')}/>
+                    <label htmlFor="observations">Observações</label>
+                    <span className='textareaCounter'>{observationsValue.length}/200</span>
                 </div>
 
                 <div className={styles.buttonSection}>
