@@ -7,7 +7,7 @@ import styles from './ClientDetailsModal.module.css';
 
 import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
-import DateDropdown from '../DateDropdown/DateDropdown';
+import DateDropdown from '../DateInput/DateDropdown/DateDropdown';
 
 import { useRef, useState, useEffect } from 'react';
 
@@ -25,11 +25,6 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
     };
     const [editedDateOfBirth, setEditedDateOfBirth] = useState(displayDate(client.dateOfBirth));
     const [editedObservation, setEditedObservation] = useState(client.observation);
-
-    const [selectedDay, setSelectedDay] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
-    const [selectedYear, setSelectedYear] = useState(null);
 
     const handleSave = () => {
         const updatedFields = {};
@@ -126,28 +121,7 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
                         onChange={(e) => {setEditedWhatsapp(formatPhone(e.target.value));}}/>
                     <label htmlFor="whatsapp">WhatsApp</label>
                 </div>
-
-                <div className={styles.formGroup}>
-                    <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
-                    <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <DateDropdown dropdownLabel={selectedDay || "Dia"} optionType={"days"}
-                            onSelect={(day) => {
-                                setSelectedDay(day);
-                                if (day && selectedMonth && selectedYear) { clearErrors('dateOfBirth'); }
-                            }}/>
-                        <DateDropdown dropdownLabel={selectedMonthLabel || "Mês"} optionType={"months"}
-                            onSelect={(monthObject) => {
-                                setSelectedMonth(monthObject.value);
-                                setSelectedMonthLabel(monthObject.label);
-                                if (selectedDay && monthObject.value && selectedYear) { clearErrors('dateOfBirth'); }
-                            }}/>
-                        <DateDropdown dropdownLabel={selectedYear || "Ano"} optionType={"years"}
-                            onSelect={(year) => {
-                                setSelectedYear(year);
-                                if (selectedDay && selectedMonth && year) { clearErrors('dateOfBirth'); }
-                            }}/>
-                    </div>
-                </div>
+                
 
                 <div className="inputContainer">
                     <textarea  id="observations" name="observations" autoComplete="off" readOnly={!isEditing}

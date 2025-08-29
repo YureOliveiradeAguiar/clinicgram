@@ -1,0 +1,10 @@
+.formGroup {
+    width: 100%;
+}
+
+.dateWrapper {
+    display: grid;
+    grid-template-columns: 3fr 5fr 4fr;
+    gap: 5px;
+    width: 100%;
+}

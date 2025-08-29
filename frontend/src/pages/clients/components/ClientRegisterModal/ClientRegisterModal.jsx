@@ -3,32 +3,19 @@ import styles from './ClientRegisterModal.module.css'
 
 import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton';
-import DateDropdown from '../DateDropdown/DateDropdown.jsx';
+import DateInput from '../DateInput/DateInput';
 
-import { useState } from 'react';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
 
 
 export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
-    const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
-
-    const [selectedDay, setSelectedDay] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
-    const [selectedYear, setSelectedYear] = useState(null);
+    const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
 
     const whatsappValue = watch('whatsapp');
 
     const observationsValue = watch('observations') || '';
-
-    const formatDateOfBirth = () => {
-        if (!selectedYear || !selectedMonth || !selectedDay) return null;
-        const mm = String(selectedMonth).padStart(2, '0');
-        const dd = String(selectedDay).padStart(2, '0');
-        return `${selectedYear}-${mm}-${dd}`;
-    };
 
     const formatPhone = (value) => {
         if (!value) return "";
@@ -53,26 +40,15 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
         }
         return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
     };
-
-    const resetForm = () => {
-        reset();
-        setSelectedDay('');
-        setSelectedMonth('');
-        setSelectedYear('');
-    };
     
     const onSubmit = async (data) => {
-        const dateOfBirth = formatDateOfBirth();
         const rawPhone = normalizePhone(data.whatsapp);
 
-        if (!dateOfBirth) {
-            setError("dateOfBirth", {type: "manual", message: "Informe a data de nascimento completa"});
-        }
         if (!rawPhone) {
             setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
         }
 
-        const payload = { ...data, rawPhone, dateOfBirth };
+        const payload = { ...data, rawPhone };
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
@@ -85,22 +61,18 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
             const result = await response.json();
             if (response.ok) {
                 setStatusMessage({message: result.message, type: "success"});
-                resetForm();
+                reset();
                 onSuccess(result.client);
             } else {
                 setStatusMessage({ message: "Erro ao registrar cliente", type: "error" });
             }
         } catch (error) {
-            setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
+            setStatusMessage({message: `Erro de conexão com o servidor: ${error}`, type: "error"});
         }
     };
 
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
-        const dateOfBirth = formatDateOfBirth();
-        if (!dateOfBirth) {
-            setError("dateOfBirth", {type: "manual", message: "Informe a data de nascimento completa"});
-        }
     };
 
     return (
@@ -132,28 +104,12 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                     <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
                 </div>
 
-                <div className={styles.formGroup}>
-                    <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
-                    <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <DateDropdown dropdownLabel={selectedDay || "Dia"} optionType={"days"} hasError={!!errors.dateOfBirth}
-                            onSelect={(day) => {
-                                setSelectedDay(day);
-                                if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
-                            }}/>
-                        <DateDropdown dropdownLabel={selectedMonthLabel || "Mês"} optionType={"months"} hasError={!!errors.dateOfBirth}
-                            onSelect={(monthObject) => {
-                                setSelectedMonth(monthObject.value);
-                                setSelectedMonthLabel(monthObject.label);
-                                if (selectedDay && monthObject.value && selectedYear) {clearErrors('dateOfBirth');}
-                            }}/>
-                        <DateDropdown dropdownLabel={selectedYear || "Ano"} optionType={"years"} hasError={!!errors.dateOfBirth}
-                            onSelect={(year)=> {
-                                setSelectedYear(year);
-                                if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
-                            }}/>
-                    </div>
-                    <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
-                </div>
+                <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
+                        render={({ field, fieldState }) => (
+                            <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
+                                    hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}/>
+                        )}
+                />
 
                 <div className="inputContainer">
                     <textarea  id="observations" name="observations" autoComplete="off"

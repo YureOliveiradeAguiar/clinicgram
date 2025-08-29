@@ -6,7 +6,6 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 
 export default function DateDropdown ({ dropdownLabel, optionType, locale = navigator.language, onSelect, hasError=false }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(dropdownLabel);
 
     const options = useMemo(() => {
         if (optionType === "days") {
@@ -38,16 +37,11 @@ export default function DateDropdown ({ dropdownLabel, optionType, locale = navi
         };
     }, []);
 
-    useEffect(() => { // Reacts to external label changes for Form reset.
-        setSelectedOption(dropdownLabel);
-    }, [dropdownLabel]);
-
     const toggleDropdown = () => { setIsOpen(prev => !prev);};
 
     const handleOptionClick = (option) => {
-        setSelectedOption(option);
+        onSelect(option);
         setIsOpen(false);
-        if (onSelect) onSelect(option);
     };
 
     return (
