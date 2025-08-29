@@ -7,24 +7,40 @@ import styles from './ClientDetailsModal.module.css';
 
 import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
-import DateDropdown from '../DateInput/DateDropdown/DateDropdown';
+import DateInput from '../DateInput/DateInput';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function ClientDetailsModal({ closeOnClickOutside=true, client, onDelete, isOpen, onClose, onUpdate, modalStatus}) {
-    const modalRef = useRef();
+
+export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate}) {
 
     const [isEditing, setIsEditing] = useState(false);
     
     const [editedName, setEditedName] = useState(client.name);
     const [editedWhatsapp, setEditedWhatsapp] = useState(client.whatsapp);
+
     const displayDate = (isoDate) => {
         if (!isoDate) return '';
         const [y, m, d] = isoDate.split('-');
         return `${d}/${m}/${y}`;
     };
+
+    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
+    const [selectedYear, setSelectedYear] = useState(null);
+    useEffect(() => {
+        if (client?.dateOfBirth) {
+            const dob = new Date(client.dateOfBirth);
+            setSelectedDay(dob.getDate());
+            setSelectedMonthLabel(
+                dob.toLocaleString("default", { month: "long" })
+            );
+            setSelectedYear(dob.getFullYear());
+        }
+    }, [client]);
+
     const [editedDateOfBirth, setEditedDateOfBirth] = useState(displayDate(client.dateOfBirth));
-    const [editedObservation, setEditedObservation] = useState(client.observation);
+    const [editedObservation, setEditedObservation] = useState(client.observation || "");
 
     const handleSave = () => {
         const updatedFields = {};
@@ -47,19 +63,6 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
         }
         setIsEditing(false);
     };
-
-    useEffect(() => { // For outside click = close handling.
-        if (!closeOnClickOutside) return;
-        const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
-                onClose();
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [closeOnClickOutside, onClose]);
 
     const formatPhone = (value) => {
         if (!value) return "";
@@ -122,6 +125,9 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
                     <label htmlFor="whatsapp">WhatsApp</label>
                 </div>
                 
+                <DateInput onDateChange={setEditedDateOfBirth} isReadOnly={!isEditing}
+                        selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                        setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
 
                 <div className="inputContainer">
                     <textarea  id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
@@ -130,11 +136,6 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
                     <label htmlFor="observations">Observações</label>
                     <span className={`textareaCounter ${!isEditing ? "readOnly": ""}`}>{editedObservation.length}/200</span>
                 </div>
-            </div>
-            <div className={styles.modalStatusContainer}>
-                <span className={`${styles.modalStatusMessage} ${modalStatus ? styles[modalStatus.type] : ''}`}>
-                    {modalStatus?.message}
-                </span>
             </div>
 
             <div className={styles.buttonRow}>
@@ -154,42 +155,3 @@ export default function ClientDetailsModal({ closeOnClickOutside=true, client, o
         </Modal>
     );
 }
-
-/*
-<div className={styles.infoContent}>
-                <div className={styles.infoRow}>
-                    <span className={styles.label}>Nascimento:</span>
-                    {isEditing ? (
-                        <input type="text" value={editedDateOfBirth} className={styles.input}
-                                onChange={(e) => {setEditedDateOfBirth(formatDate(e.target.value));}}/>
-                    ) : (
-                        <span>{`${displayDate(client.dateOfBirth)} – ${calculateAge(client.dateOfBirth)} anos`}</span>
-                    )}
-                </div>
-            </div>
-
-
-
-<div className={styles.formGroup}>
-                <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
-                <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                    <DateDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
-                        onSelect={(day) => {
-                            setSelectedDay(day);
-                            if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
-                        }}/>
-                    <DateDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
-                        onSelect={(name) => {
-                            const monthNumber = months.indexOf(name) + 1;
-                            setSelectedMonth(monthNumber);
-                            if (selectedDay && monthNumber && selectedYear) {clearErrors('dateOfBirth');}
-                        }}/>
-                    <DateDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
-                        onSelect={(year)=> {
-                            setSelectedYear(year);
-                            if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
-                        }}/>
-                </div>
-                <p className="errorMessage">{errors.dateOfBirth?.message || " "}</p>
-            </div>
-*/

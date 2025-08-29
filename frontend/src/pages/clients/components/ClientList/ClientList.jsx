@@ -13,6 +13,7 @@ import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 export default function ClientList() {
+
     const [clients, setClients] = useState([]);
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
@@ -22,7 +23,6 @@ export default function ClientList() {
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
     const [selectedClient, setSelectedClient] = useState(null);
-    const [modalStatus, setModalStatus] = useState(null);
 
     const handleClientAdded = (newClient) => {
         setClients((prev) => [...prev, newClient]);
@@ -106,14 +106,12 @@ export default function ClientList() {
                     prev.map(client => client.id === updatedClient.id ? updatedClient : client)
                 );
                 setSelectedClient(updatedClient);
-                //console.log(patchData);
-                setModalStatus({ message: "Atualizado com sucesso!", type: "success" });
+                setStatusMessage({ message:"Paciente atualizado com sucesso!", type: "success" });
             } else {
-                setModalStatus({ message: "Erro ao atualizar", type: "error" });
+                setStatusMessage({ message: "Erro ao atualizar", type: "error" });
             }
-        } catch (err) {
-            console.error("Erro ao atualizar:", err);
-            setModalStatus({ message: "Erro na comunicação com o servidor", type: "error" });
+        } catch (error) {
+            setStatusMessage({ message: "Erro na comunicação com o servidor", type: "error" });
         }
     };
 
@@ -128,7 +126,6 @@ export default function ClientList() {
                     )
                     .map(client => (
                         <Card key={client.id} element={client}
-                                modalStatus={modalStatus} setModalStatus={setModalStatus}
                                 selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
                             <p className={styles.cardName} aria-label={client.name}>
                                 {client.name}
@@ -141,12 +138,12 @@ export default function ClientList() {
 
             {isRegisterModalOpen && (
                 <ClientRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleClientAdded}
-                        statusMessage={statusMessage} setStatusMessage={setStatusMessage} onClose={() => setIsRegisterModalOpen(false)} />
+                        setStatusMessage={setStatusMessage} onClose={() => setIsRegisterModalOpen(false)} />
             )}
 
             {selectedClient && (
-                <ClientDetailsModal closeOnClickOutside={false} client={selectedClient} isOpen={selectedClient !== null} onClose={() => setSelectedClient(null)}
-                        onDelete={handleDeleteClient} onUpdate={handleUpdate} modalStatus={modalStatus} />
+                <ClientDetailsModal closeOnClickOutside={false} client={selectedClient} isOpen={selectedClient !== null}
+                        onClose={() => setSelectedClient(null)} onDelete={handleDeleteClient} onUpdate={handleUpdate}/>
             )}
 
             {statusMessage?.message && (

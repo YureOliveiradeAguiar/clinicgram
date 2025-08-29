@@ -3,12 +3,11 @@ import styles from './DateInput.module.css';
 
 import { useState, useEffect } from "react";
 
-export default function DateInput({ onDateChange, hasError, clearErrors }) {
+export default function DateInput({ onDateChange, hasError=false, clearErrors, isReadOnly=false,
+    selectedDay, setSelectedDay, selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {
 
-    const [selectedDay, setSelectedDay] = useState(null);
+        
     const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
-    const [selectedYear, setSelectedYear] = useState(null);
     
     const formatDateOfBirth = (day, month, year) => {
         if (!year || !month || !day) return null;
@@ -29,16 +28,19 @@ export default function DateInput({ onDateChange, hasError, clearErrors }) {
         <div className={styles.formGroup}>
             <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
             <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                <DateDropdown dropdownLabel={selectedDay || "Dia"} optionType={"days"} hasError={hasError}
+                <DateDropdown dropdownLabel={selectedDay || "Dia"}
+                    optionType={"days"} hasError={hasError} isReadOnly={isReadOnly}
                     onSelect={(day) => {
                         setSelectedDay(day);
                     }}/>
-                <DateDropdown dropdownLabel={selectedMonthLabel || "Mês"} optionType={"months"} hasError={hasError}
+                <DateDropdown dropdownLabel={selectedMonthLabel || "Mês"}
+                    optionType={"months"} hasError={hasError} isReadOnly={isReadOnly}
                     onSelect={(monthObject) => {
                         setSelectedMonth(monthObject.value);
                         setSelectedMonthLabel(monthObject.label);
                     }}/>
-                <DateDropdown dropdownLabel={selectedYear || "Ano"} optionType={"years"} hasError={hasError}
+                <DateDropdown dropdownLabel={selectedYear || "Ano"}
+                    optionType={"years"} hasError={hasError} isReadOnly={isReadOnly}
                     onSelect={(year)=> {
                         setSelectedYear(year);
                     }}/>

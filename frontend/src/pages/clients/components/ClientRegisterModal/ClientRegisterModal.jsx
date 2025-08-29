@@ -14,6 +14,10 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
 
     const whatsappValue = watch('whatsapp');
+    
+    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
+    const [selectedYear, setSelectedYear] = useState(null);
 
     const observationsValue = watch('observations') || '';
 
@@ -107,7 +111,9 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
                         render={({ field, fieldState }) => (
                             <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
-                                    hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}/>
+                                    hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
+                                    selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                                    setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
                         )}
                 />
 

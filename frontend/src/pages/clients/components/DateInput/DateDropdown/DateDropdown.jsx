@@ -4,7 +4,8 @@ import styles from './DateDropdown.module.css';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
 
-export default function DateDropdown ({ dropdownLabel, optionType, locale = navigator.language, onSelect, hasError=false }) {
+export default function DateDropdown ({ dropdownLabel, optionType, locale = navigator.language,
+            onSelect, hasError=false, isReadOnly }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const options = useMemo(() => {
@@ -46,7 +47,7 @@ export default function DateDropdown ({ dropdownLabel, optionType, locale = navi
 
     return (
         <div className={`${styles.dropdown} ${hasError ? styles.dropdownError : ""}`} ref={dropdownRef}>
-            <div className={styles.dropdownToggle} onClick={toggleDropdown}>
+            <div className={`${styles.dropdownToggle} ${isReadOnly ? "readOnly" : ""}`} onClick={toggleDropdown}>
                 <span className={styles.dropdownLabel}>
                     {dropdownLabel}
                 </span>
