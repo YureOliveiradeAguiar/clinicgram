@@ -50,18 +50,18 @@ function Login () {
             <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
                 <p className={`loginStatusMessage ${status.type}`}>{status.message}</p>
 
-                <div className={styles.formGroup}>
-                    <label htmlFor="username">Usuário</label>
+                <div className="inputContainer">
                     <input type="text" id="username" name="username" autoComplete='true'
-                        maxLength="80" placeholder="Digite aqui" className="formInput"
+                        maxLength="80" placeholder=" " className="formInput"
                         {...register("username", { required: "Usuário é obrigatório" })}/>
+                    <label htmlFor="username">Usuário</label>
                 </div>
 
-                <div className={styles.formGroup}>
-                    <label htmlFor="password">Senha</label>
+                <div className="inputContainer">
                     <input type="password" id="password" name="password" minlenght="8"
-                        maxLength="32" placeholder="Digite sua senha" className="formInput"
+                        maxLength="32" placeholder=" " className="formInput"
                         {...register("password", {required: "Senha é obrigatória"})}/>
+                    <label htmlFor="password">Senha</label>
                     <div className={styles.forgotPassword}>
                         <a href="/forgot-password">esqueceu a senha?</a>
                     </div>

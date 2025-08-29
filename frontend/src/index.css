@@ -79,7 +79,6 @@ input:focus {
     width: 100%;
     padding: 26px 10px 6px 10px;
     font-size: 16px;
-    background-color: #fff;
     border-radius: 4px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -87,7 +86,6 @@ input:focus {
 .readOnly {
     background-color: #e6e6e6;
     color: #555;
-    border: 1px solid #ccc;
     cursor: not-allowed;
     pointer-events: none;
 }
@@ -111,7 +109,7 @@ input:focus {
     top: 4px; 
     font-size: 14px;
 }
-/*form texarea */
+/*form textarea */
 .formTexarea {
     resize: none;
     overflow-y: scroll;
@@ -130,20 +128,13 @@ input:focus {
 .textareaCounter {
     pointer-events: none;
     position: absolute;
-    top: 5px;
-    right: 12px;
-    font-size: 0.8rem;
-    color: #666;
-}
-.textareaCounter {
-    pointer-events: none;
-    position: absolute;
     z-index: 9;
     top: 1px;
     right: 12px;
+    padding-top: 5px;
     width: 96%;
-    height: 24px;
-    background-color: inherit;
+    height: 18px;
+    background-color: #fff;
     color: #666;
     font-size: 0.8rem;
     display: flex;
@@ -152,6 +143,9 @@ input:focus {
     box-sizing: border-box;
     border-radius: 4px 0 0 0;
     border-top-right-radius: 6px;
+}
+.textareaCounter.readOnly {
+    background-color: #e6e6e6;;
 }
 /* input errors */
 .formInputError  {
@@ -180,6 +174,7 @@ input:focus {
     border: 1px solid;
     border-radius: 8px;
     padding: 2px 16px;
+    margin: 8px 0;
     transition: all 0.08s ease-in-out;
 }
 .statusMessage.info,

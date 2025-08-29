@@ -19,20 +19,6 @@ class ClientListAPIView(APIView):
         return Response(serializer.data)
 
 
-class DateOptionsAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        currentYear = datetime.now().year
-        monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-        return Response({
-            'days': list(range(1, 32)),
-            'months': monthNames,
-            'years': list(range(currentYear, 1899, -1))
-        })
-
-
 class RegisterClientAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

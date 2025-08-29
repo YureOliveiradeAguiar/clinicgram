@@ -5,7 +5,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton';
 import DateDropdown from '../DateDropdown/DateDropdown.jsx';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
@@ -14,12 +14,9 @@ import { getCookie } from '@/utils/csrf.js';
 export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors } = useForm({mode:'onBlur'});
 
-    const [days, setDays] = useState([]);
-    const [months, setMonths] = useState([]);
-    const [years, setYears] = useState([]);
-
     const [selectedDay, setSelectedDay] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
     const [selectedYear, setSelectedYear] = useState(null);
 
     const whatsappValue = watch('whatsapp');
@@ -63,22 +60,6 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
         setSelectedMonth('');
         setSelectedYear('');
     };
-
-    useEffect(() => {
-        fetch('/api/clients/date-options/', {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then(response => response.json())
-            .then(data => {
-                setDays(data.days);
-                setMonths(data.months);
-                setYears(data.years);
-            })
-            .catch(() => {
-                setStatusMessage({ message: "Erro ao carregar opções de data", type: "error" });
-            });
-    }, []);
     
     const onSubmit = async (data) => {
         const dateOfBirth = formatDateOfBirth();
@@ -154,18 +135,18 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <div className={styles.formGroup}>
                     <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
                     <div className={styles.dateWrapper} aria-labelledby="dobLabel">
-                        <DateDropdown label={selectedDay || "Dia"} options={days} hasError={!!errors.dateOfBirth}
+                        <DateDropdown dropdownLabel={selectedDay || "Dia"} optionType={"days"} hasError={!!errors.dateOfBirth}
                             onSelect={(day) => {
                                 setSelectedDay(day);
                                 if (day && selectedMonth && selectedYear) {clearErrors('dateOfBirth');}
                             }}/>
-                        <DateDropdown label={months[selectedMonth - 1] || "Mês"} options={months} hasError={!!errors.dateOfBirth}
-                            onSelect={(name) => {
-                                const monthNumber = months.indexOf(name) + 1;
-                                setSelectedMonth(monthNumber);
-                                if (selectedDay && monthNumber && selectedYear) {clearErrors('dateOfBirth');}
+                        <DateDropdown dropdownLabel={selectedMonthLabel || "Mês"} optionType={"months"} hasError={!!errors.dateOfBirth}
+                            onSelect={(monthObject) => {
+                                setSelectedMonth(monthObject.value);
+                                setSelectedMonthLabel(monthObject.label);
+                                if (selectedDay && monthObject.value && selectedYear) {clearErrors('dateOfBirth');}
                             }}/>
-                        <DateDropdown label={selectedYear || "Ano"} options={years} hasError={!!errors.dateOfBirth}
+                        <DateDropdown dropdownLabel={selectedYear || "Ano"} optionType={"years"} hasError={!!errors.dateOfBirth}
                             onSelect={(year)=> {
                                 setSelectedYear(year);
                                 if (selectedDay && selectedMonth && year) {clearErrors('dateOfBirth');}
@@ -175,7 +156,6 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 </div>
 
                 <div className="inputContainer">
-                    <div className="floatingBar"></div>
                     <textarea  id="observations" name="observations" autoComplete="off"
                         maxLength="200" placeholder=" " className={"formInput formTexarea"}
                         {...register('observations')}/>
