@@ -1,13 +1,12 @@
 import DateDropdown from "./DateDropdown/DateDropdown";
 import styles from './DateInput.module.css';
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function DateInput({ onDateChange, hasError=false, clearErrors, isReadOnly=false,
-    selectedDay, setSelectedDay, selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {
+        selectedDay, setSelectedDay, selectedMonth, setSelectedMonth,
+        selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {
 
-        
-    const [selectedMonth, setSelectedMonth] = useState(null);
     
     const formatDateOfBirth = (day, month, year) => {
         if (!year || !month || !day) return null;
@@ -17,10 +16,11 @@ export default function DateInput({ onDateChange, hasError=false, clearErrors, i
     };
 
     useEffect(() => {
+        if (!selectedDay || !selectedMonth || !selectedYear) return;
         const formatted = formatDateOfBirth(selectedDay, selectedMonth, selectedYear);
         onDateChange(formatted);
         if (selectedDay && selectedMonth && selectedYear) {
-            clearErrors();
+            clearErrors?.()
         }
     }, [selectedDay, selectedMonth, selectedYear]);
 

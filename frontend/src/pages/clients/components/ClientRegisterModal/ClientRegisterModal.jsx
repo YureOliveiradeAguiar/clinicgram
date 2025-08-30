@@ -5,6 +5,7 @@ import Modal from '@/components/Modal/Modal';
 import ModalButton from '@/components/ModalButton/ModalButton';
 import DateInput from '../DateInput/DateInput';
 
+import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
@@ -16,6 +17,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     const whatsappValue = watch('whatsapp');
     
     const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
     const [selectedYear, setSelectedYear] = useState(null);
 
@@ -113,6 +115,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                             <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
                                     hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
                                     selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                                    selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
                                     setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
                         )}
                 />

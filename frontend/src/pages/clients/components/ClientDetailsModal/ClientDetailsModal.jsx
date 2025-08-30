@@ -1,11 +1,9 @@
-import XIcon from '@/assets/icons/xIcon';
 import TrashCan from '@/assets/icons/trashCan';
 import EditIcon from '@/assets/icons/editIcon';
 import SaveIcon from '@/assets/icons/saveIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
-import styles from './ClientDetailsModal.module.css';
 
-import Modal from '@/components/Modal/Modal';
+import DetailsModal from '@/components/DetailsModal/DetailsModal';
 import ModalButton from '@/components/ModalButton/ModalButton.jsx';
 import DateInput from '../DateInput/DateInput';
 
@@ -19,27 +17,21 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
     const [editedName, setEditedName] = useState(client.name);
     const [editedWhatsapp, setEditedWhatsapp] = useState(client.whatsapp);
 
-    const displayDate = (isoDate) => {
-        if (!isoDate) return '';
-        const [y, m, d] = isoDate.split('-');
-        return `${d}/${m}/${y}`;
-    };
-
     const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
     const [selectedYear, setSelectedYear] = useState(null);
     useEffect(() => {
-        if (client?.dateOfBirth) {
-            const dob = new Date(client.dateOfBirth);
-            setSelectedDay(dob.getDate());
-            setSelectedMonthLabel(
-                dob.toLocaleString("default", { month: "long" })
-            );
-            setSelectedYear(dob.getFullYear());
+        if (client.dateOfBirth) {
+            const [year, month, day] = client.dateOfBirth.split("-");
+            setSelectedDay(Number(day));
+            setSelectedMonth(Number(month));
+            setSelectedMonthLabel(new Date(year, month - 1).toLocaleString("default", { month: "long" }));
+            setSelectedYear(Number(year));
         }
     }, [client]);
 
-    const [editedDateOfBirth, setEditedDateOfBirth] = useState(displayDate(client.dateOfBirth));
+    const [editedDateOfBirth, setEditedDateOfBirth] = useState(client.dateOfBirth);
     const [editedObservation, setEditedObservation] = useState(client.observation || "");
 
     const handleSave = () => {
@@ -50,10 +42,8 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         if (normalizePhone(editedWhatsapp)  !== normalizePhone(client.whatsapp)) {
             updatedFields.whatsapp = editedWhatsapp;
         }
-        const normalizedEditedDate = normalizeDate(editedDateOfBirth);
-        if (normalizedEditedDate !== client.dateOfBirth) {
-            updatedFields.dateOfBirth = normalizedEditedDate;
-            setEditedDateOfBirth(displayDate(updatedFields.dateOfBirth));
+        if (editedDateOfBirth !== client.dateOfBirth) {
+            updatedFields.dateOfBirth = editedDateOfBirth;
         }
         if (editedObservation !== client.observation) {
             updatedFields.observation = editedObservation;
@@ -107,9 +97,19 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         return age;
     }
 
+    const resetModal = () => {
+        setIsEditing(false);
+        setEditedName(client.name);
+        setEditedWhatsapp(client.whatsapp);
+        setEditedDateOfBirth(client.dateOfBirth);
+        setEditedObservation(client.observation || "");
+    }
+
     return (
-        <Modal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen} onClose={onClose}>
-            <div className={styles.clientForm}>
+        <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}
+                isEditing={isEditing} setIsEditing={setIsEditing}
+                onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
+            <div className={"standardFormulary"}>
                 <div className="inputContainer">
                     <input type="text" id="name" name="name" autoComplete="off"
                         maxLength="70" placeholder=" " value={editedName}
@@ -125,9 +125,10 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                     <label htmlFor="whatsapp">WhatsApp</label>
                 </div>
                 
-                <DateInput onDateChange={setEditedDateOfBirth} isReadOnly={!isEditing}
+                <DateInput onDateChange={(newDate) => setEditedDateOfBirth(newDate)} isReadOnly={!isEditing}
                         selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
-                        setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+                        setSelectedMonthLabel={setSelectedMonthLabel} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
+                        selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
 
                 <div className="inputContainer">
                     <textarea  id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
@@ -137,21 +138,17 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                     <span className={`textareaCounter ${!isEditing ? "readOnly": ""}`}>{editedObservation.length}/200</span>
                 </div>
             </div>
-
-            <div className={styles.buttonRow}>
+        </DetailsModal>
+    );
+}
+/*
+<div className={styles.buttonRow}>
                 <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
                 {!isEditing ? (
                     <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
                 ) : (<div className={styles.editButtonsRow}>
                         <ModalButton Icon={SaveIcon} onClick={() => handleSave()} variant="save"/> 
-                        <ModalButton Icon={CancelIcon} variant="default" onClick={() => {
-                            setIsEditing(false);
-                            setEditedName(client.name);
-                            setEditedWhatsapp(client.whatsapp);
-                            setEditedDateOfBirth(displayDate(client.dateOfBirth));}}/>
+                        <ModalButton Icon={CancelIcon} variant="default" onClick={() => resetModal()}/>
                     </div>)}
             </div>
-            <ModalButton Icon={XIcon} variant="close" onClick={onClose}/>
-        </Modal>
-    );
-}
+*/

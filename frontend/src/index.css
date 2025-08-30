@@ -66,6 +66,11 @@ button:focus {
 }
 
 /* FORMS */
+.standardFormulary {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 Form label, .fieldLabel, Form input, .fieldLabel {
     display: flex;
     flex-direction: column;
@@ -131,7 +136,7 @@ input:focus {
     z-index: 9;
     top: 1px;
     right: 12px;
-    padding-top: 5px;
+    padding: 14px 0 5px 0;
     width: 96%;
     height: 18px;
     background-color: #fff;

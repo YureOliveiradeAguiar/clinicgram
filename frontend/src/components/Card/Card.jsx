@@ -1,5 +1,5 @@
 import InfoIcon from '@/assets/icons/infoIcon';
-import HistoryIcon from '@/assets/icons/historyIcon';
+import BarChartIcon from '@/assets/icons/barChart';
 import styles from './Card.module.css';
 
 import { useRef, useEffect } from 'react';
@@ -24,7 +24,7 @@ export default function Card({ children, element, selectedElement, setSelectedEl
                 {children}
             </div>
             <div className={styles.cardButtonSection}>
-                <ModalButton Icon={HistoryIcon}/>
+                <ModalButton Icon={BarChartIcon}/>
                 <ModalButton Icon={InfoIcon} onClick={() => setSelectedElement(element)}/>
             </div>
         </div>

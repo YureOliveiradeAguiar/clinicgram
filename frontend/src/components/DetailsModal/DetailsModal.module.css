@@ -1,0 +1,11 @@
+.buttonRow {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.editingButtonsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
