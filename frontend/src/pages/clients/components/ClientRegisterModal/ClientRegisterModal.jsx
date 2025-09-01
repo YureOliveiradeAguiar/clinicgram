@@ -1,17 +1,15 @@
-import SaveIcon from '@/assets/icons/saveIcon';
-import styles from './ClientRegisterModal.module.css'
-
-import Modal from '@/components/Modal/Modal';
-import ModalButton from '@/components/ModalButton/ModalButton';
+import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import DateInput from '../DateInput/DateInput';
 
 import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
+import { formatPhone, normalizePhone } from '../ClientDetailsModal/phoneUtils';
 
 
 export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
+
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
 
     const whatsappValue = watch('whatsapp');
@@ -22,30 +20,6 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     const [selectedYear, setSelectedYear] = useState(null);
 
     const observationsValue = watch('observations') || '';
-
-    const formatPhone = (value) => {
-        if (!value) return "";
-        const cleaned = value.replace(/\D/g, '');
-        if (cleaned.length <= 2) {
-            return `(${cleaned}`;
-        } else if (cleaned.length <= 6) {
-            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
-        } else if (cleaned.length <= 10) {
-            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
-        } else {
-            return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`;
-        }
-    };
-    const normalizePhone = (formatted) => {
-        if (!formatted) return "";
-        const cleaned = formatted.replace(/\D/g, '');
-        const ddd = cleaned.slice(0, 2);
-        let number = cleaned.slice(2);
-        if (number.length === 8 && number[0] !== '9') {
-            number = '9' + number;
-        }
-        return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
-    };
     
     const onSubmit = async (data) => {
         const rawPhone = normalizePhone(data.whatsapp);
@@ -82,56 +56,50 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     };
 
     return (
-        <Modal title="Novo Paciente" isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={handleSubmit(onSubmit, handleError)} className={styles.clientForm}>
-                <div className="inputContainer">
-                    <input type="text" id="name" name="name" autoComplete="off"
-                        maxLength="70" placeholder=" "
-                        className={`formInput ${errors.name ? "formInputError" : ""}`}
-                        {...register('name', { required: "O nome é obrigatório" })}/>
-                    <label htmlFor="name">Nome Completo</label>
-                    <p className="errorMessage">{errors.name?.message || " "}</p>
-                </div>
+        <RegisterModal title="Novo Paciente" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+            <div className="inputContainer">
+                <input type="text" id="name" name="name" autoComplete="off"
+                    maxLength="70" placeholder=" "
+                    className={`formInput ${errors.name ? "formInputError" : ""}`}
+                    {...register('name', { required: "O nome é obrigatório" })}/>
+                <label htmlFor="name">Nome Completo</label>
+                <p className="errorMessage">{errors.name?.message || ""}</p>
+            </div>
 
-                <div className="inputContainer">
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
-                        className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
-                        {...register('whatsapp', {required: "WhatsApp é obrigatório",
-                            validate: (value) => {
-                                const digits = value.replace(/\D/g, '');
-                                if (digits.length < 10) return "Número incompleto";
-                                return true;
-                        }})}
-                        onChange={(e) => {
-                            const formatted = formatPhone(e.target.value);
-                            setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
-                        }}/>
-                    <label htmlFor="whatsapp">WhatsApp</label>
-                    <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
-                </div>
+            <div className="inputContainer">
+                <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
+                    className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
+                    {...register('whatsapp', {required: "WhatsApp é obrigatório",
+                        validate: (value) => {
+                            const digits = value.replace(/\D/g, '');
+                            if (digits.length < 10) return "Número incompleto";
+                            return true;
+                    }})}
+                    onChange={(e) => {
+                        const formatted = formatPhone(e.target.value);
+                        setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
+                    }}/>
+                <label htmlFor="whatsapp">WhatsApp</label>
+                <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
+            </div>
 
-                <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
-                        render={({ field, fieldState }) => (
-                            <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
-                                    hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
-                                    selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
-                                    selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
-                                    setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
-                        )}
-                />
+            <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
+                    render={({ field, fieldState }) => (
+                        <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
+                                hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
+                                selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                                selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
+                                setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+                    )}
+            />
 
-                <div className="inputContainer">
-                    <textarea  id="observations" name="observations" autoComplete="off"
-                        maxLength="200" placeholder=" " className={"formInput formTexarea"}
-                        {...register('observations')}/>
-                    <label htmlFor="observations">Observações</label>
-                    <span className='textareaCounter'>{observationsValue.length}/200</span>
-                </div>
-
-                <div className={styles.buttonSection}>
-                    <ModalButton Icon={SaveIcon} variant="save" type="submit" name="registrar" buttonTitle="Registrar"/>
-                </div>
-            </form>
-        </Modal>
+            <div className="inputContainer">
+                <textarea  id="observations" name="observations" autoComplete="off"
+                    maxLength="200" placeholder=" " className={"formInput formTexarea"}
+                    {...register('observations')}/>
+                <label htmlFor="observations">Observações</label>
+                <span className='textareaCounter'>{observationsValue.length}/200</span>
+            </div>
+        </RegisterModal>
     );
 }

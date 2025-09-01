@@ -1,8 +1,4 @@
-import CalendarIcon from '@/assets/icons/calendarIcon';
-import UserAddIcon from '@/assets/icons/UserAddIcon';
-import PlacesIcon from '@/assets/icons/PlacesIcon';
 import styles from './SchedulingForm.module.css'
-import Navbar from '@/components/Navbar/Navbar';
 import ConfirmBackButtons from "@/components/ConfirmBackButtons/ConfirmBackButtons.jsx";
 
 import SearchDropdown from '@/components/SearchDropdown/SearchDropdown.jsx';
@@ -21,12 +17,6 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 
 
 export default function ScheduleForm() {
-    const navItems = [
-        { to: '/schedule/', Icon: CalendarIcon, label: 'Agenda' },
-        { to: '/clients/new', Icon: UserAddIcon, label: 'Novo Cliente' },
-        { to: '/places', Icon: PlacesIcon, label: 'Salas' },
-    ];
-
     const { register, handleSubmit, setValue, reset, formState: { errors }, setError, clearErrors } = useForm({ mode: 'onBlur' });
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
@@ -216,7 +206,6 @@ export default function ScheduleForm() {
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
                 <h2>Agendamento</h2>
-                <Navbar items={navItems} />
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.scheduleForm}>
                 <div className={styles.inputsWrapper}>

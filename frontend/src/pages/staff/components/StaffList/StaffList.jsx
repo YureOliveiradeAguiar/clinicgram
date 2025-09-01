@@ -1,5 +1,5 @@
 import AlertIcon from '@/assets/icons/alertSign';
-import UserAddIcon from '@/assets/icons/userAddIcon';
+import PersonAddIcon from '@/assets/icons/personAddIcon.jsx';
 
 import List from '@/components/List/List';
 import StaffCard from '../StaffCard/StaffCard.jsx';
@@ -116,7 +116,7 @@ export default function StaffList() {
 
     return (
         <List title="Estagiários"
-                NewElementIcon={UserAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
+                NewElementIcon={PersonAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
                 searchPlaceholder="Pesquisar estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             {staffs.length > 0 ? (
                 staffs

@@ -1,4 +1,4 @@
-import userAddIcon from '@/assets/icons/userAddIcon.jsx'
+import PersonAddIcon from '@/assets/icons/personAddIcon'
 import usersIcon from '@/assets/icons/usersIcon.jsx'
 import scheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import appointsIcon from '@/assets/icons/appointsIcon.jsx'
@@ -15,7 +15,7 @@ import handleLogout from '@/utils/handleLogout.js'
 
 function Dash () {
     const cards = [
-        { title: "Registrar Cliente", Icon: userAddIcon, link: "/clients/new" },
+        { title: "Registrar Cliente", Icon: PersonAddIcon, link: "/clients/new" },
         { title: "Clientes", Icon: usersIcon, link: "/clients" },
         { title: "Agendamento", Icon: appointsIcon, link: "/schedule/new" },
         { title: "Agenda", Icon: scheduleIcon, link: "/schedule" },

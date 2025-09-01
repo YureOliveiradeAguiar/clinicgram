@@ -1,6 +1,6 @@
 import TrashCan from '@/assets/icons/trashCan';
 import EditIcon from '@/assets/icons/editIcon';
-import SaveIcon from '@/assets/icons/saveIcon';
+import SaveAsIcon from '@/assets/icons/saveAsIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
 import styles from './DetailsModal.module.css';
 
@@ -19,7 +19,7 @@ export default function DetailsModal({ title, isOpen, isEditing, setIsEditing,
                 {!isEditing ? (
                     <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
                 ) : (<div className={styles.editingButtonsRow}>
-                        <ModalButton Icon={SaveIcon} onClick={() => onSave()} variant="save"/> 
+                        <ModalButton Icon={SaveAsIcon} onClick={() => onSave()} variant="save"/> 
                         <ModalButton Icon={CancelIcon} variant="default" onClick={() => onCancel()}/>
                     </div>)}
             </div>

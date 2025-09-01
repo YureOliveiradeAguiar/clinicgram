@@ -1,11 +1,7 @@
 import MedicalSuitcase from '@/assets/icons/medicalSuitcase.jsx'
-import UserAddIcon from '@/assets/icons/userAddIcon.jsx'
 import UsersIcon from '@/assets/icons/usersIcon.jsx'
 import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
-import AppointsIcon from '@/assets/icons/appointsIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
-//import waitingIcon from '@/assets/icons/clockIcon.jsx'
-//import suppliesIcon from '@/assets/icons/boxes.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
 
 import Sidebar from './components/Sidebar/SideBar.jsx'
@@ -49,7 +45,6 @@ export default function Layout() {
             { title: "Agendar consulta", link: "/schedule/new" },]},
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
         //{ title: "Estoque", Icon: suppliesIcon, link: "" },
-        //{ title: "Lista de Espera", Icon: waitingIcon, link: "" },
         { title: "Histórico", Icon: HistoryIcon, link: "/history" },
     ];
 

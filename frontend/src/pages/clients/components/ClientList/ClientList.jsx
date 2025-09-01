@@ -1,10 +1,11 @@
 import AlertIcon from '@/assets/icons/alertSign';
-import UserAddIcon from '@/assets/icons/userAddIcon';
+import PersonAddIcon from '@/assets/icons/personAddIcon';
 import styles from './ClientList.module.css'
 
 import List from '@/components/List/List';
 import Card from '@/components/Card/Card.jsx';
 import ClientRegisterModal from '../ClientRegisterModal/ClientRegisterModal';
+import ClientStatisticsModal from '../ClientStatisticsModal/ClientStatisticsModal';
 import ClientDetailsModal from '../ClientDetailsModal/ClientDetailsModal.jsx';
 
 import React, { useEffect, useState } from 'react';
@@ -20,8 +21,7 @@ export default function ClientList() {
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-
+    const [openModal, setOpenModal] = useState(null);
     const [selectedClient, setSelectedClient] = useState(null);
 
     const handleClientAdded = (newClient) => {
@@ -117,7 +117,7 @@ export default function ClientList() {
 
     return (
         <List title="Pacientes"
-                NewElementIcon={UserAddIcon} NewElementMessage="Novo" onNewElement={() => setIsRegisterModalOpen(true)}
+                NewElementIcon={PersonAddIcon} NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
                 searchPlaceholder="Pesquisar paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             {clients.length > 0 ? (
                 clients
@@ -125,7 +125,7 @@ export default function ClientList() {
                         client.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(client => (
-                        <Card key={client.id} element={client}
+                        <Card key={client.id} element={client} setOpenModal={setOpenModal}
                                 selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
                             <p className={styles.cardName} aria-label={client.name}>
                                 {client.name}
@@ -136,16 +136,18 @@ export default function ClientList() {
                 <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
             )}
 
-            {isRegisterModalOpen && (
-                <ClientRegisterModal isOpen={isRegisterModalOpen} onSuccess={handleClientAdded}
-                        setStatusMessage={setStatusMessage} onClose={() => setIsRegisterModalOpen(false)} />
+            {openModal === "register" && (
+                <ClientRegisterModal isOpen={openModal === "register"} onSuccess={handleClientAdded}
+                        setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
             )}
-
-            {selectedClient && (
-                <ClientDetailsModal closeOnClickOutside={false} client={selectedClient} isOpen={selectedClient !== null}
-                        onClose={() => setSelectedClient(null)} onDelete={handleDeleteClient} onUpdate={handleUpdate}/>
+            {(openModal === "statistics" && selectedClient) && (
+                <ClientStatisticsModal client={selectedClient} isOpen={selectedClient !== null} setStatusMessage={setStatusMessage}
+                        onClose={() => {setSelectedClient(null); setOpenModal(null)}} onDelete={handleDeleteClient} onUpdate={handleUpdate}/>
             )}
-
+            {(openModal === "properties" && selectedClient) && (
+                <ClientDetailsModal client={selectedClient} isOpen={selectedClient !== null} setStatusMessage={setStatusMessage}
+                        onClose={() => {setSelectedClient(null); setOpenModal(null)}} onDelete={handleDeleteClient} onUpdate={handleUpdate}/>
+            )}
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>
                     {statusMessage.message}

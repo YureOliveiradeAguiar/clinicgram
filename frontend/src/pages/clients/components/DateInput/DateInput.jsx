@@ -3,7 +3,7 @@ import styles from './DateInput.module.css';
 
 import { useEffect } from "react";
 
-export default function DateInput({ onDateChange, hasError=false, clearErrors, isReadOnly=false,
+export default function DateInput({ fieldLabel="Data de Nascimento", onDateChange, hasError=false, clearErrors, isReadOnly=false,
         selectedDay, setSelectedDay, selectedMonth, setSelectedMonth,
         selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {
 
@@ -26,7 +26,7 @@ export default function DateInput({ onDateChange, hasError=false, clearErrors, i
 
     return (
         <div className={styles.formGroup}>
-            <p id="dobLabel" className="fieldLabel">Data de Nascimento</p>
+            <p id="dobLabel" className="fieldLabel">{fieldLabel}</p>
             <div className={styles.dateWrapper} aria-labelledby="dobLabel">
                 <DateDropdown dropdownLabel={selectedDay || "Dia"}
                     optionType={"days"} hasError={hasError} isReadOnly={isReadOnly}
@@ -45,7 +45,7 @@ export default function DateInput({ onDateChange, hasError=false, clearErrors, i
                         setSelectedYear(year);
                     }}/>
             </div>
-            <p className="errorMessage">{hasError?.message || " "}</p>
+            <p className="errorMessage">{hasError?.message || hasError || " "}</p>
         </div>
     )
 }

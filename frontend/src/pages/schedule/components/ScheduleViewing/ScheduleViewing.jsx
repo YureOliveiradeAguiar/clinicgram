@@ -1,10 +1,5 @@
-import AlertIcon from '@/assets/icons/alertSign.jsx'
-import AppointsIcon from '@/assets/icons/appointsIcon';
-import UserAddIcon from '@/assets/icons/userAddIcon';
-import PlacesIcon from '@/assets/icons/placesIcon';
 import styles from './ScheduleViewing.module.css';
 
-import Navbar from '@/components/Navbar/Navbar.jsx';
 import ScheduleTable from '@/components/ScheduleTable/ScheduleTable/ScheduleTable.jsx';
 import AppointmentCard from '../AppointmentCard/AppointmentCard.jsx';
 import ReturnButton from '@/components/ReturnButton/ReturnButton';
@@ -16,12 +11,6 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 export default function ScheduleViewing() {
-    const navItems = [
-        { to: '/schedule/new', Icon: AppointsIcon, label: "Agendamento" },
-        { to: '/clients/new', Icon: UserAddIcon, label: "Novo Cliente" },
-        { to: '/places', Icon: PlacesIcon, label: "Salas" },
-    ];
-
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
 
@@ -85,7 +74,6 @@ export default function ScheduleViewing() {
         <div className={styles.mainWrapper}>
             <div className={styles.formHeader}>
                 <h2>Agenda</h2> 
-                <Navbar items={navItems} />
             </div>
             <div className={styles.contentWrapper}>
                 <div className={styles.TableWrapper}>
