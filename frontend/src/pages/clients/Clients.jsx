@@ -1,4 +1,4 @@
-import ClientList from './components/ClientList/ClientList.jsx'
+import ClientList from './components/List/ClientList.jsx'
 
 export default function Clients() {
 	return(

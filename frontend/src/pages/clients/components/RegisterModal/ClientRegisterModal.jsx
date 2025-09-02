@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
-import { formatPhone, normalizePhone } from '../ClientDetailsModal/phoneUtils';
+import { formatPhone, normalizePhone } from '@/utils/phoneUtils';
 
 
 export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
@@ -44,10 +44,10 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 reset();
                 onSuccess(result.client);
             } else {
-                setStatusMessage({ message: "Erro ao registrar cliente", type: "error" });
+                setStatusMessage({ message: "Erro ao registrar o cliente", type: "error" });
             }
         } catch (error) {
-            setStatusMessage({message: `Erro de conexão com o servidor: ${error}`, type: "error"});
+            setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
         }
     };
 

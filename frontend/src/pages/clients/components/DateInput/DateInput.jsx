@@ -3,6 +3,7 @@ import styles from './DateInput.module.css';
 
 import { useEffect } from "react";
 
+
 export default function DateInput({ fieldLabel="Data de Nascimento", onDateChange, hasError=false, clearErrors, isReadOnly=false,
         selectedDay, setSelectedDay, selectedMonth, setSelectedMonth,
         selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {

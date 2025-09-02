@@ -1,4 +1,4 @@
-import { normalizePhone } from "./phoneUtils";
+import { normalizePhone } from './phoneUtils.js';
 
 export const validators = {
     name: (value) => {

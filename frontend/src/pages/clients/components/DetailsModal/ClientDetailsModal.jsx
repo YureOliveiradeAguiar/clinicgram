@@ -3,10 +3,10 @@ import DateInput from '../DateInput/DateInput';
 
 import { useState, useEffect } from 'react';
 
-import { formatPhone } from "./phoneUtils";
-import calculateAge from './calculateAge';
+import { formatPhone } from "@/utils/phoneUtils";
+import calculateAge from './utils/calculateAge';
 
-import useFields from './useField';
+import useFields from '@/hooks/useField.jsx';
 
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {

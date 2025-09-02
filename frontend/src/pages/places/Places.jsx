@@ -1,4 +1,4 @@
-import PlaceList from './components/PlaceList/PlaceList.jsx'
+import PlaceList from './components/List/PlaceList.jsx'
 
 export default function Places() {
     return (
