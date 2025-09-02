@@ -12,7 +12,6 @@ export default function useFields(contextFields = {}) {
 
     const setField = (key, value) => {
         setFields(prev => ({ ...prev, [key]: value }));
-
         // Runs a validation if a validator exists.
         if (validators[key]) {
             const error = validators[key](value);
@@ -23,10 +22,12 @@ export default function useFields(contextFields = {}) {
     const validateAll = () => {
         let allValid = true;
         const newErrors = {};
-        for (const key in validators) {
-            const error = validators[key](fields[key]);
-            newErrors[key] = error;
-            if (error) allValid = false;
+        for (const key in fields) {
+            if (validators[key]) {
+                const error = validators[key](fields[key]);
+                newErrors[key] = error;
+                if (error) allValid = false;
+            }
         }
         setErrors(newErrors);
         return allValid;

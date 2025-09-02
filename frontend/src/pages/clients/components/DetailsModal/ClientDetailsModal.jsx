@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { formatPhone } from "@/utils/phoneUtils";
 import calculateAge from './utils/calculateAge';
 
-import useFields from '@/hooks/useField.jsx';
+import useFields from '@/hooks/useFieldPatch.jsx';
 
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {

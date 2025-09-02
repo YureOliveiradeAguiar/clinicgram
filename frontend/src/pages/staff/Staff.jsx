@@ -1,6 +1,6 @@
-import StaffList from './components/StaffList/StaffList.jsx'
+import StaffList from './components/List/StaffList.jsx'
 
-export default function  Staff() {
+export default function Staff() {
 	return(
         <main>
 			<StaffList/>

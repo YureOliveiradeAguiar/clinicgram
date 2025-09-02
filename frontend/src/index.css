@@ -81,9 +81,13 @@ input:focus {
 }
 
 .formInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     padding: 26px 10px 6px 10px;
     font-size: 16px;
+    background-color: #fff;
     border-radius: 4px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -99,7 +103,8 @@ input:focus {
     width: 100%;
     margin: 4px 0;
 }
-.inputContainer label {
+.inputContainer label,
+.inputContainer .customLabel {
     position: absolute;
     z-index: 10;
     top: 14px;
@@ -110,7 +115,9 @@ input:focus {
     transition: all 0.2s ease-in-out;
 }
 .inputContainer .formInput:focus + label,
-.inputContainer .formInput:not(:placeholder-shown) + label {
+.inputContainer .formInput:focus + .customLabel,
+.inputContainer .formInput:not(:placeholder-shown) + label,
+.inputContainer .formInput:not(:placeholder-shown) + .customLabel {
     top: 4px; 
     font-size: 14px;
 }

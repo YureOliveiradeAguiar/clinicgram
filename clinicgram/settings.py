@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "history",
 ]
 
+AUTH_USER_MODEL = "accounts.CustomUser"
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 

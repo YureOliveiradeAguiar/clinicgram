@@ -36,7 +36,7 @@ export default function useElement({ elementName, elementNamePlural, elementPath
 
     const handleElementDelete = async () => {
         if (!selectedElement) return;
-        if (!window.confirm(`Tem certeza que deseja excluir ${elementName}?`)) return;
+        if (!window.confirm(`Tem certeza que deseja excluir ${elementName.charAt(0).toUpperCase()}${elementName.slice(1)}?`)) return;
         try {
             const res = await fetch(`/api/${elementPath}/delete/${selectedElement.id}/`, {
                 method: 'DELETE',
@@ -46,7 +46,7 @@ export default function useElement({ elementName, elementNamePlural, elementPath
                 }
             });
             if (res.ok) {
-                setStatusMessage({ message: `${elementName.charAt(0).toUpperCase()}${elementName.slice(1)} excluído com sucesso`, type: "success" });
+                setStatusMessage({ message: `As informações d${elementName.charAt(0)}${elementName.slice(1)} foram excluídas com sucesso`, type: "success" });
                 setData(prev => // Filters out the deleted element.
                     prev.filter(deletedElement => deletedElement.id !== selectedElement.id)
                 );
@@ -94,7 +94,7 @@ export default function useElement({ elementName, elementNamePlural, elementPath
                     prev.map(element => element.id === updatedElement.id ? updatedElement : element)
                 );
                 setSelectedElement(updatedElement);
-                setStatusMessage({ message: `${elementName.charAt(0).toUpperCase()}${elementName.slice(1)} foi atualizado com sucesso!`, type: "success" });
+                setStatusMessage({ message: `Informações d${elementName.charAt(0)}${elementName.slice(1)} atualizadas com sucesso!`, type: "success" });
             } else {
                 setStatusMessage({ message: "Erro ao atualizar", type: "error" });
             }

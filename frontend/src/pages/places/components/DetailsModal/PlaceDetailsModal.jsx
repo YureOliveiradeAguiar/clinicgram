@@ -1,10 +1,10 @@
 import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import { formatPhone } from "@/utils/phoneUtils";
+import EmojiPicker from '../EmojiPicker/EmojiPicker';
 
-import useFields from '@/hooks/useField.jsx';
+import useFields from '@/hooks/useFieldPatch.jsx';
 
 
 export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
@@ -16,23 +16,7 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const [selectedDay, setSelectedDay] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
-    const [selectedYear, setSelectedYear] = useState(null);
-
-    const setDateInputFields = () => {
-        if (place.dateOfBirth) {
-            const [year, month, day] = Place.dateOfBirth.split("-");
-            setSelectedDay(Number(day));
-            setSelectedMonth(Number(month));
-            setSelectedMonthLabel(new Date(year, month - 1).toLocaleString("default", { month: "long" }));
-            setSelectedYear(Number(year));
-        }
-    }
-    useEffect(() => {
-        setDateInputFields();
-    }, [place]);
+    const [selectedEmoji, setSelectedEmoji] = useState(place.icon);
 
     const handleSave = () => {
         const allValid = validateAll();
@@ -40,9 +24,9 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
             setStatusMessage({message: "Dados inválidos!", type: "error" });
             return;
         }
-        const updatedFields = getUpdatedFields(fields, Place);
+        const updatedFields = getUpdatedFields(fields, place);
         if (Object.keys(updatedFields).length > 0) {
-            onUpdate({ id: Place.id, ...updatedFields });
+            onUpdate({ id: place.id, ...updatedFields });
         }
         setIsEditing(false);
     };
@@ -50,11 +34,11 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
-        setDateInputFields();
+        setSelectedEmoji(place.icon);
     }
 
     return (
-        <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}
+        <DetailsModal title={isEditing ? "Edição da Sala" : "Detalhes da Sala"} isOpen={isOpen}
                 isEditing={isEditing} setIsEditing={setIsEditing}
                 onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
             <div className={"standardFormulary"}>
@@ -66,29 +50,11 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
                     <label htmlFor="name">Nome Completo</label>
                     <p className="errorMessage">{errors.name || ""}</p>
                 </div>
-
-                <div className="inputContainer">
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" " readOnly={!isEditing}
-                        className={`formInput ${!isEditing ? "readOnly": errors.whatsapp ? "formInputError" : ""}`} value={fields.whatsapp}
-                        onChange={(e) => {setField("whatsapp", formatPhone(e.target.value));}}/>
-                    <label htmlFor="whatsapp">WhatsApp</label>
-                    <p className="errorMessage">{errors.whatsapp || ""}</p>
-                </div>
-                
-                <DateInput fieldLabel={`Data de nascimento (${calculateAge(fields.dateOfBirth)})`}
-                        hasError={errors.dateOfBirth} onDateChange={(newDate) => setField("dateOfBirth", newDate)} isReadOnly={!isEditing}
-                        selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
-                        setSelectedMonthLabel={setSelectedMonthLabel} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
-                        selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
-
-                <div className="inputContainer">
-                    <textarea  id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
-                        maxLength="200" placeholder=" " className={`formInput formTexarea ${!isEditing ? "readOnly": ""}`}
-                        onChange={(e) => setField("observation", e.target.value)} value={fields.observation}/>
-                    <label htmlFor="observations">Observações</label>
-                    <span className={`textareaCounter ${!isEditing ? "readOnly": ""}`}>{fields.observation.length}/200</span>
-                </div>
             </div>
+
+            <EmojiPicker value={place.icon} isEditing={isEditing} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji}
+                onChange={(emoji) => setField("icon", emoji)}/>
+
         </DetailsModal>
     );
 }

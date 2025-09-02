@@ -6,7 +6,6 @@ from rest_framework import status
 import reversion
 from .models import Client
 from django.shortcuts import get_object_or_404
-from datetime import datetime
 from .serializers import ClientSerializer
 
 

@@ -29,9 +29,9 @@ class RegisterPlaceAPIView(APIView):
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Created via API")
             return Response({
-                'id': place.id,
-                'name': place.name,
+                'success': True,
                 'place': serializer.data,
+                'message': f'{place.name} registrada com sucesso!'
             })
         return Response(serializer.errors)
 
