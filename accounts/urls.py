@@ -6,9 +6,9 @@ urlpatterns = [
     path('profile/', views.UserProfileAPIView.as_view(), name='userProfile'),
     path("check-auth/", views.CheckAuthAPIView.as_view(), name="checkAuth"),
     path('logout/', views.LogoutAPIView.as_view(), name='logout'),
-
-    path('staff/list/', views.StaffListAPIView.as_view(), name='staffList'),
-    path('staff/new/', views.RegisterStaffAPIView.as_view(), name='staffRegister'),
-    path('staff/delete/<int:staff_id>/', views.StaffDeleteAPIView.as_view(), name='staffDelete'),
-    path('staff/<int:staff_id>/', views.StaffUpdateAPIView.as_view(), name='staffUpdate'),
+    # Staff urls:
+    path('workers/list/', views.WorkerListAPIView.as_view(), name='workerList'),
+    path('workers/new/', views.RegisterWorkerAPIView.as_view(), name='workerRegister'),
+    path('workers/delete/<int:worker_id>/', views.WorkerDeleteAPIView.as_view(), name='workerDelete'),
+    path('workers/<int:worker_id>/', views.WorkerUpdateAPIView.as_view(), name='workerUpdate'),
 ]

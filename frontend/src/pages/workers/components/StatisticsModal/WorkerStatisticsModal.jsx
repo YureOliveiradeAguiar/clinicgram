@@ -2,7 +2,7 @@ import Modal from '@/components/Modal/Modal';
 import FrequencyChart from './components/FrequencyChart';
 
 
-export default function StaffStatisticsModal({ title, isOpen, onClose }) {
+export default function WorkerStatisticsModal({ title, isOpen, onClose }) {
     const appointments = [
         { date: "01", count: 2 },
         { date: "02", count: 0 },

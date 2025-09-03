@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
 
-class StaffSerializer(serializers.ModelSerializer):
+class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'whatsapp', 'is_worker']
+        fields = ['id', 'username', 'first_name', 'last_name', 'whatsapp', 'is_worker']

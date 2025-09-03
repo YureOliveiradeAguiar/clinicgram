@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 
 from .models import CustomUser
-from .serializers import StaffSerializer
+from .serializers import WorkerSerializer
 
 from rest_framework import status
 import reversion
@@ -63,59 +63,59 @@ class LogoutAPIView(APIView):
 
 
 # STAFF MANAGEMENT: LISTING, REGISTER, DELETE, PATCH:
-class StaffListAPIView(APIView):
+class WorkerListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        staff_users = CustomUser.objects.filter(is_worker=True).order_by('username')
-        serializer = StaffSerializer(staff_users, many=True)
+        worker_users = CustomUser.objects.filter(is_worker=True).order_by('username')
+        serializer = WorkerSerializer(worker_users, many=True)
         return Response(serializer.data)
 
-class RegisterStaffAPIView(APIView):
+class RegisterWorkerAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = StaffSerializer(data=request.data)
+        serializer = WorkerSerializer(data=request.data)
         if serializer.is_valid():
             with reversion.create_revision():
-                staff = serializer.save(is_worker=True) # Sets is_worker to True
+                worker = serializer.save(is_worker=True) # Sets is_worker to True
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Created via API")
-            staffUsername = staff.username
+            workerUsername = worker.username
             return Response({
                 'success': True,
-                'staff': serializer.data,
-                'message': f'{staffUsername} registrado com sucesso!'
+                'worker': serializer.data,
+                'message': f'{workerUsername} registrado com sucesso!'
             })
         return Response({
             'success': False,
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
     
-class StaffDeleteAPIView(APIView):
+class WorkerDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, staff_id):
-        staff = get_object_or_404(CustomUser, id=staff_id)
+    def delete(self, request, worker_id):
+        worker = get_object_or_404(CustomUser, id=worker_id)
 
         with reversion.create_revision():
             reversion.set_user(request.user)
             reversion.set_comment("Deleted via API")
-            staff.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        staff.delete()
-        return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+            worker.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
+        worker.delete()
+        return Response({"message": "Estagiário excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
 
-class StaffUpdateAPIView(APIView):
+class WorkerUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request, staff_id):
-        staff = get_object_or_404(CustomUser, id=staff_id)
-        serializer = StaffSerializer(staff, data=request.data, partial=True)
+    def patch(self, request, worker_id):
+        worker = get_object_or_404(CustomUser, id=worker_id)
+        serializer = WorkerSerializer(worker, data=request.data, partial=True)
         if serializer.is_valid():
             with reversion.create_revision():
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Updated via API")
-                staff.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
+                worker.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

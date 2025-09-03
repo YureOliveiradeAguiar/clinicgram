@@ -3,9 +3,9 @@ import styles from './ElementDropdown.module.css';
 import { useState, useRef, useEffect } from 'react';
 
 
-export default function ElementDropdown({ value, onChange, isEditing=true, options = [], selectedOption, setSelectedOption,
-        error, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado',
-    },}) {
+export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [],
+        hasError=false, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado'}
+    }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const dropdownRef = useRef();
@@ -31,12 +31,12 @@ export default function ElementDropdown({ value, onChange, isEditing=true, optio
 
     return (
         <div className="inputContainer" ref={dropdownRef}>
-            <button className={`formInput formButtonPicker ${!isEditing ? "readOnly" : ""}`} readOnly={!isEditing}
-                    type="button" onClick={() => setIsOpen(!isOpen)}>
-                {selectedOption ? selectedOption.name : "Selecione um cliente"}
+            <button className={`formButtonPicker ${selectedOption ? "hasValue" : hasError ? styles.dropdownError : ""} ${!isEditing ? "readOnly" : ""}`}
+                    readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}>
+                {selectedOption ? selectedOption.name : ""}
             </button>
             <p id="clientLabel" className="customLabel">{labels.label}</p>
-            <p className="errorMessage">{error || ""}</p>
+            <p className="errorMessage">{hasError?.message || ""}</p>
             {isOpen && (
                 <div className={styles.dropdownContent}>
                     <input type="text" className={styles.searchBox} placeholder={labels.placeholder}

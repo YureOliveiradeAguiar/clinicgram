@@ -64,6 +64,11 @@ section {
 button:focus {
     outline: none;
 }
+/*icons*/
+.icon {
+    height: 20px;
+    width: 20px;
+}
 
 /* FORMS */
 .standardFormulary {
@@ -80,7 +85,7 @@ input:focus {
     outline: var(--primary);
 }
 
-.formInput {
+.formInput, .formButtonPicker {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,7 +122,8 @@ input:focus {
 .inputContainer .formInput:focus + label,
 .inputContainer .formInput:focus + .customLabel,
 .inputContainer .formInput:not(:placeholder-shown) + label,
-.inputContainer .formInput:not(:placeholder-shown) + .customLabel {
+.inputContainer .formInput:not(:placeholder-shown) + .customLabel,
+.inputContainer .formButtonPicker.hasValue + .customLabel {
     top: 4px;
     font-size: 14px;
 }
@@ -254,4 +260,10 @@ input:focus {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: #a8a8a8;
+}
+
+/* hidding default up and down arrows in numeric inputs */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
 }

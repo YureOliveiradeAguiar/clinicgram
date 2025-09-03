@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 # Custom user model extends from Django's AbstractUser. So it already includes the fields from AbstractUser:
@@ -9,4 +10,11 @@ class CustomUser(AbstractUser):
     is_worker = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.username
+        full_name = f"{self.first_name} {self.last_name}".strip()
+        return full_name if full_name else self.username
+
+    def clean(self):
+        super().clean()
+        # Conditional validation: WhatsApp is required for workers
+        if self.is_worker and not self.whatsapp:
+            raise ValidationError({"whatsapp": "O WhatsApp é obrigatório para trabalhadores."})

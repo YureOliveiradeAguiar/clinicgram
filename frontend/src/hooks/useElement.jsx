@@ -1,3 +1,4 @@
+import AlertIcon from "@/assets/icons/alertSign";
 import { useState, useEffect } from "react";
 
 import { getCookie } from "@/utils/csrf";
@@ -55,7 +56,7 @@ export default function useElement({ elementName, elementNamePlural, elementPath
             } else {
                 setStatusMessage({
                     type: "error", message: <>
-                        <AlertIcon className={styles.icon} />
+                        <AlertIcon className="icon" />
                         Erro ao excluir {elementName}</>
                 });
             }

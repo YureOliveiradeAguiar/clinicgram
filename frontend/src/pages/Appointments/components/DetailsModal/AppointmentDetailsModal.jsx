@@ -7,14 +7,20 @@ import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
 import useFields from '@/hooks/useFieldPatch.jsx';
 
 
-export default function QueueDetailsModal({ pendingAppointment, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
+export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
+        setStatusMessage, clients, workers, places
+    }) {
     const contextFields = {
-        client: pendingAppointment.client,
-        worker: pendingAppointment.worker,
-        place: pendingAppointment.place,
-        observation: pendingAppointment.observation || "",
+        client: appointment.client,
+        worker: appointment.worker,
+        place: appointment.place,
+        observation: appointment.observation || "",
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
+
+    const [selectedClient, setSelectedClient] = useState(appointment.client);
+    const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
+    const [selectedPlace, setSelectedPlace] = useState(appointment.place);
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -24,9 +30,9 @@ export default function QueueDetailsModal({ pendingAppointment, onDelete, isOpen
             setStatusMessage({message: "Dados inválidos!", type: "error" });
             return;
         }
-        const updatedFields = getUpdatedFields(fields, pendingAppointment);
+        const updatedFields = getUpdatedFields(fields, appointment);
         if (Object.keys(updatedFields).length > 0) {
-            onUpdate({ id: pendingAppointment.id, ...updatedFields });
+            onUpdate({ id: appointment.id, ...updatedFields });
         }
         setIsEditing(false);
     };
@@ -41,7 +47,21 @@ export default function QueueDetailsModal({ pendingAppointment, onDelete, isOpen
                 isEditing={isEditing} setIsEditing={setIsEditing}
                 onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
             <div className={"standardFormulary"}>
-                <ElementDropdown isEditing={isEditing}/>
+                <ElementDropdown isEditing={isEditing} options={clients}
+                    onSelect={(option) => {setField("client", option); setSelectedClient(option)}}
+                    selectedOption={selectedClient} setSelectedOption={setSelectedClient} hasError={errors.client}
+                    labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}/>
+
+                <ElementDropdown isEditing={isEditing} options={workers}
+                    onSelect={(option) => {setField("worker", option); setSelectedWorker(option)}}
+                    selectedOption={selectedWorker} setSelectedOption={setSelectedWorker} hasError={errors.client}
+                    labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}/>
+
+                <ElementDropdown isEditing={isEditing} options={places}
+                    onSelect={(option) => {setField("place", option); setSelectedPlace(option)}}
+                    selectedOption={selectedPlace} setSelectedOption={setSelectedPlace} hasError={errors.client}
+                    labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
+
                 <div className="inputContainer">
                     <textarea id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
                         maxLength="200" placeholder=" " className={`formInput formTexarea ${!isEditing ? "readOnly" : ""}`}
@@ -53,12 +73,3 @@ export default function QueueDetailsModal({ pendingAppointment, onDelete, isOpen
         </DetailsModal>
     );
 }
-
-/*
-options = [], selectedOption, onSelect, hasError, labels = {
-        label: 'Cliente', optionName : 'Selecione um cliente',
-        placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado',
-
-<EmojiPicker value={place.icon} isEditing={isEditing} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji}
-                onChange={(emoji) => setField("icon", emoji)}/>
-*/

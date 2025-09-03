@@ -3,7 +3,6 @@ import styles from './PlaceList.module.css'
 import List from '@/components/List/List';
 import Card from '@/components/Card/Card.jsx';
 import PlaceRegisterModal from '../RegisterModal/PlaceRegisterModal';
-import PlaceStatisticsModal from '../StatisticsModal/PlaceStatisticsModal';
 import PlaceDetailsModal from '../DetailsModal/PlaceDetailsModal';
 
 import { useState } from 'react';
@@ -41,7 +40,7 @@ export default function PlaceList() {
                         place.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(place => (
-                        <Card key={place.id} element={place} setOpenModal={setOpenModal}
+                        <Card key={place.id} element={place} setOpenModal={setOpenModal} showStatistics={false}
                                 selectedElement={selectedPlace} setSelectedElement={setSelectedPlace}>
                             
                             <p className={styles.cardName} aria-label={place.name}>
@@ -56,10 +55,6 @@ export default function PlaceList() {
             {openModal === "register" && (
                 <PlaceRegisterModal isOpen={openModal === "register"} onSuccess={handlePlaceAdded}
                         setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
-            )}
-            {(openModal === "statistics" && selectedPlace) && (
-                <PlaceStatisticsModal place={selectedPlace} isOpen={selectedPlace !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedPlace(null); setOpenModal(null)}} onDelete={handlePlaceDelete} onUpdate={handlePlaceUpdate}/>
             )}
             {(openModal === "properties" && selectedPlace) && (
                 <PlaceDetailsModal place={selectedPlace} isOpen={selectedPlace !== null} setStatusMessage={setStatusMessage}

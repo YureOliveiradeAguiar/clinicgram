@@ -36,7 +36,7 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
-        { title: "Estagiários", Icon: MedicalSuitcase, link: "/staff" },
+        { title: "Estagiários", Icon: MedicalSuitcase, link: "/workers" },
         { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
         { title: "Salas", Icon: PlacesIcon, link: "/places" },
         { title: "Agendamentos", Icon: PlacesIcon, link: "/appointments" },
