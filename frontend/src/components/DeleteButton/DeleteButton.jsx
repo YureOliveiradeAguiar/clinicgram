@@ -1,4 +1,4 @@
-import TrashCan from '@/assets/icons/trashCan'
+import TrashCan from '@/assets/icons/deleteIcon'
 import styles from './DeleteButton.module.css'
 
 export default function DeleteButton ({onDelete}) {

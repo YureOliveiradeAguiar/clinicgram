@@ -11,7 +11,7 @@ import Clients from '@/pages/clients/Clients.jsx';
 import Scheduling from '@/pages/scheduling/Scheduling.jsx';
 import Schedule from '@/pages/schedule/Schedule.jsx';
 import Places from '@/pages/places/Places.jsx';
-import Appointments from '@/pages/Appointments/Appointments.jsx';
+import Appointments from '@/pages/appointments/Appointments.jsx';
 import History from '@/pages/history/History.jsx';
 
 

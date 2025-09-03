@@ -1,4 +1,4 @@
-import TrashCan from '@/assets/icons/trashCan';
+import DeleteIcon from '@/assets/icons/deleteIcon';
 import EditIcon from '@/assets/icons/editIcon';
 import SaveAsIcon from '@/assets/icons/saveAsIcon';
 import CancelIcon from '@/assets/icons/cancelIcon';
@@ -15,7 +15,7 @@ export default function DetailsModal({ title, isOpen, isEditing, setIsEditing,
         <Modal title={title} isOpen={isOpen} onClose={onClose}>
             {children}
             <div className={styles.buttonRow}>
-                <ModalButton Icon={TrashCan} onClick={onDelete} variant="delete"/>
+                <ModalButton Icon={DeleteIcon} onClick={onDelete} variant="delete"/>
                 {!isEditing ? (
                     <ModalButton Icon={EditIcon} onClick={() => setIsEditing(true)} variant="edit"/> 
                 ) : (<div className={styles.editingButtonsRow}>

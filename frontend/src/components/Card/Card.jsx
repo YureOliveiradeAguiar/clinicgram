@@ -6,7 +6,8 @@ import { useRef, useEffect } from 'react';
 
 import ModalButton from '../ModalButton/ModalButton';
 
-export default function Card({ children, element, selectedElement, setOpenModal, setSelectedElement, showStatistics=true }) {
+export default function Card({ children, element, selectedElement, setOpenModal, setSelectedElement,
+        showSecondButton=true, secondButtonIcon=BarChartIcon }) {
     const cardRef = useRef(null);
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export default function Card({ children, element, selectedElement, setOpenModal,
                 {children}
             </div>
             <div className={styles.cardButtonSection}>
-                {showStatistics && <ModalButton Icon={BarChartIcon} onClick={() => {setOpenModal("statistics"); setSelectedElement(element)}}/>}
+                {showSecondButton && <ModalButton Icon={secondButtonIcon} onClick={() => {setOpenModal("statistics"); setSelectedElement(element)}}/>}
                 <ModalButton Icon={InfoIcon} onClick={() => {setOpenModal("properties");setSelectedElement(element)}}/>
             </div>
         </div>

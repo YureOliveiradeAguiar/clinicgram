@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
-import TrashCan from '@/assets/icons/trashCan';
+import TrashCan from '@/assets/icons/deleteIcon';
 
 export default function HistoryList() {
     const [history, setHistory] = useState([]);

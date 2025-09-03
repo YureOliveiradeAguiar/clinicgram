@@ -1,4 +1,4 @@
-import styles from './QueueList.module.css'
+import styles from './AppointmentList.module.css'
 
 import List from '@/components/List/List';
 import Card from '@/components/Card/Card.jsx';
@@ -13,7 +13,7 @@ import useElement from '@/hooks/useElement';
 import useFetch from './hooks/useFetch';
 
 
-export default function QueueList() {
+export default function AppointmentList() {
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
 
@@ -40,14 +40,14 @@ export default function QueueList() {
                 searchPlaceholder="Pesquisar por estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             {appointments.length > 0 ? (
                 appointments
-                    .filter((queue) =>
-                        queue.client.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    .filter((appointment) =>
+                        appointment.client.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
-                    .map(queue => (
-                        <Card key={queue.id} element={queue} setOpenModal={setOpenModal} showStatistics={false}
+                    .map(appointment => (
+                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} showStatistics={false}
                                 selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}>
-                            <p className={styles.cardName} aria-label={queue.client.name}>
-                                {queue.client.name}
+                            <p className={styles.cardName} aria-label={appointment.client.name}>
+                                {appointment.client.name}
                             </p>
                         </Card>
                 ))

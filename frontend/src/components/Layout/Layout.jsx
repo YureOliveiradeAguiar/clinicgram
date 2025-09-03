@@ -1,5 +1,6 @@
 import MedicalSuitcase from '@/assets/icons/medicalSuitcase.jsx'
 import UsersIcon from '@/assets/icons/usersIcon.jsx'
+import CalendarAddIcon from '@/assets/icons/calendarAddIcon.jsx'
 import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
@@ -39,7 +40,7 @@ export default function Layout() {
         { title: "Estagiários", Icon: MedicalSuitcase, link: "/workers" },
         { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
         { title: "Salas", Icon: PlacesIcon, link: "/places" },
-        { title: "Agendamentos", Icon: PlacesIcon, link: "/appointments" },
+        { title: "Agendamentos", Icon: CalendarAddIcon, link: "/appointments" },
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
         { title: "Histórico", Icon: HistoryIcon, link: "/history" },
 
