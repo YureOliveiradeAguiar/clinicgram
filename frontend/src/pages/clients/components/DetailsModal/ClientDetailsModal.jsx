@@ -14,7 +14,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         name: client.name,
         whatsapp: client.whatsapp,
         dateOfBirth: client.dateOfBirth,
-        observation: client.observation || ""
+        observation: client.observation || "",
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
 

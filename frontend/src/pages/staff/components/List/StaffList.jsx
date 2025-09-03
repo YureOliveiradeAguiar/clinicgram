@@ -58,8 +58,7 @@ export default function StaffList() {
                         setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
             )}
             {(openModal === "statistics" && selectedStaff) && (
-                <StaffStatisticsModal staff={selectedStaff} isOpen={selectedStaff !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedStaff(null); setOpenModal(null)}} onDelete={handleElementDelete} onUpdate={handleElementUpdate}/>
+                <StaffStatisticsModal staff={selectedStaff} isOpen={selectedStaff !== null} onClose={() => {setSelectedStaff(null); setOpenModal(null)}}/>
             )}
             {(openModal === "properties" && selectedStaff) && (
                 <StaffDetailsModal staff={selectedStaff} isOpen={selectedStaff !== null} setStatusMessage={setStatusMessage}

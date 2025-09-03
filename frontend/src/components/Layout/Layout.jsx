@@ -39,13 +39,15 @@ export default function Layout() {
         { title: "Estagiários", Icon: MedicalSuitcase, link: "/staff" },
         { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
         { title: "Salas", Icon: PlacesIcon, link: "/places" },
-        {title: "Agendamento", Icon: UsersIcon, dropdown: [
-            { title: "Registrar Consulta", link: "/schedule/new" },
-            { title: "Lista de Espera", link: "/schedule/new" },
-            { title: "Agendar consulta", link: "/schedule/new" },]},
+        { title: "Agendamentos", Icon: PlacesIcon, link: "/appointments" },
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
-        //{ title: "Estoque", Icon: suppliesIcon, link: "" },
         { title: "Histórico", Icon: HistoryIcon, link: "/history" },
+
+        { title: "agendar aqui", Icon: HistoryIcon, link: "/schedule/new" },
+        //{title: "Agendamento", Icon: UsersIcon, dropdown: [
+        //    { title: "Lista de espera", link: "/schedule/new" },
+        //    { title: "Lista de Espera", link: "/schedule/new" },
+        //    { title: "Estoque", link: "/schedule/new" },]},
     ];
 
     const location = useLocation();

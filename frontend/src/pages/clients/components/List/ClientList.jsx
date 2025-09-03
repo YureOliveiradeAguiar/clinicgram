@@ -58,8 +58,7 @@ export default function ClientList() {
                         setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
             )}
             {(openModal === "statistics" && selectedClient) && (
-                <ClientStatisticsModal client={selectedClient} isOpen={selectedClient !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedClient(null); setOpenModal(null)}} onDelete={handleElementDelete} onUpdate={handleElementUpdate}/>
+                <ClientStatisticsModal client={selectedClient} isOpen={selectedClient !== null} onClose={() => {setSelectedClient(null); setOpenModal(null)}}/>
             )}
             {(openModal === "properties" && selectedClient) && (
                 <ClientDetailsModal client={selectedClient} isOpen={selectedClient !== null} setStatusMessage={setStatusMessage}

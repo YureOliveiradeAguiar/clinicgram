@@ -13,7 +13,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'startTime', 'endTime', 'place', 'note', 'client']
+        fields = ['id', 'startTime', 'endTime', 'place', 'observation', 'client']
 
     def get_place(self, obj):
         return {

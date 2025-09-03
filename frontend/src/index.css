@@ -118,8 +118,17 @@ input:focus {
 .inputContainer .formInput:focus + .customLabel,
 .inputContainer .formInput:not(:placeholder-shown) + label,
 .inputContainer .formInput:not(:placeholder-shown) + .customLabel {
-    top: 4px; 
+    top: 4px;
     font-size: 14px;
+}
+/*form buttonPicker */
+.formButtonPicker {
+    display: inline-block;
+    text-align: start;
+    height: 52px;
+    font-family: inherit;
+    font-size: 14px;
+    color: rgb(100,100,100);
 }
 /*form textarea */
 .formTexarea {
