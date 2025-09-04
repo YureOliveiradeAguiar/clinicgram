@@ -1,6 +1,6 @@
 import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
 
@@ -22,6 +22,10 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
 
+    //useEffect(() => {
+    //    console.log("appointment: ", appointment);
+    //}, [appointment]);
+
     const [isEditing, setIsEditing] = useState(false);
 
     const handleSave = () => {
@@ -40,6 +44,9 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
+        setSelectedClient(appointment.client);
+        setSelectedWorker(appointment.worker);
+        setSelectedPlace(appointment.place);
     }
 
     return (
@@ -49,17 +56,17 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             <div className={"standardFormulary"}>
                 <ElementDropdown isEditing={isEditing} options={clients}
                     onSelect={(option) => {setField("client", option); setSelectedClient(option)}}
-                    selectedOption={selectedClient} setSelectedOption={setSelectedClient} hasError={errors.client}
+                    selectedOption={selectedClient} hasError={errors.client}
                     labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}/>
 
                 <ElementDropdown isEditing={isEditing} options={workers}
                     onSelect={(option) => {setField("worker", option); setSelectedWorker(option)}}
-                    selectedOption={selectedWorker} setSelectedOption={setSelectedWorker} hasError={errors.client}
+                    selectedOption={selectedWorker} hasError={errors.worker}
                     labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}/>
 
                 <ElementDropdown isEditing={isEditing} options={places}
                     onSelect={(option) => {setField("place", option); setSelectedPlace(option)}}
-                    selectedOption={selectedPlace} setSelectedOption={setSelectedPlace} hasError={errors.client}
+                    selectedOption={selectedPlace} hasError={errors.client}
                     labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
 
                 <div className="inputContainer">

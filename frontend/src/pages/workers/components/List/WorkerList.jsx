@@ -38,13 +38,13 @@ export default function WorkerList() {
             {workers.length > 0 ? (
                 workers
                     .filter((worker) =>
-                        worker.username.toLowerCase().includes(searchTerm.toLowerCase())
+                        worker.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(worker => (
                         <Card key={worker.id} element={worker} setOpenModal={setOpenModal}
                                 selectedElement={selectedWorker} setSelectedElement={setSelectedWorker}>
-                            <p className={styles.cardName} aria-label={worker.username}>
-                                {worker.username}
+                            <p className={styles.cardName} aria-label={worker.name}>
+                                {worker.name}
                             </p>
                         </Card>
                 ))

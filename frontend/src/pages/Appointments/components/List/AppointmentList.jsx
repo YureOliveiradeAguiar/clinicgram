@@ -1,3 +1,4 @@
+import CalendarIcon from '@/assets/icons/calendarIcon';
 import styles from './AppointmentList.module.css'
 
 import List from '@/components/List/List';
@@ -44,7 +45,7 @@ export default function AppointmentList() {
                         appointment.client.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(appointment => (
-                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} showStatistics={false}
+                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} secondButtonIcon={CalendarIcon}
                                 selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}>
                             <p className={styles.cardName} aria-label={appointment.client.name}>
                                 {appointment.client.name}
@@ -61,7 +62,7 @@ export default function AppointmentList() {
             )}
             {(openModal === "properties" && selectedAppointment) && (
                 <AppointmentDetailsModal appointment={selectedAppointment} isOpen={selectedAppointment !== null}
-                    clients={clients} worker={workers} places={places}
+                    clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
                     onDelete={handleElementDelete} onUpdate={handleElementUpdate}/>
             )}

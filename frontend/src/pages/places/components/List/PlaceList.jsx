@@ -40,7 +40,7 @@ export default function PlaceList() {
                         place.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(place => (
-                        <Card key={place.id} element={place} setOpenModal={setOpenModal} showStatistics={false}
+                        <Card key={place.id} element={place} setOpenModal={setOpenModal} showSecondButton={false}
                                 selectedElement={selectedPlace} setSelectedElement={setSelectedPlace}>
                             
                             <p className={styles.cardName} aria-label={place.name}>

@@ -96,3 +96,18 @@ class AppointmentDeleteAPIView(APIView):
         appointment.delete()
         
         return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+    
+class AppointmentUpdateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, appointment_id):
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        serializer = AppointmentSerializer(appointment, data=request.data, partial=True)
+        if serializer.is_valid():
+            with reversion.create_revision():
+                reversion.set_user(self.request.user)
+                reversion.set_comment("Updated via API")
+                appointment.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
