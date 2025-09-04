@@ -1,13 +1,14 @@
+import DeleteIcon from '@/assets/icons/deleteIcon';
 import styles from './HistoryList.module.css'
 
 import HistoryCard from '../HistoryCard/HistoryCard.jsx';
-import ReturnButton from '@/components/ReturnButton/ReturnButton.jsx';
+import Panel from '@/components/Panel/Panel';
 
 import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
-import TrashCan from '@/assets/icons/deleteIcon';
+
 
 export default function HistoryList() {
     const [history, setHistory] = useState([]);
@@ -33,7 +34,7 @@ export default function HistoryList() {
             })
             .then(data => {
                 setHistory(data);
-                console.log(data);
+                //console.log(data);
             })
             .catch(() => {
                 setStatusMessage({ message: "Erro de conexão", type: "error" });
@@ -85,30 +86,26 @@ export default function HistoryList() {
     };
 
     return (
-        <div className={styles.historyWrapper}>
-            <div className={styles.formHeader}>
-                <h2>Histórico</h2>
-            </div>
+        <Panel title='Histórico'>
             <button className={styles.deleteHistoryButton} onClick={handleHistoryClear}>
-                <TrashCan className={styles.icon}/>Excluir histórico
+                <DeleteIcon className={styles.icon}/>
+                Excluir histórico
             </button>
             <section className={styles.historyList}>
                 {history.length > 0 ? (
                     history.map(record => (
-                        <HistoryCard key={record.id} record={record} handleRollback={handleRollback}/>
+                        <HistoryCard key={record.id} record={record} handleRollback={handleRollback} />
                     ))
                 ) : (
                     <p>Histórico vazio</p>
                 )}
             </section>
 
-            <ReturnButton containerClass={styles.returnButtonContainer}/>
-
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>
                     {statusMessage.message}
                 </div>
             )}
-        </div>
+        </Panel>
     );
 }

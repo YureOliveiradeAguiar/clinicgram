@@ -1,4 +1,4 @@
-import HistoryList from './components/HistoryList/HistoryList.jsx'
+import HistoryList from './components/List/HistoryList.jsx'
 
 export default function History() {
 	return(

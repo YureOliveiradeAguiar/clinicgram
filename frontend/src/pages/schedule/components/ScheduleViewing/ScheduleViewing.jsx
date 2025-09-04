@@ -2,7 +2,7 @@ import styles from './ScheduleViewing.module.css';
 
 import ScheduleTable from '@/components/ScheduleTable/ScheduleTable/ScheduleTable.jsx';
 import AppointmentCard from '../AppointmentCard/AppointmentCard.jsx';
-import ReturnButton from '@/components/ReturnButton/ReturnButton';
+import Panel from '@/components/Panel/Panel';
 
 import { useMemo, useState, useEffect} from 'react';
 
@@ -71,20 +71,19 @@ export default function ScheduleViewing() {
     }, [appointments]);
 
     return (
-        <div className={styles.mainWrapper}>
-            <div className={styles.formHeader}>
-                <h2>Agenda</h2> 
-            </div>
+        <Panel title='Agenda' maxWidth='1000px'>
             <div className={styles.contentWrapper}>
-                <div className={styles.TableWrapper}>
+                <div>
                     <ScheduleTable
-                            setAppointments={setAppointments} setStatus={setStatusMessage}
-                            appointmentColors={appointmentColors} occupiedMap={occupiedMap}
-                            days={days} times={times} indexedCells={matrix}
-                            startOffset={startOffset} setStartOffset={setStartOffset}
-                            monthName={monthName} year={year}
-                            selectedAppointment={selectedAppointment} setSelectedAppointment={setSelectedAppointment}/>
+                        setAppointments={setAppointments} setStatus={setStatusMessage}
+                        appointmentColors={appointmentColors} occupiedMap={occupiedMap}
+                        days={days} times={times} indexedCells={matrix}
+                        startOffset={startOffset} setStartOffset={setStartOffset}
+                        monthName={monthName} year={year}
+                        selectedAppointment={selectedAppointment} setSelectedAppointment={setSelectedAppointment}
+                    />
                 </div>
+
                 <div className={styles.appointmentList}>
                     {appointments.length > 0 ? (
                         appointments.map(appointment => (
@@ -95,15 +94,12 @@ export default function ScheduleViewing() {
                         <p className="listMessage">Nenhum agendamento registrado</p>
                     )}
                 </div>
-                <div className={styles.returnButtonContainer}>
-                    <ReturnButton/>
-                </div>
             </div>
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>
                     {statusMessage.message}
                 </div>
             )}
-        </div>
+        </Panel>
     );
 }

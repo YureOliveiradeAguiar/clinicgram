@@ -51,7 +51,8 @@ export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStat
                 <input type="text" id="name" name="name" autoComplete="off"
                     maxLength="70" placeholder=" "
                     className={`formInput ${errors.name ? "formInputError" : ""}`}
-                    {...register('name', { required: "O nome é obrigatório" })}/>
+                    {...register('name', { required: "O nome é obrigatório" })}
+                />
                 <label htmlFor="name">Nome Completo</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
             </div>

@@ -8,21 +8,17 @@ from django.utils.translation import gettext_lazy as _
 class Appointment(models.Model):
 
     class Status(models.TextChoices):
-        UNSCHEDULED = "unscheduled", _("Unscheduled")
-        SCHEDULED = "scheduled", _("Scheduled")
-        COMPLETED = "completed", _("Completed")
-        MISSED = "missed", _("Missed")
-        CANCELED = "canceled", _("Canceled")
+        UNSCHEDULED = "unscheduled", _("Não Agendado")
+        SCHEDULED   = "scheduled", _("Agendado")
+        COMPLETED   = "completed", _("Concluído")
+        MISSED      = "missed", _("Não Compareceu")
+        CANCELED    = "canceled", _("Cancelado")
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     sus = models.BooleanField(_("SUS Patient"), default=False)
     observation = models.TextField(blank=True, null=True)
     priority = models.IntegerField(_("Priority"), default=0)
-    status = models.CharField(
-        max_length=20,
-        choices=Status.choices,
-        default=Status.UNSCHEDULED,
-    )
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSCHEDULED)
 
     startTime = models.DateTimeField(blank=True, null=True)
     endTime = models.DateTimeField(blank=True, null=True)

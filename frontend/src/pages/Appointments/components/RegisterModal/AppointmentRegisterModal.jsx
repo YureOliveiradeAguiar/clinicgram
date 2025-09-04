@@ -1,25 +1,25 @@
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
-import { useForm } from "react-hook-form";
+import { useState } from 'react';
+import { useForm, Controller } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
-import { formatPhone, normalizePhone } from '@/utils/phoneUtils';
+
+import ElementDropdown from '../ElementDropdown/ElementDropdown';
 
 
-export default function QueueRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
+export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, clients, workers, places}) {
 
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
+    // The selectedClient, selectedWorker and selectedPlace are for updating the dropdowns displays.
+    const [selectedClient, setSelectedClient] = useState(null);
+    const [selectedWorker, setSelectedWorker] = useState(null);
+    const [selectedPlace, setSelectedPlace] = useState(null);
 
-    const whatsappValue = watch('whatsapp');
+    const observationsValue = watch('observations') || '';
     
     const onSubmit = async (data) => {
-        const rawPhone = normalizePhone(data.whatsapp);
-
-        if (!rawPhone) {
-            setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
-        }
-
-        const payload = { ...data, rawPhone };
+        const payload = { ...data };
         try {
             const response = await fetch('/api/appointments/new/', {
                 method: 'POST',
@@ -48,30 +48,46 @@ export default function QueueRegisterModal({ isOpen, onSuccess, onClose, setStat
 
     return (
         <RegisterModal title="Nova consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+            <Controller name="clientId" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={clients} selectedOption={selectedClient}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedClient(option)}} hasError={errors.clientId}
+                        labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
+                    />
+                )}
+            />
+            <Controller name="workerId" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={workers} selectedOption={selectedWorker}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedWorker(option)}} hasError={errors.workerId}
+                        labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
+                    />
+                )}
+            />
+            <Controller name="placeId" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={places} selectedOption={selectedPlace}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedPlace(option)}} hasError={errors.placeId}
+                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                    />
+                )}
+            />
             <div className="inputContainer">
-                <input type="text" id="username" name="username" autoComplete="off"
+                <input type="number" id="priority" name="priority" autoComplete="off"
                     maxLength="70" placeholder=" "
-                    className={`formInput ${errors.username ? "formInputError" : ""}`}
-                    {...register('username', { required: "O nome é obrigatório" })}/>
-                <label htmlFor="username">Nome Completo</label>
-                <p className="errorMessage">{errors.username?.message || ""}</p>
+                    className={`formInput ${errors.priority ? "formInputError" : ""}`}
+                    {...register('priority')}
+                />
+                <label htmlFor="priority">Prioridade</label>
+                <p className="errorMessage">{errors.priority?.message || ""}</p>
             </div>
 
             <div className="inputContainer">
-                <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
-                    className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
-                    {...register('whatsapp', {required: "WhatsApp é obrigatório",
-                        validate: (value) => {
-                            const digits = value.replace(/\D/g, '');
-                            if (digits.length < 10) return "Número incompleto";
-                            return true;
-                    }})}
-                    onChange={(e) => {
-                        const formatted = formatPhone(e.target.value);
-                        setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
-                    }}/>
-                <label htmlFor="whatsapp">WhatsApp</label>
-                <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
+                <textarea  id="observations" name="observations" autoComplete="off"
+                    maxLength="200" placeholder=" " className={"formInput formTexarea"}
+                    {...register('observations')}/>
+                <label htmlFor="observations">Observações</label>
+                <span className='textareaCounter'>{observationsValue.length}/200</span>
             </div>
         </RegisterModal>
     );

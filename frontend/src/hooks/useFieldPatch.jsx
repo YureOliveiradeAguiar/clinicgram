@@ -46,7 +46,7 @@ export default function useFields(contextFields = {}) {
                 updatedFields[key] = fields[key];
             }
         }
-        console.log("updatedFields: ", updatedFields);
+        //console.log("updatedFields: ", updatedFields);
         return updatedFields;
     }
 

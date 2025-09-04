@@ -61,7 +61,7 @@ export default function WorkerDetailsModal({ worker, onDelete, isOpen, onClose, 
                 </div>
 
                 <div className="inputContainer">
-                    <input type="text" id="username" name="username" autoComplete="off"
+                    <input type="number" id="username" name="username" autoComplete="off"
                         maxLength="70" placeholder=" " value={fields.username}
                         className={`formInput ${!isEditing ? "readOnly": errors.username ? "formInputError" : ""}`} readOnly={!isEditing}
                         onChange={(e) => setField("username",(e.target.value))}/>

@@ -13,7 +13,9 @@ export default function DetailsModal({ title, isOpen, isEditing, setIsEditing,
 
     return (
         <Modal title={title} isOpen={isOpen} onClose={onClose}>
-            {children}
+            <div className='standardFormulary'>
+                {children}
+            </div>
             <div className={styles.buttonRow}>
                 <ModalButton Icon={DeleteIcon} onClick={onDelete} variant="delete"/>
                 {!isEditing ? (

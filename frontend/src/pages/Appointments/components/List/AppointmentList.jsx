@@ -31,6 +31,7 @@ export default function AppointmentList() {
         selectedElement:selectedAppointment, setSelectedElement:setSelectedAppointment,
         setStatusMessage, setOpenModal });
 
+    // I put the fetches here, so the modals can use them without having to re-render the fetches.
     const { data: clients} = useFetch({ elementNamePlural:'os pacientes', elementPath:'clients', setStatusMessage});
     const { data: workers} = useFetch({ elementNamePlural:'os estagiários', elementPath:'workers', setStatusMessage});
     const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
@@ -44,10 +45,17 @@ export default function AppointmentList() {
                     .filter((appointment) =>
                         appointment.client.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
+                    .sort((a, b) => b.priority - a.priority)
                     .map(appointment => (
                         <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} secondButtonIcon={CalendarIcon}
                                 selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}>
-                            <p className={styles.cardName} aria-label={appointment.client.name}>
+                            <p className={`${styles.cardAtribute} ${styles.priority}`}>
+                                Prioridade: {appointment.priority}
+                            </p>
+                            <p className={`${styles.cardAtribute} ${styles.status}`}>
+                                {appointment.status_display}
+                            </p>
+                            <p className={`${styles.cardAtribute} ${styles.client}`}>
                                 {appointment.client.name}
                             </p>
                         </Card>
@@ -58,7 +66,9 @@ export default function AppointmentList() {
 
             {openModal === "register" && (
                 <AppointmentRegisterModal isOpen={openModal === "register"} onSuccess={handleElementAdded}
-                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
+                    clients={clients} workers={workers} places={places}
+                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
+                />
             )}
             {(openModal === "properties" && selectedAppointment) && (
                 <AppointmentDetailsModal appointment={selectedAppointment} isOpen={selectedAppointment !== null}

@@ -69,7 +69,7 @@ export default function WorkerRegisterModal({ isOpen, onSuccess, onClose, setSta
             </div>
 
             <div className="inputContainer">
-                <input type="number" id="username" username="username" autoComplete="off"
+                <input type="number" id="username" name="username" autoComplete="off"
                     maxLength="70" placeholder=" "
                     className={`formInput ${errors.username ? "formInputError" : ""}`}
                     {...register('username', { required: "O RA é obrigatório",

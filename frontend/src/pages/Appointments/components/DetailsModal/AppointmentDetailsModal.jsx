@@ -1,6 +1,6 @@
 import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
 
@@ -12,8 +12,12 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     }) {
     const contextFields = {
         client: appointment.client,
+        clientId: appointment.clientId,
         worker: appointment.worker,
+        workerId: appointment.workerId,
         place: appointment.place,
+        placeId: appointment.placeId,
+        priority: appointment.priority,
         observation: appointment.observation || "",
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
@@ -21,10 +25,6 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
-
-    //useEffect(() => {
-    //    console.log("appointment: ", appointment);
-    //}, [appointment]);
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -51,31 +51,39 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
 
     return (
         <DetailsModal title={isEditing ? "Edição da Consulta" : "Detalhes da Consulta"} isOpen={isOpen}
-                isEditing={isEditing} setIsEditing={setIsEditing}
-                onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
-            <div className={"standardFormulary"}>
-                <ElementDropdown isEditing={isEditing} options={clients}
-                    onSelect={(option) => {setField("client", option); setSelectedClient(option)}}
-                    selectedOption={selectedClient} hasError={errors.client}
-                    labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}/>
+            isEditing={isEditing} setIsEditing={setIsEditing}
+            onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}
+        >
+            <ElementDropdown isEditing={isEditing} options={clients}
+                onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
+                selectedOption={selectedClient} hasError={errors.client}
+                labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}/>
 
-                <ElementDropdown isEditing={isEditing} options={workers}
-                    onSelect={(option) => {setField("worker", option); setSelectedWorker(option)}}
-                    selectedOption={selectedWorker} hasError={errors.worker}
-                    labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}/>
+            <ElementDropdown isEditing={isEditing} options={workers}
+                onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
+                selectedOption={selectedWorker} hasError={errors.worker}
+                labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}/>
 
-                <ElementDropdown isEditing={isEditing} options={places}
-                    onSelect={(option) => {setField("place", option); setSelectedPlace(option)}}
-                    selectedOption={selectedPlace} hasError={errors.client}
-                    labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
+            <ElementDropdown isEditing={isEditing} options={places}
+                onSelect={(option) => {setField("placeId", option.id); console.log("option.id: ",option.id); setSelectedPlace(option)}}
+                selectedOption={selectedPlace} hasError={errors.client}
+                labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
 
-                <div className="inputContainer">
-                    <textarea id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
-                        maxLength="200" placeholder=" " className={`formInput formTexarea ${!isEditing ? "readOnly" : ""}`}
-                        onChange={(e) => setField("observation", e.target.value)} value={fields.observation} />
-                    <label htmlFor="observations">Observações</label>
-                    <span className={`textareaCounter ${!isEditing ? "readOnly" : ""}`}>{fields.observation.length}/200</span>
-                </div>
+            <div className="inputContainer">
+                <input type="number" id="priority" name="priority" autoComplete="off"
+                    min="0" max="99" placeholder=" " value={fields.priority}
+                    className={`formInput ${!isEditing ? "readOnly": errors.priority ? "formInputError" : ""}`} readOnly={!isEditing}
+                    onChange={(e) => setField("priority",(e.target.value))}/>
+                <label htmlFor="priority">Prioridade</label>
+                <p className="errorMessage">{errors.priority || ""}</p>
+            </div>
+
+            <div className="inputContainer">
+                <textarea id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
+                    maxLength="200" placeholder=" " className={`formInput formTexarea ${!isEditing ? "readOnly" : ""}`}
+                    onChange={(e) => setField("observation", e.target.value)} value={fields.observation} />
+                <label htmlFor="observations">Observações</label>
+                <span className={`textareaCounter ${!isEditing ? "readOnly" : ""}`}>{fields.observation.length}/200</span>
             </div>
         </DetailsModal>
     );

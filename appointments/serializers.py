@@ -16,24 +16,27 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class AppointmentSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
-    client_id = serializers.PrimaryKeyRelatedField(
+    clientId = serializers.PrimaryKeyRelatedField(
         queryset=Client.objects.all(),
         source="client",
         write_only=True,
     )
     worker = WorkerSerializer(read_only=True)
-    worker_id = serializers.PrimaryKeyRelatedField(
+    workerId = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.filter(is_worker=True),
         source="worker",
         write_only=True,
     )
-    place = PlaceSerializer(read_only=True)
-    place_id = serializers.PrimaryKeyRelatedField(
+    place = PlaceSerializer(read_only=True)  # Nested for display.
+    placeId = serializers.PrimaryKeyRelatedField(
         queryset=Place.objects.all(),
         source="place",
         write_only=True,
     )
 
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+
     class Meta:
         model = Appointment
-        fields = ['id', 'client', 'client_id', 'worker', 'worker_id', 'place', 'place_id', 'startTime', 'endTime', 'observation']
+        fields = ['id', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
+                    'startTime', 'endTime', 'priority','status','status_display', 'observation']
