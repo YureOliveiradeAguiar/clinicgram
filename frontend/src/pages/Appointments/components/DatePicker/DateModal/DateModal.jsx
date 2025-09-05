@@ -16,9 +16,9 @@ export default function DateModal({ isOpen, onClose, appointments, setAppointmen
     const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
     const [error, setError] = useState(null);
 
-    useEffect (() => {
-        console.log("scheduledDay: ", scheduledDay);
-    }, [scheduledDay]);
+    //useEffect (() => {
+    //    console.log("scheduledDay: ", scheduledDay);
+    //}, [scheduledDay]);
 
     const [startOffset, setStartOffset] = useState(0);
     const startDate = useMemo(() => {
@@ -51,7 +51,7 @@ export default function DateModal({ isOpen, onClose, appointments, setAppointmen
     }, [selectedClient, selectedPlace, selectedWorker, appointments, matrix]);
 
     return (
-        <Modal title="Selecione um Horário" isOpen={isOpen} onClose={onClose} maxWidth='640px'>
+        <Modal title="Seleção de Horários" isOpen={isOpen} onClose={onClose} maxWidth='640px'>
             <div className={styles.hoursWrapper}>
                 <ScheduleTable mode={"scheduling"} occupiedIndexes={occupiedIndexes} haserror={error}
                     days={days} times={times} indexedCells={matrix}

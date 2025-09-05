@@ -196,7 +196,7 @@ export default function ScheduleTable({ mode = 'viewing',
                 <div className={styles.scrollbarCorner}></div>
             </div>
             {mode === 'scheduling' && (
-                <div className={`${styles.description} ${hasError ? styles.descriptionError : ''}`}>
+                <div className={`${styles.description} ${hasError ? styles.descriptionError : (startTime && endTime) ? styles.descriptionSuccess : ''}`}>
                 {hasError && AlertIcon && <AlertIcon className={styles.icon}/>}
                 {hasError ? errorText : descriptionText}
             </div>

@@ -6,7 +6,6 @@ import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
 import DatePicker from '../DatePicker/DatePicker.jsx';
 
 import useFields from '@/hooks/useFieldPatch.jsx';
-import { useEffect } from 'react';
 
 
 export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
@@ -30,6 +29,10 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
 
+    const [selectedstartTime, setSelectedStartTime] = useState(null);
+    const [selectedEndTime, setSelectedEndTime] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(null);
+
     const [isEditing, setIsEditing] = useState(false);
 
     const handleSave = () => {
@@ -43,6 +46,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             onUpdate({ id: appointment.id, ...updatedFields });
         }
         setIsEditing(false);
+        resetModal();
     };
 
     const resetModal = () => {
@@ -51,10 +55,11 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setSelectedClient(appointment.client);
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
+
+        setSelectedStartTime(null);
+        setSelectedEndTime(null);
+        setSelectedDay(null);
     }
-    useEffect (() => {
-        console.log("appointment.startTime: ", appointment.startTime);
-    },[appointment.startTime]);
 
     return (
         <DetailsModal title={isEditing ? "Edição da Consulta" : "Detalhes da Consulta"} isOpen={isOpen}
@@ -85,7 +90,10 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 <p className="errorMessage">{errors.priority || ""}</p>
             </div>
 
-            <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}/>
+            <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
+                startTime={selectedstartTime} setStartTime={setSelectedStartTime}
+                endTime={selectedEndTime} setEndTime={setSelectedEndTime} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+            />
 
             <div className="inputContainer">
                 <textarea id="observations" name="observations" autoComplete="off" readOnly={!isEditing}

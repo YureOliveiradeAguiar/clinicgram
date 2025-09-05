@@ -1,14 +1,12 @@
 import DateModal from './DateModal/DateModal';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
-export default function DatePicker({ appointment, isEditing=true, onSelect, hasError }) {
+export default function DatePicker({ appointment, isEditing=true, onSelect, hasError, 
+        startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay
+    }) {
     const [isDateModalOpen, setDateModalOpen] = useState(false);
-
-    const [startTime, setStartTime] = useState(null);
-    const [endTime, setEndTime] = useState(null);
-    const [scheduledDay, setScheduledDay] = useState(null);
 
     const localDateTimeToUTCISOString = (day, time) => {
         const [year, month, dayOfMonth] = day.split('-').map(Number);
@@ -18,7 +16,23 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
         return localDate.toISOString(); // UTC ISO string with Z.
     }
 
-    const formatDate = (dateString, withWeekday = false) => {
+    const displaySameDayTimeSpan = (start, end) => {
+        /* New Date is required because django will return a string, not date, and toStrings methods of
+        a string will just return the same string back. appointment.startTime is 2025-09-04T12:14:20Z */
+        // The get methods for date elements and toString functions are how you convert UTC to local time.
+        // .toString() = "Tue Oct 28 2025 11:30:00 GMT-0300 (Brasilia Standard Time)"
+        // .toLocaleString() = "28/10/2025, 11:30:00"
+        // .toLocaleTimeString() = "11:30:00"
+        // .getFullYear() .getMonth() (Careful: 0 = January, 11 = December)
+        // .getDate() .getHours() .getMinutes() .getSeconds()
+        // slice is (from, to) and -3 const from the oposite direction.
+
+        const startTimeDisplay = new Date (start).toLocaleString().slice(0,-3);
+        const endTimeDisplay = new Date (end).toLocaleTimeString().slice(0,-3);
+        return (`${startTimeDisplay} a ${endTimeDisplay}`)
+    }
+
+    const formatDate = (dateString, withWeekday = false) => { // Local time (not UTC).
         const [year, month, day] = dateString.split('-').map(Number);
         const date = new Date(year, month - 1, day); // Local time (not UTC).
         const formattedDate = date.toLocaleDateString('pt-BR', {
@@ -32,12 +46,12 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
         return `${capitalizedWeekday}, ${formattedDate}`;
     }
 
-    const handleSelect = (startTime, endTime) => {
+    useEffect(() => {
+        if (!startTime && !endTime && !scheduledDay) return;
         const startDate = localDateTimeToUTCISOString(scheduledDay, startTime);
         const endDate = localDateTimeToUTCISOString(scheduledDay, endTime);
         onSelect(startDate, endDate);
-        setDateModalOpen(false);
-    }
+    }, [scheduledDay]);
 
     return (<>
         <div className={'inputContainer'}>
@@ -45,10 +59,10 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
                 type="button" readOnly={!isEditing} onClick={() => setDateModalOpen(true)}
             >
                 {(startTime && endTime && scheduledDay)
-                    ? `${startTime} às ${endTime} no dia ${formatDate(scheduledDay, false)}`
-                    : appointment.startTime}
+                    ? `${formatDate(scheduledDay, false)}, ${startTime} a ${endTime}`
+                    : displaySameDayTimeSpan(appointment.startTime, appointment.endTime)}
             </button>
-            <p id="dobLabel" className="customLabel">Duração</p>
+            <p id="dobLabel" className="customLabel">Data</p>
         </div>
         <p className="errorMessage">{hasError?.message || hasError?.message || " "}</p>
         {isDateModalOpen && (
