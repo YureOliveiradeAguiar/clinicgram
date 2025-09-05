@@ -39,9 +39,9 @@ export default function ScheduleForm() {
 
     // Centralized base date info.
     const startDate = useMemo(() => {
-      const date = new Date();
-      date.setDate(date.getDate() + startOffset);
-      return date;
+        const date = new Date();
+        date.setDate(date.getDate() + startOffset);
+        return date;
     }, [startOffset]);
     const days = useMemo(() => generateDays(7, startDate), [startDate]);
     const rawMonth = startDate.toLocaleString('pt-BR', { month: 'long' });
@@ -102,10 +102,10 @@ export default function ScheduleForm() {
     }, [startTime, endTime, scheduledDay, setValue, clearErrors]);
 
     useEffect(() => {
-        console.log("occupiedIndexes: ", occupiedIndexes);
-        console.log("selectedIndexes: ", selectedIndexes);
+        //console.log("occupiedIndexes: ", occupiedIndexes);
+        //console.log("selectedIndexes: ", selectedIndexes);
         const hasConflict = [...selectedIndexes].some(idx => occupiedIndexes.has(idx));
-        console.log("conflict? ", hasConflict);
+        //console.log("conflict? ", hasConflict);
         if (hasConflict) {
             resetScheduleTime();
             setStatusMessage({ message: "O horário selecionado já está ocupado. Selecione outro horário.", type: "error" });
@@ -246,7 +246,8 @@ export default function ScheduleForm() {
                         scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
                         selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}
                         startOffset={startOffset} setStartOffset={setStartOffset}
-                        monthName={monthName} year={year}/>
+                        monthName={monthName} year={year}
+                    />
                 </div>
 
                 <ConfirmBackButtons containerClass={styles.buttonsContainer}/>

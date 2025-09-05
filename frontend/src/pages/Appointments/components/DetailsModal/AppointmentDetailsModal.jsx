@@ -3,8 +3,10 @@ import DetailsModal from '@/components/DetailsModal/DetailsModal';
 import { useState } from 'react';
 
 import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
+import DatePicker from '../DatePicker/DatePicker.jsx';
 
 import useFields from '@/hooks/useFieldPatch.jsx';
+import { useEffect } from 'react';
 
 
 export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
@@ -18,6 +20,8 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         place: appointment.place,
         placeId: appointment.placeId,
         priority: appointment.priority,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
         observation: appointment.observation || "",
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
@@ -48,6 +52,9 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
     }
+    useEffect (() => {
+        console.log("appointment.startTime: ", appointment.startTime);
+    },[appointment.startTime]);
 
     return (
         <DetailsModal title={isEditing ? "Edição da Consulta" : "Detalhes da Consulta"} isOpen={isOpen}
@@ -57,18 +64,18 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             <ElementDropdown isEditing={isEditing} options={clients}
                 onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
                 selectedOption={selectedClient} hasError={errors.client}
-                labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}/>
-
+                labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
+                />
             <ElementDropdown isEditing={isEditing} options={workers}
                 onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
                 selectedOption={selectedWorker} hasError={errors.worker}
-                labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}/>
-
+                labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
+                />
             <ElementDropdown isEditing={isEditing} options={places}
-                onSelect={(option) => {setField("placeId", option.id); console.log("option.id: ",option.id); setSelectedPlace(option)}}
+                onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
                 selectedOption={selectedPlace} hasError={errors.client}
-                labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}/>
-
+                labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                />
             <div className="inputContainer">
                 <input type="number" id="priority" name="priority" autoComplete="off"
                     min="0" max="99" placeholder=" " value={fields.priority}
@@ -77,6 +84,8 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 <label htmlFor="priority">Prioridade</label>
                 <p className="errorMessage">{errors.priority || ""}</p>
             </div>
+
+            <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}/>
 
             <div className="inputContainer">
                 <textarea id="observations" name="observations" autoComplete="off" readOnly={!isEditing}

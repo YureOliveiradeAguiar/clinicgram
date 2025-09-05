@@ -9,17 +9,18 @@ import { useState, useEffect } from 'react';
 import { getCookie } from '@/utils/csrf';
 
 export default function ScheduleTable({ mode = 'viewing',
-        occupiedMap, setStatus, setAppointments, appointmentColors, // Viewing.
-        selectedAppointment, setSelectedAppointment, // Viewing.
-        // Scheduling >.
-        occupiedIndexes,
-        days, indexedCells,
-        scheduledDay, setScheduledDay,
-        selectedIndexes, setSelectedIndexes,
-        startTime, setStartTime, endTime, setEndTime, hasError=false,
-        //Base Structure >.
-        startOffset={startOffset}, setStartOffset={setStartOffset},
-        monthName={monthName}, year={year}}) {
+    occupiedMap, setStatus, setAppointments, appointmentColors, // Viewing.
+    selectedAppointment, setSelectedAppointment, // Viewing.
+    // Scheduling >.
+    occupiedIndexes,
+    days, indexedCells,
+    scheduledDay, setScheduledDay,
+    selectedIndexes, setSelectedIndexes,
+    startTime, setStartTime, endTime, setEndTime, hasError = false,
+    //Base Structure >.
+    startOffset = { startOffset }, setStartOffset = { setStartOffset },
+    monthName = { monthName }, year = { year }
+    }) {
 
     const [isDragging, setIsDragging] = useState(false); // Scheduling.
     const [selectedDay, setSelectedDay] = useState(null); // Scheduling.

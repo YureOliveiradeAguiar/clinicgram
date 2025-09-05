@@ -85,7 +85,8 @@ input:focus {
     outline: var(--primary);
 }
 
-.formInput, .formButtonPicker {
+.formInput,
+.formButtonPicker {
     display: flex;
     justify-content: center;
     align-items: center;
