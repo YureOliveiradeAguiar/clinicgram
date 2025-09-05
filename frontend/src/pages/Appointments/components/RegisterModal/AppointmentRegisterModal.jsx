@@ -1,11 +1,12 @@
-import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
 import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
-import { getCookie } from '@/utils/csrf.js';
-
+import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import ElementDropdown from '../ElementDropdown/ElementDropdown';
+import DatePicker from '../DatePicker/DatePicker';
+
+import { getCookie } from '@/utils/csrf.js';
 
 
 export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, clients, workers, places}) {
@@ -15,6 +16,12 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
+
+    // This is the group that is fed exclusively to the DatePicker.
+    const [selectedstartTime, setSelectedStartTime] = useState(null);
+    const [selectedEndTime, setSelectedEndTime] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(null);
+    const [isDateValid, setIsDateValid] = useState(false);
 
     const observationsValue = watch('observations') || '';
     
@@ -81,6 +88,11 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 <label htmlFor="priority">Prioridade</label>
                 <p className="errorMessage">{errors.priority?.message || ""}</p>
             </div>
+
+            <DatePicker onSelect={(start, end) => {setValue("startTime", start); setValue("endTime", end);}}
+                startTime={selectedstartTime} setStartTime={setSelectedStartTime} setIsDateValid={setIsDateValid}
+                endTime={selectedEndTime} setEndTime={setSelectedEndTime} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+            />
 
             <div className="inputContainer">
                 <textarea  id="observations" name="observations" autoComplete="off"

@@ -10,16 +10,24 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 
 export default function DateModal({ isOpen, onClose, appointments, setAppointments,
         startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay,
-        selectedClient, setSelectedClient, selectedWorker, setSelectedWorker, selectedPlace, setSelectedPlace
+        selectedClient, setSelectedClient, selectedWorker, setSelectedWorker, selectedPlace, setSelectedPlace,
+        setIsDateValid
     }) {
     const [selectedIndexes, setSelectedIndexes] = useState(new Set());
     const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
     const [error, setError] = useState(null);
 
-    //useEffect (() => {
-    //    console.log("scheduledDay: ", scheduledDay);
-    //}, [scheduledDay]);
+    useEffect(() => {
+        const hasConflict = [...selectedIndexes].some(idx => occupiedIndexes.has(idx));
+        if (hasConflict) {
+            //resetScheduleTime();
+            setIsDateValid(hasConflict);
+            console.log("hasConflict: ", hasConflict);
+            //setStatusMessage({ message: "O horário selecionado já está ocupado. Selecione outro horário.", type: "error" });
+        }
+    }, [occupiedIndexes]);
 
+    // This part is for the base structure:
     const [startOffset, setStartOffset] = useState(0);
     const startDate = useMemo(() => {
         const date = new Date();

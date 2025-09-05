@@ -24,7 +24,7 @@ class RegisterAppointmentAPIView(APIView):
         startDateTime = parse_datetime(data.get("startTime"))
         endDateTime = parse_datetime(data.get("endTime"))
         placeId = data.get("placeId")
-        note = data.get("note")
+        observation = data.get("observation")
 
         if is_naive(startDateTime):
             startDateTime = make_aware(startDateTime)
@@ -59,7 +59,7 @@ class RegisterAppointmentAPIView(APIView):
                 startTime=startDateTime,
                 endTime=endDateTime,
                 place=place,
-                note=note,
+                observation=observation,
             )
             reversion.set_user(self.request.user)
             reversion.set_comment("Created via API")

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 
 
 export default function DatePicker({ appointment, isEditing=true, onSelect, hasError, 
-        startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay
+        startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay,
+        setIsDateValid
     }) {
     const [isDateModalOpen, setDateModalOpen] = useState(false);
 
@@ -38,7 +39,7 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
         const formattedDate = date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
-            year: '2-digit',
+            year: 'numeric',
         });
         if (!withWeekday) return formattedDate;
         const weekday = date.toLocaleDateString('pt-BR', { weekday: 'short' });
@@ -60,7 +61,7 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
             >
                 {(startTime && endTime && scheduledDay)
                     ? `${formatDate(scheduledDay, false)}, ${startTime} a ${endTime}`
-                    : displaySameDayTimeSpan(appointment.startTime, appointment.endTime)}
+                    : appointment ? displaySameDayTimeSpan(appointment.startTime, appointment.endTime): ''}
             </button>
             <p id="dobLabel" className="customLabel">Data</p>
         </div>
@@ -68,7 +69,7 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
         {isDateModalOpen && (
             <DateModal isOpen={isDateModalOpen} onClose={() => setDateModalOpen(false)}
                 startTime={startTime} setStartTime={setStartTime} endTime={endTime} setEndTime={setEndTime}
-                scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
+                scheduledDay={scheduledDay} setScheduledDay={setScheduledDay} setIsDateValid={setIsDateValid}
             />
         )}
     </>)

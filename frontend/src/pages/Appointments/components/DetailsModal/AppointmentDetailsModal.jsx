@@ -29,13 +29,16 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
 
+    // This is the group that is fed exclusively to the DatePicker.
     const [selectedstartTime, setSelectedStartTime] = useState(null);
     const [selectedEndTime, setSelectedEndTime] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
+    const [isDateValid, setIsDateValid] = useState(false);
 
     const [isEditing, setIsEditing] = useState(false);
 
     const handleSave = () => {
+        console.log("isDateValid: ", isDateValid);
         const allValid = validateAll();
         if (!allValid) {
             setStatusMessage({message: "Dados inválidos!", type: "error" });
@@ -46,7 +49,6 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             onUpdate({ id: appointment.id, ...updatedFields });
         }
         setIsEditing(false);
-        resetModal();
     };
 
     const resetModal = () => {
@@ -91,7 +93,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             </div>
 
             <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
-                startTime={selectedstartTime} setStartTime={setSelectedStartTime}
+                startTime={selectedstartTime} setStartTime={setSelectedStartTime} setIsDateValid={setIsDateValid}
                 endTime={selectedEndTime} setEndTime={setSelectedEndTime} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
             />
 
