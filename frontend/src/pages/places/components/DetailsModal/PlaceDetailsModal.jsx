@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import EmojiPicker from '../EmojiPicker/EmojiPicker';
 
-import useFields from '@/hooks/useFieldPatch.jsx';
+import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
@@ -12,7 +12,7 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
         name: place.name,
         icon: place.icon,
     };
-    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
+    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
 

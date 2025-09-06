@@ -71,7 +71,7 @@ export default function AppointmentList() {
                 />
             )}
             {(openModal === "properties" && selectedAppointment) && (
-                <AppointmentDetailsModal appointment={selectedAppointment} isOpen={selectedAppointment !== null}
+                <AppointmentDetailsModal appointment={selectedAppointment} setAppointment={setSelectedAppointment} isOpen={selectedAppointment !== null}
                     clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
                     onDelete={handleElementDelete} onUpdate={handleElementUpdate}/>

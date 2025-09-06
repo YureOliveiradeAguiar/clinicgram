@@ -3,7 +3,7 @@ import { useState } from "react";
 import { validators } from '@/utils/validators.js';
 import { normalizePhone } from "@/utils/phoneUtils.js";
 
-export default function useFields(contextFields = {}) {
+export default function usePatchFields(contextFields = {}) {
     const [fields, setFields] = useState(contextFields);
 
     const [errors, setErrors] = useState(
@@ -30,11 +30,12 @@ export default function useFields(contextFields = {}) {
             }
         }
         setErrors(newErrors);
+        console.log("allValid: ", allValid);
         return allValid;
     };
 
     const getUpdatedFields = (fields, element) => {
-        const preprocess = (key, value) => { //This is per field, so add more pre-processing here if needed.
+        const preprocess = (key, value) => { // This is per field, so add more pre-processing here if needed.
             if (key === "whatsapp") return normalizePhone(value);
             return value;
         };
@@ -45,8 +46,9 @@ export default function useFields(contextFields = {}) {
             if (editedValue !== elementValue) {
                 updatedFields[key] = fields[key];
             }
+            //console.log("editedValue: ", editedValue);
+            //console.log("elementValue: ", elementValue);
         }
-        //console.log("updatedFields: ", updatedFields);
         return updatedFields;
     }
 

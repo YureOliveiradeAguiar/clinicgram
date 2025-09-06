@@ -79,6 +79,7 @@ export default function useElement({ elementName, elementNamePlural, elementPath
     };
     const handleElementUpdate = async (patchData) => {
         const update = buildPatch(patchData);
+        console.log("patchData: ", patchData);
         try {
             const res = await fetch(`/api/${elementPath}/${patchData.id}/`, {
                 method: 'PATCH',

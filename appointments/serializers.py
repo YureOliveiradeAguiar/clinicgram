@@ -19,19 +19,16 @@ class AppointmentSerializer(serializers.ModelSerializer):
     clientId = serializers.PrimaryKeyRelatedField(
         queryset=Client.objects.all(),
         source="client",
-        write_only=True,
     )
     worker = WorkerSerializer(read_only=True)
     workerId = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.filter(is_worker=True),
         source="worker",
-        write_only=True,
     )
     place = PlaceSerializer(read_only=True)  # Nested for display.
     placeId = serializers.PrimaryKeyRelatedField(
         queryset=Place.objects.all(),
         source="place",
-        write_only=True,
     )
 
     status_display = serializers.CharField(source="get_status_display", read_only=True)

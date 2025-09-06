@@ -9,13 +9,20 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
     }) {
     const [isDateModalOpen, setDateModalOpen] = useState(false);
 
-    const localDateTimeToUTCISOString = (day, time) => {
+    const localDateTimeToUTCISOStringNoSeconds = (day, time) => {
         const [year, month, dayOfMonth] = day.split('-').map(Number);
         const [hour, minute] = time.split(':').map(Number);
 
         const localDate = new Date(year, month - 1, dayOfMonth, hour, minute);
-        return localDate.toISOString(); // UTC ISO string with Z.
-    }
+
+        const yearUTC = localDate.getUTCFullYear();
+        const monthUTC = String(localDate.getUTCMonth() + 1).padStart(2, '0');
+        const dayUTC = String(localDate.getUTCDate()).padStart(2, '0');
+        const hourUTC = String(localDate.getUTCHours()).padStart(2, '0');
+        const minuteUTC = String(localDate.getUTCMinutes()).padStart(2, '0');
+
+        return `${yearUTC}-${monthUTC}-${dayUTC}T${hourUTC}:${minuteUTC}:00Z`;
+    };
 
     const displaySameDayTimeSpan = (start, end) => {
         /* New Date is required because django will return a string, not date, and toStrings methods of
@@ -49,8 +56,8 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
 
     useEffect(() => {
         if (!startTime && !endTime && !scheduledDay) return;
-        const startDate = localDateTimeToUTCISOString(scheduledDay, startTime);
-        const endDate = localDateTimeToUTCISOString(scheduledDay, endTime);
+        const startDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, startTime);
+        const endDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, endTime);
         onSelect(startDate, endDate);
     }, [scheduledDay]);
 

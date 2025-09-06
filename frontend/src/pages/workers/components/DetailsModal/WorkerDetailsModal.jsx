@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { formatPhone } from "@/utils/phoneUtils";
 
-import useFieldPatch from '@/hooks/useFieldPatch.jsx';
+import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function WorkerDetailsModal({ worker, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
@@ -15,7 +15,7 @@ export default function WorkerDetailsModal({ worker, onDelete, isOpen, onClose, 
         password: worker.password,
         whatsapp: worker.whatsapp,
     };
-    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFieldPatch(contextFields);
+    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
 

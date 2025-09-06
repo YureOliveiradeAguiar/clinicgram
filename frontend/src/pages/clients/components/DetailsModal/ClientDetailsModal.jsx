@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { formatPhone } from "@/utils/phoneUtils";
 import calculateAge from './utils/calculateAge';
 
-import useFields from '@/hooks/useFieldPatch.jsx';
+import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
@@ -16,7 +16,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         dateOfBirth: client.dateOfBirth,
         observation: client.observation || "",
     };
-    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
+    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
 

@@ -5,25 +5,22 @@ import { useState } from 'react';
 import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
 import DatePicker from '../DatePicker/DatePicker.jsx';
 
-import useFields from '@/hooks/useFieldPatch.jsx';
+import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
         setStatusMessage, clients, workers, places
     }) {
     const contextFields = {
-        client: appointment.client,
         clientId: appointment.clientId,
-        worker: appointment.worker,
         workerId: appointment.workerId,
-        place: appointment.place,
         placeId: appointment.placeId,
         priority: appointment.priority,
         startTime: appointment.startTime,
         endTime: appointment.endTime,
         observation: appointment.observation || "",
     };
-    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = useFields(contextFields);
+    const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
@@ -37,8 +34,8 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleSave = () => {
-        console.log("isDateValid: ", isDateValid);
+    const handleSave = async () => {
+        // console.log("isDateValid: ", isDateValid);
         const allValid = validateAll();
         if (!allValid) {
             setStatusMessage({message: "Dados inválidos!", type: "error" });
@@ -48,6 +45,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         if (Object.keys(updatedFields).length > 0) {
             onUpdate({ id: appointment.id, ...updatedFields });
         }
+        //console.log("updatedFields: ", updatedFields);
         setIsEditing(false);
     };
 
@@ -87,7 +85,8 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 <input type="number" id="priority" name="priority" autoComplete="off"
                     min="0" max="99" placeholder=" " value={fields.priority}
                     className={`formInput ${!isEditing ? "readOnly": errors.priority ? "formInputError" : ""}`} readOnly={!isEditing}
-                    onChange={(e) => setField("priority",(e.target.value))}/>
+                    onChange={ (e) => setField("priority", Number(e.target.value) )}
+                />
                 <label htmlFor="priority">Prioridade</label>
                 <p className="errorMessage">{errors.priority || ""}</p>
             </div>
