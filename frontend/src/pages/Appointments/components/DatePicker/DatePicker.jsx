@@ -1,11 +1,15 @@
 import DateModal from './DateModal/DateModal';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
+import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
 
-export default function DatePicker({ appointment, isEditing=true, onSelect, hasError, 
-        startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay,
-        setIsDateValid
+export default function DatePicker({ appointment, isEditing=true, onSelect,
+        startHours, setStartHours, endHours, setEndHours, scheduledDay, setScheduledDay,
+        appointments, selectedClient, selectedWorker, selectedPlace,
+        selectedStartTime, selectedEndTime, setSelectedStartTime, setSelectedEndTime,
+        isDateValid, setIsDateValid
     }) {
     const [isDateModalOpen, setDateModalOpen] = useState(false);
 
@@ -55,28 +59,93 @@ export default function DatePicker({ appointment, isEditing=true, onSelect, hasE
     }
 
     useEffect(() => {
-        if (!startTime && !endTime && !scheduledDay) return;
-        const startDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, startTime);
-        const endDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, endTime);
-        onSelect(startDate, endDate);
+        if (!startHours && !endHours && !scheduledDay) return;
+        const startDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, startHours);
+        const endDate = localDateTimeToUTCISOStringNoSeconds(scheduledDay, endHours);
+        onSelect(startDate, endDate); // Sends formated dates to the fields sent to the backend.
+        setSelectedStartTime(startDate);
+        setSelectedEndTime(endDate);
     }, [scheduledDay]);
+
+//=======================================Base Structure Of The Schedule Table=========================================
+    const [startOffset, setStartOffset] = useState(0);
+    const startDate = useMemo(() => {
+        const date = new Date();
+        date.setDate(date.getDate() + startOffset);
+        return date;
+    }, [startOffset]);
+
+    const days = useMemo(() => generateDays(7, startDate), [startDate]);
+    const times = useMemo(() => generateHours(), []);
+    const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
+
+//=============================================Selected Indexes Logic====================================================
+    // const [selectedIndexes, setSelectedIndexes] = useState(new Set());
+    // useEffect(() => {
+    //     if (selectedStartTime && selectedEndTime) {
+    //         setSelectedIndexes(new Set(getIndexesFromTimeRange(selectedStartTime, selectedEndTime, matrix)));
+    //     }
+    // }, [selectedStartTime, selectedEndTime, matrix]);
+
+    /* Gets the current selected indexes based on current dates selected. In theory the useMemo runs before any useEffect */
+    const selectedIndexes = useMemo(() => {
+        if (selectedStartTime && selectedEndTime) {
+            return new Set(getIndexesFromTimeRange(selectedStartTime, selectedEndTime, matrix));
+        }
+        console.log("selectedIndexes: ", selectedIndexes);
+        return new Set();
+    }, [selectedStartTime, selectedEndTime, matrix]);
+
+//===============================================Occupied Cells Logic===================================================== (maybe make into a useMemo too???)
+    const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
+    useEffect(() => { // For rendering the occupied cells based on the selected client, worker and place.
+        if ((!selectedPlace && !selectedClient && !selectedWorker) || !appointments.length || !matrix.length) return;
+        const filteredAppointments = appointments.filter( (appt) => {
+            const samePlace = selectedPlace && appt.place.id === selectedPlace.id;
+            const sameClient = selectedClient && appt.client.id === selectedClient.id;
+            const sameWorker = selectedWorker  && appt.worker.id === selectedWorker.id;
+            const sameId = appointment?.id === appt.id;
+            return (samePlace || sameClient || sameWorker) && !sameId;
+        });
+        const indexes = new Set();
+        for (const appt of filteredAppointments) {
+            const start = appt.startTime;
+            const end = appt.endTime;
+            const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
+            apptIndexes.forEach(index => indexes.add(index));
+        }
+        setOccupiedIndexes(indexes); // Updates occupied indexes when refered client, worker, place changes.
+        console.log("occupiedIndexes: ", indexes);
+//============================When occupied indexes change, check for validity of selected indexes===========================
+        // Checks for conflictant date selection.
+        if (![...selectedIndexes].some((index) => indexes.has(index))) {
+            console.log("DID NOT FOUND CONFLICT");
+            setIsDateValid(true);
+        } else {
+            console.log("FOUND CONFLICT");
+            setIsDateValid(false);
+        }
+    }, [selectedClient, selectedPlace, selectedWorker, appointments, matrix]);
+//============================================================================================================================
 
     return (<>
         <div className={'inputContainer'}>
             <button className={`formButtonPicker ${true ? 'hasValue' : ""} ${!isEditing ? "readOnly" : ""}`}
                 type="button" readOnly={!isEditing} onClick={() => setDateModalOpen(true)}
             >
-                {(startTime && endTime && scheduledDay)
-                    ? `${formatDate(scheduledDay, false)}, ${startTime} a ${endTime}`
+                {(startHours && endHours && scheduledDay)
+                    ? `${formatDate(scheduledDay, false)}, ${startHours} a ${endHours}`
                     : appointment ? displaySameDayTimeSpan(appointment.startTime, appointment.endTime): ''}
             </button>
             <p id="dobLabel" className="customLabel">Data</p>
         </div>
-        <p className="errorMessage">{hasError?.message || hasError?.message || " "}</p>
+        <p className="errorMessage">{!isDateValid ? 'Selecione uma data válida' : ''}</p>
         {isDateModalOpen && (
             <DateModal isOpen={isDateModalOpen} onClose={() => setDateModalOpen(false)}
-                startTime={startTime} setStartTime={setStartTime} endTime={endTime} setEndTime={setEndTime}
-                scheduledDay={scheduledDay} setScheduledDay={setScheduledDay} setIsDateValid={setIsDateValid}
+                startHours={startHours} setStartHours={setStartHours} endHours={endHours} setEndHours={setEndHours} scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
+                startOffset={startOffset} setStartOffset={setStartOffset} startDate={startDate}
+                days={days} times={times} matrix={matrix}
+                selectedIndexes={selectedIndexes} occupiedIndexes={occupiedIndexes} isDateValid={isDateValid}
             />
         )}
     </>)

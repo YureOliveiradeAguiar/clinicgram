@@ -9,7 +9,7 @@ import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
-        setStatusMessage, clients, workers, places
+        setStatusMessage, clients, workers, places, appointments
     }) {
     const contextFields = {
         clientId: appointment.clientId,
@@ -22,22 +22,26 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
+    const [isEditing, setIsEditing] = useState(false);
+ //========================================Dropdowns data=========================================   
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
-
-    // This is the group that is fed exclusively to the DatePicker.
-    const [selectedstartTime, setSelectedStartTime] = useState(null);
-    const [selectedEndTime, setSelectedEndTime] = useState(null);
+//=========================================DatePicker data=========================================
+    const [selectedStartHours, setSelectedStartHours] = useState(null);
+    const [selectedEndHours, setSelectedEndHours] = useState(null);
     const [selectedDay, setSelectedDay] = useState(null);
-    const [isDateValid, setIsDateValid] = useState(false);
-
-    const [isEditing, setIsEditing] = useState(false);
+    // These two down here are for displaying selectedIndexes.
+    const [selectedStartTime, setSelectedStartTime] = useState(appointment.startTime);
+    const [selectedEndTime, setSelectedEndTime] = useState(appointment.endTime);
+    // Here is for checking date validity.
+    const [isDateValid, setIsDateValid] = useState(true);
+//==================================================================================================
 
     const handleSave = async () => {
-        // console.log("isDateValid: ", isDateValid);
+        console.log("isDateValid: ", isDateValid);
         const allValid = validateAll();
-        if (!allValid) {
+        if (!allValid || !isDateValid) {
             setStatusMessage({message: "Dados inválidos!", type: "error" });
             return;
         }
@@ -56,9 +60,11 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
 
-        setSelectedStartTime(null);
-        setSelectedEndTime(null);
+        setSelectedStartHours(null);
+        setSelectedEndHours(null);
         setSelectedDay(null);
+        setSelectedStartTime(appointment.startTime);
+        setSelectedEndTime(appointment.endTime);
     }
 
     return (
@@ -92,8 +98,12 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             </div>
 
             <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
-                startTime={selectedstartTime} setStartTime={setSelectedStartTime} setIsDateValid={setIsDateValid}
-                endTime={selectedEndTime} setEndTime={setSelectedEndTime} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+                startHours={selectedStartHours} setStartHours={setSelectedStartHours} endHours={selectedEndHours}
+                setEndHours={setSelectedEndHours} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+                appointments={appointments} selectedClient={selectedClient} selectedWorker={selectedWorker} selectedPlace={selectedPlace}
+                selectedStartTime={selectedStartTime} selectedEndTime={selectedEndTime} // Selected cells UI display
+                setSelectedStartTime={setSelectedStartTime} setSelectedEndTime={setSelectedEndTime} // Selected cells UI display
+                isDateValid={isDateValid} setIsDateValid={setIsDateValid} // Error handling
             />
 
             <div className="inputContainer">

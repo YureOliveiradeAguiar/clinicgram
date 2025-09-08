@@ -1,74 +1,35 @@
 import styles from './DateModal.module.css';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 import Modal from '@/components/Modal/Modal';
 import ScheduleTable from '@/components/ScheduleTable/ScheduleTable/ScheduleTable';
 
-import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTimeRange } from '@/utils/generateScheduleMatrix';
 
-
-export default function DateModal({ isOpen, onClose, appointments, setAppointments,
-        startTime, setStartTime, endTime, setEndTime, scheduledDay, setScheduledDay,
-        selectedClient, setSelectedClient, selectedWorker, setSelectedWorker, selectedPlace, setSelectedPlace,
-        setIsDateValid
+export default function DateModal({ isOpen, onClose, // For modal UI
+        startHours, setStartHours, endHours, setEndHours, scheduledDay, setScheduledDay, // For date selection
+        startOffset, setStartOffset, startDate, days, times, matrix, // For schedule table structuration.
+        selectedIndexes, setSelectedIndexes, occupiedIndexes, isDateValid,
     }) {
-    const [selectedIndexes, setSelectedIndexes] = useState(new Set());
-    const [occupiedIndexes, setOccupiedIndexes] = useState(new Set());
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const hasConflict = [...selectedIndexes].some(idx => occupiedIndexes.has(idx));
-        if (hasConflict) {
-            //resetScheduleTime();
-            setIsDateValid(hasConflict);
-            console.log("hasConflict: ", hasConflict);
-            //setStatusMessage({ message: "O horário selecionado já está ocupado. Selecione outro horário.", type: "error" });
-        }
-    }, [occupiedIndexes]);
-
-    // This part is for the base structure:
-    const [startOffset, setStartOffset] = useState(0);
-    const startDate = useMemo(() => {
-        const date = new Date();
-        date.setDate(date.getDate() + startOffset);
-        return date;
-    }, [startOffset]);
-    const days = useMemo(() => generateDays(7, startDate), [startDate]);
+//=======================================Base Structure Of The Schedule Table=========================================
     const rawMonth = startDate.toLocaleString('pt-BR', { month: 'long' });
     const monthName = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
     const year = startDate.getFullYear();
-    const times = useMemo(() => generateHours(), []);
-    const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
-    useEffect(() => { // For rendering the occupied cells based on the selected client, worker and place.
-        if ((!selectedPlace && !selectedClient && !selectedWorker) || !appointments.length || !matrix.length) return;
-        const filteredAppointments = appointments.filter( (appt) => {
-            const samePlace = selectedPlace && appt.place.id === selectedPlace.id;
-            const sameClient = selectedClient && appt.client.id === selectedClient.id;
-            const sameWorker = selectedWorker  && appt.worker.id === selectedWorker.id;
-            return samePlace || sameClient || sameWorker;
-        });
-        const indexes = new Set();
-        for (const appt of filteredAppointments) {
-            const start = appt.startTime;
-            const end = appt.endTime;
-            const apptIndexes = getIndexesFromTimeRange(start, end, matrix);
-            apptIndexes.forEach(index => indexes.add(index));
-        }
-        setOccupiedIndexes(indexes);
-    }, [selectedClient, selectedPlace, selectedWorker, appointments, matrix]);
+
+//=====================================================================================================================
 
     return (
         <Modal title="Seleção de Horários" isOpen={isOpen} onClose={onClose} maxWidth='640px'>
             <div className={styles.hoursWrapper}>
-                <ScheduleTable mode={"scheduling"} occupiedIndexes={occupiedIndexes} haserror={error}
+                <ScheduleTable mode={"scheduling"} occupiedIndexes={occupiedIndexes} 
                     days={days} times={times} indexedCells={matrix}
-                    startTime={startTime} endTime={endTime}
-                    setStartTime={setStartTime} setEndTime={setEndTime}
+                    startTime={startHours} endTime={endHours}
+                    setStartTime={setStartHours} setEndTime={setEndHours}
                     scheduledDay={scheduledDay} setScheduledDay={setScheduledDay}
                     selectedIndexes={selectedIndexes} setSelectedIndexes ={setSelectedIndexes}
                     startOffset={startOffset} setStartOffset={setStartOffset}
                     monthName={monthName} year={year}
+                    hasError={!isDateValid}
                 />
             </div>
             
