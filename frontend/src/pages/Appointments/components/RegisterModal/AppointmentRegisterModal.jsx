@@ -9,24 +9,32 @@ import DatePicker from '../DatePicker/DatePicker';
 import { getCookie } from '@/utils/csrf.js';
 
 
-export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, clients, workers, places}) {
+export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, clients, workers, places, appointments}) {
 
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
-    // The selectedClient, selectedWorker and selectedPlace are for updating the dropdowns displays.
+
+ //========================================Dropdowns data=========================================   
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
 
-    // This is the group that is fed exclusively to the DatePicker.
-    const [selectedstartTime, setSelectedStartTime] = useState(null);
-    const [selectedEndTime, setSelectedEndTime] = useState(null);
-    const [selectedDay, setSelectedDay] = useState(null);
-    const [isDateValid, setIsDateValid] = useState(false);
+//=========================================DatePicker data=========================================
+    // Here is for checking date validity.
+    const [hasDateError, setHasDateError] = useState(true);
 
+//==================================================================================================
     const observationsValue = watch('observations') || '';
     
     const onSubmit = async (data) => {
-        const payload = { ...data };
+        if (hasDateError) {
+            setStatusMessage({message: "Data escolhida está ocupada!", type: "error" });
+            return;
+        }
+        const payload = { ...data,
+            startTime: data.timeRange?.startTime, 
+            endTime: data.timeRange?.endTime,
+        };
+        delete payload.timeRange;
         try {
             const response = await fetch('/api/appointments/new/', {
                 method: 'POST',
@@ -89,9 +97,14 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 <p className="errorMessage">{errors.priority?.message || ""}</p>
             </div>
 
-            <DatePicker onSelect={(start, end) => {setValue("startTime", start); setValue("endTime", end);}}
-                startTime={selectedstartTime} setStartTime={setSelectedStartTime} setIsDateValid={setIsDateValid}
-                endTime={selectedEndTime} setEndTime={setSelectedEndTime} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+            <Controller name="timeRange" control={control}
+                render={({ field }) => (
+                    <DatePicker
+                        onSelect={(start, end) => {field.onChange({ startTime: start, endTime: end });}}
+                        appointments={appointments} selectedClient={selectedClient} selectedWorker={selectedWorker} selectedPlace={selectedPlace}
+                        setHasDateError={setHasDateError}
+                    />
+                )}
             />
 
             <div className="inputContainer">

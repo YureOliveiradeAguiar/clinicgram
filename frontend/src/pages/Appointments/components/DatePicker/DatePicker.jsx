@@ -85,7 +85,10 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 
 //===============================================Selected Indexes Logic==================================================
     /* useMemo is for derived/computed values, that do not change over time, such as the selectedIndexes */
-    const [selectedIndexes, setSelectedIndexes] = useState(new Set(getIndexesFromTimeRange(appointment.startTime, appointment.endTime, matrix)));
+    const [selectedIndexes, setSelectedIndexes] = useState(appointment
+        ? new Set(getIndexesFromTimeRange(appointment.startTime, appointment.endTime, matrix))
+        : new Set()
+    );
     //useEffect(() => {
     //    console.log("selectedIndexes: ", selectedIndexes);
     //}, [selectedIndexes]);
@@ -115,15 +118,14 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 //============================When occupied indexes change, check for validity of selected indexes===========================
     const isDateValid = useMemo(() => {
         if (![...selectedIndexes].some((index) => occupiedIndexes.has(index))) { // Checks for conflictant date selection.
-            //console.log("DID NOT FOUND CONFLICT");
-            setHasDateError(false);
             return true;
         } else {
-            //console.log("FOUND CONFLICT");
-            setHasDateError(true);
             return false;
         }
     },[occupiedIndexes, selectedIndexes]);
+    useEffect(() => {
+        setHasDateError(!isDateValid);
+    }, [isDateValid]);
 
 //=============================================Actual Date Sending ================================================
     useEffect(() => {

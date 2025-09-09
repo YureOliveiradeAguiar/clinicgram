@@ -1,9 +1,12 @@
-import MedicalSuitcase from '@/assets/icons/medicalSuitcase.jsx'
+import MedicalInfo from '@/assets/icons/medicalInfo.jsx'
 import UsersIcon from '@/assets/icons/usersIcon.jsx'
 import CalendarAddIcon from '@/assets/icons/calendarAddIcon.jsx'
 import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
+import PillIcon from '@/assets/icons/pillIcon.jsx'
+import OpenBookIcon from '@/assets/icons/openBookIcon.jsx'
+import ClipboardIcon from '@/assets/icons/clipboardIcon.jsx'
 
 import Sidebar from './components/Sidebar/SideBar.jsx'
 import MobileDrawer from './components/MobileDrawer/MobileDrawer.jsx'
@@ -37,18 +40,20 @@ export default function Layout() {
     }, []);
 
     const panelOptions = [
-        { title: "Estagiários", Icon: MedicalSuitcase, link: "/workers" },
         { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
+        { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
         { title: "Salas", Icon: PlacesIcon, link: "/places" },
-        { title: "Agendamentos", Icon: CalendarAddIcon, link: "/appointments" },
+        { title: "Disciplinas", Icon: OpenBookIcon, link: "/places" },
+        { title: "Tratamentos", Icon: PillIcon, link: "/places" },
+        { title: "Consultas", Icon: CalendarAddIcon, link: "/appointments" },
         { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
+        { title: "Reservas", Icon: ClipboardIcon, link: "/history" },
         { title: "Histórico", Icon: HistoryIcon, link: "/history" },
 
-        { title: "agendar aqui", Icon: HistoryIcon, link: "/schedule/new" },
-        //{title: "Agendamento", Icon: UsersIcon, dropdown: [
-        //    { title: "Lista de espera", link: "/schedule/new" },
-        //    { title: "Lista de Espera", link: "/schedule/new" },
-        //    { title: "Estoque", link: "/schedule/new" },]},
+        //{title: "Minha Clínica", Icon: UsersIcon, dropdown: [
+        //    { title: "Pacientes", link: "/schedule/new" },
+        //    { title: "Estagiários", link: "/schedule/new" },
+        //    { title: "Salas", link: "/schedule/new" },]},
     ];
 
     const location = useLocation();

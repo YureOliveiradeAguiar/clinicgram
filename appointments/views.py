@@ -14,65 +14,27 @@ from django.shortcuts import get_object_or_404
 
 import reversion
 
+
 class RegisterAppointmentAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    # Data is received from API, formatted for saving, saved, and then some info is formated back to front.
+
     def post(self, request):
-        data = request.data
+        serializer = AppointmentSerializer(data=request.data)
 
-        clientId = data.get("clientId")
-        startDateTime = parse_datetime(data.get("startTime"))
-        endDateTime = parse_datetime(data.get("endTime"))
-        placeId = data.get("placeId")
-        observation = data.get("observation")
-
-        if is_naive(startDateTime):
-            startDateTime = make_aware(startDateTime)
-        if is_naive(endDateTime):
-            endDateTime = make_aware(endDateTime)
-
-        if not all([clientId, placeId, startDateTime, endDateTime]):
+        if serializer.is_valid():
+            with reversion.create_revision():
+                appointment = serializer.save()
+                reversion.set_user(self.request.user)
+                reversion.set_comment("Created via API")
             return Response({
-                "success": False,
-                "message": "Todos os campos são obrigatórios."
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            client = Client.objects.get(id=clientId)
-        except Client.DoesNotExist:
-            return Response({
-                "success": False,
-                "message": "Cliente não encontrado."
-            }, status=status.HTTP_404_NOT_FOUND)
-        
-        try:
-            place = Place.objects.get(id=placeId)
-        except Place.DoesNotExist:
-            return Response({
-                "success": False,
-                "message": "Lugar não encontrado."
-            }, status=status.HTTP_404_NOT_FOUND)
-        
-        with reversion.create_revision():
-            appointment = Appointment.objects.create(
-                client=client,
-                startTime=startDateTime,
-                endTime=endDateTime,
-                place=place,
-                observation=observation,
-            )
-            reversion.set_user(self.request.user)
-            reversion.set_comment("Created via API")
-
-        firstName = client.name.split()[0] if client.name else ''
-        startUTC = appointment.startTime
-        endUTC = appointment.endTime
+                'success': True,
+                'appointment': serializer.data,
+                'message': f'{appointment} registrado com sucesso!'
+            }, status=status.HTTP_201_CREATED)
         return Response({
-            "firstName": firstName,
-            "startUTC": startUTC,
-            "endUTC": endUTC,
-            "placeName": appointment.place.name,
-        }, status=status.HTTP_201_CREATED)
+            'success': False,
+            'errors': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
     
 
 class AppointmentListAPIView(APIView):
@@ -83,6 +45,7 @@ class AppointmentListAPIView(APIView):
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data)
     
+
 class AppointmentDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -97,6 +60,7 @@ class AppointmentDeleteAPIView(APIView):
         
         return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
     
+
 class AppointmentUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

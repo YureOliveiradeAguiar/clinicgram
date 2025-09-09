@@ -67,11 +67,13 @@ export default function AppointmentList() {
             {openModal === "register" && (
                 <AppointmentRegisterModal isOpen={openModal === "register"} onSuccess={handleElementAdded}
                     clients={clients} workers={workers} places={places}
-                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
+                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(null)}
+                    appointments={appointments}
                 />
             )}
             {(openModal === "properties" && selectedAppointment) && (
-                <AppointmentDetailsModal appointment={selectedAppointment} setAppointment={setSelectedAppointment} isOpen={selectedAppointment !== null}
+                <AppointmentDetailsModal isOpen={openModal === "properties" && selectedAppointment !== null}
+                    appointment={selectedAppointment} setAppointment={setSelectedAppointment} 
                     clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
                     onDelete={handleElementDelete} onUpdate={handleElementUpdate}

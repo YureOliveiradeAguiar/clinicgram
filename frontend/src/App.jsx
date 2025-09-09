@@ -29,10 +29,8 @@ export default function App() {
 						<Route path="/clients" element={<RequireAuth><Clients/></RequireAuth>}/>
 						<Route path="/places" element={<RequireAuth><Places /></RequireAuth>}/>
 						<Route path="/appointments" element={<RequireAuth><Appointments/></RequireAuth>}/>
-						<Route path="/history" element={<RequireAuth><History /></RequireAuth>}/>
-
-						<Route path="/schedule/new" element={<RequireAuth><Scheduling/></RequireAuth>}/>
 						<Route path="/schedule" element={<RequireAuth><Schedule /></RequireAuth>}/>
+						<Route path="/history" element={<RequireAuth><History /></RequireAuth>}/>
 					</Route>
 				</Routes>
 			</Router>
