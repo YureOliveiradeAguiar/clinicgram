@@ -30,7 +30,7 @@ export default function usePatchFields(contextFields = {}) {
             }
         }
         setErrors(newErrors);
-        console.log("allValid: ", allValid);
+        //console.log("allValid: ", allValid);
         return allValid;
     };
 

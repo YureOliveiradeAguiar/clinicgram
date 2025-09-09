@@ -23,25 +23,24 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
+
  //========================================Dropdowns data=========================================   
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
+
 //=========================================DatePicker data=========================================
-    const [selectedStartHours, setSelectedStartHours] = useState(null);
-    const [selectedEndHours, setSelectedEndHours] = useState(null);
-    const [selectedDay, setSelectedDay] = useState(null);
-    // These two down here are for displaying selectedIndexes.
-    const [selectedStartTime, setSelectedStartTime] = useState(appointment.startTime);
-    const [selectedEndTime, setSelectedEndTime] = useState(appointment.endTime);
     // Here is for checking date validity.
-    const [isDateValid, setIsDateValid] = useState(true);
+    const [hasDateError, setHasDateError] = useState(true);
 //==================================================================================================
 
     const handleSave = async () => {
-        console.log("isDateValid: ", isDateValid);
+        if (hasDateError) {
+            setStatusMessage({message: "Data escolhida está ocupada!", type: "error" });
+            return;
+        }
         const allValid = validateAll();
-        if (!allValid || !isDateValid) {
+        if (!allValid) {
             setStatusMessage({message: "Dados inválidos!", type: "error" });
             return;
         }
@@ -59,12 +58,6 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setSelectedClient(appointment.client);
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
-
-        setSelectedStartHours(null);
-        setSelectedEndHours(null);
-        setSelectedDay(null);
-        setSelectedStartTime(appointment.startTime);
-        setSelectedEndTime(appointment.endTime);
     }
 
     return (
@@ -97,13 +90,10 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 <p className="errorMessage">{errors.priority || ""}</p>
             </div>
 
-            <DatePicker appointment={appointment} isEditing={isEditing} onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
-                startHours={selectedStartHours} setStartHours={setSelectedStartHours} endHours={selectedEndHours}
-                setEndHours={setSelectedEndHours} scheduledDay={selectedDay} setScheduledDay={setSelectedDay}
+            <DatePicker appointment={appointment} isEditing={isEditing}
+                onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
                 appointments={appointments} selectedClient={selectedClient} selectedWorker={selectedWorker} selectedPlace={selectedPlace}
-                selectedStartTime={selectedStartTime} selectedEndTime={selectedEndTime} // Selected cells UI display
-                setSelectedStartTime={setSelectedStartTime} setSelectedEndTime={setSelectedEndTime} // Selected cells UI display
-                isDateValid={isDateValid} setIsDateValid={setIsDateValid} // Error handling
+                setHasDateError={setHasDateError}
             />
 
             <div className="inputContainer">

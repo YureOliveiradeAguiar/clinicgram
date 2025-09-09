@@ -6,8 +6,8 @@ export function generateScheduleMatrix(days, times) {
             const [year, month, dayNum] = day.split("-").map(Number);
             const [hour, minute] = time.split(":").map(Number);
 
-            const start = new Date(Date.UTC(year, month - 1, dayNum, hour, minute));
-            const end = new Date(Date.UTC(year, month - 1, dayNum, hour, minute + 15));
+            const start = new Date(year, month - 1, dayNum, hour, minute);
+            const end = new Date(year, month - 1, dayNum, hour, minute + 15);
 
             return {
                 day, time, index: indexCounter++,
@@ -39,25 +39,23 @@ export function generateHours(startHour = 6, endHour = 22, intervalMinutes = 15)
     return hours;
 }
 
-function localDateTime(day, time) {
-    // day = 2025-06-30
-    // time = 2025-06-30T06:00:00.000Z
-    const [year, month, dayOfMonth] = day.split('-').map(Number);
-    const timeStringPart = time.split('T')[1].substring(0, 5);
-    const [hour, minute] = timeStringPart.split(':').map(Number);
-    const localDate = new Date(year, month - 1, dayOfMonth, hour, minute);
-    return localDate;
+const getTimeFromNewDate = (dateString) => {
+    return new Date (dateString).getTime();
 }
 
 export function getIndexesFromTimeRange(start, end, matrix2D) {
     const indexes = [];
 
     for (const row of matrix2D) {
+        const startTD = getTimeFromNewDate(start);
+        const endTD = getTimeFromNewDate(end);
         for (const cell of row) {
-            const cellStartUTC = localDateTime(cell.day, cell.start);
-            const cellEndUTC = localDateTime(cell.day, cell.end);
-            // console.log ("Comparing ", start, "to", cellStart);
-            if (cellStartUTC < new Date(end) && cellEndUTC > new Date(start)) {
+            const cellStartTD = getTimeFromNewDate(cell.start); // cell.start is a string, 2025-09-16T00:45:00.000Z = the GMT-0 from GMT-3
+            const cellEndTD = getTimeFromNewDate(cell.end);
+            //if (cell.index===0) {
+            //    console.log ("Comparing ", new Date(start), "to", new Date (cellStart));
+            //}
+            if (cellStartTD < endTD && cellEndTD> startTD) {
                 indexes.push(cell.index);
             }
         }
