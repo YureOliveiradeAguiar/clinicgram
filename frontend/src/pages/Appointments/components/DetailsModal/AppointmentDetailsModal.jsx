@@ -9,9 +9,10 @@ import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function AppointmentDetailsModal({ appointment, onDelete, isOpen, onClose, onUpdate,
-        setStatusMessage, clients, workers, places, appointments
+        setStatusMessage, treatments, clients, workers, places, appointments
     }) {
     const contextFields = {
+        treatmentId: appointment.treatmentId,
         clientId: appointment.clientId,
         workerId: appointment.workerId,
         placeId: appointment.placeId,
@@ -28,6 +29,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
+    const [selectedTreatment, setSelectedTreatment] = useState(appointment.treatment);
 
 //=========================================DatePicker data=========================================
     // Here is for checking date validity.
@@ -58,6 +60,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setSelectedClient(appointment.client);
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
+        setSelectedTreatment(appointment.treatment);
     }
 
     return (
@@ -65,6 +68,11 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             isEditing={isEditing} setIsEditing={setIsEditing}
             onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}
         >
+            <ElementDropdown isEditing={isEditing} options={treatments}
+                onSelect={(option) => {setField("treatmentId", option.id); setSelectedTreatment(option)}}
+                selectedOption={selectedTreatment} hasError={errors.treatment}
+                labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento registrado'}}
+            />
             <ElementDropdown isEditing={isEditing} options={clients}
                 onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
                 selectedOption={selectedClient} hasError={errors.client}
@@ -77,7 +85,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 />
             <ElementDropdown isEditing={isEditing} options={places}
                 onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
-                selectedOption={selectedPlace} hasError={errors.client}
+                selectedOption={selectedPlace} hasError={errors.place}
                 labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
                 />
             <div className="inputContainer">

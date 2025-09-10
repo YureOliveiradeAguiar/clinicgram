@@ -5,14 +5,14 @@ import { useForm } from "react-hook-form";
 import { getCookie } from '@/utils/csrf.js';
 
 
-export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
+export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
 
     const { register, handleSubmit, reset, formState: { errors  } } = useForm({mode:'onBlur',});
 
     const onSubmit = async (data) => {
         const payload = { ...data };
         try {
-            const response = await fetch('/api/places/new/', {
+            const response = await fetch('/api/treatments/new/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStat
             if (response.ok) {
                 setStatusMessage({message: result.message, type: "success"});
                 reset();
-                onSuccess(result.place);
+                onSuccess(result.treatment);
             } else {
                 setStatusMessage({ message: "Erro ao registrar a sala", type: "error" });
             }
@@ -40,7 +40,7 @@ export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStat
         <RegisterModal title="Novo Procedimento" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <div className="inputContainer">
                 <input type="text" id="name" name="name" autoComplete="off"
-                    maxLength="70" placeholder=" "
+                    maxLength="70" treatmentholder=" "
                     className={`formInput ${errors.name ? "formInputError" : ""}`}
                     {...register('name', { required: "O nome é obrigatório" })}
                 />

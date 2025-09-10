@@ -33,7 +33,7 @@ export default function TreatmentList() {
     return (
         <List title="Tratamentos"
                 NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
-                searchTreatmentholder="Pesquisar tratamento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+                searchPlaceholder="Pesquisar tratamento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             {treatments.length > 0 ? (
                 treatments
                     .filter((treatment) =>
@@ -49,7 +49,7 @@ export default function TreatmentList() {
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhum tratamento registrado'}</p>
+                <p>{statusMessage?.message || 'Nenhum tratamento encontrado'}</p>
             )}
 
             {openModal === "register" && (

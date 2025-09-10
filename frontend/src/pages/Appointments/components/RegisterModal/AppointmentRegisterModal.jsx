@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
@@ -9,11 +9,12 @@ import DatePicker from '../DatePicker/DatePicker';
 import { getCookie } from '@/utils/csrf.js';
 
 
-export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, clients, workers, places, appointments}) {
+export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, treatments, clients, workers, places, appointments}) {
 
-    const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
+    const { register, handleSubmit, watch, reset, formState: { errors  }, control } = useForm({mode:'onBlur'});
 
- //========================================Dropdowns data=========================================   
+ //========================================Dropdowns data==========================================  
+    const [selectedTreatment, setSelectedTreatment] = useState(null);
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
@@ -22,7 +23,44 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     // Here is for checking date validity.
     const [hasDateError, setHasDateError] = useState(true);
 
-//==================================================================================================
+//=======================================Checking for best worker==================================
+    const sortedWorkers = useMemo(() => {
+        if (!selectedTreatment) return workers;
+        /* Preprocess stats for performance (appointments in last 30 days = less data processed) */
+        const now = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(now.getDate() - 30);
+
+        const stats = {}; // 9 : {totalCount : 5 treatmentCount : 5} - (9 is the client.id I think)
+        appointments.forEach(appointment => {
+            const appointmentDate = new Date(appointment.startTime);
+            if (appointmentDate <= thirtyDaysAgo) return;
+            const id = appointment.workerId;
+            if (!stats[id]) {
+                stats[id] = { treatmentCount: 0, totalCount: 0 };
+            }
+            stats[id].totalCount += 1;
+            if (appointment.treatmentId === selectedTreatment.id) stats[id].treatmentCount += 1;
+        });
+        console.log("stats: ", stats);
+
+
+        // Sort workers based on stats.
+        return [...workers].sort((a, b) => {
+            const aStat = stats[a.id] || { treatmentCount: 0, totalCount: 0 };
+            const bStat = stats[b.id] || { treatmentCount: 0, totalCount: 0 };
+
+            if (aStat.treatmentCount !== bStat.treatmentCount)
+                return aStat.treatmentCount - bStat.treatmentCount;
+            return aStat.totalCount - bStat.totalCount;
+        });
+    }, [workers, appointments, selectedTreatment]);
+
+    useEffect (() => {
+        console.log("sortedWorkers: ", sortedWorkers);
+    },[sortedWorkers])
+
+//=================================================================================================
     const observationsValue = watch('observations') || '';
     
     const onSubmit = async (data) => {
@@ -63,19 +101,27 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
 
     return (
         <RegisterModal title="Nova consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+            <Controller name="treatmentId" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={treatments} selectedOption={selectedTreatment}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedTreatment(option)}} hasError={errors.treatmentId}
+                        labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento encontrado'}}
+                    />
+                )}
+            />
             <Controller name="clientId" control={control}
                 render={({ field }) => (
                     <ElementDropdown options={clients} selectedOption={selectedClient}
                         onSelect={(option) => {field.onChange(option.id); setSelectedClient(option)}} hasError={errors.clientId}
-                        labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
+                        labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente encontrado'}}
                     />
                 )}
             />
             <Controller name="workerId" control={control}
                 render={({ field }) => (
-                    <ElementDropdown options={workers} selectedOption={selectedWorker}
+                    <ElementDropdown options={sortedWorkers} selectedOption={selectedWorker} bestOption={!!selectedTreatment}
                         onSelect={(option) => {field.onChange(option.id); setSelectedWorker(option)}} hasError={errors.workerId}
-                        labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
+                        labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário encontrado'}}
                     />
                 )}
             />
@@ -83,7 +129,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 render={({ field }) => (
                     <ElementDropdown options={places} selectedOption={selectedPlace}
                         onSelect={(option) => {field.onChange(option.id); setSelectedPlace(option)}} hasError={errors.placeId}
-                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala encontrada'}}
                     />
                 )}
             />

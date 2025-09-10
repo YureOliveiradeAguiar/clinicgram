@@ -1,8 +1,10 @@
 from .models import Appointment
+from treatments.models import Treatment
 from clients.models import Client
 from places.models import Place
 
 from rest_framework import serializers
+from treatments.serializers import TreatmentSerializer
 from accounts.serializers import WorkerSerializer
 from places.serializers import PlaceSerializer
 
@@ -15,6 +17,11 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    treatment = TreatmentSerializer(read_only=True)
+    treatmentId = serializers.PrimaryKeyRelatedField(
+        queryset=Treatment.objects.all(),
+        source="treatment",
+    )
     client = ClientSerializer(read_only=True)
     clientId = serializers.PrimaryKeyRelatedField(
         queryset=Client.objects.all(),
@@ -35,5 +42,5 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
+        fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
                     'startTime', 'endTime', 'priority','status','status_display', 'observation']

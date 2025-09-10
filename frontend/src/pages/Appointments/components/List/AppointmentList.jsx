@@ -32,6 +32,7 @@ export default function AppointmentList() {
         setStatusMessage, setOpenModal });
 
     // I put the fetches here, so the modals can use them without having to re-render the fetches.
+    const { data: treatments} = useFetch({ elementNamePlural:'os procedimentos', elementPath:'treatments', setStatusMessage});
     const { data: clients} = useFetch({ elementNamePlural:'os pacientes', elementPath:'clients', setStatusMessage});
     const { data: workers} = useFetch({ elementNamePlural:'os estagiários', elementPath:'workers', setStatusMessage});
     const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
@@ -66,7 +67,7 @@ export default function AppointmentList() {
 
             {openModal === "register" && (
                 <AppointmentRegisterModal isOpen={openModal === "register"} onSuccess={handleElementAdded}
-                    clients={clients} workers={workers} places={places}
+                    treatments={treatments} clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => setOpenModal(null)}
                     appointments={appointments}
                 />
@@ -74,7 +75,7 @@ export default function AppointmentList() {
             {(openModal === "properties" && selectedAppointment) && (
                 <AppointmentDetailsModal isOpen={openModal === "properties" && selectedAppointment !== null}
                     appointment={selectedAppointment} setAppointment={setSelectedAppointment} 
-                    clients={clients} workers={workers} places={places}
+                    treatments={treatments} clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
                     onDelete={handleElementDelete} onUpdate={handleElementUpdate}
                     appointments={appointments}

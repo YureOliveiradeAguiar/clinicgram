@@ -1,10 +1,12 @@
+import StarIcon from '@/assets/icons/startIcon';
 import styles from './ElementDropdown.module.css';
 
 import { useState, useRef, useEffect } from 'react';
 
 
 export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [],
-        hasError=false, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente registrado'}
+        hasError=false, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente encontrado'},
+        isBestOptionFirst=false
     }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -40,15 +42,25 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
             {isOpen && (
                 <div className={styles.dropdownContent}>
                     <input type="text" className={styles.searchBox} placeholder={labels.placeholder}
-                        value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                    {filteredOptions.length > 0 ? (
-                        filteredOptions.map((option) => (
-                            <div key={option.id} className={styles.dropdownOption}
-                                onClick={() => handleSelect(option)}>
-                                {option.name}
+                        value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {filteredOptions.length > 0 ? (<>
+                        {isBestOptionFirst && (
+                            <div key={filteredOptions[0].id} className={`${styles.dropdownOption} ${styles.bestOption}`}
+                                onClick={() => handleSelect(filteredOptions[0])}
+                            >
+                                <StarIcon className={styles.firstOptionIcon}/> {filteredOptions[0].name}
+                                <span className={styles.tooltip}>Recomendado para treinamento</span>
                             </div>
-                        ))
-                    ) : (
+                        )}
+                        {filteredOptions
+                            .slice(isBestOptionFirst ? 1 : 0)
+                            .map((option) => (
+                                <div key={option.id} className={styles.dropdownOption} onClick={() => handleSelect(option)}>
+                                    {option.name}
+                                </div>
+                            ))}
+                    </>) : (
                         <p className={styles.dropdownNoOption}>{labels.noResults}</p>
                     )}
                 </div>

@@ -8,13 +8,10 @@ import usePatchFields from '@/hooks/usePatchFields.jsx';
 export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
     const contextFields = {
         name: treatment.name,
-        icon: treatment.icon,
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
-
-    const [selectedEmoji, setSelectedEmoji] = useState(treatment.icon);
 
     const handleSave = () => {
         const allValid = validateAll();
@@ -32,7 +29,6 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
-        setSelectedEmoji(treatment.icon);
     }
 
     return (
@@ -45,7 +41,7 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
                         maxLength="70" treatmentholder=" " value={fields.name}
                         className={`formInput ${!isEditing ? "readOnly": errors.name ? "formInputError" : ""}`} readOnly={!isEditing}
                         onChange={(e) => setField("name",(e.target.value))}/>
-                    <label htmlFor="name">Nome Completo</label>
+                    <label htmlFor="name">Nome</label>
                     <p className="errorMessage">{errors.name || ""}</p>
                 </div>
             </div>

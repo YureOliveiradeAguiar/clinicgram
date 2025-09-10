@@ -31,7 +31,7 @@ class RegisterTreatmentAPIView(APIView):
             return Response({
                 'success': True,
                 'treatment': serializer.data,
-                'message': f'{treatment.name} registrada com sucesso!'
+                'message': f'{treatment.name} registrado com sucesso!'
             })
         return Response(serializer.errors)
 
