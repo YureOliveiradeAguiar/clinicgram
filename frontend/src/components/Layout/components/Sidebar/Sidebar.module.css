@@ -72,7 +72,13 @@
 .heading:hover .icon.hover {
   	display: block;
 }
-
+/* SIDEBAR GROUPS */
+.groupTitle {
+	font-size: 0.9rem;
+	color:rgb(160,160,160);
+	padding: 0 8px;
+	margin: 4px 0;
+}
 /* SIDEBAR DROPDOWNS */
 .dropdownContent {
 	display: flex;

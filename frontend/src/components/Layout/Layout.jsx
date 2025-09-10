@@ -5,7 +5,6 @@ import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
 import PillIcon from '@/assets/icons/pillIcon.jsx'
-import OpenBookIcon from '@/assets/icons/openBookIcon.jsx'
 import ClipboardIcon from '@/assets/icons/clipboardIcon.jsx'
 
 import Sidebar from './components/Sidebar/SideBar.jsx'
@@ -39,17 +38,25 @@ export default function Layout() {
             .catch(err => { console.error('Erro ao buscar perfil do usuário:', err); });
     }, []);
 
-    const panelOptions = [
-        { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
-        { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
-        { title: "Salas", Icon: PlacesIcon, link: "/places" },
-        { title: "Disciplinas", Icon: OpenBookIcon, link: "/places" },
-        { title: "Tratamentos", Icon: PillIcon, link: "/places" },
-        { title: "Consultas", Icon: CalendarAddIcon, link: "/appointments" },
-        { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
-        { title: "Reservas", Icon: ClipboardIcon, link: "/history" },
-        { title: "Histórico", Icon: HistoryIcon, link: "/history" },
-
+    const panelGroups = [
+        {
+            title: "Agendamento",
+            items: [
+                { title: "Consultas", Icon: CalendarAddIcon, link: "/appointments" },
+                { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
+                { title: "Reservas", Icon: ClipboardIcon, link: "/history" },
+            ]
+        },
+        {
+            title: "Gerenciamento",
+            items: [
+                { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
+                { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
+                { title: "Salas", Icon: PlacesIcon, link: "/places" },
+                { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
+                { title: "Histórico", Icon: HistoryIcon, link: "/history" },
+            ]
+        },
         //{title: "Minha Clínica", Icon: UsersIcon, dropdown: [
         //    { title: "Pacientes", link: "/schedule/new" },
         //    { title: "Estagiários", link: "/schedule/new" },
@@ -84,10 +91,10 @@ export default function Layout() {
         <div className={styles.appContainer}>
             <div className={styles.sideContent}>
                 {isMobile ? (
-                    <MobileDrawer panelOptions={panelOptions} currentPath={currentPath}
+                    <MobileDrawer panelOptions={panelGroups} currentPath={currentPath}
                         isOpen={sidebarExpanded} onClose={() => setSidebarExpanded(false)} />
                 ) : (
-                    <Sidebar panelOptions={panelOptions} currentPath={currentPath}
+                    <Sidebar panelGroups={panelGroups} currentPath={currentPath}
                         setSidebarExpanded = {setSidebarExpanded} sidebarExpanded={sidebarExpanded} />
                 )}
             </div>

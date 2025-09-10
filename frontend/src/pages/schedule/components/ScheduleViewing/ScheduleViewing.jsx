@@ -73,7 +73,7 @@ export default function ScheduleViewing() {
     return (
         <Panel title='Agenda' maxWidth='1000px'>
             <div className={styles.contentWrapper}>
-                <div>
+                <div className={styles.scheduleTable}>
                     <ScheduleTable
                         setAppointments={setAppointments} setStatus={setStatusMessage}
                         appointmentColors={appointmentColors} occupiedMap={occupiedMap}

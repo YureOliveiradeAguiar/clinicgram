@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "clients",
     "appointments",
     "places",
+    "treatments",
     "history",
 ]
 

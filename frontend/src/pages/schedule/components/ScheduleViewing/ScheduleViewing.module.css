@@ -3,6 +3,10 @@
     gap: 10px;
 }
 
+.scheduleTable{
+    width: 100%;
+}
+
 .appointmentList {
     display: flex;
     flex-direction: column;

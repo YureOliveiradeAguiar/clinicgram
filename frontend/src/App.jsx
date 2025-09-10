@@ -8,11 +8,11 @@ import Login from '@/pages/login/Login.jsx'
 import Dashboard from '@/pages/dashBoard/Dashboard.jsx';
 import Workers from './pages/workers/Workers.jsx';
 import Clients from '@/pages/clients/Clients.jsx';
-import Scheduling from '@/pages/scheduling/Scheduling.jsx';
 import Schedule from '@/pages/schedule/Schedule.jsx';
 import Places from '@/pages/places/Places.jsx';
 import Appointments from '@/pages/appointments/Appointments.jsx';
 import History from '@/pages/history/History.jsx';
+import Treatments from '@/pages/treatments/Treatments.jsx';
 
 
 export default function App() {
@@ -25,12 +25,14 @@ export default function App() {
 					<Route element={<Layout />}>
 						<Route path="/dashboard" element={<RequireAuth><Dashboard/></RequireAuth>}/>
 
-						<Route path="/workers" element={<RequireAuth><Workers/></RequireAuth>}/>
-						<Route path="/clients" element={<RequireAuth><Clients/></RequireAuth>}/>
-						<Route path="/places" element={<RequireAuth><Places /></RequireAuth>}/>
 						<Route path="/appointments" element={<RequireAuth><Appointments/></RequireAuth>}/>
 						<Route path="/schedule" element={<RequireAuth><Schedule /></RequireAuth>}/>
-						<Route path="/history" element={<RequireAuth><History /></RequireAuth>}/>
+
+						<Route path="/clients" element={<RequireAuth><Clients/></RequireAuth>}/>
+						<Route path="/workers" element={<RequireAuth><Workers/></RequireAuth>}/>
+						<Route path="/places" element={<RequireAuth><Places/></RequireAuth>}/>
+						<Route path="/treatments" element={<RequireAuth><Treatments/></RequireAuth>}/>
+						<Route path="/history" element={<RequireAuth><History/></RequireAuth>}/>
 					</Route>
 				</Routes>
 			</Router>
