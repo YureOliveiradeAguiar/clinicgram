@@ -4,9 +4,8 @@ import styles from './ElementDropdown.module.css';
 import { useState, useRef, useEffect } from 'react';
 
 
-export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [],
+export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], bestOptions,
         hasError=false, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente encontrado'},
-        isBestOptionFirst=false
     }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -23,7 +22,7 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
     }, []);
 
     const filteredOptions = options.filter(option =>
-        option.name.toLowerCase().includes(searchTerm.toLowerCase())
+        option.isTop || option.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleSelect = (option) => {
@@ -45,21 +44,17 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
                         value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     {filteredOptions.length > 0 ? (<>
-                        {isBestOptionFirst && (
-                            <div key={filteredOptions[0].id} className={`${styles.dropdownOption} ${styles.bestOption}`}
-                                onClick={() => handleSelect(filteredOptions[0])}
+                        {filteredOptions.map(option => (
+                            <div key={option.id} onClick={() => handleSelect(option)}
+                                className={`${styles.dropdownOption} ${option.isTop ? styles.bestOption : ""}`}
                             >
-                                <StarIcon className={styles.firstOptionIcon}/> {filteredOptions[0].name}
-                                <span className={styles.tooltip}>Recomendado para treinamento</span>
+                                {option.isTop && <StarIcon className={styles.firstOptionIcon} />}
+                                {option.name}
+                                {option.isTop && (
+                                    <span className={styles.tooltip}>Recomendado para treinamento</span>
+                                )}
                             </div>
-                        )}
-                        {filteredOptions
-                            .slice(isBestOptionFirst ? 1 : 0)
-                            .map((option) => (
-                                <div key={option.id} className={styles.dropdownOption} onClick={() => handleSelect(option)}>
-                                    {option.name}
-                                </div>
-                            ))}
+                        ))}
                     </>) : (
                         <p className={styles.dropdownNoOption}>{labels.noResults}</p>
                     )}

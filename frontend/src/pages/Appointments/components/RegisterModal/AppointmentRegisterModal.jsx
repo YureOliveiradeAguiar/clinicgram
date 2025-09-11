@@ -25,13 +25,14 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
 
 //=======================================Checking for best worker==================================
     const sortedWorkers = useMemo(() => {
+        if (!workers || workers.length === 0) return [];
         if (!selectedTreatment) return workers;
         /* Preprocess stats for performance (appointments in last 30 days = less data processed) */
         const now = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(now.getDate() - 30);
-
-        const stats = {}; // 9 : {totalCount : 5 treatmentCount : 5} - (9 is the client.id I think)
+        /* Here it creates the custom dictionary for sorting workers */
+        const stats = {}; // 9 : {totalCount : 5 treatmentCount : 5} -> (9 is the client.id)
         appointments.forEach(appointment => {
             const appointmentDate = new Date(appointment.startTime);
             if (appointmentDate <= thirtyDaysAgo) return;
@@ -42,23 +43,29 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
             stats[id].totalCount += 1;
             if (appointment.treatmentId === selectedTreatment.id) stats[id].treatmentCount += 1;
         });
-        console.log("stats: ", stats);
-
-
-        // Sort workers based on stats.
-        return [...workers].sort((a, b) => {
+        /* Sorts workers based on stats */
+        const ordered = [...workers].sort((a, b) => {
             const aStat = stats[a.id] || { treatmentCount: 0, totalCount: 0 };
             const bStat = stats[b.id] || { treatmentCount: 0, totalCount: 0 };
 
-            if (aStat.treatmentCount !== bStat.treatmentCount)
+            if (aStat.treatmentCount !== bStat.treatmentCount) {
                 return aStat.treatmentCount - bStat.treatmentCount;
+            }
             return aStat.totalCount - bStat.totalCount;
         });
+        /* Gets the top worker stats and mark its equals */
+        const topStat = stats[ordered[0].id] || { treatmentCount: 0, totalCount: 0 };
+        return ordered.map(worker => {
+            const workerStat = stats[worker.id] || { treatmentCount: 0, totalCount: 0 };
+            return {
+                ...worker,
+                isTop:
+                    workerStat.treatmentCount === topStat.treatmentCount &&
+                    workerStat.totalCount === topStat.totalCount,
+            };
+        });
+        
     }, [workers, appointments, selectedTreatment]);
-
-    useEffect (() => {
-        console.log("sortedWorkers: ", sortedWorkers);
-    },[sortedWorkers])
 
 //=================================================================================================
     const observationsValue = watch('observations') || '';
@@ -119,7 +126,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
             />
             <Controller name="workerId" control={control}
                 render={({ field }) => (
-                    <ElementDropdown options={sortedWorkers} selectedOption={selectedWorker} bestOption={!!selectedTreatment}
+                    <ElementDropdown options={sortedWorkers} selectedOption={selectedWorker} bestOptions={sortedWorkers.filter(w => w.isTop)} 
                         onSelect={(option) => {field.onChange(option.id); setSelectedWorker(option)}} hasError={errors.workerId}
                         labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário encontrado'}}
                     />

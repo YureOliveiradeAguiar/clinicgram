@@ -38,9 +38,9 @@ export default function AppointmentList() {
     const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
 
     return (
-        <List title="Agendamentos"
+        <List title="Consultas"
                 NewElementMessage="Nova" onNewElement={() => setOpenModal("register")}
-                searchPlaceholder="Pesquisar por estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+                searchPlaceholder="Pesquisar por paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             {appointments.length > 0 ? (
                 appointments
                     .filter((appointment) =>
