@@ -1,97 +1,55 @@
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { useEffect, useRef } from "react";
+import { Chart } from "chart.js/auto";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-export default function FrequencyChart({ workerName, chartData }) {
-    //console.log("chartData: ", chartData);
-    const totalAppointments = chartData.reduce((sum, a) => sum + a.consultations, 0);
+export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppointments, workerData, workerName }) {
+    const canvasRef = useRef(null);
+    const chartRef = useRef(null);
 
-    const totalRatings = chartData.reduce((sum, a) => sum + a.rating * a.consultations, 0);
+    useEffect(() => {
+        if (!canvasRef.current) return;
+        /* Destroy old chart instance on re-render to avoid duplicates */
+        if (chartRef.current) {
+            chartRef.current.destroy();
+        }
 
-    const avgRating = totalAppointments > 0 ? totalRatings / totalAppointments : 0;
-
-    const labels = chartData.map((a) => a.date);
-    //console.log("labels: ", labels);
-
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: "Atendimentos",
-                data: chartData.map((a) => a.consultations),
-                borderColor: "#4da78d",
-                backgroundColor: "#4da78d",
-                fill: false,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                yAxisID: "y",
+        chartRef.current = new Chart(canvasRef.current, {
+            type: "bar",
+            data: {
+                labels: daysInMonth.map(day => day.toString()),
+                datasets: workerData,
             },
-            {
-                label: "Avaliação Média",
-                data: chartData.map((a) => a.rating),
-                borderColor: "#f39c12",
-                backgroundColor: "#f39c12",
-                fill: false,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                yAxisID: "y1",
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        interaction: {
-            mode: "index",
-            intersect: false,
-        },
-        stacked: false,
-        scales: {
-            y: {
-                type: "linear",
-                display: true,
-                position: "left",
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: "Atendimentos",
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `${totalAppointments} Consultas - ${prevMonthStart.toLocaleString("default", {month: "long",})} - ${workerName}`,
+                    },
                 },
-                ticks: {
-                    stepSize: 1,
-                    callback: function (value) {
-                        return Number.isInteger(value) ? value : null;
+                scales: {
+                    x: {
+                        stacked: true,
+                        type: "category",
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0,
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 0,
+                            minRotation: 0,
+                        },
+                    }, 
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: { display: false, text: "Number of Appointments" },
+                        ticks: { precision: 0 },
+                        grace: 1,
                     },
                 },
             },
-            y1: {
-                type: "linear",
-                display: true,
-                position: "right",
-                min: 0,
-                max: 5,
-                title: {
-                    display: true,
-                    text: "Avaliação",
-                },
-                
-            },
-        },
-    };
-
-    return (
-        <div className="p-4 shadow-lg rounded-2xl bg-white">
-            <p>{workerName}</p>
-            <p className="text-gray-600 mb-2">
-                Total de atendimentos:{" "}
-                <span className="font-semibold">{totalAppointments}</span>
-            </p>
-            <p className="mb-4">
-                Média de avaliação: {avgRating.toFixed(1)}★
-            </p>
-            <Line data={data} options={options} height={300} />
-        </div>
-    );
+        });
+    }, [workerData]);
+    return <canvas ref={canvasRef} width={daysInMonth.length * 20} height= {240} style={{ cursor: 'pointer' }} />;
 }

@@ -7,11 +7,12 @@ import WorkerRegisterModal from '../RegisterModal/WorkerRegisterModal';
 import WorkerStatisticsModal from '../StatisticsModal/WorkerStatisticsModal';
 import WorkerDetailsModal from '../DetailsModal/WorkerDetailsModal';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-import useElement from '@/hooks/useElement';
+import useElement from '@/hooks/useElement.jsx';
+import useFetch from '@/hooks/useFetch.jsx';
 
 
 export default function WorkerList() {
@@ -30,6 +31,9 @@ export default function WorkerList() {
     } = useElement({ elementName: "o estagiário", elementNamePlural: "os estagiários", elementPath: "workers",
         selectedElement: selectedWorker, setSelectedElement: setSelectedWorker,
         setStatusMessage, setOpenModal });
+
+    const { data: appointments} = useFetch({ elementNamePlural:'as consultas', elementPath:'appointments', setStatusMessage});
+
 
     return (
         <List title="Estagiários"
@@ -54,14 +58,18 @@ export default function WorkerList() {
 
             {openModal === "register" && (
                 <WorkerRegisterModal isOpen={openModal === "register"} onSuccess={handleElementAdded}
-                        setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
+                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
+                />
             )}
             {(openModal === "statistics" && selectedWorker) && (
-                <WorkerStatisticsModal worker={selectedWorker} isOpen={selectedWorker !== null} onClose={() => {setSelectedWorker(null); setOpenModal(null)}}/>
+                <WorkerStatisticsModal worker={selectedWorker} appointments={appointments}
+                    isOpen={selectedWorker !== null} onClose={() => {setSelectedWorker(null); setOpenModal(null)}}
+                />
             )}
             {(openModal === "properties" && selectedWorker) && (
                 <WorkerDetailsModal worker={selectedWorker} isOpen={selectedWorker !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedWorker(null); setOpenModal(null)}} onDelete={handleElementDelete} onUpdate={handleElementUpdate}/>
+                    onClose={() => {setSelectedWorker(null); setOpenModal(null)}} onDelete={handleElementDelete} onUpdate={handleElementUpdate}
+                />
             )}
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>

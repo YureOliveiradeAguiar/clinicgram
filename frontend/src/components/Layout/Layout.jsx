@@ -91,8 +91,8 @@ export default function Layout() {
         <div className={styles.appContainer}>
             <div className={styles.sideContent}>
                 {isMobile ? (
-                    <MobileDrawer panelOptions={panelGroups} currentPath={currentPath}
-                        isOpen={sidebarExpanded} onClose={() => setSidebarExpanded(false)} />
+                    <Sidebar panelGroups={panelGroups} currentPath={currentPath}
+                        setSidebarExpanded = {setSidebarExpanded} sidebarExpanded={sidebarExpanded} />
                 ) : (
                     <Sidebar panelGroups={panelGroups} currentPath={currentPath}
                         setSidebarExpanded = {setSidebarExpanded} sidebarExpanded={sidebarExpanded} />

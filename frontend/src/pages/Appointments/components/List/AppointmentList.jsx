@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 import useElement from '@/hooks/useElement';
-import useFetch from './hooks/useFetch';
+import useFetch from '@/hooks/useFetch';
 
 
 export default function AppointmentList() {
