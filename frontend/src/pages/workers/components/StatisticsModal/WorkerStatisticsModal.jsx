@@ -43,18 +43,20 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
 
 //=====================================Group by day and treatment type========================================
     const datasets = useMemo(() => {
-        const dataByTreatment = {};
-        treatmentTypes.forEach((type) => {
-            dataByTreatment[type.id] = daysInMonth.map((day) => {
-                return filteredAppointments.filter((appointment) => {
-                    const date = new Date(appointment.startTime);
-                    return date.getDate() === day && appointment.treatmentId === type.id; //not optimal big filters inside loop
-                }).length;
-            });
-        });
+        /* Pre-aggregate: counts[treatmentId][day] = count */
+        const counts = {};
+        for (const appointment of filteredAppointments) {
+            const date = new Date(appointment.startTime);
+            const day = date.getDate();
+            if (!counts[appointment.treatmentId]) {
+                counts[appointment.treatmentId] = {};
+            }
+            counts[appointment.treatmentId][day] = (counts[appointment.treatmentId][day] || 0) + 1;
+        }
+        /* Now build datasets with fast lookups */
         return treatmentTypes.map((type, index) => ({
             label: type.name,
-            data: dataByTreatment[type],
+            data: daysInMonth.map((day) => counts[type.id]?.[day] || 0),
             backgroundColor: `hsl(${index * 137.5}, 70%, 60%)`,
         }));
     }, [filteredAppointments, treatmentTypes, daysInMonth]);

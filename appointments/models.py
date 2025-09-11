@@ -24,6 +24,7 @@ class Appointment(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     startTime = models.DateTimeField(blank=True, null=True)
     endTime = models.DateTimeField(blank=True, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     # Mandatory for apointments but not reservations
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     sus = models.BooleanField(_("SUS Patient"), default=False)

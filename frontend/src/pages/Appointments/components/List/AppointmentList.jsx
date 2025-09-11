@@ -59,6 +59,10 @@ export default function AppointmentList() {
                             <p className={`${styles.cardAtribute} ${styles.client}`}>
                                 {appointment.client.name}
                             </p>
+                            <p className={`${styles.cardAtribute} ${styles.client}`}>
+                                {appointment.createdAt}
+                                registrado há 12 meses
+                            </p>
                         </Card>
                 ))
             ) : (
