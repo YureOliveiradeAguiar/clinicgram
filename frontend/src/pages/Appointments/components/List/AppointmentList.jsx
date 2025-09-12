@@ -1,4 +1,5 @@
 import CalendarIcon from '@/assets/icons/calendarIcon';
+import CalendarAddIcon from '@/assets/icons/calendarAddIcon';
 import styles from './AppointmentList.module.css'
 
 import List from '@/components/List/List';
@@ -31,11 +32,35 @@ export default function AppointmentList() {
         selectedElement:selectedAppointment, setSelectedElement:setSelectedAppointment,
         setStatusMessage, setOpenModal });
 
-    // I put the fetches here, so the modals can use them without having to re-render the fetches.
+//============================Fetches for the modals, so they can use them without having to re-render the fetches===================
     const { data: treatments} = useFetch({ elementNamePlural:'os procedimentos', elementPath:'treatments', setStatusMessage});
     const { data: clients} = useFetch({ elementNamePlural:'os pacientes', elementPath:'clients', setStatusMessage});
     const { data: workers} = useFetch({ elementNamePlural:'os estagiários', elementPath:'workers', setStatusMessage});
     const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
+
+//========================================Getting relative time for display in appointment cards=====================================
+    function getRelativeTime(date) {
+        const rtf = new Intl.RelativeTimeFormat("pt-BR", { numeric: "auto" });
+        const diffMs = date.getTime() - Date.now();
+        const diffSec = Math.round(diffMs / 1000);
+        const divisions = [
+            { amount: 60, name: "second" },
+            { amount: 60, name: "minute" },
+            { amount: 24, name: "hour" },
+            { amount: 30, name: "day" },
+            { amount: 12, name: "month" },
+            { amount: Number.POSITIVE_INFINITY, name: "year" },
+        ];
+        let unit = "second";
+        let value = diffSec;
+        for (const division of divisions) {
+            if (Math.abs(value) < division.amount) break;
+            value = Math.round(value / division.amount);
+            unit = division.name;
+        }
+        return rtf.format(value, unit);
+    }
+//===================================================================================================================================
 
     return (
         <List title="Consultas"
@@ -48,21 +73,25 @@ export default function AppointmentList() {
                     )
                     .sort((a, b) => b.priority - a.priority)
                     .map(appointment => (
-                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} secondButtonIcon={CalendarIcon}
-                                selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}>
-                            <p className={`${styles.cardAtribute} ${styles.priority}`}>
-                                Prioridade: {appointment.priority}
-                            </p>
-                            <p className={`${styles.cardAtribute} ${styles.status}`}>
-                                {appointment.status_display}
-                            </p>
-                            <p className={`${styles.cardAtribute} ${styles.client}`}>
-                                {appointment.client.name}
-                            </p>
-                            <p className={`${styles.cardAtribute} ${styles.client}`}>
-                                {appointment.createdAt}
-                                registrado há 12 meses
-                            </p>
+                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} showSecondButton={false}
+                            selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}
+                        >
+                            <div className={styles.mainGroup}>
+                                <p className={styles.priority}>Prioridade {appointment.priority}</p>
+                                <div className={styles.centerInfo}>
+                                    <p>{appointment.client.name}</p>
+                                    <p className={styles.status}>{appointment.statusDisplay}</p>
+                                </div>
+                            </div>
+                            <div className={styles.dateInfo}>
+                                <span>
+                                    <CalendarIcon className='icon'/>
+                                    {appointment.startTime ? (<>
+                                        {getRelativeTime(new Date(appointment.startTime))}
+                                    </>) : "-/-"}
+                                </span>
+                                <span><CalendarAddIcon className='icon'/> {getRelativeTime(new Date(appointment.createdAt))}</span>
+                            </div>
                         </Card>
                 ))
             ) : (

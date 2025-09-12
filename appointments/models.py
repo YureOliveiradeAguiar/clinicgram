@@ -24,13 +24,14 @@ class Appointment(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     startTime = models.DateTimeField(blank=True, null=True)
     endTime = models.DateTimeField(blank=True, null=True)
-    createdAt = models.DateTimeField(auto_now_add=True)
     # Mandatory for apointments but not reservations
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     sus = models.BooleanField(_("SUS Patient"), default=False)
     priority = models.IntegerField(_("Priority"), default=0)
     # Aways optional fields
     observation = models.TextField(blank=True, null=True)
+    # Added by system
+    createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Agendamento de {self.client.name}"

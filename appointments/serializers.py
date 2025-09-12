@@ -38,9 +38,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
         source="place",
     )
 
-    status_display = serializers.CharField(source="get_status_display", read_only=True)
+    statusDisplay = serializers.CharField(source="get_status_display", read_only=True)
 
     class Meta:
         model = Appointment
         fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
-                    'startTime', 'endTime', 'priority','status','status_display', 'observation']
+                    'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt']

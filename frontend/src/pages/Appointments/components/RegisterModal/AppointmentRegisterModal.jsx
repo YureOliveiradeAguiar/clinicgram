@@ -95,7 +95,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 reset();
                 onSuccess(result.appointment);
             } else {
-                setStatusMessage({ message: "Erro ao registrar o estagiário", type: "error" });
+                setStatusMessage({ message: "Erro ao registrar consulta", type: "error" });
             }
         } catch (error) {
             setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});

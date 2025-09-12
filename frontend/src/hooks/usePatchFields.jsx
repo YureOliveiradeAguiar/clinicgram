@@ -17,6 +17,7 @@ export default function usePatchFields(contextFields = {}) {
             const error = validators[key](value);
             setErrors(prev => ({ ...prev, [key]: error }));
         }
+        //console.log("fields: ", fields);
     };
 
     const validateAll = () => {

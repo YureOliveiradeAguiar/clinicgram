@@ -1,3 +1,6 @@
+import XIcon from '@/assets/icons/xIcon';
+import styles from './DatePicker.module.css'
+
 import DateModal from './DateModal/DateModal';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -67,10 +70,23 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
 
 //=======================================Interpreter of Selected Date Info===============================================
+    const formatTime = (date) => {
+        if (!date) return null;
+        return `${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}`;
+    };
+    const appointmentStart = appointment?.startTime ? new Date(appointment.startTime) : null;
+    const appointmentEnd = appointment?.endTime ? new Date(appointment.endTime) : null;
     /* Selected hours and day come from the table as values that change of time */
-    const [selectedStartHours, setSelectedStartHours] = useState(null);
-    const [selectedEndHours, setSelectedEndHours] = useState(null);
-    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedStartHours, setSelectedStartHours] = useState(formatTime(appointmentStart));
+    const [selectedEndHours, setSelectedEndHours] = useState(formatTime(appointmentEnd));
+    const [selectedDay, setSelectedDay] = useState(() => startDate ? startDate.toISOString().split("T")[0] : null);
+    //useEffect(() => {
+    //    console.log("selectedStartHours: ", selectedStartHours);
+    //    console.log("selectedEndHours: ", selectedEndHours);
+    //    console.log("selectedDay: ", selectedDay);
+    //}, [appointment]);
+
+//========================================Converter of Selected Date Info ===============================================
     /* Converts 2025-09-15 and 09:00 to 2025-09-15T09:00:00Z */
     const { selectedStartTime, selectedEndTime, } = useMemo(() => {
         if (selectedDay && selectedStartHours && selectedEndHours) {
@@ -129,7 +145,6 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 
 //=============================================Actual Date Sending ================================================
     useEffect(() => {
-        if ((!selectedStartTime || !selectedEndTime)) return;
         onSelect(selectedStartTime, selectedEndTime); // Sends formated dates to the fields sent to the backend.
     }, [selectedDay]);
 
@@ -137,14 +152,24 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 
     return (<>
         <div className={'inputContainer'}>
-            <button className={`formButtonPicker ${true ? 'hasValue' : ""} ${!isEditing ? "readOnly" : ""}`}
-                type="button" readOnly={!isEditing} onClick={() => setDateModalOpen(true)}
+            <button className={`formButtonPicker ${selectedStartHours && selectedEndHours && selectedDay ? 'hasValue' : ""}
+                ${!isEditing ? "readOnly" : ""}`} type="button" readOnly={!isEditing} onClick={() => setDateModalOpen(true)}
             >
-                {(selectedStartHours && selectedEndHours && selectedDay)
-                    ? `${formatDate(selectedDay, false)}, ${selectedStartHours} a ${selectedEndHours}`
-                    : appointment ? displaySameDayTimeSpan(appointment.startTime, appointment.endTime): ''}
+                {selectedStartHours && selectedEndHours && selectedDay ? (
+                    `${formatDate(selectedDay, false)}, ${selectedStartHours} a ${selectedEndHours}`
+                ) : ("")}
             </button>
             <p id="dobLabel" className="customLabel">Data</p>
+            {(isEditing && selectedStartHours && selectedEndHours && selectedDay) &&(
+                <button type="button" className={styles.unscheduleButton}
+                    onClick={() => {
+                        setSelectedStartHours(null); setSelectedEndHours(null); setSelectedDay(null);
+                        onSelect(null, null);
+                    }}
+                >
+                    <XIcon className={styles.unscheduleIcon}/>
+                </button>
+            )}
         </div>
         <p className="errorMessage">{!isDateValid ? 'Selecione uma data válida' : ''}</p>
         {isDateModalOpen && (

@@ -11,9 +11,10 @@
 
 .cardHeader {
     display: inline-flex;
+    justify-content: space-between;
     align-items: center;
-    font-size: 1rem;
-    gap: 2px;
+    width: 100%;
+    padding-right: 12px;
 }
 
 .cardName {
