@@ -3,6 +3,7 @@ import UsersIcon from '@/assets/icons/usersIcon.jsx'
 import CalendarAddIcon from '@/assets/icons/calendarAddIcon.jsx'
 import ScheduleIcon from '@/assets/icons/calendarIcon.jsx'
 import PlacesIcon from '@/assets/icons/placesIcon.jsx'
+import OpenBookIcon from '@/assets/icons/openBookIcon.jsx'
 import HistoryIcon from '@/assets/icons/historyIcon'
 import PillIcon from '@/assets/icons/pillIcon.jsx'
 import ClipboardIcon from '@/assets/icons/clipboardIcon.jsx'
@@ -53,8 +54,15 @@ export default function Layout() {
                 { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
                 { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
                 { title: "Salas", Icon: PlacesIcon, link: "/places" },
+                { title: "Disciplinas", Icon: OpenBookIcon, link: "/history" },
                 { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
                 { title: "Histórico", Icon: HistoryIcon, link: "/history" },
+            ]
+        },
+        {
+            title: "Externo",
+            items: [
+                { title: "Solicitações", Icon: UsersIcon, link: "/history" },
             ]
         },
         //{title: "Minha Clínica", Icon: UsersIcon, dropdown: [

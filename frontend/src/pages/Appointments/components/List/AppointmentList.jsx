@@ -1,5 +1,4 @@
 import CalendarIcon from '@/assets/icons/calendarIcon';
-import CalendarAddIcon from '@/assets/icons/calendarAddIcon';
 import styles from './AppointmentList.module.css'
 
 import List from '@/components/List/List';
@@ -63,9 +62,9 @@ export default function AppointmentList() {
 //===================================================================================================================================
 
     return (
-        <List title="Consultas"
-                NewElementMessage="Nova" onNewElement={() => setOpenModal("register")}
-                searchPlaceholder="Pesquisar por paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+        <List title="Consultas" NewElementMessage="Nova" onNewElement={() => setOpenModal("register")}
+            searchPlaceholder="Pesquisar por paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+        >
             {appointments.length > 0 ? (
                 appointments
                     .filter((appointment) =>
@@ -80,7 +79,9 @@ export default function AppointmentList() {
                                 <p className={styles.priority}>Prioridade {appointment.priority}</p>
                                 <div className={styles.centerInfo}>
                                     <p>{appointment.client.name}</p>
-                                    <p className={styles.status}>{appointment.statusDisplay}</p>
+                                    <p className={`${styles.status} ${styles[appointment.status]}`}>
+                                        {appointment.statusDisplay}
+                                    </p>
                                 </div>
                             </div>
                             <div className={styles.dateInfo}>
@@ -90,7 +91,7 @@ export default function AppointmentList() {
                                         {getRelativeTime(new Date(appointment.startTime))}
                                     </>) : "-/-"}
                                 </span>
-                                <span><CalendarAddIcon className='icon'/> {getRelativeTime(new Date(appointment.createdAt))}</span>
+                                <span>criado {getRelativeTime(new Date(appointment.createdAt))}</span>
                             </div>
                         </Card>
                 ))

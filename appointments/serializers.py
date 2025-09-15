@@ -43,4 +43,21 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
-                    'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt']
+            'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt'
+        ]
+        read_only_fields = ['treatment', 'client', 'worker', 'place', 'status']
+
+    def _set_status(self, instance):
+        instance.status = (
+            Appointment.Status.SCHEDULED if instance.startTime else Appointment.Status.UNSCHEDULED
+        )
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        return self._set_status(instance)
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        return self._set_status(instance)

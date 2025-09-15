@@ -4,12 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Appointment
-from clients.models import Client
-from places.models import Place
 from .serializers import AppointmentSerializer
 
-from django.utils.dateparse import parse_datetime
-from django.utils.timezone import make_aware, is_naive
 from django.shortcuts import get_object_or_404
 
 import reversion

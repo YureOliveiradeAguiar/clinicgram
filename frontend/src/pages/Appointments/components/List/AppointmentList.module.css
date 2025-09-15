@@ -24,8 +24,6 @@
 .status {
     padding: 1px 4px;
     border-radius: 16px;
-    background-color: #e6f0ff;
-    color: #1a73e8;
 }
 
 .dateInfo {
@@ -43,4 +41,28 @@
     display: inline-flex;
     align-items: center;
     gap: 2px;
+}
+
+.status.scheduled {
+    background-color: #e6f0ff;
+    color: #1a73e8;
+}
+.status.unscheduled {
+    background-color: rgb(235,235,235);
+}
+.status.completed {
+    background-color: #ecfdf5;
+    color: #047857;
+}
+.status.missed {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+.status.canceled {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+.status.reservation {
+    background-color: #f5f3ff;
+    color: #6d28d9;
 }

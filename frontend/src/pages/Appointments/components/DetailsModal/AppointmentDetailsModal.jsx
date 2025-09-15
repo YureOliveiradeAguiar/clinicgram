@@ -31,11 +31,28 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
     const [selectedTreatment, setSelectedTreatment] = useState(appointment.treatment);
 
+//=======================================Interpreter of Selected Date Info===============================================
+    const formatTime = (date) => {
+        if (!date) return null;
+        return `${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}`;
+    };
+    const appointmentStart = appointment?.startTime ? new Date(appointment.startTime) : null;
+    const appointmentEnd = appointment?.endTime ? new Date(appointment.endTime) : null;
+    /* Selected hours and day come from the table as values that change of time */
+    const [selectedStartHours, setSelectedStartHours] = useState(formatTime(appointmentStart));
+    const [selectedEndHours, setSelectedEndHours] = useState(formatTime(appointmentEnd));
+    const [selectedDay, setSelectedDay] = useState(() => appointment?.startTime ? new Date(appointment.startTime).toISOString().split("T")[0] : null);
+    //useEffect(() => {
+    //    console.log("selectedStartHours: ", selectedStartHours);
+    //    console.log("selectedEndHours: ", selectedEndHours);
+    //    console.log("selectedDay: ", selectedDay);
+    //}, [appointment]);
+
 //=========================================DatePicker data=========================================
     // Here is for checking date validity.
     const [hasDateError, setHasDateError] = useState(true);
-//==================================================================================================
 
+//==========================================Saving method==========================================
     const handleSave = async () => {
         if (hasDateError) {
             setStatusMessage({message: "Data escolhida está ocupada!", type: "error" });
@@ -54,14 +71,22 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         setIsEditing(false);
     };
 
+//==========================================Reseting method==========================================
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
+        
         setSelectedClient(appointment.client);
         setSelectedWorker(appointment.worker);
         setSelectedPlace(appointment.place);
         setSelectedTreatment(appointment.treatment);
+
+        setSelectedStartHours(formatTime(appointmentStart));
+        setSelectedEndHours(formatTime(appointmentEnd));
+        setSelectedDay(appointment?.startTime ? new Date(appointment.startTime).toISOString().split("T")[0] : null);
     }
+
+//====================================================================================================
 
     return (
         <DetailsModal title={isEditing ? "Edição da Consulta" : "Detalhes da Consulta"} isOpen={isOpen}
@@ -99,6 +124,9 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             </div>
 
             <DatePicker appointment={appointment} isEditing={isEditing}
+                selectedStartHours={selectedStartHours} setSelectedStartHours={setSelectedStartHours} selectedEndHours={selectedEndHours}
+                setSelectedEndHours={setSelectedEndHours} selectedDay={selectedDay} setSelectedDay={setSelectedDay}
+
                 onSelect={(start, end) => {setField("startTime", start); setField("endTime", end);}}
                 appointments={appointments} selectedClient={selectedClient} selectedWorker={selectedWorker} selectedPlace={selectedPlace}
                 setHasDateError={setHasDateError}

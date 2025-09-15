@@ -9,6 +9,7 @@ import { generateDays, generateHours, generateScheduleMatrix, getIndexesFromTime
 
 
 export default function DatePicker({ appointment, isEditing=true, onSelect,
+        selectedStartHours, setSelectedStartHours, selectedEndHours, setSelectedEndHours, selectedDay, setSelectedDay,
         appointments, selectedClient, selectedWorker, selectedPlace,
         setHasDateError
     }) {
@@ -27,21 +28,6 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 
         return `${yearUTC}-${monthUTC}-${dayUTC}T${hourUTC}:${minuteUTC}:00Z`;
     };
-
-    const displaySameDayTimeSpan = (start, end) => {
-        /* New Date is required because django will return a string, not date, and toStrings methods of
-        a string will just return the same string back. appointment.startTime is 2025-09-04T12:14:20Z */
-        // The get methods for date elements and toString functions are how you convert UTC to local time.
-        // .toString() = "Tue Oct 28 2025 11:30:00 GMT-0300 (Brasilia Standard Time)"
-        // .toLocaleString() = "28/10/2025, 11:30:00"
-        // .toLocaleTimeString() = "11:30:00"
-        // .getFullYear() .getMonth() (Careful: 0 = January, 11 = December)
-        // .getDate() .getHours() .getMinutes() .getSeconds()
-        // slice is (from, to) and -3 const from the oposite direction.
-        const startTimeDisplay = new Date (start).toLocaleString().slice(0,-3);
-        const endTimeDisplay = new Date (end).toLocaleTimeString().slice(0,-3);
-        return (`${startTimeDisplay} a ${endTimeDisplay}`)
-    }
 
     const formatDate = (dateString, withWeekday = false) => { // Local time (not UTC).
         const [year, month, day] = dateString.split('-').map(Number);
@@ -68,23 +54,6 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
     const days = useMemo(() => generateDays(7, startDate), [startDate]);
     const times = useMemo(() => generateHours(), []);
     const matrix = useMemo(() => generateScheduleMatrix(days, times), [days, times]);
-
-//=======================================Interpreter of Selected Date Info===============================================
-    const formatTime = (date) => {
-        if (!date) return null;
-        return `${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}`;
-    };
-    const appointmentStart = appointment?.startTime ? new Date(appointment.startTime) : null;
-    const appointmentEnd = appointment?.endTime ? new Date(appointment.endTime) : null;
-    /* Selected hours and day come from the table as values that change of time */
-    const [selectedStartHours, setSelectedStartHours] = useState(formatTime(appointmentStart));
-    const [selectedEndHours, setSelectedEndHours] = useState(formatTime(appointmentEnd));
-    const [selectedDay, setSelectedDay] = useState(() => startDate ? startDate.toISOString().split("T")[0] : null);
-    //useEffect(() => {
-    //    console.log("selectedStartHours: ", selectedStartHours);
-    //    console.log("selectedEndHours: ", selectedEndHours);
-    //    console.log("selectedDay: ", selectedDay);
-    //}, [appointment]);
 
 //========================================Converter of Selected Date Info ===============================================
     /* Converts 2025-09-15 and 09:00 to 2025-09-15T09:00:00Z */
@@ -185,3 +154,13 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
         )}
     </>)
 }
+
+/* New Date is required because django will return a string, not date, and toStrings methods of
+    a string will just return the same string back. appointment.startTime is 2025-09-04T12:14:20Z */
+// The get methods for date elements and toString functions are how you convert UTC to local time.
+// .toString() = "Tue Oct 28 2025 11:30:00 GMT-0300 (Brasilia Standard Time)"
+// .toLocaleString() = "28/10/2025, 11:30:00"
+// .toLocaleTimeString() = "11:30:00"
+// .getFullYear() .getMonth() (Careful: 0 = January, 11 = December)
+// .getDate() .getHours() .getMinutes() .getSeconds()
+// slice is (from, to) and -3 const from the oposite direction.
