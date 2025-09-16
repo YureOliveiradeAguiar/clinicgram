@@ -1,4 +1,4 @@
-import AppointmentList from './components/List/AppointmentList.jsx'
+import AppointmentList from './List/AppointmentList.jsx'
 
 export default function Appointments() {
 	return(

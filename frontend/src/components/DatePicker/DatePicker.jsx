@@ -81,11 +81,11 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
 //===============================================Occupied Cells Logic=====================================================
     /* Updates occupied indexes when refered client, worker, place changes. */
     const occupiedIndexes = useMemo(() => {
-        if ((!selectedPlace && !selectedClient && !selectedWorker) || !appointments.length || !matrix.length) return new Set();
+        if ((!selectedPlace && !selectedWorker) || !appointments.length || !matrix.length) return new Set();
         const filteredAppointments = appointments.filter( (appt) => {
             if (appointment?.id === appt.id) return false;
             const samePlace = selectedPlace && appt.place.id === selectedPlace.id;
-            const sameClient = selectedClient && appt.client.id === selectedClient.id;
+            const sameClient = selectedClient && appt.client?.id === selectedClient.id;
             const sameWorker = selectedWorker  && appt.worker.id === selectedWorker.id;
             return (samePlace || sameClient || sameWorker);
         });

@@ -25,7 +25,7 @@ class Appointment(models.Model):
     startTime = models.DateTimeField(blank=True, null=True)
     endTime = models.DateTimeField(blank=True, null=True)
     # Mandatory for apointments but not reservations
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, null=True, blank=True)
     sus = models.BooleanField(_("SUS Patient"), default=False)
     priority = models.IntegerField(_("Priority"), default=0)
     # Aways optional fields
@@ -34,4 +34,12 @@ class Appointment(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Agendamento de {self.client.name}"
+        if self.status == Appointment.Status.RESERVATION:
+            return f"Reserva em {self.place.name} ({self.startTime:%d/%m/%Y %H:%M})"
+        elif self.client:
+            return f"Agendamento de {self.client.name}"
+        else:
+            return "Agendamento sem cliente"
+    
+# null=True allows the DB to store NULL
+# blank=True allows forms to submit empty values

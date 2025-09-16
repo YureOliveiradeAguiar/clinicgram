@@ -45,7 +45,12 @@ export default function Layout() {
             items: [
                 { title: "Consultas", Icon: CalendarAddIcon, link: "/appointments" },
                 { title: "Agenda", Icon: ScheduleIcon, link: "/schedule" },
-                { title: "Reservas", Icon: ClipboardIcon, link: "/history" },
+            ]
+        },
+        {
+            title: "Externo",
+            items: [
+                { title: "Solicitações", Icon: ClipboardIcon, link: "/history" },
             ]
         },
         {
@@ -57,12 +62,6 @@ export default function Layout() {
                 { title: "Disciplinas", Icon: OpenBookIcon, link: "/history" },
                 { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
                 { title: "Histórico", Icon: HistoryIcon, link: "/history" },
-            ]
-        },
-        {
-            title: "Externo",
-            items: [
-                { title: "Solicitações", Icon: UsersIcon, link: "/history" },
             ]
         },
         //{title: "Minha Clínica", Icon: UsersIcon, dropdown: [

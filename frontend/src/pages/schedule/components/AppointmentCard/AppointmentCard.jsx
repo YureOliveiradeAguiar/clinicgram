@@ -51,7 +51,7 @@ export default function AppointmentCard({ appointment, labelColor, setSelectedAp
                 <div className={styles.cardColorLabel} style={{ backgroundColor: labelColor }}/>
 
                 <div className={styles.cardTextSection}>
-                    <p className={styles.cardName}>{appointment.client.name.split(' ')[0]} · {appointment.place.name} {appointment.place.icon}</p>
+                    <p className={styles.cardName}>{appointment.client ? appointment.client.name.split(' ')[0] : "Reserva"} · {appointment.place.name} {appointment.place.icon}</p>
                     <p className={styles.cardDeets}>{formatDateRange(appointment.startTime, appointment.endTime)}</p>
                 </div>
                 <div className={styles.cardButtonSection}>

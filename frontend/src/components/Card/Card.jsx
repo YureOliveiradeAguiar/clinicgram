@@ -7,7 +7,8 @@ import { useRef, useEffect } from 'react';
 import ModalButton from '../ModalButton/ModalButton';
 
 export default function Card({ children, element, selectedElement, setOpenModal, setSelectedElement,
-        showSecondButton=true, secondButtonIcon=BarChartIcon }) {
+    showSecondButton = true, secondButtonIcon = BarChartIcon, customSpecifier
+    }) {
     const cardRef = useRef(null);
 
     useEffect(() => {
@@ -25,8 +26,14 @@ export default function Card({ children, element, selectedElement, setOpenModal,
                 {children}
             </div>
             <div className={styles.cardButtonSection}>
-                {showSecondButton && <ModalButton Icon={secondButtonIcon} onClick={() => {setOpenModal("statistics"); setSelectedElement(element)}}/>}
-                <ModalButton Icon={InfoIcon} onClick={() => {setOpenModal("properties");setSelectedElement(element)}}/>
+                {showSecondButton &&
+                    <ModalButton Icon={secondButtonIcon} 
+                        onClick={() => { setOpenModal(customSpecifier ? `${customSpecifier}Statistics`: 'statistics'); setSelectedElement(element) }}
+                    />
+                }
+                <ModalButton Icon={InfoIcon}
+                    onClick={() => { setOpenModal(customSpecifier ? `${customSpecifier}Properties`: 'properties'); setSelectedElement(element) }}
+                />
             </div>
         </div>
     )

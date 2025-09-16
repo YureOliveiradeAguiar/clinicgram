@@ -26,6 +26,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
     clientId = serializers.PrimaryKeyRelatedField(
         queryset=Client.objects.all(),
         source="client",
+        required=False,
+        allow_null=True
     )
     worker = WorkerSerializer(read_only=True)
     workerId = serializers.PrimaryKeyRelatedField(
@@ -45,13 +47,20 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
             'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt'
         ]
-        read_only_fields = ['treatment', 'client', 'worker', 'place', 'status']
+        read_only_fields = ['treatment', 'client', 'worker', 'place', 'statusDisplay']
+    
+    def validate(self, data):
+        if data.get("status") != Appointment.Status.RESERVATION and not data.get("client"):
+            raise serializers.ValidationError("Client is required for non-reservation appointments.")
+        return data
 
     def _set_status(self, instance):
-        instance.status = (
-            Appointment.Status.SCHEDULED if instance.startTime else Appointment.Status.UNSCHEDULED
-        )
-        instance.save()
+        # Only auto-set status if it wasn’t explicitly set
+        if instance.status not in (Appointment.Status.RESERVATION, Appointment.Status.SCHEDULED, Appointment.Status.UNSCHEDULED):
+            instance.status = (
+                Appointment.Status.SCHEDULED if instance.startTime else Appointment.Status.UNSCHEDULED
+            )
+            instance.save()
         return instance
 
     def update(self, instance, validated_data):

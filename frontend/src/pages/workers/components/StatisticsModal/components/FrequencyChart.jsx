@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 
 
-export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppointments, workerData, workerName }) {
+export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppointments, appointmentsByClient, workerData, workerName }) {
     const canvasRef = useRef(null);
     const chartRef = useRef(null);
 
@@ -26,6 +26,7 @@ export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppoi
                     title: {
                         display: true,
                         text: `${totalAppointments} Consultas - ${prevMonthStart.toLocaleString("default", {month: "long",})} - ${workerName}`,
+                        ...{appointmentsByClient}
                     },
                 },
                 scales: {

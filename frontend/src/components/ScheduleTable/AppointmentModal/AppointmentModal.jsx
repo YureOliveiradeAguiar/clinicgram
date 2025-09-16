@@ -34,11 +34,13 @@ export default function AppointmentModal({ appointment, onDelete, onClose }) {
     return (
         <div className={styles.overlay}>
             <div className={styles.modal} ref={modalRef}>
-                <h2>Detalhes do Agendamento</h2>
-                <div className={styles.infoRow}>
-                    <span className={styles.label}>Cliente:</span>
-                    <span>{appointment.client.name}</span>
-                </div>
+                <h2>Detalhes da {appointment.status === "reservation" ? "Reserva" : "Consulta"}</h2>
+                {appointment.client && (
+                    <div className={styles.infoRow}>
+                        <span className={styles.label}>Cliente:</span>
+                        <span>{appointment.client.name}</span>
+                    </div>
+                )}
                 <div className={styles.infoRow}>
                     <span className={styles.label}>Local:</span>
                     <span>{appointment.place.name} {appointment.place.icon}</span>

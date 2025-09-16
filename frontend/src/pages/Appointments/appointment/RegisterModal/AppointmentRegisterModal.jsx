@@ -3,8 +3,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
-import ElementDropdown from '../ElementDropdown/ElementDropdown';
-import DatePicker from '../DatePicker/DatePicker';
+import ElementDropdown from '../../../../components/ElementDropdown/ElementDropdown';
+import DatePicker from '../../../../components/DatePicker/DatePicker';
 
 import { getCookie } from '@/utils/csrf.js';
 
@@ -18,6 +18,12 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
+
+//=======================================Interpreter of Selected Date Info===============================================
+    /* Selected hours and day come from the table as values that change of time */
+    const [selectedStartHours, setSelectedStartHours] = useState(null);
+    const [selectedEndHours, setSelectedEndHours] = useState(null);
+    const [selectedDay, setSelectedDay] = useState(() => null);
 
 //=========================================DatePicker data=========================================
     // Here is for checking date validity.
@@ -107,7 +113,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     };
 
     return (
-        <RegisterModal title="Nova consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+        <RegisterModal title="Nova Consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <Controller name="treatmentId" control={control}
                 render={({ field }) => (
                     <ElementDropdown options={treatments} selectedOption={selectedTreatment}
@@ -144,7 +150,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 <input type="number" id="priority" name="priority" autoComplete="off"
                     maxLength="70" placeholder=" "
                     className={`formInput ${errors.priority ? "formInputError" : ""}`}
-                    {...register('priority')}
+                    {...register('priority', { value: 0 })}
                 />
                 <label htmlFor="priority">Prioridade</label>
                 <p className="errorMessage">{errors.priority?.message || ""}</p>
@@ -153,6 +159,9 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
             <Controller name="timeRange" control={control}
                 render={({ field }) => (
                     <DatePicker
+                        selectedStartHours={selectedStartHours} setSelectedStartHours={setSelectedStartHours} selectedEndHours={selectedEndHours}
+                        setSelectedEndHours={setSelectedEndHours} selectedDay={selectedDay} setSelectedDay={setSelectedDay}
+
                         onSelect={(start, end) => {field.onChange({ startTime: start, endTime: end });}}
                         appointments={appointments} selectedClient={selectedClient} selectedWorker={selectedWorker} selectedPlace={selectedPlace}
                         setHasDateError={setHasDateError}

@@ -60,17 +60,33 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
             backgroundColor: `hsl(${index * 137.5}, 70%, 60%)`,
         }));
     }, [filteredAppointments, treatmentTypes, daysInMonth]);
+//=========================================Geting count for each patient=======================================
+    const countsArray = useMemo(() => {
+        const appointmentCounts = filteredAppointments.reduce((acc, appointment) => {
+            if (!appointment.client) return acc; // skip reservations without client
+            const name = appointment.client.name;
+            acc[name] = (acc[name] || 0) + 1;
+            return acc;
+        }, {});
+
+        return Object.entries(appointmentCounts).map(
+            ([name, count]) => `${count} - ${name}`
+        );
+    }, [filteredAppointments]);
+
 //=============================================================================================================
 
     useEffect(() => {
-        console.log("datasets: ", datasets);
-    }, [datasets]);
+        console.log("countsArray: ", countsArray);
+    }, [countsArray]);
 
     return (
         <Modal title={"Controle de Frequência"} isOpen={isOpen} onClose={onClose} maxWidth='620px'>
             <div style={{ overflowX: 'auto' }}>
                 <FrequencyChart daysInMonth={daysInMonth} prevMonthStart={prevMonthStart}
-                totalAppointments={filteredAppointments ? filteredAppointments.length : 0} workerData={datasets} workerName={worker?.name || ''}/>
+                totalAppointments={filteredAppointments ? filteredAppointments.length : 0}
+                appointmentsByClient={countsArray}
+                workerData={datasets} workerName={worker?.name || ''}/>
             </div>
         </Modal>
     );

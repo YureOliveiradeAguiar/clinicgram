@@ -2,8 +2,8 @@ import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
 import { useState } from 'react';
 
-import ElementDropdown from '../ElementDropdown/ElementDropdown.jsx';
-import DatePicker from '../DatePicker/DatePicker.jsx';
+import ElementDropdown from '@/components/ElementDropdown/ElementDropdown.jsx';
+import DatePicker from '@/components/DatePicker/DatePicker.jsx';
 
 import usePatchFields from '@/hooks/usePatchFields.jsx';
 
@@ -42,11 +42,6 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     const [selectedStartHours, setSelectedStartHours] = useState(formatTime(appointmentStart));
     const [selectedEndHours, setSelectedEndHours] = useState(formatTime(appointmentEnd));
     const [selectedDay, setSelectedDay] = useState(() => appointment?.startTime ? new Date(appointment.startTime).toISOString().split("T")[0] : null);
-    //useEffect(() => {
-    //    console.log("selectedStartHours: ", selectedStartHours);
-    //    console.log("selectedEndHours: ", selectedEndHours);
-    //    console.log("selectedDay: ", selectedDay);
-    //}, [appointment]);
 
 //=========================================DatePicker data=========================================
     // Here is for checking date validity.

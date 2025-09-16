@@ -1,17 +1,16 @@
 .mainGroup {
     display: inline-flex;
-    gap: 12px;
+    gap: 6px;
+}
+.mainGroup p {
+    text-align: start;
+    vertical-align: baseline;
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
-.priority {
-    align-self: center;
-    padding: 1px 4px;
-    border-radius: 6px;
-    background-color: #ffe5e5;
-    color: #d93025;
-}
-
-.centerInfo {
+.infoGroup {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -20,23 +19,33 @@
     line-height: 1.2rem;
     color: rgb(60,60,60);
 }
+.icon{
+    width: 20px;
+    height: 20px;
+    color: rgb(60,60,60);
+}
 
 .status {
-    padding: 1px 4px;
+    padding: 0 6px;
     border-radius: 16px;
+}
+.priority {
+    line-height: 1.5;
+    margin: 0 6px;
+    font-size: 0.9rem;
+    color: rgb(100,100,100);
 }
 
 .dateInfo {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: end;
     justify-content: center;
     height: 100%;
     font-size: 0.9rem;
     line-height: 1.2rem;
     color: rgb(100,100,100);
 }
-
 .dateInfo span {
     display: inline-flex;
     align-items: center;
@@ -55,8 +64,8 @@
     color: #047857;
 }
 .status.missed {
-    background-color: #fef2f2;
-    color: #b91c1c;
+    background-color: #ffe5e5;
+    color: #d93025
 }
 .status.canceled {
     background-color: #fff7ed;
