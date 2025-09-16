@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 
 
-export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppointments, appointmentsByClient, workerData, workerName }) {
+export default function TreatmentsChart({ daysInMonth, workerData }) {
     const canvasRef = useRef(null);
     const chartRef = useRef(null);
 
@@ -20,15 +20,8 @@ export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppoi
                 datasets: workerData,
             },
             options: {
-                responsive: true,
+                responsive: false,
                 maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: `${totalAppointments} Consultas - ${prevMonthStart.toLocaleString("default", {month: "long",})} - ${workerName}`,
-                        ...{appointmentsByClient}
-                    },
-                },
                 scales: {
                     x: {
                         stacked: true,
@@ -52,5 +45,5 @@ export default function FrequencyChart({ daysInMonth, prevMonthStart, totalAppoi
             },
         });
     }, [workerData]);
-    return <canvas ref={canvasRef} width={daysInMonth.length * 20} height= {240} style={{ cursor: 'pointer' }} />;
+    return <canvas ref={canvasRef} width={daysInMonth.length * 20} height= {240} style={{ cursor: 'help' }} />;
 }

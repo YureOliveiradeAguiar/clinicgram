@@ -1,0 +1,30 @@
+.summary {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.summary {
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.summary strong {
+    color: #111827;
+}
+
+/* Chart wrapper */
+.chartWrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 1rem;
+}
+
+/* Ensure the chart actually scrolls */
+.chartWrapper>* {
+    min-width: 600px;
+    /* adjust depending on your chart size */
+}

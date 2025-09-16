@@ -1,5 +1,9 @@
+import styles from './WorkerStatisticsModal.module.css'
+
 import Modal from '@/components/Modal/Modal';
-import FrequencyChart from './components/FrequencyChart';
+import ClientsChart from './components/ClientsChart';
+import TreatmentsChart from './components/TreatmentsChart';
+
 import { useMemo, useEffect } from 'react';
 
 
@@ -61,7 +65,7 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
         }));
     }, [filteredAppointments, treatmentTypes, daysInMonth]);
 //=========================================Geting count for each patient=======================================
-    const countsArray = useMemo(() => {
+    const appointmentCountByClient = useMemo(() => {
         const appointmentCounts = filteredAppointments.reduce((acc, appointment) => {
             if (!appointment.client) return acc; // skip reservations without client
             const name = appointment.client.name;
@@ -76,17 +80,20 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
 
 //=============================================================================================================
 
-    useEffect(() => {
-        console.log("countsArray: ", countsArray);
-    }, [countsArray]);
+    //useEffect(() => {
+    //    console.log("appointmentCountByClient: ", appointmentCountByClient);
+    //}, [appointmentCountByClient]);
 
     return (
         <Modal title={"Controle de Frequência"} isOpen={isOpen} onClose={onClose} maxWidth='620px'>
-            <div style={{ overflowX: 'auto' }}>
-                <FrequencyChart daysInMonth={daysInMonth} prevMonthStart={prevMonthStart}
-                totalAppointments={filteredAppointments ? filteredAppointments.length : 0}
-                appointmentsByClient={countsArray}
-                workerData={datasets} workerName={worker?.name || ''}/>
+            <div className={styles.summary}>
+                <p>{worker?.name || ""}</p> 
+                <p>Total em {prevMonthStart.toLocaleString("default", { month: "long" })}:
+                    {filteredAppointments ? filteredAppointments.length : 0}
+                </p>
+            </div>
+            <div className={styles.chartWrapper}>
+                <TreatmentsChart daysInMonth={daysInMonth} workerData={datasets} />
             </div>
         </Modal>
     );

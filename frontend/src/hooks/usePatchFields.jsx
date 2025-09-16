@@ -50,6 +50,7 @@ export default function usePatchFields(contextFields = {}) {
             //console.log("editedValue: ", editedValue);
             //console.log("elementValue: ", elementValue);
         }
+        console.log("updatedFields: ", updatedFields);
         return updatedFields;
     }
 
