@@ -45,5 +45,5 @@ export default function TreatmentsChart({ daysInMonth, workerData }) {
             },
         });
     }, [workerData]);
-    return <canvas ref={canvasRef} width={daysInMonth.length * 20} height= {240} style={{ cursor: 'help' }} />;
+    return <canvas ref={canvasRef} width={daysInMonth.length * 20} height= {200} />;
 }

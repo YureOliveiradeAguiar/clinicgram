@@ -47,10 +47,10 @@ export default function usePatchFields(contextFields = {}) {
             if (editedValue !== elementValue) {
                 updatedFields[key] = fields[key];
             }
-            //console.log("editedValue: ", editedValue);
-            //console.log("elementValue: ", elementValue);
+            //console.log("editedValue: ", typeof editedValue);
+            //console.log("elementValue: ", typeof elementValue);
         }
-        console.log("updatedFields: ", updatedFields);
+        //console.log("updatedFields: ", updatedFields);
         return updatedFields;
     }
 

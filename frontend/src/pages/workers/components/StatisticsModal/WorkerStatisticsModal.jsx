@@ -1,7 +1,7 @@
 import styles from './WorkerStatisticsModal.module.css'
 
 import Modal from '@/components/Modal/Modal';
-import ClientsChart from './components/ClientsChart';
+import FrequencyChart from './components/FrequencyChart';
 import TreatmentsChart from './components/TreatmentsChart';
 
 import { useMemo, useEffect } from 'react';
@@ -64,22 +64,23 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
             backgroundColor: `hsl(${index * 137.5}, 70%, 60%)`,
         }));
     }, [filteredAppointments, treatmentTypes, daysInMonth]);
+
 //=========================================Geting count for each patient=======================================
     const appointmentCountByClient = useMemo(() => {
         const appointmentCounts = filteredAppointments.reduce((acc, appointment) => {
-            if (!appointment.client) return acc; // skip reservations without client
+            if (!appointment.client) return acc; // Skips reservations without client
             const name = appointment.client.name;
             acc[name] = (acc[name] || 0) + 1;
             return acc;
         }, {});
-
-        return Object.entries(appointmentCounts).map(
-            ([name, count]) => `${count} - ${name}`
-        );
+        // Returns array of objects directly for the chart.
+        return Object.entries(appointmentCounts).map(([name, count]) => ({
+            name,
+            count
+        }));
     }, [filteredAppointments]);
 
 //=============================================================================================================
-
     //useEffect(() => {
     //    console.log("appointmentCountByClient: ", appointmentCountByClient);
     //}, [appointmentCountByClient]);
@@ -87,13 +88,16 @@ export default function WorkerStatisticsModal({ appointments, worker, isOpen, on
     return (
         <Modal title={"Controle de Frequência"} isOpen={isOpen} onClose={onClose} maxWidth='620px'>
             <div className={styles.summary}>
-                <p>{worker?.name || ""}</p> 
-                <p>Total em {prevMonthStart.toLocaleString("default", { month: "long" })}:
-                    {filteredAppointments ? filteredAppointments.length : 0}
-                </p>
+                <p>{worker?.name || ""}</p>
+                <p>Consultas em {prevMonthStart.toLocaleString("default", { month: "long" })}: {filteredAppointments ? filteredAppointments.length : 0}</p>
             </div>
-            <div className={styles.chartWrapper}>
-                <TreatmentsChart daysInMonth={daysInMonth} workerData={datasets} />
+            <div className={styles.graphWrapper}>
+                <div className={styles.frequencyChartWrapper}>
+                    <FrequencyChart frequencyDataset={appointmentCountByClient}/>
+                </div>
+                <div className={styles.treatmentsChartWrapper}>
+                    <TreatmentsChart daysInMonth={daysInMonth} workerData={datasets}/>
+                </div>
             </div>
         </Modal>
     );

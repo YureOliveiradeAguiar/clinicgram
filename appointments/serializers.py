@@ -50,7 +50,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['treatment', 'client', 'worker', 'place', 'statusDisplay']
     
     def validate(self, data):
-        if data.get("status") != Appointment.Status.RESERVATION and not data.get("client"):
+        instance = getattr(self, "instance", None)
+        # Get the new status if provided, else keep the old one
+        status = data.get("status", getattr(instance, "status", None))
+        # Get the new client if provided, else keep the old one
+        client = data.get("client", getattr(instance, "client", None))
+        if status != Appointment.Status.RESERVATION and not client:
             raise serializers.ValidationError("Client is required for non-reservation appointments.")
         return data
 

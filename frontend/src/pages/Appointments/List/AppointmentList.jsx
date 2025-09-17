@@ -113,8 +113,7 @@ export default function AppointmentList() {
                                     <p className={styles.priority}>Prioridade {appointment.priority}</p>
                                 </div>
                                 <div className={styles.infoGroup}>
-                                    <p>{appointment.client ? <><PersonIcon className={styles.icon}/>{appointment.client.name}</> : "---"}
-                                    </p>
+                                    <p><PersonIcon className={styles.icon}/>{appointment.client ? appointment.client.name : "---"}</p>
                                     <p><MedicalInfo className={styles.icon}/>{appointment.worker.name}</p>
                                 </div>
                             </div>
