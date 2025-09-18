@@ -5,7 +5,7 @@ import { useState } from 'react';
 import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
-export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
+export default function SolicitationDetailsModal({ treatment, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
     const contextFields = {
         name: treatment.name,
     };

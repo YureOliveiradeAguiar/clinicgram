@@ -1,0 +1,77 @@
+.mainGroup {
+    display: inline-flex;
+    gap: 6px;
+}
+.mainGroup p {
+    text-align: start;
+    vertical-align: baseline;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.infoGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    font-size: 0.95rem;
+    line-height: 1.2rem;
+    color: rgb(60,60,60);
+}
+.icon{
+    width: 20px;
+    height: 20px;
+    color: rgb(60,60,60);
+}
+
+.status {
+    padding: 0 6px;
+    border-radius: 16px;
+}
+.priority {
+    line-height: 1.5;
+    margin: 0 6px;
+    font-size: 0.9rem;
+    color: rgb(100,100,100);
+}
+
+.dateInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    height: 100%;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    color: rgb(100,100,100);
+}
+.dateInfo span {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.status.scheduled {
+    background-color: #e6f0ff;
+    color: #1a73e8;
+}
+.status.unscheduled {
+    background-color: rgb(235,235,235);
+}
+.status.completed {
+    background-color: #ecfdf5;
+    color: #047857;
+}
+.status.missed {
+    background-color: #ffe5e5;
+    color: #d93025
+}
+.status.canceled {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+.status.reservation {
+    background-color: #f5f3ff;
+    color: #6d28d9;
+}

@@ -16,6 +16,7 @@ class Appointment(models.Model):
         MISSED = "missed", _("Não Compareceu")
         CANCELED = "canceled", _("Cancelado")
         RESERVATION = "reservation", _("Reserva")
+        SOLICITATION = "solicitation", _("Solicitação")
     
     # Always mandatory fields
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSCHEDULED)

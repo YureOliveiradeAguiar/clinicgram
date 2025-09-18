@@ -33,9 +33,10 @@ export default function ClientList() {
 
 
     return (
-        <List title="Pacientes"
-                NewElementIcon={PersonAddIcon} NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
-                searchPlaceholder="Pesquisar paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+        <List title="Pacientes" NewElementIcon={PersonAddIcon} NewElementMessage="Novo"
+            onNewElement={() => setOpenModal("register")}
+            searchPlaceholder="Pesquisar paciente" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+        >
             {clients.length > 0 ? (
                 clients
                     .filter((client) =>

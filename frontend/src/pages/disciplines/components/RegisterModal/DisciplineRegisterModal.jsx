@@ -2,17 +2,17 @@ import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
 import { useForm } from "react-hook-form";
 
-import { getCookie } from '@/utils/csrf.js';
+import { getCookie } from '@/utils/csrf';
 
 
-export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
+export default function DisciplineRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
 
     const { register, handleSubmit, reset, formState: { errors  } } = useForm({mode:'onBlur',});
 
     const onSubmit = async (data) => {
         const payload = { ...data };
         try {
-            const response = await fetch('/api/treatments/new/', {
+            const response = await fetch('/api/disciplines/new/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,9 +24,9 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
             if (response.ok) {
                 setStatusMessage({message: result.message, type: "success"});
                 reset();
-                onSuccess(result.treatment);
+                onSuccess(result.discipline);
             } else {
-                setStatusMessage({ message: "Erro ao registrar a sala", type: "error" });
+                setStatusMessage({ message: "Erro ao registrar a disciplina", type: "error" });
             }
         } catch (error) {
             setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
@@ -37,10 +37,10 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
     };
 
     return (
-        <RegisterModal title="Novo Procedimento" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+        <RegisterModal title="Nova Disciplina" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <div className="inputContainer">
                 <input type="text" id="name" name="name" autoComplete="off"
-                    maxLength="70" treatmentholder=" "
+                    maxLength="70" disciplineholder=" "
                     className={`formInput ${errors.name ? "formInputError" : ""}`}
                     {...register('name', { required: "O nome é obrigatório" })}
                 />

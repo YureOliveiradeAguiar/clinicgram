@@ -50,7 +50,7 @@ export default function Layout() {
         {
             title: "Externo",
             items: [
-                { title: "Solicitações", Icon: ClipboardIcon, link: "/history" },
+                { title: "Solicitações(beta)", Icon: ClipboardIcon, link: "/solicitations" },
             ]
         },
         {
@@ -58,8 +58,8 @@ export default function Layout() {
             items: [
                 { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
                 { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
+                { title: "Disciplinas(beta)", Icon: OpenBookIcon, link: "/disciplines" },
                 { title: "Salas", Icon: PlacesIcon, link: "/places" },
-                { title: "Disciplinas", Icon: OpenBookIcon, link: "/history" },
                 { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
                 { title: "Histórico", Icon: HistoryIcon, link: "/history" },
             ]

@@ -12,7 +12,7 @@ export default function FrequencyChart({ frequencyDataset }) {
             {
                 label: "Consultas por cliente",
                 data: frequencyDataset.map(i => i.count),
-                backgroundColor: frequencyDataset.map((_, idx) => `hsl(${idx * 137.5}, 70%, 60%)`),
+                backgroundColor: frequencyDataset.map((_, idx) => `hsl(${(frequencyDataset.length - idx) * 137.5}, 70%, 60%)`),
             }
         ]
     };

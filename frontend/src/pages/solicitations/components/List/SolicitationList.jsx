@@ -1,16 +1,16 @@
+import CalendarAddIcon from '@/assets/icons/calendarAddIcon';
+import SolicitateIcon from '@/assets/icons/solicitateIcon';
 import CalendarIcon from '@/assets/icons/calendarIcon';
 import PersonIcon from '@/assets/icons/personIcon';
 import MedicalInfo from '@/assets/icons/medicalInfo';
-import styles from './AppointmentList.module.css'
+import styles from './SolicitationList.module.css'
 
-import List from '@/components/List/List';
-import Card from '@/components/Card/Card';
-import AppointmentRegisterModal from '../appointment/RegisterModal/AppointmentRegisterModal';
-import AppointmentDetailsModal from '../appointment/DetailsModal/AppointmentDetailsModal';
-import ReservationRegisterModal from '../reservation/RegisterModal/ReservationRegisterModal';
-import ReservationDetailsModal from '../reservation/DetailsModal/ReservationDetailsModal';
+import List from '@/components/List/List.jsx';
+import Card from '@/components/Card/Card.jsx';
+import ReservationRegisterModal from '@/pages/appointments/reservation/RegisterModal/ReservationRegisterModal';
+import ReservationDetailsModal from '@/pages/appointments/reservation/DetailsModal/ReservationDetailsModal';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
@@ -20,7 +20,7 @@ import useFetch from '@/hooks/useFetch';
 import getRelativeTime from '@/utils/getRelativeTime';
 
 
-export default function AppointmentList() {
+export default function SolicitationList() {
     const [statusMessage, setStatusMessage] = useState('');
     useAutoClearStatus(statusMessage, setStatusMessage);
 
@@ -33,8 +33,8 @@ export default function AppointmentList() {
         handleElementAdded,
         handleElementDelete,
         handleElementUpdate,
-    } = useElement({ elementName:"a consulta", elementNamePlural:"as consultas", elementPath:"appointments",
-        selectedElement:selectedAppointment, setSelectedElement:setSelectedAppointment,
+    } = useElement({ elementName: "a solicitação", elementNamePlural: "as solicitações", elementPath: "appointments",
+        selectedElement: selectedAppointment, setSelectedElement: setSelectedAppointment,
         setStatusMessage, setOpenModal });
 
 //============================Fetches for the modals, so they can use them without having to re-render the fetches===================
@@ -43,50 +43,23 @@ export default function AppointmentList() {
     const { data: workers} = useFetch({ elementNamePlural:'os estagiários', elementPath:'workers', setStatusMessage});
     const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
 
-//=============================================New Element Button Selection Logic=================================================
-    const [isNewElementMenuOpen, setIsNewElementMenuOpen] = useState(false);
-    const newElementOptions = [
-        {
-            title: "Consulta",
-            onClick: () => { setOpenModal("registerAppointment"); setIsNewElementMenuOpen(false); },
-        },
-        {
-            title: "Reserva",
-            onClick: () => { setOpenModal("registerReservation"); setIsNewElementMenuOpen(false); },
-        },
-    ];
-    /* Closes on outside click */
-    const menuRef = useRef(null);
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsNewElementMenuOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
 //==============================================================================================================================
 
     return (
-        <List title="Consultas"
-            NewElementMessage="Criar" onNewElement={() => setIsNewElementMenuOpen(prev => !prev)} ref={menuRef}
+        <List title="Solicitações"
+            NewElementIcon={CalendarAddIcon} NewElementMessage="Criar" onNewElement={() => setOpenModal("registerReservation")}
             searchPlaceholder="Pesquisar por estagiário" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
-            newIsDropdown={true} isNewElementMenuOpen={isNewElementMenuOpen} newElementOptions={newElementOptions}
         >
             {appointments.length > 0 ? (
                 appointments
                     .filter((appointment) =>
+                        appointment.status === "reservation" &&
                         appointment.worker.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
-                    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
                     .map(appointment => (
-                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal} 
+                        <Card key={appointment.id} element={appointment} setOpenModal={setOpenModal}
                             selectedElement={selectedAppointment} setSelectedElement={setSelectedAppointment}
-                            showSecondButton={false} customSpecifier={`${appointment.status==="reservation" ? "reservation" : "appointment"}`}
+                            secondButtonIcon={SolicitateIcon} customSpecifier={`${appointment.status==="reservation" ? "reservation" : "appointment"}`}
                         >
                             <div className={styles.mainGroup}>
                                 <div className={styles.infoGroup}>
@@ -94,13 +67,13 @@ export default function AppointmentList() {
                                     <p className={styles.priority}>Prioridade {appointment.priority}</p>
                                 </div>
                                 <div className={styles.infoGroup}>
-                                    <p><PersonIcon className={styles.icon}/>{appointment.client ? appointment.client.name : "---"}</p>
-                                    <p><MedicalInfo className={styles.icon}/>{appointment.worker.name}</p>
+                                    <p><PersonIcon className={styles.icon} />{appointment.client ? appointment.client.name : "---"}</p>
+                                    <p><MedicalInfo className={styles.icon} />{appointment.worker.name}</p>
                                 </div>
                             </div>
                             <div className={styles.dateInfo}>
                                 <span>
-                                    <CalendarIcon className='icon'/>
+                                    <CalendarIcon className='icon' />
                                     {appointment.startTime ? (<>
                                         {getRelativeTime(new Date(appointment.startTime))}
                                     </>) : "---"}
@@ -110,37 +83,30 @@ export default function AppointmentList() {
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhuma consulta na lista de espera'}</p>
+                <p>{statusMessage?.message || 'Nenhum tratamento encontrado'}</p>
             )}
 
-            {openModal === "registerAppointment" && (
-                <AppointmentRegisterModal isOpen={openModal === "registerAppointment"} onSuccess={handleElementAdded}
-                    treatments={treatments} clients={clients} workers={workers} places={places}
-                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(null)}
-                    appointments={appointments}
-                />
-            )}
-            {(openModal === "appointmentProperties" && selectedAppointment) && (
-                <AppointmentDetailsModal isOpen={openModal === "appointmentProperties" && selectedAppointment !== null}
-                    appointment={selectedAppointment} setAppointment={setSelectedAppointment} 
-                    treatments={treatments} clients={clients} workers={workers} places={places}
-                    setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
-                    onDelete={handleElementDelete} onUpdate={handleElementUpdate}
-                    appointments={appointments}
-                />
-            )}
             {openModal === "registerReservation" && (
-                <ReservationRegisterModal isOpen={openModal === "registerReservation"} onSuccess={handleElementAdded}
-                    treatments={treatments} workers={workers} places={places}
+                <ReservationRegisterModal isOpen={openModal === "registerAppointment"} onSuccess={handleElementAdded}
+                    treatments={treatments} clients={clients} workers={workers} places={places}
                     setStatusMessage={setStatusMessage} onClose={() => setOpenModal(null)}
                     appointments={appointments}
                 />
             )}
             {(openModal === "reservationProperties" && selectedAppointment) && (
                 <ReservationDetailsModal isOpen={openModal === "appointmentProperties" && selectedAppointment !== null}
-                    appointment={selectedAppointment} setAppointment={setSelectedAppointment} 
+                    appointment={selectedAppointment} setAppointment={setSelectedAppointment}
                     treatments={treatments} clients={clients} workers={workers} places={places}
-                    setStatusMessage={setStatusMessage} onClose={() => {setSelectedAppointment(null); setOpenModal(null)}}
+                    setStatusMessage={setStatusMessage} onClose={() => { setSelectedAppointment(null); setOpenModal(null) }}
+                    onDelete={handleElementDelete} onUpdate={handleElementUpdate}
+                    appointments={appointments}
+                />
+            )}
+            {(openModal === "solicitationProperties" && selectedAppointment) && (
+                <ReservationDetailsModal isOpen={openModal === "appointmentProperties" && selectedAppointment !== null}
+                    appointment={selectedAppointment} setAppointment={setSelectedAppointment}
+                    treatments={treatments} clients={clients} workers={workers} places={places}
+                    setStatusMessage={setStatusMessage} onClose={() => { setSelectedAppointment(null); setOpenModal(null) }}
                     onDelete={handleElementDelete} onUpdate={handleElementUpdate}
                     appointments={appointments}
                 />
