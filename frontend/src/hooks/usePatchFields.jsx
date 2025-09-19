@@ -38,6 +38,7 @@ export default function usePatchFields(contextFields = {}) {
     const getUpdatedFields = (fields, element) => {
         const preprocess = (key, value) => { // This is per field, so add more pre-processing here if needed.
             if (key === "whatsapp") return normalizePhone(value);
+            if (key === "password" && !value) return "";
             return value;
         };
         const updatedFields = {}; // Starts empty and gets field by the for loop of comparisons.
@@ -47,8 +48,8 @@ export default function usePatchFields(contextFields = {}) {
             if (editedValue !== elementValue) {
                 updatedFields[key] = fields[key];
             }
-            //console.log("editedValue: ", typeof editedValue);
-            //console.log("elementValue: ", typeof elementValue);
+            //console.log("editedValue: ", editedValue);
+            //console.log("elementValue: ", elementValue);
         }
         //console.log("updatedFields: ", updatedFields);
         return updatedFields;

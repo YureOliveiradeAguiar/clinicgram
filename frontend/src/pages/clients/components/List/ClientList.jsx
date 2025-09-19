@@ -7,7 +7,7 @@ import ClientRegisterModal from '../RegisterModal/ClientRegisterModal';
 import ClientStatisticsModal from '../StatisticsModal/ClientStatisticsModal';
 import ClientDetailsModal from '../DetailsModal/ClientDetailsModal';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
@@ -30,6 +30,10 @@ export default function ClientList() {
     } = useElement({ elementName: "o paciente", elementNamePlural: "os pacientes", elementPath: "clients",
         selectedElement: selectedClient, setSelectedElement: setSelectedClient,
         setStatusMessage, setOpenModal });
+//================================================================================================================
+    useEffect (()=>{
+        console.log("clients: ", clients);
+    },[clients]);
 
 
     return (
@@ -40,18 +44,18 @@ export default function ClientList() {
             {clients.length > 0 ? (
                 clients
                     .filter((client) =>
-                        client.name.toLowerCase().includes(searchTerm.toLowerCase())
+                        client.full_name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(client => (
                         <Card key={client.id} element={client} setOpenModal={setOpenModal}
                                 selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
-                            <p className={styles.cardName} aria-label={client.name}>
-                                {client.name}
+                            <p className={styles.cardName} aria-label={client.full_name}>
+                                {client.full_name}
                             </p>
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhum cliente registrado'}</p>
+                <p>{'Nenhum cliente encontrado'}</p>
             )}
 
             {openModal === "register" && (

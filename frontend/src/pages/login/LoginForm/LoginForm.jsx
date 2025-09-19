@@ -54,7 +54,7 @@ function Login () {
                     <input type="text" id="username" name="username" autoComplete='true'
                         maxLength="80" placeholder=" " className="formInput"
                         {...register("username", { required: "Usuário é obrigatório" })}/>
-                    <label htmlFor="username">Usuário</label>
+                    <label htmlFor="username">Email</label>
                 </div>
 
                 <div className="inputContainer">

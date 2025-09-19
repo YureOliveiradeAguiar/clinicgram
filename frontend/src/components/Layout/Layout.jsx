@@ -57,10 +57,10 @@ export default function Layout() {
             title: "Gerenciamento",
             items: [
                 { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
+                { title: "Disciplinas", Icon: OpenBookIcon, link: "/disciplines" },
                 { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
-                { title: "Disciplinas(beta)", Icon: OpenBookIcon, link: "/disciplines" },
-                { title: "Salas", Icon: PlacesIcon, link: "/places" },
                 { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
+                { title: "Salas", Icon: PlacesIcon, link: "/places" },
                 { title: "Histórico", Icon: HistoryIcon, link: "/history" },
             ]
         },

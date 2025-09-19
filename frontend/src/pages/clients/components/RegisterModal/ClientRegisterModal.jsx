@@ -58,12 +58,43 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     return (
         <RegisterModal title="Novo Paciente" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <div className="inputContainer">
-                <input type="text" id="name" name="name" autoComplete="off"
-                    maxLength="70" placeholder=" "
-                    className={`formInput ${errors.name ? "formInputError" : ""}`}
-                    {...register('name', { required: "O nome é obrigatório" })}/>
-                <label htmlFor="name">Nome Completo</label>
+                <input type="text" id="firstName" name="firstName" autoComplete="off"
+                    maxLength="70" placeholder=""
+                    className={`formInput ${errors.firstName ? "formInputError" : ""}`}
+                    {...register('first_name', { required: "O nome é obrigatório" })}/>
+                <label htmlFor="firstName">Nome</label>
+                <p className="errorMessage">{errors.firstName?.message || ""}</p>
+            </div>
+            <div className="inputContainer">
+                <input type="text" id="lastName" name="lastName" autoComplete="off"
+                    maxLength="70" placeholder=""
+                    className={`formInput ${errors.lastName ? "formInputError" : ""}`}
+                    {...register('last_name', { required: "O sobrenome é obrigatório" })}/>
+                <label htmlFor="lastName">Sobrenome</label>
+                <p className="errorMessage">{errors.lastName?.message || ""}</p>
+            </div>
+
+            <div className="inputContainer">
+                <input type="text" id="email" name="email" autoComplete="off" maxLength="254" placeholder=""
+                    className={`formInput ${errors.email ? "formInputError" : ""}`}
+                    {...register('email', { required: "O nome é obrigatório",
+                        pattern: {value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Insira um email válido"}})}
+                />
+                <label htmlFor="email">Email</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
+            </div>
+
+            <div className="inputContainer">
+                <input type="password" id="password" name="password" autoComplete="new-password"
+                    maxLength={128} placeholder=" " className={`formInput ${errors.password ? "formInputError" : ""}`}
+                    {...register("password", {
+                        required: "A senha é obrigatória",
+                        minLength: { value: 6, message: "A senha deve ter ao menos 6 caracteres" }
+                    })}
+                />
+                <label htmlFor="password">Senha</label>
+                <p className="errorMessage">{errors.password?.message || ""}</p>
             </div>
 
             <div className="inputContainer">

@@ -46,10 +46,11 @@ INSTALLED_APPS = [
 
     "accounts",
     "clients",
-    "appointments",
     "disciplines",
-    "places",
+    "workers",
     "treatments",
+    "places",
+    "appointments",
     "history",
 ]
 

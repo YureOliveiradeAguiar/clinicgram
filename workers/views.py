@@ -1,70 +1,69 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
 
-import reversion
-from .models import Client
 from django.shortcuts import get_object_or_404
-from .serializers import ClientSerializer
+
+from accounts.models import CustomUser
+from .models import Worker
+from .serializers import WorkerSerializer
+import reversion
 
 
-class ClientListAPIView(APIView):
+class WorkerListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        clients = Client.objects.all().order_by('user__last_name', 'user__first_name')
-        serializer = ClientSerializer(clients, many=True)
+        workers = Worker.objects.all().order_by('first_name')
+        serializer = WorkerSerializer(workers, many=True)
         return Response(serializer.data)
 
-
-class RegisterClientAPIView(APIView):
+class RegisterWorkerAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = ClientSerializer(data=request.data)
-
+        serializer = WorkerSerializer(data=request.data)
         if serializer.is_valid():
             with reversion.create_revision():
-                client = serializer.save()
+                worker = serializer.save(is_worker=True) # Sets is_worker to True
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Created via API")
+            workerUsername = worker.username
             return Response({
                 'success': True,
-                'client': serializer.data,
-                'message': f'{client.full_name} registrado(a) com sucesso!'
+                'worker': serializer.data,
+                'message': f'{workerUsername} registrado com sucesso!'
             })
         return Response({
             'success': False,
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ClientDeleteAPIView(APIView):
+    
+class WorkerDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, client_id):
-        client = get_object_or_404(Client, id=client_id)
+    def delete(self, request, worker_id):
+        worker = get_object_or_404(CustomUser, id=worker_id)
 
         with reversion.create_revision():
             reversion.set_user(request.user)
             reversion.set_comment("Deleted via API")
-            client.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        client.delete()
-        return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+            worker.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
+        worker.delete()
+        return Response({"message": "Estagiário excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
 
-
-class ClientUpdateAPIView(APIView):
+class WorkerUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request, client_id):
-        client = get_object_or_404(Client, id=client_id)
-        serializer = ClientSerializer(client, data=request.data, partial=True)
+    def patch(self, request, worker_id):
+        worker = get_object_or_404(CustomUser, id=worker_id)
+        serializer = WorkerSerializer(worker, data=request.data, partial=True)
         if serializer.is_valid():
             with reversion.create_revision():
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Updated via API")
-                client.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
+                worker.save() # Save() has to be used here to trigger reversion and save with with old data to be reverted to.
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

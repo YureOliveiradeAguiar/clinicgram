@@ -11,7 +11,10 @@ import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
     const contextFields = {
-        name: client.name,
+        email: client.email,
+        password: "",
+        firstName: client.first_name,
+        lastName: client.last_name,
         whatsapp: client.whatsapp,
         dateOfBirth: client.dateOfBirth,
         observation: client.observation || "",
@@ -45,6 +48,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
             return;
         }
         const updatedFields = getUpdatedFields(fields, client);
+        console.log("updatedFields:: ", updatedFields);
         if (Object.keys(updatedFields).length > 0) {
             onUpdate({ id: client.id, ...updatedFields });
         }
@@ -63,12 +67,38 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                 onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
             <div className={"standardFormulary"}>
                 <div className="inputContainer">
-                    <input type="text" id="name" name="name" autoComplete="off"
-                        maxLength="70" placeholder=" " value={fields.name}
-                        className={`formInput ${!isEditing ? "readOnly": errors.name ? "formInputError" : ""}`} readOnly={!isEditing}
-                        onChange={(e) => setField("name",(e.target.value))}/>
-                    <label htmlFor="name">Nome Completo</label>
-                    <p className="errorMessage">{errors.name || ""}</p>
+                    <input type="text" id="firstName" name="firstName" autoComplete="off"
+                        maxLength="70" placeholder=" " value={fields.firstName}
+                        className={`formInput ${!isEditing ? "readOnly": errors.firstName ? "formInputError" : ""}`} readOnly={!isEditing}
+                        onChange={(e) => setField("firstName",(e.target.value))}/>
+                    <label htmlFor="firstName">Nome</label>
+                    <p className="errorMessage">{errors.firstName || ""}</p>
+                </div>
+                <div className="inputContainer">
+                    <input type="text" id="lastName" name="lastName" autoComplete="off"
+                        maxLength="70" placeholder=" " value={fields.lastName}
+                        className={`formInput ${!isEditing ? "readOnly": errors.lastName ? "formInputError" : ""}`} readOnly={!isEditing}
+                        onChange={(e) => setField("lastName",(e.target.value))}/>
+                    <label htmlFor="lastName">Sobrenome</label>
+                    <p className="errorMessage">{errors.lastName || ""}</p>
+                </div>
+
+                <div className="inputContainer">
+                    <input type="text" id="email" name="email" autoComplete="off"
+                        maxLength="70" placeholder=" " value={fields.email}
+                        className={`formInput ${!isEditing ? "readOnly": errors.email ? "formInputError" : ""}`} readOnly={!isEditing}
+                        onChange={(e) => setField("email",(e.target.value))}/>
+                    <label htmlFor="email">Email</label>
+                    <p className="errorMessage">{errors.email || ""}</p>
+                </div>
+
+                <div className="inputContainer">
+                    <input type="password" id="password" name="password" autoComplete="new-password" maxLength={128} placeholder="" 
+                        value={fields.password} className={`formInput ${!isEditing ? "readOnly" : errors.password ? "formInputError" : ""}`}
+                        readOnly={!isEditing} onChange={(e) => setField("password", e.target.value)}
+                    />
+                    <label htmlFor="password">Nova Senha</label>
+                    <p className="errorMessage">{errors.password || ""}</p>
                 </div>
 
                 <div className="inputContainer">

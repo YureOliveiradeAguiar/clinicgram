@@ -15,14 +15,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Client',
+            name='Worker',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
+                ('ra', models.CharField(max_length=11, unique=True)),
                 ('whatsapp', models.CharField(max_length=15)),
-                ('dateOfBirth', models.DateField()),
-                ('observation', models.TextField(blank=True, max_length=200, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='client_profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='worker_profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

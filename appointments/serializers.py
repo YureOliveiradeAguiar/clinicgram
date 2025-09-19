@@ -1,11 +1,12 @@
 from .models import Appointment
-from treatments.models import Treatment
 from clients.models import Client
+from workers.models import Worker
+from treatments.models import Treatment
 from places.models import Place
 
 from rest_framework import serializers
 from treatments.serializers import TreatmentSerializer
-from accounts.serializers import WorkerSerializer
+from workers.serializers import WorkerSerializer
 from places.serializers import PlaceSerializer
 
 from django.contrib.auth import get_user_model
@@ -31,7 +32,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     )
     worker = WorkerSerializer(read_only=True)
     workerId = serializers.PrimaryKeyRelatedField(
-        queryset=get_user_model().objects.filter(is_worker=True),
+        queryset=Worker.objects.all(),
         source="worker",
     )
     place = PlaceSerializer(read_only=True)  # Nested for display.
