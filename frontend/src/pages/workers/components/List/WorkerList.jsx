@@ -33,7 +33,7 @@ export default function WorkerList() {
         setStatusMessage, setOpenModal });
 
     const { data: appointments} = useFetch({ elementNamePlural:'as consultas', elementPath:'appointments', setStatusMessage});
-
+//==================================================================================================================================
 
     return (
         <List title="Estagiários"
@@ -42,18 +42,18 @@ export default function WorkerList() {
             {workers.length > 0 ? (
                 workers
                     .filter((worker) =>
-                        worker.name.toLowerCase().includes(searchTerm.toLowerCase())
+                        worker.fullName.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(worker => (
                         <Card key={worker.id} element={worker} setOpenModal={setOpenModal}
                                 selectedElement={selectedWorker} setSelectedElement={setSelectedWorker}>
-                            <p className={styles.cardName} aria-label={worker.name}>
-                                {worker.name}
+                            <p className={styles.cardName} aria-label={worker.fullName}>
+                                {worker.fullName}
                             </p>
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhum estagiário registrado'}</p>
+                <p>Nenhum estagiário encontrado</p>
             )}
 
             {openModal === "register" && (

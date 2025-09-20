@@ -54,18 +54,11 @@ export default function useElement({ elementName, elementNamePlural, elementPath
                 setSelectedElement(null);
                 setOpenModal(null);
             } else {
-                setStatusMessage({
-                    type: "error", message: <>
-                        <AlertIcon className="icon" />
-                        Erro ao excluir {elementName}</>
-                });
+                console.log("asdasdasdsa");
+                setStatusMessage({type: "error", message: <><AlertIcon className="icon" />Erro ao excluir {elementName}</>});
             }
         } catch {
-            setStatusMessage({
-                type: "error", message: <>
-                    <AlertIcon className={styles.icon} />
-                    Erro de conexão com o servidor</>
-            });
+            setStatusMessage({type: "error", message: <><AlertIcon className={styles.icon} />Erro de conexão com o servidor</>});
         }
     };
 

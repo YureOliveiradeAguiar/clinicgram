@@ -7,7 +7,7 @@ import ClientRegisterModal from '../RegisterModal/ClientRegisterModal';
 import ClientStatisticsModal from '../StatisticsModal/ClientStatisticsModal';
 import ClientDetailsModal from '../DetailsModal/ClientDetailsModal';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
@@ -31,10 +31,6 @@ export default function ClientList() {
         selectedElement: selectedClient, setSelectedElement: setSelectedClient,
         setStatusMessage, setOpenModal });
 //================================================================================================================
-    useEffect (()=>{
-        console.log("clients: ", clients);
-    },[clients]);
-
 
     return (
         <List title="Pacientes" NewElementIcon={PersonAddIcon} NewElementMessage="Novo"
@@ -44,13 +40,13 @@ export default function ClientList() {
             {clients.length > 0 ? (
                 clients
                     .filter((client) =>
-                        client.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+                        client.fullName.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(client => (
                         <Card key={client.id} element={client} setOpenModal={setOpenModal}
                                 selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
-                            <p className={styles.cardName} aria-label={client.full_name}>
-                                {client.full_name}
+                            <p className={styles.cardName} aria-label={client.fullName}>
+                                {client.fullName}
                             </p>
                         </Card>
                 ))

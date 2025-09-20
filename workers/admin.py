@@ -1,3 +1,7 @@
 from django.contrib import admin
+from reversion.admin import VersionAdmin
+from .models import Worker
 
-# Register your models here.
+@admin.register(Worker)
+class WorkerAdmin(VersionAdmin):
+    pass

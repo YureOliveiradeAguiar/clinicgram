@@ -15,7 +15,7 @@ class WorkerListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        workers = Worker.objects.all().order_by('first_name')
+        workers = Worker.objects.all().order_by('user__firstName', 'user__lastName')
         serializer = WorkerSerializer(workers, many=True)
         return Response(serializer.data)
 
@@ -26,14 +26,13 @@ class RegisterWorkerAPIView(APIView):
         serializer = WorkerSerializer(data=request.data)
         if serializer.is_valid():
             with reversion.create_revision():
-                worker = serializer.save(is_worker=True) # Sets is_worker to True
+                worker = serializer.save()
                 reversion.set_user(self.request.user)
                 reversion.set_comment("Created via API")
-            workerUsername = worker.username
             return Response({
                 'success': True,
                 'worker': serializer.data,
-                'message': f'{workerUsername} registrado com sucesso!'
+                'message': f'Estagiário {worker.fullName} registrado com sucesso!'
             })
         return Response({
             'success': False,
@@ -50,7 +49,8 @@ class WorkerDeleteAPIView(APIView):
             reversion.set_user(request.user)
             reversion.set_comment("Deleted via API")
             worker.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        worker.delete()
+        if worker.user:
+            worker.user.delete()
         return Response({"message": "Estagiário excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
 
 class WorkerUpdateAPIView(APIView):

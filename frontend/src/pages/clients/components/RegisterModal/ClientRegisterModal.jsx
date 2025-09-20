@@ -29,31 +29,35 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
         }
 
         const payload = { ...data, rawPhone };
+        console.log("payload: ", payload);
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')},
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
                 credentials: 'include',
-                body: JSON.stringify(payload)});
+                body: JSON.stringify(payload)
+            });
 
             const result = await response.json();
             if (response.ok) {
-                setStatusMessage({message: result.message, type: "success"});
+                setStatusMessage({ message: result.message, type: "success" });
                 reset();
                 onSuccess(result.client);
             } else {
                 setStatusMessage({ message: "Erro ao registrar o cliente", type: "error" });
             }
         } catch (error) {
-            setStatusMessage({message: "Erro de conexão com o servidor", type: "error"});
+            setStatusMessage({ message: "Erro de conexão com o servidor", type: "error" });
         }
     };
 
     const handleError = () => {
-        setStatusMessage({message: "Dados inválidos!", type: "error" });
+        setStatusMessage({ message: "Dados inválidos!", type: "error" });
     };
+//===========================================================================================================================
 
     return (
         <RegisterModal title="Novo Paciente" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -61,7 +65,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <input type="text" id="firstName" name="firstName" autoComplete="off"
                     maxLength="70" placeholder=""
                     className={`formInput ${errors.firstName ? "formInputError" : ""}`}
-                    {...register('first_name', { required: "O nome é obrigatório" })}/>
+                    {...register('firstName', { required: "O nome é obrigatório" })}/>
                 <label htmlFor="firstName">Nome</label>
                 <p className="errorMessage">{errors.firstName?.message || ""}</p>
             </div>
@@ -69,7 +73,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <input type="text" id="lastName" name="lastName" autoComplete="off"
                     maxLength="70" placeholder=""
                     className={`formInput ${errors.lastName ? "formInputError" : ""}`}
-                    {...register('last_name', { required: "O sobrenome é obrigatório" })}/>
+                    {...register('lastName', { required: "O sobrenome é obrigatório" })}/>
                 <label htmlFor="lastName">Sobrenome</label>
                 <p className="errorMessage">{errors.lastName?.message || ""}</p>
             </div>
@@ -84,7 +88,6 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <label htmlFor="email">Email</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
             </div>
-
             <div className="inputContainer">
                 <input type="password" id="password" name="password" autoComplete="new-password"
                     maxLength={128} placeholder=" " className={`formInput ${errors.password ? "formInputError" : ""}`}
@@ -115,13 +118,13 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
             </div>
 
             <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
-                    render={({ field, fieldState }) => (
-                        <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
-                                hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
-                                selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
-                                selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
-                                setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
-                    )}
+                render={({ field, fieldState }) => (
+                    <DateInput value={field.value} onDateChange={field.onChange} onBlur={field.onBlur}
+                        hasError={fieldState.error} clearErrors={() => clearErrors("dateOfBirth")}
+                        selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                        selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
+                        setSelectedMonthLabel={setSelectedMonthLabel} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+                )}
             />
 
             <div className="inputContainer">

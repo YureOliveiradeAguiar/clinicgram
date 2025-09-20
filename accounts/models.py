@@ -22,11 +22,11 @@ class CustomUserManager(BaseUserManager):
 
 # Custom user model extends from Django's AbstractUser. So it already includes the fields from AbstractUser:
 # username, password, first_name, last_name, email, is_staff, is_superuser, is_active, last_login, date_joined
-# But thats not the case here
+# But thats not the case here because AbstractBaseUser is used
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    first_name = models.CharField("First Name", max_length=30)
-    last_name = models.CharField("Last Name", max_length=150)
+    firstName = models.CharField("First Name", max_length=30)
+    lastName = models.CharField("Last Name", max_length=150)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -36,5 +36,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []  # No username required
     
     def __str__(self):
-        fullName = f"{self.first_name} {self.last_name}".strip()
+        fullName = f"{self.firstName} {self.lastName}".strip()
         return fullName if fullName else self.email

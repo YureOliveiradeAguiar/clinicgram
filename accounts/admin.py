@@ -8,11 +8,11 @@ from .models import CustomUser
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     ordering = ["email"]  # Instead of username
-    list_display = ["email", "first_name", "last_name", "is_staff", "is_active"]  # Replaced the username
+    list_display = ["email", "firstName", "lastName", "is_staff", "is_active"]  # Replaced the username
 
     # Fields to display in admin forms
     fieldsets = (
-        (None, {"fields": ("email", "first_name", "last_name", "password")}),
+        (None, {"fields": ("email", "firstName", "lastName", "password")}),
         (_("Permissions"), {"fields": ("is_staff", "is_active", "is_superuser", "groups", "user_permissions")}),
         (_("Important dates"), {"fields": ("last_login",)}),
     )

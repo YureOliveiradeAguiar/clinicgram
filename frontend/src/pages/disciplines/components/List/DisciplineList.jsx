@@ -5,7 +5,7 @@ import Card from '@/components/Card/Card.jsx';
 import DisciplineRegisterModal from '../RegisterModal/DisciplineRegisterModal.jsx';
 import DisciplineDetailsModal from '../DetailsModal/DisciplineDetailsModal.jsx';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import useElement from '@/hooks/useElement.jsx';
 
@@ -28,11 +28,7 @@ export default function DisciplineList() {
     } = useElement({ elementName: "o tratamento", elementNamePlural: "os tratamentos", elementPath: "disciplines",
         selectedElement: selectedDiscipline, setSelectedElement: setSelectedDiscipline,
         setStatusMessage, setOpenModal });
-    
-    useEffect (()=>{
-        console.log(disciplines)
-    },[disciplines]);
-
+//=====================================================================================================================
 
     return (
         <List title="Disciplinas"

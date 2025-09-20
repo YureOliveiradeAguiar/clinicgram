@@ -35,7 +35,7 @@ class UserProfileAPIView(APIView):
     def get(self, request):
         user = request.user
         return Response ({
-            "username": user.first_name,
+            "username": user.firstName,
         })
 
 

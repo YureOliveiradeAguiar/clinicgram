@@ -97,17 +97,17 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
                 selectedOption={selectedClient} hasError={errors.client}
                 labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
-                />
+            />
             <ElementDropdown isEditing={isEditing} options={workers}
                 onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
                 selectedOption={selectedWorker} hasError={errors.worker}
                 labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
-                />
+            />
             <ElementDropdown isEditing={isEditing} options={places}
                 onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
                 selectedOption={selectedPlace} hasError={errors.place}
                 labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
-                />
+            />
             <div className="inputContainer">
                 <input type="number" id="priority" name="priority" autoComplete="off"
                     min="0" max="99" placeholder=" " value={fields.priority}

@@ -13,7 +13,7 @@ class ClientListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        clients = Client.objects.all().order_by('user__last_name', 'user__first_name')
+        clients = Client.objects.all().order_by('user__firstName', 'user__lastName')
         serializer = ClientSerializer(clients, many=True)
         return Response(serializer.data)
 
@@ -32,7 +32,7 @@ class RegisterClientAPIView(APIView):
             return Response({
                 'success': True,
                 'client': serializer.data,
-                'message': f'{client.full_name} registrado(a) com sucesso!'
+                'message': f'Cliente {client.fullName} registrado com sucesso!'
             })
         return Response({
             'success': False,
@@ -50,7 +50,8 @@ class ClientDeleteAPIView(APIView):
             reversion.set_user(request.user)
             reversion.set_comment("Deleted via API")
             client.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        client.delete()
+        if client.user:
+            client.user.delete()
         return Response({"message": "Cliente excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
 
 

@@ -11,10 +11,10 @@ import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
     const contextFields = {
+        firstName: client.firstName,
+        lastName: client.lastName,
         email: client.email,
         password: "",
-        firstName: client.first_name,
-        lastName: client.last_name,
         whatsapp: client.whatsapp,
         dateOfBirth: client.dateOfBirth,
         observation: client.observation || "",
@@ -63,15 +63,16 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
 
     return (
         <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}
-                isEditing={isEditing} setIsEditing={setIsEditing}
-                onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
+            isEditing={isEditing} setIsEditing={setIsEditing}
+            onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}
+        >
             <div className={"standardFormulary"}>
                 <div className="inputContainer">
                     <input type="text" id="firstName" name="firstName" autoComplete="off"
                         maxLength="70" placeholder=" " value={fields.firstName}
                         className={`formInput ${!isEditing ? "readOnly": errors.firstName ? "formInputError" : ""}`} readOnly={!isEditing}
                         onChange={(e) => setField("firstName",(e.target.value))}/>
-                    <label htmlFor="firstName">Nome</label>
+                    <label htmlFor="firstName">Nome*</label>
                     <p className="errorMessage">{errors.firstName || ""}</p>
                 </div>
                 <div className="inputContainer">
@@ -79,7 +80,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                         maxLength="70" placeholder=" " value={fields.lastName}
                         className={`formInput ${!isEditing ? "readOnly": errors.lastName ? "formInputError" : ""}`} readOnly={!isEditing}
                         onChange={(e) => setField("lastName",(e.target.value))}/>
-                    <label htmlFor="lastName">Sobrenome</label>
+                    <label htmlFor="lastName">Sobrenome*</label>
                     <p className="errorMessage">{errors.lastName || ""}</p>
                 </div>
 
@@ -88,7 +89,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                         maxLength="70" placeholder=" " value={fields.email}
                         className={`formInput ${!isEditing ? "readOnly": errors.email ? "formInputError" : ""}`} readOnly={!isEditing}
                         onChange={(e) => setField("email",(e.target.value))}/>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email*</label>
                     <p className="errorMessage">{errors.email || ""}</p>
                 </div>
 
@@ -110,10 +111,11 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                 </div>
                 
                 <DateInput fieldLabel={`Data de nascimento (${calculateAge(fields.dateOfBirth)})`}
-                        hasError={errors.dateOfBirth} onDateChange={(newDate) => setField("dateOfBirth", newDate)} isReadOnly={!isEditing}
-                        selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
-                        setSelectedMonthLabel={setSelectedMonthLabel} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
-                        selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+                    hasError={errors.dateOfBirth} onDateChange={(newDate) => setField("dateOfBirth", newDate)} isReadOnly={!isEditing}
+                    selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
+                    setSelectedMonthLabel={setSelectedMonthLabel} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth}
+                    selectedYear={selectedYear} setSelectedYear={setSelectedYear}
+                />
 
                 <div className="inputContainer">
                     <textarea  id="observations" name="observations" autoComplete="off" readOnly={!isEditing}
