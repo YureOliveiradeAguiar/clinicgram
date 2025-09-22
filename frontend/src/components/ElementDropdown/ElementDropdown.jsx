@@ -4,8 +4,9 @@ import styles from './ElementDropdown.module.css';
 import { useState, useRef, useEffect } from 'react';
 
 
-export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], bestOptions,
-        hasError=false, labels = { label: 'Cliente', placeholder: 'Pesquisar cliente...', noResults: 'Nenhum cliente encontrado'},
+export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], hasError=false,
+        isMultiSelect=false, selectedOptions,
+        labels = { label: 'Elemento', placeholder: 'Pesquisar elemento...', noResults: 'Nenhum elemento encontrado'},
     }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,15 +27,30 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
     );
 
     const handleSelect = (option) => {
-        onSelect(option);
-        setIsOpen(false);
+        if (isMultiSelect) {
+            // If multi-select, toggle the option in the selected list
+            if (selectedOptions.includes(option)) {// Remove it
+                onSelect(selectedOptions.filter((o) => o !== option));
+            } else {// Add it
+                onSelect([...selectedOptions, option]);
+            }
+        } else {// Single-select: just replace
+            onSelect(option);
+            setIsOpen(false);
+        }
     };
 
     return (
         <div className="inputContainer" ref={dropdownRef}>
-            <button className={`formButtonPicker ${selectedOption ? "hasValue" : hasError ? styles.dropdownError : ""} ${!isEditing ? "readOnly" : ""}`}
-                    readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}>
-                {selectedOption ? selectedOption.name : ""}
+            <button 
+                className={`formButtonPicker ${(selectedOption || selectedOptions?.length > 0)
+                    ? "hasValue" : hasError ? styles.dropdownError : ""} ${!isEditing ? "readOnly" : ""}`}
+                readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}>
+                {isMultiSelect && selectedOptions?.length > 0
+                    ? selectedOptions.map((opt) => opt.name).join(", ")
+                    : !isMultiSelect && selectedOption
+                        ? selectedOption.name
+                        : ""}
             </button>
             <p id="clientLabel" className="customLabel">{labels.label}</p>
             <p className="errorMessage">{hasError?.message || ""}</p>
@@ -49,6 +65,9 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
                                 className={`${styles.dropdownOption} ${option.isTop ? styles.bestOption : ""}`}
                             >
                                 {option.isTop && <StarIcon className={styles.firstOptionIcon} />}
+                                {isMultiSelect && (
+                                    <input type="checkbox" checked={selectedOptions?.some(o => o.id === option.id)} readOnly/>
+                                )}
                                 {option.name}
                                 {option.isTop && (
                                     <span className={styles.tooltip}>Recomendado para treinamento</span>

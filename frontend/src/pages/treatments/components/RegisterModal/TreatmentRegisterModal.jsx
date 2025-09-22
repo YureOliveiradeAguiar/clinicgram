@@ -1,14 +1,22 @@
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
-import { useForm } from "react-hook-form";
+import { useState } from 'react';
+import { useForm, Controller } from "react-hook-form";
+
+import ElementDropdown from '@/components/ElementDropdown/ElementDropdown';
 
 import { getCookie } from '@/utils/csrf.js';
 
 
-export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
+export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage, disciplines, rooms }) {
 
-    const { register, handleSubmit, reset, formState: { errors  } } = useForm({mode:'onBlur',});
+    const { register, handleSubmit, reset, formState: { errors  }, control } = useForm({mode:'onBlur',});
 
+//==========================================Dropdown data==========================================  
+    const [selectedDiscipline, setSelectedDiscipline] = useState(null);
+    const [selectedRooms, setSelectedRooms] = useState([]);
+
+//=========================================Submiting===========================================
     const onSubmit = async (data) => {
         const payload = { ...data };
         try {
@@ -35,6 +43,7 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
     };
+//====================================================================================================
 
     return (
         <RegisterModal title="Novo Procedimento" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -47,6 +56,24 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
                 <label htmlFor="name">Nome</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
             </div>
+
+            <Controller name="disciplineId" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={disciplines} selectedOption={selectedDiscipline}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedDiscipline(option)}} hasError={errors.disciplineId}
+                        labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina...', noResults: 'Nenhuma disciplina encontrada'}}
+                    />
+                )}
+            />
+
+            <Controller name="rooms" control={control}
+                render={({ field }) => (
+                    <ElementDropdown options={rooms} selectedOptions={selectedRooms} isMultiSelect={true}
+                        onSelect={(option) => {field.onChange(option.id); setSelectedRooms(option)}} hasError={errors.disciplineId}
+                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala encontrada'}}
+                    />
+                )}
+            />
         </RegisterModal>
     );
 }

@@ -1,10 +1,10 @@
 
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
-import ElementDropdown from '../../../../components/ElementDropdown/ElementDropdown';
-import DatePicker from '../../../../components/DatePicker/DatePicker';
+import ElementDropdown from '@/components/ElementDropdown/ElementDropdown';
+import DatePicker from '@/components/DatePicker/DatePicker';
 
 import { getCookie } from '@/utils/csrf.js';
 
@@ -13,7 +13,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
 
     const { register, handleSubmit, watch, reset, formState: { errors  }, control } = useForm({mode:'onBlur'});
 
- //========================================Dropdowns data==========================================  
+//==========================================Dropdowns data==========================================  
     const [selectedTreatment, setSelectedTreatment] = useState(null);
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
@@ -73,7 +73,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
         
     }, [workers, appointments, selectedTreatment]);
 
-//=================================================================================================
+//=========================================Submiting===========================================
     const observationsValue = watch('observations') || '';
     
     const onSubmit = async (data) => {

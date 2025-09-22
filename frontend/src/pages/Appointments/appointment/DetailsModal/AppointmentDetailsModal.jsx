@@ -25,7 +25,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
 
     const [isEditing, setIsEditing] = useState(false);
 
- //========================================Dropdowns data=========================================   
+//=========================================Dropdowns data=========================================   
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);

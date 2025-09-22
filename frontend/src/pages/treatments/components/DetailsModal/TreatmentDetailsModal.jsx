@@ -2,17 +2,26 @@ import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
 import { useState } from 'react';
 
+import ElementDropdown from '@/components/ElementDropdown/ElementDropdown';
+
 import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
-export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
+export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onClose, onUpdate, 
+        setStatusMessage, disciplines
+    }) {
     const contextFields = {
         name: treatment.name,
+        discipline: treatment.discipline,
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
 
+//=========================================Dropdown data==========================================   
+    const [selectedDiscipline, setSelectedDiscipline] = useState(treatment.discipline);
+
+//==========================================Saving method==========================================
     const handleSave = () => {
         const allValid = validateAll();
         if (!allValid) {
@@ -29,10 +38,12 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
+
+        setSelectedDiscipline(treatment.discipline);
     }
 
     return (
-        <DetailsModal title={isEditing ? "Edição da Sala" : "Detalhes da Sala"} isOpen={isOpen}
+        <DetailsModal title={isEditing ? "Edição da Disciplina" : "Detalhes da Disciplina"} isOpen={isOpen}
                 isEditing={isEditing} setIsEditing={setIsEditing}
                 onSave={handleSave} onCancel={resetModal} onDelete={onDelete} onClose={onClose}>
             <div className={"standardFormulary"}>
@@ -44,6 +55,12 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
                     <label htmlFor="name">Nome</label>
                     <p className="errorMessage">{errors.name || ""}</p>
                 </div>
+
+                <ElementDropdown isEditing={isEditing} options={disciplines}
+                    onSelect={(option) => {setField("disciplineId", option.id); setSelectedDiscipline(option)}}
+                    selectedOption={selectedDiscipline} hasError={errors.discipline}
+                    labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina...', noResults: 'Nenhuma disciplina registrada'}}
+                />
             </div>
         </DetailsModal>
     );

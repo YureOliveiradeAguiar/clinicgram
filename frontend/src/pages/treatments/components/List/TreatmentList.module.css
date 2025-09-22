@@ -1,3 +1,15 @@
+.cardHeading {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.cardIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.05rem;
+}
+
 .cardDescription {
     display: flex;
     flex-direction: column;
@@ -10,10 +22,14 @@
 
 .cardName {
     color: var(--font);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
-.cardDiscipline {
+.placesIcon{
+    width: 18px;
+    height: 18px;
+}
+.cardRooms {
     color: rgb(100,100,100);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }

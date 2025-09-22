@@ -1,3 +1,4 @@
+import PlacesIcon from '@/assets/icons/placesIcon';
 import styles from './TreatmentList.module.css'
 
 import List from '@/components/List/List.jsx';
@@ -10,6 +11,7 @@ import { useState } from 'react';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 import useElement from '@/hooks/useElement';
+import useFetch from '@/hooks/useFetch';
 
 
 export default function TreatmentList() {
@@ -29,11 +31,17 @@ export default function TreatmentList() {
         selectedElement: selectedTreatment, setSelectedElement: setSelectedTreatment,
         setStatusMessage, setOpenModal });
 
+//============================Fetches for the modals, so they can use them without having to re-render the fetches===================
+    const { data: disciplines} = useFetch({ elementNamePlural:'as disciplinas', elementPath:'disciplines', setStatusMessage});
+    const { data: rooms} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
+
+//===================================================================================================================================
 
     return (
         <List title="Tratamentos"
-                NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
-                searchPlaceholder="Pesquisar tratamento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+            NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
+            searchPlaceholder="Pesquisar tratamento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+        >
             {treatments.length > 0 ? (
                 treatments
                     .filter((treatment) =>
@@ -41,11 +49,17 @@ export default function TreatmentList() {
                     )
                     .map(treatment => (
                         <Card key={treatment.id} element={treatment} setOpenModal={setOpenModal} showSecondButton={false}
-                                selectedElement={selectedTreatment} setSelectedElement={setSelectedTreatment}
+                            selectedElement={selectedTreatment} setSelectedElement={setSelectedTreatment}
                         >
-                            <div className={styles.cardDescription}>
-                                <span className={styles.cardName}>{treatment.name}</span>
-                                <span className={styles.cardDiscipline}>Psicologia</span>
+                            <div className={styles.cardHeading}>
+                                <span className={styles.cardIcon}>{treatment.discipline.icon}</span>
+                                <div className={styles.cardDescription}>
+                                    <span className={styles.cardName}>{treatment.name}</span>
+                                    <span className={styles.cardRooms}>
+                                        {PlacesIcon && <PlacesIcon className={styles.placesIcon}/>}
+                                        {treatment.places}
+                                    </span>
+                                </div>
                             </div>
                         </Card>
                 ))
@@ -55,11 +69,16 @@ export default function TreatmentList() {
 
             {openModal === "register" && (
                 <TreatmentRegisterModal isOpen={openModal === "register"} onSuccess={handleTreatmentAdded}
-                        setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
+                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
+                    disciplines={disciplines} rooms={rooms}
+                />
             )}
             {(openModal === "properties" && selectedTreatment) && (
-                <TreatmentDetailsModal treatment={selectedTreatment} isOpen={selectedTreatment !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedTreatment(null); setOpenModal(null)}} onDelete={handleTreatmentDelete} onUpdate={handleTreatmentUpdate}/>
+                <TreatmentDetailsModal treatment={selectedTreatment} isOpen={selectedTreatment !== null}
+                    setStatusMessage={setStatusMessage}
+                    disciplines={disciplines} rooms={rooms}
+                    onClose={() => {setSelectedTreatment(null); setOpenModal(null)}} onDelete={handleTreatmentDelete} onUpdate={handleTreatmentUpdate}
+                />
             )}
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>
