@@ -1,4 +1,19 @@
+.cardDescription {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardDescription span {
+    text-align: start;
+    line-height: 1.2rem;
+}
+
 .cardName {
     color: var(--font);
     font-size: 1.1rem;
+}
+
+.cardDiscipline {
+    color: rgb(100,100,100);
+    font-size: 0.9rem;
 }

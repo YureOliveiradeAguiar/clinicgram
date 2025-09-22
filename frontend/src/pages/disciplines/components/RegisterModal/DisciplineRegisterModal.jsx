@@ -1,13 +1,22 @@
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
-import { useForm } from "react-hook-form";
+import { useState } from 'react';
+import { useForm, Controller } from "react-hook-form";
 
-import { getCookie } from '@/utils/csrf';
+import EmojiPicker from '../EmojiPicker/EmojiPicker';
+
+import { getCookie } from '@/utils/csrf.js';
 
 
 export default function DisciplineRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
 
-    const { register, handleSubmit, reset, formState: { errors  } } = useForm({mode:'onBlur',});
+    const { register, handleSubmit, reset, formState: { errors  }, control } = useForm({mode:'onBlur',
+        defaultValues: {
+            icon: null,
+        }
+    });
+
+    const [selectedEmoji, setSelectedEmoji] = useState(null);
 
     const onSubmit = async (data) => {
         const payload = { ...data };
@@ -37,16 +46,22 @@ export default function DisciplineRegisterModal({ isOpen, onSuccess, onClose, se
     };
 
     return (
-        <RegisterModal title="Nova Disciplina" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
+        <RegisterModal title="Nova Sala" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <div className="inputContainer">
                 <input type="text" id="name" name="name" autoComplete="off"
                     maxLength="70" disciplineholder=" "
                     className={`formInput ${errors.name ? "formInputError" : ""}`}
                     {...register('name', { required: "O nome é obrigatório" })}
                 />
-                <label htmlFor="name">Nome</label>
+                <label htmlFor="name">Nome Completo</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
             </div>
+
+            <Controller name="icon" control={control}
+                render={({ field }) => (
+                    <EmojiPicker value={field.value} onChange={field.onChange} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji}/>
+                )}
+            />
         </RegisterModal>
     );
 }

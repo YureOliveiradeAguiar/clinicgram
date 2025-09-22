@@ -54,7 +54,6 @@ export default function useElement({ elementName, elementNamePlural, elementPath
                 setSelectedElement(null);
                 setOpenModal(null);
             } else {
-                console.log("asdasdasdsa");
                 setStatusMessage({type: "error", message: <><AlertIcon className="icon" />Erro ao excluir {elementName}</>});
             }
         } catch {

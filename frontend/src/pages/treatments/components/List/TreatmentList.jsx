@@ -41,15 +41,16 @@ export default function TreatmentList() {
                     )
                     .map(treatment => (
                         <Card key={treatment.id} element={treatment} setOpenModal={setOpenModal} showSecondButton={false}
-                                selectedElement={selectedTreatment} setSelectedElement={setSelectedTreatment}>
-                            
-                            <p className={styles.cardName} aria-label={treatment.name}>
-                                {treatment.name}
-                            </p>
+                                selectedElement={selectedTreatment} setSelectedElement={setSelectedTreatment}
+                        >
+                            <div className={styles.cardDescription}>
+                                <span className={styles.cardName}>{treatment.name}</span>
+                                <span className={styles.cardDiscipline}>Psicologia</span>
+                            </div>
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhum tratamento encontrado'}</p>
+                <p>Nenhum tratamento encontrado</p>
             )}
 
             {openModal === "register" && (

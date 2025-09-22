@@ -1,15 +1,15 @@
 import styles from './DisciplineList.module.css'
 
-import List from '@/components/List/List.jsx';
+import List from '@/components/List/List';
 import Card from '@/components/Card/Card.jsx';
-import DisciplineRegisterModal from '../RegisterModal/DisciplineRegisterModal.jsx';
-import DisciplineDetailsModal from '../DetailsModal/DisciplineDetailsModal.jsx';
+import DisciplineRegisterModal from '../RegisterModal/DisciplineRegisterModal';
+import DisciplineDetailsModal from '../DetailsModal/DisciplineDetailsModal';
 
 import { useState } from 'react';
 
-import useElement from '@/hooks/useElement.jsx';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
-import { useAutoClearStatus } from '@/utils/useAutoClearStatus.js';
+import useElement from '@/hooks/useElement';
 
 
 export default function DisciplineList() {
@@ -25,13 +25,13 @@ export default function DisciplineList() {
         handleElementAdded: handleDisciplineAdded,
         handleElementDelete : handleDisciplineDelete,
         handleElementUpdate : handleDisciplineUpdate,
-    } = useElement({ elementName: "o tratamento", elementNamePlural: "os tratamentos", elementPath: "disciplines",
+    } = useElement({ elementName: "a sala", elementNamePlural: "as salas", elementPath: "disciplines",
         selectedElement: selectedDiscipline, setSelectedElement: setSelectedDiscipline,
         setStatusMessage, setOpenModal });
-//=====================================================================================================================
+
 
     return (
-        <List title="Disciplinas"
+        <List title="Salas"
             NewElementMessage="Nova" onNewElement={() => setOpenModal("register")}
             searchPlaceholder="Pesquisar disciplina" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
         >
@@ -42,26 +42,25 @@ export default function DisciplineList() {
                     )
                     .map(discipline => (
                         <Card key={discipline.id} element={discipline} setOpenModal={setOpenModal} showSecondButton={false}
-                                selectedElement={selectedDiscipline} setSelectedElement={setSelectedDiscipline}>
-                            
-                            <p className={styles.cardName} aria-label={discipline.name}>
-                                {discipline.name}
-                            </p>
+                            selectedElement={selectedDiscipline} setSelectedElement={setSelectedDiscipline}
+                        >
+                            <div className={styles.cardName}>
+                                <span>{discipline.icon}</span>
+                                <span>{discipline.name}</span>
+                            </div>
                         </Card>
                 ))
             ) : (
-                <p>{'Nenhuma disciplina encontrada'}</p>
+                <p>{statusMessage?.message || 'Nenhuma sala registrada'}</p>
             )}
 
             {openModal === "register" && (
                 <DisciplineRegisterModal isOpen={openModal === "register"} onSuccess={handleDisciplineAdded}
-                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
-                />
+                        setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
             )}
             {(openModal === "properties" && selectedDiscipline) && (
                 <DisciplineDetailsModal discipline={selectedDiscipline} isOpen={selectedDiscipline !== null} setStatusMessage={setStatusMessage}
-                    onClose={() => {setSelectedDiscipline(null); setOpenModal(null)}} onDelete={handleDisciplineDelete} onUpdate={handleDisciplineUpdate}
-                />
+                        onClose={() => {setSelectedDiscipline(null); setOpenModal(null)}} onDelete={handleDisciplineDelete} onUpdate={handleDisciplineUpdate}/>
             )}
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>

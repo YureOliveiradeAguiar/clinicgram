@@ -8,9 +8,31 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+}
+.userInfoSection {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+.userInfoSection .userIcon {
+    cursor: default;
+}
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+.userInfo span {
+    line-height: 1.2rem;
+}
+.userInfo .email {
+    font-size: 0.95rem;
+    color: rgb(100,100,100)
 }
 
 .dropdown {
@@ -29,19 +51,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
 }
-
-.userInfoSection {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    border-bottom: 1px solid #eee;
-    gap: 0.5rem;
-    font-weight: 500;
-}
-.userInfoSection .userIcon {
-    cursor: default;
-}
-
 .dropdownItem {
 	display: flex;
 	align-items: center;

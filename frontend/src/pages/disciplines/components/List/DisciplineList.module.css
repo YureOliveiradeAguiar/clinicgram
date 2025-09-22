@@ -1,4 +1,6 @@
 .cardName {
+    display: inline-flex;
     color: var(--font);
     font-size: 1.1rem;
+    gap: 2px;
 }

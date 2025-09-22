@@ -19,12 +19,17 @@ import { Outlet } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
+import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 
 export default function Layout() {
+    const [statusMessage, setStatusMessage] = useState('');
+    useAutoClearStatus(statusMessage, setStatusMessage);
+    
     const [user, setUser] = useState(null);
+
     useEffect(() => {
-        fetch('/api/profile', {
+        fetch('/api/profile/', {
             method: 'GET',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
@@ -32,11 +37,15 @@ export default function Layout() {
             credentials: 'include',
         })
             .then(res => {
-                if (!res.ok) throw new Error('Erro ao carregar usuário');
+                if (!res.ok) throw new Error("Erro ao carregar usuário");
                 return res.json();
             })
-            .then(data => { setUser(data); })
-            .catch(err => { console.error('Erro ao buscar perfil do usuário:', err); });
+            .then(res => {
+                setUser(res);
+            })
+            .catch(() => {
+                setStatusMessage({ message: "Erro de conexão com o servidor", type: 'error' });
+            });
     }, []);
 
     const panelGroups = [
@@ -94,7 +103,7 @@ export default function Layout() {
         }
     }, [isMobile]);
 
-    return (
+    return (<>
         <div className={styles.appContainer}>
             <div className={styles.sideContent}>
                 {isMobile ? (
@@ -120,5 +129,10 @@ export default function Layout() {
                 </div>
             </div>
         </div>
-    );
+        {statusMessage?.message && (
+            <div className={`statusMessage ${statusMessage.type}`}>
+                {statusMessage.message}
+            </div>
+        )}
+    </>);
 }

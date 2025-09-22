@@ -4,11 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
+import reversion
 
-from accounts.models import CustomUser
 from .models import Worker
 from .serializers import WorkerSerializer
-import reversion
 
 
 class WorkerListAPIView(APIView):
@@ -18,6 +17,7 @@ class WorkerListAPIView(APIView):
         workers = Worker.objects.all().order_by('user__firstName', 'user__lastName')
         serializer = WorkerSerializer(workers, many=True)
         return Response(serializer.data)
+
 
 class RegisterWorkerAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -38,26 +38,35 @@ class RegisterWorkerAPIView(APIView):
             'success': False,
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class WorkerDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, worker_id):
-        worker = get_object_or_404(CustomUser, id=worker_id)
+        try:
+            worker = get_object_or_404(Worker, id=worker_id)
+            with reversion.create_revision():
+                reversion.set_user(request.user)
+                reversion.set_comment("Deleted via API")
+                worker.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
+            if worker.user:
+                worker.user.delete()
+            else:
+                worker.delete()
+            return Response({"message": "Estagiário excluído com sucesso."}, status=status.HTTP_200_OK)
+        
+        except Worker.DoesNotExist:
+            return Response({"error": "Estagiário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": f"Erro interno: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        with reversion.create_revision():
-            reversion.set_user(request.user)
-            reversion.set_comment("Deleted via API")
-            worker.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        if worker.user:
-            worker.user.delete()
-        return Response({"message": "Estagiário excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
 
 class WorkerUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, worker_id):
-        worker = get_object_or_404(CustomUser, id=worker_id)
+        worker = get_object_or_404(Worker, id=worker_id)
         serializer = WorkerSerializer(worker, data=request.data, partial=True)
         if serializer.is_valid():
             with reversion.create_revision():
