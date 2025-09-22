@@ -59,7 +59,7 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
                 <ElementDropdown isEditing={isEditing} options={disciplines}
                     onSelect={(option) => {setField("disciplineId", option.id); setSelectedDiscipline(option)}}
                     selectedOption={selectedDiscipline} hasError={errors.discipline}
-                    labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina...', noResults: 'Nenhuma disciplina registrada'}}
+                    labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina', noResults: 'Nenhuma disciplina registrada'}}
                 />
             </div>
         </DetailsModal>

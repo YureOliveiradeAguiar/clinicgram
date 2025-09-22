@@ -5,7 +5,6 @@ import Layout from './components/Layout/Layout.jsx';
 
 import Home from '@/pages/home/Home.jsx'
 import Login from '@/pages/login/Login.jsx'
-import Dashboard from '@/pages/dashBoard/Dashboard.jsx';
 
 import Appointments from '@/pages/appointments/Appointments.jsx';
 import Schedule from '@/pages/schedule/Schedule.jsx';
@@ -27,8 +26,6 @@ export default function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route element={<Layout />}>
-						<Route path="/dashboard" element={<RequireAuth><Dashboard/></RequireAuth>}/>
-
 						<Route path="/appointments" element={<RequireAuth><Appointments/></RequireAuth>}/>
 						<Route path="/schedule" element={<RequireAuth><Schedule/></RequireAuth>}/>
 						<Route path="/solicitations" element={<RequireAuth><Solicitations/></RequireAuth>}/>

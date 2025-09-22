@@ -1,3 +1,5 @@
+import XIcon from '@/assets/icons/xIcon';
+import CheckMarkIcon from '@/assets/icons/checkMarkIcon';
 import StarIcon from '@/assets/icons/startIcon';
 import styles from './ElementDropdown.module.css';
 
@@ -6,7 +8,7 @@ import { useState, useRef, useEffect } from 'react';
 
 export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], hasError=false,
         isMultiSelect=false, selectedOptions,
-        labels = { label: 'Elemento', placeholder: 'Pesquisar elemento...', noResults: 'Nenhum elemento encontrado'},
+        labels = { label: 'Elemento', placeholder: 'Pesquisar elemento', noResults: 'Nenhum elemento encontrado'},
     }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -42,10 +44,11 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
 
     return (
         <div className="inputContainer" ref={dropdownRef}>
-            <button 
+            <button
                 className={`formButtonPicker ${(selectedOption || selectedOptions?.length > 0)
                     ? "hasValue" : hasError ? styles.dropdownError : ""} ${!isEditing ? "readOnly" : ""}`}
-                readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}>
+                readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}
+            >
                 {isMultiSelect && selectedOptions?.length > 0
                     ? selectedOptions.map((opt) => opt.name).join(", ")
                     : !isMultiSelect && selectedOption
@@ -56,17 +59,22 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
             <p className="errorMessage">{hasError?.message || ""}</p>
             {isOpen && (
                 <div className={styles.dropdownContent}>
-                    <input type="text" className={styles.searchBox} placeholder={labels.placeholder}
-                        value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <div className={styles.searchWrapper}>
+                        {XIcon && <XIcon className={styles.dropdownIcon}/>}
+                       <input type="text" className={styles.searchBox} placeholder={labels.placeholder}
+                            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                     {filteredOptions.length > 0 ? (<>
                         {filteredOptions.map(option => (
                             <div key={option.id} onClick={() => handleSelect(option)}
-                                className={`${styles.dropdownOption} ${option.isTop ? styles.bestOption : ""}`}
+                                className={`${styles.dropdownOption}
+                                    ${(isMultiSelect && (selectedOptions?.some(o => o.id === option.id))) && styles.selected}
+                                    ${option.isTop ? styles.bestOption : ""}`}
                             >
                                 {option.isTop && <StarIcon className={styles.firstOptionIcon} />}
-                                {isMultiSelect && (
-                                    <input type="checkbox" checked={selectedOptions?.some(o => o.id === option.id)} readOnly/>
+                                {isMultiSelect && (selectedOptions?.some(o => o.id === option.id)) && (
+                                    CheckMarkIcon && <CheckMarkIcon className={styles.dropdownIcon}/>
                                 )}
                                 {option.name}
                                 {option.isTop && (

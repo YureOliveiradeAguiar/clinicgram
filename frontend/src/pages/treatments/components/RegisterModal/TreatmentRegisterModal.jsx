@@ -49,7 +49,7 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
         <RegisterModal title="Novo Procedimento" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
             <div className="inputContainer">
                 <input type="text" id="name" name="name" autoComplete="off"
-                    maxLength="70" treatmentholder=" "
+                    maxLength="70" placeholder=""
                     className={`formInput ${errors.name ? "formInputError" : ""}`}
                     {...register('name', { required: "O nome é obrigatório" })}
                 />
@@ -61,7 +61,7 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
                 render={({ field }) => (
                     <ElementDropdown options={disciplines} selectedOption={selectedDiscipline}
                         onSelect={(option) => {field.onChange(option.id); setSelectedDiscipline(option)}} hasError={errors.disciplineId}
-                        labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina...', noResults: 'Nenhuma disciplina encontrada'}}
+                        labels={{ label: 'Disciplina', placeholder: 'Pesquisar disciplina', noResults: 'Nenhuma disciplina encontrada'}}
                     />
                 )}
             />
@@ -70,7 +70,7 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
                 render={({ field }) => (
                     <ElementDropdown options={rooms} selectedOptions={selectedRooms} isMultiSelect={true}
                         onSelect={(option) => {field.onChange(option.id); setSelectedRooms(option)}} hasError={errors.disciplineId}
-                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala encontrada'}}
+                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala', noResults: 'Nenhuma sala encontrada'}}
                     />
                 )}
             />

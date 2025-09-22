@@ -6,7 +6,7 @@ import Card from '@/components/Card/Card.jsx';
 import TreatmentRegisterModal from '../RegisterModal/TreatmentRegisterModal.jsx';
 import TreatmentDetailsModal from '../DetailsModal/TreatmentDetailsModal.jsx';
 
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
@@ -33,9 +33,20 @@ export default function TreatmentList() {
 
 //============================Fetches for the modals, so they can use them without having to re-render the fetches===================
     const { data: disciplines} = useFetch({ elementNamePlural:'as disciplinas', elementPath:'disciplines', setStatusMessage});
-    const { data: rooms} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
+    const { data: places} = useFetch({ elementNamePlural:'as salas', elementPath:'places', setStatusMessage});
 
 //===================================================================================================================================
+    const placesById = useMemo(() => {
+        const map = new Map();
+        (places || []).forEach(p => {
+            map.set(p.id, p.name);
+        });
+        return map;
+    }, [places]);
+//===================================================================================================================================    
+    useEffect(() => {
+        console.log("treatments: ", treatments);
+    }, [treatments]);
 
     return (
         <List title="Tratamentos"
@@ -57,7 +68,16 @@ export default function TreatmentList() {
                                     <span className={styles.cardName}>{treatment.name}</span>
                                     <span className={styles.cardRooms}>
                                         {PlacesIcon && <PlacesIcon className={styles.placesIcon}/>}
-                                        {treatment.places}
+                                        {treatment.rooms.map((roomId, idx) => {
+                                            const place = placesById.get(String(roomId));
+                                            const name = place?.name ?? "Unknown";
+                                            return (
+                                                <span key={roomId} className={styles.roomName}>
+                                                    {name}
+                                                    {idx < treatment.rooms.length - 1 ? ", " : ""}
+                                                </span>
+                                            );
+                                        })}
                                     </span>
                                 </div>
                             </div>
@@ -70,13 +90,13 @@ export default function TreatmentList() {
             {openModal === "register" && (
                 <TreatmentRegisterModal isOpen={openModal === "register"} onSuccess={handleTreatmentAdded}
                     setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
-                    disciplines={disciplines} rooms={rooms}
+                    disciplines={disciplines} rooms={places}
                 />
             )}
             {(openModal === "properties" && selectedTreatment) && (
                 <TreatmentDetailsModal treatment={selectedTreatment} isOpen={selectedTreatment !== null}
                     setStatusMessage={setStatusMessage}
-                    disciplines={disciplines} rooms={rooms}
+                    disciplines={disciplines} rooms={places}
                     onClose={() => {setSelectedTreatment(null); setOpenModal(null)}} onDelete={handleTreatmentDelete} onUpdate={handleTreatmentUpdate}
                 />
             )}

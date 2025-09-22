@@ -31,7 +31,7 @@ function Login () {
 
             const result = await response.json();
             if (response.ok) {
-                navigate('/dashboard');
+                navigate('/appointments');
             } else {
                 setStatus({message: result.error, type: "error" });
             }
