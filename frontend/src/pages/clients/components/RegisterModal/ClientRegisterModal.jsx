@@ -21,15 +21,14 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
 
     const observationsValue = watch('observations') || '';
     
+//==================================================Submitting logic================================================
     const onSubmit = async (data) => {
         const rawPhone = normalizePhone(data.whatsapp);
-
         if (!rawPhone) {
             setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
         }
 
         const payload = { ...data, rawPhone };
-        console.log("payload: ", payload);
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
@@ -57,7 +56,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
     const handleError = () => {
         setStatusMessage({ message: "Dados inválidos!", type: "error" });
     };
-//===========================================================================================================================
+//=======================================================================================================================
 
     return (
         <RegisterModal title="Novo Paciente" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>

@@ -1,10 +1,10 @@
 import DeleteIcon from '@/assets/icons/deleteIcon';
 import styles from './HistoryList.module.css'
 
+import React, { useEffect, useState } from 'react';
+
 import HistoryCard from '../HistoryCard/HistoryCard.jsx';
 import Panel from '@/components/Panel/Panel';
-
-import React, { useEffect, useState } from 'react';
 
 import { getCookie } from '@/utils/csrf.js';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
@@ -84,6 +84,7 @@ export default function HistoryList() {
             setStatusMessage({ message: "Erro de conexão", type: "error" });
         }
     };
+//======================================================================================================================
 
     return (
         <Panel title='Histórico'>

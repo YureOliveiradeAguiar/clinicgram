@@ -12,14 +12,14 @@ export default function WorkerRegisterModal({ isOpen, onSuccess, onClose, setSta
 
     const whatsappValue = watch('whatsapp');
 
+//===========================================Submiting logic=============================================
     const onSubmit = async (data) => {
         const rawPhone = normalizePhone(data.whatsapp);
-
         if (!rawPhone) {
             setError("whatsapp", { type: "manual", message: "WhatsApp é obrigatório" });
         }
 
-        const payload = { ...data, rawPhone };
+        //const payload = { ...data, rawPhone };
         console.log("payload: ", payload);
         try {
             const response = await fetch('/api/workers/new/', {
@@ -48,6 +48,7 @@ export default function WorkerRegisterModal({ isOpen, onSuccess, onClose, setSta
     const handleError = () => {
         setStatusMessage({ message: "Dados inválidos!", type: "error" });
     };
+//===========================================================================================================
 
     return (
         <RegisterModal title="Novo Estagiário" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -67,7 +68,6 @@ export default function WorkerRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <label htmlFor="lastName">Sobrenome*</label>
                 <p className="errorMessage">{errors.lastName?.message || ""}</p>
             </div>
-
             <div className="inputContainer">
                 <input type="text" id="email" name="email" autoComplete="off" maxLength="254" placeholder=""
                     className={`formInput ${errors.email ? "formInputError" : ""}`}

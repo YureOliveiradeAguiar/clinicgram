@@ -9,8 +9,8 @@ class Worker(models.Model):
     whatsapp = models.CharField(max_length=15, blank=True, null=True)
 
     @property
-    def fullName(self):
+    def name(self):
         return f"{self.user.firstName} {self.user.lastName}".strip()
 
     def __str__(self):
-        return self.fullName or self.user.email
+        return self.name or self.user.email

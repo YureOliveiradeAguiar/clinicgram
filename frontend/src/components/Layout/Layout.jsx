@@ -68,8 +68,8 @@ export default function Layout() {
                 { title: "Pacientes", Icon: UsersIcon, link: "/clients" },
                 { title: "Disciplinas", Icon: OpenBookIcon, link: "/disciplines" },
                 { title: "Estagiários", Icon: MedicalInfo, link: "/workers" },
-                { title: "Tratamentos", Icon: PillIcon, link: "/treatments" },
                 { title: "Salas", Icon: PlacesIcon, link: "/places" },
+                { title: "Procedimentos", Icon: PillIcon, link: "/treatments" },
                 { title: "Histórico", Icon: HistoryIcon, link: "/history" },
             ]
         },

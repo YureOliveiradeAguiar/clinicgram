@@ -9,8 +9,6 @@ from treatments.serializers import TreatmentSerializer
 from workers.serializers import WorkerSerializer
 from places.serializers import PlaceSerializer
 
-from django.contrib.auth import get_user_model
-
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,7 +26,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         queryset=Client.objects.all(),
         source="client",
         required=False,
-        allow_null=True
+        allow_null=True,
     )
     worker = WorkerSerializer(read_only=True)
     workerId = serializers.PrimaryKeyRelatedField(
@@ -62,11 +60,13 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def _set_status(self, instance):
         # Only auto-set status if it wasn’t explicitly set
-        if instance.status not in (Appointment.Status.RESERVATION, Appointment.Status.SCHEDULED, Appointment.Status.UNSCHEDULED):
+        if instance.status in (Appointment.Status.SCHEDULED, Appointment.Status.UNSCHEDULED):
             instance.status = (
                 Appointment.Status.SCHEDULED if instance.startTime else Appointment.Status.UNSCHEDULED
             )
             instance.save()
+            print("AAAAAAAAA")
+        print("instance.status: ", instance.status)
         return instance
 
     def update(self, instance, validated_data):

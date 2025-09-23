@@ -110,7 +110,7 @@ export default function AppointmentList() {
                         </Card>
                 ))
             ) : (
-                <p>{statusMessage?.message || 'Nenhuma consulta na lista de espera'}</p>
+                <p>Nenhuma consulta na lista de espera</p>
             )}
 
             {openModal === "registerAppointment" && (

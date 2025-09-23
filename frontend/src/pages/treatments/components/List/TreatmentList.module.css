@@ -1,6 +1,6 @@
 .cardHeading {
     display: inline-flex;
-    gap: 4px;
+    gap: 6px;
 }
 
 .cardIcon {
@@ -13,23 +13,22 @@
 .cardDescription {
     display: flex;
     flex-direction: column;
-}
-
-.cardDescription span {
-    text-align: start;
-    line-height: 1.2rem;
+    line-height: 1.3rem;
 }
 
 .cardName {
+    display: inline-flex;
     color: var(--font);
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
 
-.placesIcon{
+.roomsIcon {
     width: 18px;
     height: 18px;
 }
 .cardRooms {
+    display: inline-flex;
+    text-align: center;
     color: rgb(100,100,100);
     font-size: 0.85rem;
 }

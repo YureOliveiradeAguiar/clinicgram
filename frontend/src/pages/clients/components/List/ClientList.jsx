@@ -40,13 +40,13 @@ export default function ClientList() {
             {clients.length > 0 ? (
                 clients
                     .filter((client) =>
-                        client.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+                        client.name.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(client => (
                         <Card key={client.id} element={client} setOpenModal={setOpenModal}
                                 selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
-                            <p className={styles.cardName} aria-label={client.fullName}>
-                                {client.fullName}
+                            <p className={styles.cardName} aria-label={client.name}>
+                                {client.name}
                             </p>
                         </Card>
                 ))

@@ -31,7 +31,7 @@ export default function DisciplineList() {
 
 
     return (
-        <List title="Salas"
+        <List title="Disciplinas"
             NewElementMessage="Nova" onNewElement={() => setOpenModal("register")}
             searchPlaceholder="Pesquisar disciplina" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
         >

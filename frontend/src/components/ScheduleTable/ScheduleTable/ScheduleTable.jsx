@@ -181,7 +181,7 @@ export default function ScheduleTable({ mode = 'viewing',
                                                                         marginLeft: `${32 * getMaxIndexForAppt(appointment.id)}px`,
                                                                         borderBottom: `6px solid ${appointmentColors[appointment.id]}`, }}
                                                                     onClick={() => setSelectedAppointment(appointment)}>
-                                                                {appointment.place.icon || ''}
+                                                                {appointment.treatment.discipline.icon || ''}
                                                         </div>
                                                     ))}
                                                 </div>

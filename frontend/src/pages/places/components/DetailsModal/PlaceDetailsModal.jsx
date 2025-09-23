@@ -2,21 +2,16 @@ import DetailsModal from '@/components/DetailsModal/DetailsModal';
 
 import { useState } from 'react';
 
-import EmojiPicker from '../EmojiPicker/EmojiPicker';
-
 import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
     const contextFields = {
         name: place.name,
-        icon: place.icon,
     };
     const { fields, errors, setField, validateAll, getUpdatedFields, resetFields } = usePatchFields(contextFields);
 
     const [isEditing, setIsEditing] = useState(false);
-
-    const [selectedEmoji, setSelectedEmoji] = useState(place.icon);
 
     const handleSave = () => {
         const allValid = validateAll();
@@ -34,7 +29,6 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
     const resetModal = () => {
         setIsEditing(false);
         resetFields();
-        setSelectedEmoji(place.icon);
     }
 
     return (
@@ -51,10 +45,6 @@ export default function PlaceDetailsModal({ place, onDelete, isOpen, onClose, on
                     <p className="errorMessage">{errors.name || ""}</p>
                 </div>
             </div>
-
-            <EmojiPicker value={place.icon} isEditing={isEditing} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji}
-                onChange={(emoji) => setField("icon", emoji)}/>
-
         </DetailsModal>
     );
 }

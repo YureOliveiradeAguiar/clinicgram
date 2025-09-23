@@ -14,10 +14,10 @@ class WorkerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Worker
-        fields = ['id', 'firstName', 'lastName', 'fullName', 'email', 'password', 'ra', 'whatsapp']
+        fields = ['id', 'firstName', 'lastName', 'name', 'email', 'password', 'ra', 'whatsapp']
 
-    def get_fullName(self, obj):
-        return obj.fullName
+    def get_name(self, obj):
+        return obj.name
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})

@@ -49,14 +49,6 @@
     cursor: pointer;
     font-size: 0.9rem;
 }
-.firstOptionIcon {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 24px;
-    width: 24px;
-}
 .dropdownOption.selected {
     background-color: rgb(240,240,240);
 }
@@ -75,10 +67,19 @@
     height: 18px;
     pointer-events: none;
 }
-
+/* No Option */
 .dropdownNoOption {
     cursor: default;
     color: rgb(60,60,60);
+}
+/* Best Option */
+.firstOptionIcon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
+    width: 24px;
 }
 
 /* TOOLTIP */

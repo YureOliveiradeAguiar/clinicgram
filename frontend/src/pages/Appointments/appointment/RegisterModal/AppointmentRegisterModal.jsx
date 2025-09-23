@@ -111,38 +111,39 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
     };
+//============================================================================================================
 
     return (
         <RegisterModal title="Nova Consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
-            <Controller name="treatmentId" control={control}
+            <Controller name="treatmentId" control={control} rules={{ required: "O procedimento é obrigatório" }}
                 render={({ field }) => (
                     <ElementDropdown options={treatments} selectedOption={selectedTreatment}
                         onSelect={(option) => {field.onChange(option.id); setSelectedTreatment(option)}} hasError={errors.treatmentId}
-                        labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento encontrado'}}
+                        labels={{ label: 'Procedimento*', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento encontrado'}}
                     />
                 )}
             />
-            <Controller name="clientId" control={control}
+            <Controller name="clientId" control={control} rules={{ required: "O cliente é obrigatório" }}
                 render={({ field }) => (
                     <ElementDropdown options={clients} selectedOption={selectedClient}
                         onSelect={(option) => {field.onChange(option.id); setSelectedClient(option)}} hasError={errors.clientId}
-                        labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente encontrado'}}
+                        labels={{ label: 'Paciente*', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente encontrado'}}
                     />
                 )}
             />
-            <Controller name="workerId" control={control}
+            <Controller name="workerId" control={control} rules={{ required: "O estagiário é obrigatório" }}
                 render={({ field }) => (
                     <ElementDropdown options={sortedWorkers} selectedOption={selectedWorker} bestOptions={sortedWorkers.filter(w => w.isTop)} 
                         onSelect={(option) => {field.onChange(option.id); setSelectedWorker(option)}} hasError={errors.workerId}
-                        labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário encontrado'}}
+                        labels={{ label: 'Estagiário*', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário encontrado'}}
                     />
                 )}
             />
-            <Controller name="placeId" control={control}
+            <Controller name="placeId" control={control} rules={{ required: "A sala é obrigatória" }}
                 render={({ field }) => (
                     <ElementDropdown options={places} selectedOption={selectedPlace}
                         onSelect={(option) => {field.onChange(option.id); setSelectedPlace(option)}} hasError={errors.placeId}
-                        labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala encontrada'}}
+                        labels={{ label: 'Sala*', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala encontrada'}}
                     />
                 )}
             />

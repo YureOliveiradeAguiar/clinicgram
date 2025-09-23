@@ -10,8 +10,8 @@ class Client(models.Model):
     observation = models.TextField(max_length=200, blank=True, null=True)
     
     @property
-    def fullName(self):
+    def name(self):
         return f"{self.user.firstName} {self.user.lastName}".strip()
 
     def __str__(self):
-        return self.fullName or self.user.email
+        return self.name or self.user.email

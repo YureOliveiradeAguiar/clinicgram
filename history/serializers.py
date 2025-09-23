@@ -8,7 +8,7 @@ class HistorySerializer(serializers.ModelSerializer):
 
     description = serializers.SerializerMethodField()
     action = serializers.SerializerMethodField()
-    user = serializers.CharField(source="revision.user.username", default="(Unknown)")
+    user = serializers.CharField(source="revision.user", default="(Unknown)")
     date = serializers.DateTimeField(source="revision.date_created", format="%Y-%m-%dT%H:%M:%SZ")
     changes = serializers.SerializerMethodField()
 

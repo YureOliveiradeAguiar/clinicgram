@@ -41,24 +41,24 @@ export default function PlaceList() {
                     )
                     .map(place => (
                         <Card key={place.id} element={place} setOpenModal={setOpenModal} showSecondButton={false}
-                                selectedElement={selectedPlace} setSelectedElement={setSelectedPlace}>
-                            
-                            <p className={styles.cardName} aria-label={place.name}>
-                                {place.icon}{place.name}
-                            </p>
+                            selectedElement={selectedPlace} setSelectedElement={setSelectedPlace}
+                        >
+                            <span className={styles.cardName} aria-label={place.name}>{place.name}</span>
                         </Card>
-                ))
+                    ))
             ) : (
                 <p>{statusMessage?.message || 'Nenhuma sala registrada'}</p>
             )}
 
             {openModal === "register" && (
                 <PlaceRegisterModal isOpen={openModal === "register"} onSuccess={handlePlaceAdded}
-                        setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)} />
+                    setStatusMessage={setStatusMessage} onClose={() => setOpenModal(false)}
+                />
             )}
             {(openModal === "properties" && selectedPlace) && (
                 <PlaceDetailsModal place={selectedPlace} isOpen={selectedPlace !== null} setStatusMessage={setStatusMessage}
-                        onClose={() => {setSelectedPlace(null); setOpenModal(null)}} onDelete={handlePlaceDelete} onUpdate={handlePlaceUpdate}/>
+                    onClose={() => {setSelectedPlace(null); setOpenModal(null)}} onDelete={handlePlaceDelete} onUpdate={handlePlaceUpdate}
+                />
             )}
             {statusMessage?.message && (
                 <div className={`statusMessage ${statusMessage.type}`}>

@@ -36,5 +36,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []  # No username required
     
     def __str__(self):
-        fullName = f"{self.firstName}{self.lastName}".strip()
+        fullName = f"{self.firstName} {self.lastName}".strip()
         return fullName if fullName else self.email

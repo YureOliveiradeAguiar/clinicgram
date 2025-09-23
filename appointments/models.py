@@ -1,8 +1,10 @@
 from django.db import models
+
 from treatments.models import Treatment
-from accounts.models import CustomUser
-from places.models import Place
 from clients.models import Client
+from workers.models import Worker
+from places.models import Place
+
 
 from django.utils.translation import gettext_lazy as _
 
@@ -21,7 +23,7 @@ class Appointment(models.Model):
     # Always mandatory fields
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSCHEDULED)
     treatment = models.ForeignKey(Treatment, on_delete=models.CASCADE)
-    worker = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     startTime = models.DateTimeField(blank=True, null=True)
     endTime = models.DateTimeField(blank=True, null=True)
@@ -29,7 +31,7 @@ class Appointment(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, null=True, blank=True)
     sus = models.BooleanField(_("SUS Patient"), default=False)
     priority = models.IntegerField(_("Priority"), default=0)
-    # Aways optional fields
+    # Always optional fields
     observation = models.TextField(blank=True, null=True)
     # Added by system
     createdAt = models.DateTimeField(auto_now_add=True)

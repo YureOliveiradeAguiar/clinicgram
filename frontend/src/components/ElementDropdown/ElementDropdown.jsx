@@ -3,7 +3,7 @@ import CheckMarkIcon from '@/assets/icons/checkMarkIcon';
 import StarIcon from '@/assets/icons/startIcon';
 import styles from './ElementDropdown.module.css';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 
 export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], hasError=false,
@@ -24,33 +24,44 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+//==================================The search filtering===================================
     const filteredOptions = options.filter(option =>
         option.isTop || option.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+//========================Lookup map for multi-select, for performance=====================
+    const optionsById = useMemo(() => {
+        const map = new Map();
+        (options || []).forEach(o => map.set(o.id, o));
+        return map;
+    }, [options]);
+
+//====================================Selection handling=====================================
     const handleSelect = (option) => {
         if (isMultiSelect) {
-            // If multi-select, toggle the option in the selected list
-            if (selectedOptions.includes(option)) {// Remove it
-                onSelect(selectedOptions.filter((o) => o !== option));
-            } else {// Add it
-                onSelect([...selectedOptions, option]);
-            }
+            const id = option.id;
+            onSelect(
+                selectedOptions.includes(id)
+                    ? selectedOptions.filter(o => o !== id) // Removes it
+                    : [...selectedOptions, id]              // Adds it
+            );
         } else {// Single-select: just replace
             onSelect(option);
             setIsOpen(false);
         }
     };
+//===========================================================================================
 
     return (
         <div className="inputContainer" ref={dropdownRef}>
             <button
-                className={`formButtonPicker ${(selectedOption || selectedOptions?.length > 0)
-                    ? "hasValue" : hasError ? styles.dropdownError : ""} ${!isEditing ? "readOnly" : ""}`}
+                className={`formButtonPicker
+                    ${(selectedOption || selectedOptions?.length > 0) ? "hasValue" : ""}
+                    ${hasError ? "formInputError" : ""} ${!isEditing ? "readOnly" : ""}`}
                 readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}
             >
                 {isMultiSelect && selectedOptions?.length > 0
-                    ? selectedOptions.map((opt) => opt.name).join(", ")
+                    ? selectedOptions.map((id) => optionsById.get(id)?.name ?? "Unknown").join(", ")
                     : !isMultiSelect && selectedOption
                         ? selectedOption.name
                         : ""}

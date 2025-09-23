@@ -46,15 +46,19 @@ class AppointmentDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, appointment_id):
-        appointment = get_object_or_404(Appointment, id=appointment_id)
+        try:
+            appointment = get_object_or_404(Appointment, id=appointment_id)
+            with reversion.create_revision():
+                reversion.set_user(request.user)
+                reversion.set_comment("Deleted via API")
+                appointment.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
+            appointment.delete()
+            return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_200_OK)
 
-        with reversion.create_revision():
-            reversion.set_user(request.user)
-            reversion.set_comment("Deleted via API")
-            appointment.save() # Save() causes an update that doesnt modify nothing but triggers the revision.
-        appointment.delete()
-        
-        return Response({"message": "Agendamento excluído com sucesso."}, status=status.HTTP_204_NO_CONTENT)
+        except Appointment.DoesNotExist:
+            return Response({"error": "Agendamento não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": f"Erro interno: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
 class AppointmentUpdateAPIView(APIView):

@@ -6,7 +6,7 @@ import Card from '@/components/Card/Card.jsx';
 import TreatmentRegisterModal from '../RegisterModal/TreatmentRegisterModal.jsx';
 import TreatmentDetailsModal from '../DetailsModal/TreatmentDetailsModal.jsx';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
@@ -44,14 +44,14 @@ export default function TreatmentList() {
         return map;
     }, [places]);
 //===================================================================================================================================    
-    useEffect(() => {
-        console.log("treatments: ", treatments);
-    }, [treatments]);
+    //useEffect(() => {
+    //    console.log("treatments: ", treatments);
+    //}, [treatments]);
 
     return (
-        <List title="Tratamentos"
+        <List title="Procedimentos"
             NewElementMessage="Novo" onNewElement={() => setOpenModal("register")}
-            searchPlaceholder="Pesquisar tratamento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+            searchPlaceholder="Pesquisar procedimento" searchTerm={searchTerm} setSearchTerm={setSearchTerm}
         >
             {treatments.length > 0 ? (
                 treatments
@@ -65,20 +65,21 @@ export default function TreatmentList() {
                             <div className={styles.cardHeading}>
                                 <span className={styles.cardIcon}>{treatment.discipline.icon}</span>
                                 <div className={styles.cardDescription}>
-                                    <span className={styles.cardName}>{treatment.name}</span>
-                                    <span className={styles.cardRooms}>
-                                        {PlacesIcon && <PlacesIcon className={styles.placesIcon}/>}
-                                        {treatment.rooms.map((roomId, idx) => {
-                                            const place = placesById.get(String(roomId));
-                                            const name = place?.name ?? "Unknown";
-                                            return (
-                                                <span key={roomId} className={styles.roomName}>
-                                                    {name}
-                                                    {idx < treatment.rooms.length - 1 ? ", " : ""}
-                                                </span>
-                                            );
-                                        })}
-                                    </span>
+                                    <span className={styles.cardName}>{treatment.name}</span>  
+                                    <div className={styles.cardRooms}>
+                                        <PlacesIcon className={styles.roomsIcon}/>
+                                        <span >
+                                            {treatment.rooms.map((roomId, idx) => {
+                                                const name = placesById.get(Number(roomId)) ?? "Unknown";
+                                                return (
+                                                    <span key={roomId}>
+                                                        {name}
+                                                        {idx < treatment.rooms.length - 1 ? ", " : ""}
+                                                    </span>
+                                                );
+                                            })}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </Card>

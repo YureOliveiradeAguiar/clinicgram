@@ -14,10 +14,10 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ['id', 'firstName', 'lastName', 'fullName', 'email', 'password', 'whatsapp', 'dateOfBirth', 'observation']
+        fields = ['id', 'firstName', 'lastName', 'name', 'email', 'password', 'whatsapp', 'dateOfBirth', 'observation']
 
-    def get_fullName(self, obj):
-        return obj.fullName
+    def get_name(self, obj):
+        return obj.name
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})

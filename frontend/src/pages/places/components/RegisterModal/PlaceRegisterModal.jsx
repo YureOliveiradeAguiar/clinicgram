@@ -1,22 +1,15 @@
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 
-import { useState } from 'react';
-import { useForm, Controller } from "react-hook-form";
-
-import EmojiPicker from '../EmojiPicker/EmojiPicker';
+import { useForm } from "react-hook-form";
 
 import { getCookie } from '@/utils/csrf.js';
 
 
 export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
 
-    const { register, handleSubmit, reset, formState: { errors  }, control } = useForm({mode:'onBlur',
-        defaultValues: {
-            icon: null,
-        }
-    });
+    const { register, handleSubmit, reset, formState: { errors  } } = useForm({mode:'onBlur'});
 
-    const [selectedEmoji, setSelectedEmoji] = useState(null);
+//==============================================Submitting logic=============================================
 
     const onSubmit = async (data) => {
         const payload = { ...data };
@@ -44,6 +37,7 @@ export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStat
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
     };
+//=============================================================================================================
 
     return (
         <RegisterModal title="Nova Sala" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -56,13 +50,6 @@ export default function PlaceRegisterModal({ isOpen, onSuccess, onClose, setStat
                 <label htmlFor="name">Nome Completo</label>
                 <p className="errorMessage">{errors.name?.message || ""}</p>
             </div>
-
-            <Controller name="icon" control={control}
-                render={({ field }) => (
-                    <EmojiPicker value={field.value} onChange={field.onChange} selectedEmoji={selectedEmoji} setSelectedEmoji={setSelectedEmoji}/>
-                )}
-            />
-
         </RegisterModal>
     );
 }

@@ -1,9 +1,9 @@
 import styles from './HistoryCard.module.css'
 
+
 export default function HistoryCard({ record, handleRollback }) {
     return (
         <div className={styles.historyItem}>
-            <div className={styles.sideLine}></div>
             <div className={styles.historyContent}>
                 <div className={styles.textBlock}>
                     <h4 className={styles.title}>{record.description}</h4>
