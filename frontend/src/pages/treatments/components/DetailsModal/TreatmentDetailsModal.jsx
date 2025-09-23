@@ -44,9 +44,9 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
         setSelectedDiscipline(treatment.discipline);
     }
 //===================================================================================================
-    useEffect(()=>{
-        console.log("selectedRoomsIds: ", selectedRoomsIds);
-    },[selectedRoomsIds]);
+    //useEffect(()=>{
+    //    console.log("selectedRoomsIds: ", selectedRoomsIds);
+    //},[selectedRoomsIds]);
 
     return (
         <DetailsModal title={isEditing ? "Edição da Disciplina" : "Detalhes da Disciplina"} isOpen={isOpen}
@@ -72,7 +72,7 @@ export default function TreatmentDetailsModal({ treatment, onDelete, isOpen, onC
                     onSelect={(options) => {
                         setField("rooms", options);
                         setSelectedRoomsIds(options);
-                        console.log("options: ", options);
+                        //console.log("options: ", options);
                     }}
                     selectedOptions={selectedRoomsIds} hasError={errors.rooms}
                     labels={{ label: 'Sala', placeholder: 'Pesquisar sala', noResults: 'Nenhuma sala encontrada' }}

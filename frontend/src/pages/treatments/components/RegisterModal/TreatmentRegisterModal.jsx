@@ -18,7 +18,6 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
 
 //===========================================Submiting logic===========================================
     const onSubmit = async (data) => {
-        console.log("data: ", data);
         try {
             const response = await fetch('/api/treatments/new/', {
                 method: 'POST',
@@ -70,8 +69,7 @@ export default function TreatmentRegisterModal({ isOpen, onSuccess, onClose, set
                 render={({ field }) => (
                     <ElementDropdown options={rooms} selectedOptions={selectedRooms} isMultiSelect={true}
                         onSelect={(options) => {
-                            const ids = options.map(o => o.id);
-                            field.onChange(ids);
+                            field.onChange(options);
                             setSelectedRooms(options);
                         }}
                         hasError={errors.rooms}

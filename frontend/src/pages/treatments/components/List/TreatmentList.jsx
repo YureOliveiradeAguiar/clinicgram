@@ -69,15 +69,18 @@ export default function TreatmentList() {
                                     <div className={styles.cardRooms}>
                                         <PlacesIcon className={styles.roomsIcon}/>
                                         <span >
-                                            {treatment.rooms.map((roomId, idx) => {
-                                                const name = placesById.get(Number(roomId)) ?? "Unknown";
-                                                return (
-                                                    <span key={roomId}>
+                                            {[...treatment.rooms]
+                                                .map(roomId => ({
+                                                    id: roomId,
+                                                    name: placesById.get(Number(roomId)) ?? "Unknown",
+                                                }))
+                                                .sort((a, b) => a.name.localeCompare(b.name)) // sort by name
+                                                .map(({ id, name }, idx, arr) => (
+                                                    <span key={id}>
                                                         {name}
-                                                        {idx < treatment.rooms.length - 1 ? ", " : ""}
+                                                        {idx < arr.length - 1 ? ", " : ""}
                                                     </span>
-                                                );
-                                            })}
+                                                ))}
                                         </span>
                                     </div>
                                 </div>

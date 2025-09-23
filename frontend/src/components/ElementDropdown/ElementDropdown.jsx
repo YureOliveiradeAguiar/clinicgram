@@ -61,7 +61,10 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
                 readOnly={!isEditing} type="button" onClick={() => setIsOpen(!isOpen)}
             >
                 {isMultiSelect && selectedOptions?.length > 0
-                    ? selectedOptions.map((id) => optionsById.get(id)?.name ?? "Unknown").join(", ")
+                    ? selectedOptions
+                        .map((id) => optionsById.get(id)?.name ?? "Unknown")
+                        .sort((a, b) => a.localeCompare(b))
+                        .join(", ")
                     : !isMultiSelect && selectedOption
                         ? selectedOption.name
                         : ""}
@@ -80,11 +83,11 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
                         {filteredOptions.map(option => (
                             <div key={option.id} onClick={() => handleSelect(option)}
                                 className={`${styles.dropdownOption}
-                                    ${(isMultiSelect && (selectedOptions?.some(o => o.id === option.id))) && styles.selected}
+                                    ${isMultiSelect && selectedOptions?.includes(option.id) ? styles.selected : ""}
                                     ${option.isTop ? styles.bestOption : ""}`}
                             >
                                 {option.isTop && <StarIcon className={styles.firstOptionIcon} />}
-                                {isMultiSelect && (selectedOptions?.some(o => o.id === option.id)) && (
+                                {(isMultiSelect && selectedOptions?.includes(option.id)) && (
                                     CheckMarkIcon && <CheckMarkIcon className={styles.dropdownIcon}/>
                                 )}
                                 {option.name}

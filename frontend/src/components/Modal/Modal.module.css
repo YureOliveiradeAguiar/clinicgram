@@ -16,7 +16,6 @@
     border-radius: 12px;
     width: 90%;
     max-height: 90vh;
-    overflow-y: auto;
 
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     animation: fadeInScale 0.2s ease-out;
