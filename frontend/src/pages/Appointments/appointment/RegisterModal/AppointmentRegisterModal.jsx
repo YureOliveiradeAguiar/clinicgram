@@ -1,11 +1,11 @@
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import ElementDropdown from '@/components/ElementDropdown/ElementDropdown';
 import DatePicker from '@/components/DatePicker/DatePicker';
-import SegmentedControl from '@/components/ToggleSwitch/SegmentedControl';
+import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 
 import { getCookie } from '@/utils/csrf.js';
 
@@ -14,11 +14,12 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
 
     const { register, handleSubmit, watch, reset, formState: { errors  }, control } = useForm({mode:'onBlur'});
 
-//==========================================Dropdowns data==========================================  
+//==================================================Dropdowns data====================================================  
     const [selectedTreatment, setSelectedTreatment] = useState(null);
     const [selectedClient, setSelectedClient] = useState(null);
     const [selectedWorker, setSelectedWorker] = useState(null);
     const [selectedPlace, setSelectedPlace] = useState(null);
+    const [isConfirmed, setIsConfirmed] = useState(false); // Segmented Controls, not dropdown.
 
 //=======================================Interpreter of Selected Date Info===============================================
     /* Selected hours and day come from the table as values that change of time */
@@ -112,9 +113,7 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
     };
-
 //============================================================================================================
-    const [status, setStatus] = useState("draft");
 
     return (
         <RegisterModal title="Nova Consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -151,15 +150,16 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                 )}
             />
 
-            <div>
-                <SegmentedControl value={status} onChange={setStatus} size="medium"
-                    options={[
-                        { label: "Não Confirmado", value: "draft" },
-                        { label: "Confirmado", value: "published" },
-                    ]}
-                />
-                <p className="blankMessage"/>
-            </div>
+            <Controller name="isConfirmed" control={control}
+                render={({ field }) => (
+                    <SegmentedControl value={isConfirmed} onChange={(value) => {field.onChange(value); setIsConfirmed(value)}}
+                        options={[
+                            { label: "Não Confirmado", value: false },
+                            { label: "Confirmado", value: true },
+                        ]}
+                    />
+                )}
+            />
 
             <Controller name="timeRange" control={control}
                 render={({ field }) => (

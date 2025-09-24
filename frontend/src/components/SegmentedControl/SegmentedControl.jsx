@@ -26,16 +26,19 @@ export default function SegmentedControl({ options = [], value, onChange, disabl
 //============================================================================================================
 
     return (
-        <div ref={containerRef} className={`${styles.segmentedControl} ${disabled ? styles.disabled : ""}`}>
-            <div className={styles.thumb} style={thumbStyle} />
-            {options.map((option, index) => (
-                <button type="button" key={option.value} ref={optionsRefs.current[index]}
-                    className={`${styles.segment} ${value === option.value ? styles.activeText : ""}`}
-                    onClick={() => !disabled && onChange(option.value)} disabled={disabled}
-                >
-                    {option.label}
-                </button>
-            ))}
+        <div>
+            <div ref={containerRef} className={`${styles.segmentedControl} ${disabled ? styles.disabled : ""}`}>
+                <div className={styles.thumb} style={thumbStyle} />
+                {options.map((option, index) => (
+                    <button type="button" key={option.value} ref={optionsRefs.current[index]}
+                        className={`${styles.segment} ${value === option.value ? styles.activeText : ""}`}
+                        onClick={() => !disabled && onChange(option.value)} disabled={disabled}
+                    >
+                        {option.label}
+                    </button>
+                ))}
+            </div>
+            <p className="blankMessage"/>
         </div>
     );
 }

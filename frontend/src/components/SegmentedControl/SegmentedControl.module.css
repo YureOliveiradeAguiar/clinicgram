@@ -46,5 +46,7 @@
 /* Disabled state */
 .segmentedControl.disabled {
 	opacity: 0.5;
-	cursor: not-allowed;
+}
+.segmentedControl.disabled .segment{
+	cursor: default;
 }

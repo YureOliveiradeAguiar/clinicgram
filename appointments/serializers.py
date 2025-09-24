@@ -9,6 +9,8 @@ from treatments.serializers import TreatmentSerializer
 from workers.serializers import WorkerSerializer
 from places.serializers import PlaceSerializer
 
+from django.utils import timezone
+
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,6 +46,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
+            'isConfirmed',
             'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt'
         ]
         read_only_fields = ['treatment', 'client', 'worker', 'place', 'statusDisplay']
@@ -59,14 +62,23 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return data
 
     def _set_status(self, instance):
-        # Only auto-set status if it wasn’t explicitly set
-        if instance.status in (Appointment.Status.SCHEDULED, Appointment.Status.UNSCHEDULED):
-            instance.status = (
-                Appointment.Status.SCHEDULED if instance.startTime else Appointment.Status.UNSCHEDULED
-            )
+        now = timezone.now()
+        if instance.status not in (Appointment.Status.RESERVATION, Appointment.Status.SOLICITATION):
+            if not instance.startTime:
+                return Appointment.Status.UNSCHEDULED
+            if instance.isConfirmed:
+                instance.status = (
+                    Appointment.Status.SCHEDULED
+                    if instance.startTime > now
+                    else Appointment.Status.COMPLETED
+                )
+            else:
+                instance.status = (
+                    Appointment.Status.TO_CONFIRM
+                    if instance.startTime > now
+                    else Appointment.Status.MISSED
+                )
             instance.save()
-            print("AAAAAAAAA")
-        print("instance.status: ", instance.status)
         return instance
 
     def update(self, instance, validated_data):

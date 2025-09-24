@@ -14,6 +14,7 @@ class Appointment(models.Model):
     class Status(models.TextChoices):
         UNSCHEDULED = "unscheduled", _("Não Agendado")
         SCHEDULED = "scheduled", _("Agendado")
+        TO_CONFIRM  = "TO_CONFIRM ", _("A Confirmar")
         COMPLETED = "completed", _("Concluído")
         MISSED = "missed", _("Não Compareceu")
         CANCELED = "canceled", _("Cancelado")
@@ -21,6 +22,7 @@ class Appointment(models.Model):
         SOLICITATION = "solicitation", _("Solicitação")
     
     # Always mandatory fields
+    isConfirmed = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNSCHEDULED)
     treatment = models.ForeignKey(Treatment, on_delete=models.CASCADE)
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)

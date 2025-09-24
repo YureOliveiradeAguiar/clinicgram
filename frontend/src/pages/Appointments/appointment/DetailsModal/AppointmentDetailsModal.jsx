@@ -3,6 +3,7 @@ import DetailsModal from '@/components/DetailsModal/DetailsModal';
 import { useState } from 'react';
 
 import ElementDropdown from '@/components/ElementDropdown/ElementDropdown.jsx';
+import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 import DatePicker from '@/components/DatePicker/DatePicker.jsx';
 
 import usePatchFields from '@/hooks/usePatchFields.jsx';
@@ -16,7 +17,7 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         clientId: appointment.clientId,
         workerId: appointment.workerId,
         placeId: appointment.placeId,
-        priority: appointment.priority,
+        isConfirmed: appointment.isConfirmed,
         startTime: appointment.startTime,
         endTime: appointment.endTime,
         observation: appointment.observation || "",
@@ -25,11 +26,12 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
 
     const [isEditing, setIsEditing] = useState(false);
 
-//=========================================Dropdowns data=========================================   
+//====================================================Dropdowns data==================================================
     const [selectedClient, setSelectedClient] = useState(appointment.client);
     const [selectedWorker, setSelectedWorker] = useState(appointment.worker);
     const [selectedPlace, setSelectedPlace] = useState(appointment.place);
     const [selectedTreatment, setSelectedTreatment] = useState(appointment.treatment);
+    const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed); // Segmented Controls, not dropdown.
 
 //=======================================Interpreter of Selected Date Info===============================================
     const formatTime = (date) => {
@@ -93,30 +95,31 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
                 selectedOption={selectedTreatment} hasError={errors.treatment}
                 labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento registrado'}}
             />
+
             <ElementDropdown isEditing={isEditing} options={clients}
                 onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
                 selectedOption={selectedClient} hasError={errors.client}
                 labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
             />
+
             <ElementDropdown isEditing={isEditing} options={workers}
                 onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
                 selectedOption={selectedWorker} hasError={errors.worker}
                 labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
             />
+
             <ElementDropdown isEditing={isEditing} options={places}
                 onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
                 selectedOption={selectedPlace} hasError={errors.place}
                 labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
             />
-            <div className="inputContainer">
-                <input type="number" id="priority" name="priority" autoComplete="off"
-                    min="0" max="99" placeholder=" " value={fields.priority}
-                    className={`formInput ${!isEditing ? "readOnly": errors.priority ? "formInputError" : ""}`} readOnly={!isEditing}
-                    onChange={ (e) => setField("priority", Number(e.target.value) )}
-                />
-                <label htmlFor="priority">Prioridade</label>
-                <p className="errorMessage">{errors.priority || ""}</p>
-            </div>
+
+            <SegmentedControl value={isConfirmed} disabled={!isEditing} onChange={(value) => {setField("isConfirmed", value); setIsConfirmed(value)}}
+                options={[
+                    { label: "Não Confirmado", value: false },
+                    { label: "Confirmado", value: true },
+                ]}
+            />
 
             <DatePicker appointment={appointment} isEditing={isEditing}
                 selectedStartHours={selectedStartHours} setSelectedStartHours={setSelectedStartHours} selectedEndHours={selectedEndHours}
@@ -137,3 +140,13 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
         </DetailsModal>
     );
 }
+
+//<div className="inputContainer">
+//    <input type="number" id="priority" name="priority" autoComplete="off"
+//        min="0" max="99" placeholder=" " value={fields.priority}
+//        className={`formInput ${!isEditing ? "readOnly": errors.priority ? "formInputError" : ""}`} readOnly={!isEditing}
+//        onChange={ (e) => setField("priority", Number(e.target.value) )}
+//    />
+//    <label htmlFor="priority">Prioridade</label>
+//    <p className="errorMessage">{errors.priority || ""}</p>
+//</div>
