@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import RegisterModal from '@/components/RegisterModal/RegisterModal';
 import ElementDropdown from '@/components/ElementDropdown/ElementDropdown';
 import DatePicker from '@/components/DatePicker/DatePicker';
+import SegmentedControl from '@/components/ToggleSwitch/SegmentedControl';
 
 import { getCookie } from '@/utils/csrf.js';
 
@@ -111,7 +112,9 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
     const handleError = () => {
         setStatusMessage({message: "Dados inválidos!", type: "error" });
     };
+
 //============================================================================================================
+    const [status, setStatus] = useState("draft");
 
     return (
         <RegisterModal title="Nova Consulta" onSubmit={handleSubmit(onSubmit, handleError)} isOpen={isOpen} onClose={onClose}>
@@ -147,14 +150,15 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
                     />
                 )}
             />
-            <div className="inputContainer">
-                <input type="number" id="priority" name="priority" autoComplete="off"
-                    maxLength="70" placeholder=" "
-                    className={`formInput ${errors.priority ? "formInputError" : ""}`}
-                    {...register('priority', { value: 0 })}
+
+            <div>
+                <SegmentedControl value={status} onChange={setStatus} size="medium"
+                    options={[
+                        { label: "Não Confirmado", value: "draft" },
+                        { label: "Confirmado", value: "published" },
+                    ]}
                 />
-                <label htmlFor="priority">Prioridade</label>
-                <p className="errorMessage">{errors.priority?.message || ""}</p>
+                <p className="blankMessage"/>
             </div>
 
             <Controller name="timeRange" control={control}
@@ -180,3 +184,13 @@ export default function AppointmentRegisterModal({ isOpen, onSuccess, onClose, s
         </RegisterModal>
     );
 }
+
+//<div className="inputContainer">
+//    <input type="number" id="priority" name="priority" autoComplete="off"
+//        maxLength="70" placeholder=" "
+//        className={`formInput ${errors.priority ? "formInputError" : ""}`}
+//        {...register('priority', { value: 0 })}
+//    />
+//    <label htmlFor="priority">Prioridade</label>
+//    <p className="errorMessage">{errors.priority?.message || ""}</p>
+//</div>
