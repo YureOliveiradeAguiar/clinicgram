@@ -1,4 +1,5 @@
-export const formatPhone = (value) => {
+/* Makes "1234567890" into "(12) 3456-7890" */
+export const formatPhone = (value) => { 
     if (!value) return "";
     const cleaned = value.replace(/\D/g, '');
     if (cleaned.length <= 2) {
@@ -12,6 +13,8 @@ export const formatPhone = (value) => {
     }
 };
 
+// Turns "(12) 3456-7890" into "5512934567890" (adds 55 and brazilian 9)
+// WhatsApp expects country code + DDD + number
 export const normalizePhone = (formatted) => {
     if (!formatted) return "";
     const cleaned = formatted.replace(/\D/g, '');
@@ -20,5 +23,5 @@ export const normalizePhone = (formatted) => {
     if (number.length === 8) {
         number = '9' + number;
     }
-    return `55${ddd}${number}`; // WhatsApp expects country code + DDD + number.
+    return `55${ddd}${number}`; 
 }

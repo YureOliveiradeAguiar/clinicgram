@@ -9,7 +9,7 @@
 	user-select: none;
 }
 
-/* The sliding thumb element */
+/* SLIDING THUMB */
 .thumb {
 	position: absolute;
 	top: 3px;
@@ -17,11 +17,14 @@
 	background-color: #ffffff;
 	border-radius: 6px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-	/* This is the magic for the smooth slide! */
+	/* This is the magic for the smooth slide */
 	transition: transform 0.3s ease, width 0.3s ease;
 }
+.thumb.noTransition {
+    transition: none;
+}
 
-/* Individual segment buttons */
+/* INDIVIDUAL SEGMENT BUTTONS */
 .segment {
 	position: relative;
 	/* Keeps text above the thumb */

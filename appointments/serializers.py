@@ -46,8 +46,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id', 'treatment', 'treatmentId', 'client', 'clientId', 'worker', 'workerId', 'place', 'placeId',
-            'isConfirmed',
-            'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt'
+            'isConfirmed', 'startTime', 'endTime', 'priority','status','statusDisplay', 'observation', 'createdAt'
         ]
         read_only_fields = ['treatment', 'client', 'worker', 'place', 'statusDisplay']
     
@@ -74,7 +73,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
                 )
             else:
                 instance.status = (
-                    Appointment.Status.TO_CONFIRM
+                    Appointment.Status.UNCONFIRMED
                     if instance.startTime > now
                     else Appointment.Status.MISSED
                 )

@@ -177,7 +177,7 @@ input:focus {
     border-top-right-radius: 6px;
 }
 .textareaCounter.readOnly {
-    background-color: #e6e6e6;;
+    background-color: #e6e6e6;
 }
 /* input errors */
 .formInputError  {

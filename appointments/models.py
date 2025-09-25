@@ -14,7 +14,7 @@ class Appointment(models.Model):
     class Status(models.TextChoices):
         UNSCHEDULED = "unscheduled", _("Não Agendado")
         SCHEDULED = "scheduled", _("Agendado")
-        TO_CONFIRM  = "TO_CONFIRM ", _("A Confirmar")
+        UNCONFIRMED  = "unconfirmed", _("A Confirmar")
         COMPLETED = "completed", _("Concluído")
         MISSED = "missed", _("Não Compareceu")
         CANCELED = "canceled", _("Cancelado")

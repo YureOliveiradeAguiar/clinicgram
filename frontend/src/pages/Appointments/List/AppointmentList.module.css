@@ -56,6 +56,10 @@
     background-color: #e6f0ff;
     color: #1a73e8;
 }
+.status.unconfirmed {
+    background-color: #fef9c3;
+    color: #b45309;
+}
 .status.unscheduled {
     background-color: rgb(235,235,235);
 }

@@ -1,12 +1,13 @@
+import { useState, useEffect } from 'react';
+
+import PhoneInput from '@/components/TelephoneInput/PhoneInput';
 import DetailsModal from '@/components/DetailsModal/DetailsModal';
 import DateInput from '../DateInput/DateInput';
 
-import { useState, useEffect } from 'react';
+import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 import { formatPhone } from "@/utils/phoneUtils";
 import calculateAge from './utils/calculateAge';
-
-import usePatchFields from '@/hooks/usePatchFields.jsx';
 
 
 export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, onUpdate, setStatusMessage}) {
@@ -23,6 +24,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
 
     const [isEditing, setIsEditing] = useState(false);
 
+//=============================================Date dropdown handling===========================================
     const [selectedDay, setSelectedDay] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
@@ -37,10 +39,33 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
             setSelectedYear(Number(year));
         }
     }
+
+//============================================Selected Phone handling============================================
+    const [selectedCountryCode, setSelectedCountryCode] = useState('');
+    const [selectedAreaCode, setSelectedAreaCode] = useState('');
+    const [selectedPhoneNumber, setSelectedPhoneNumber] = useState('');
+    const setSelectedWhatsapp = () => {
+        if (client.whatsapp) {
+            const [countryCode, areaCode, phoneNumber] = client.whatsapp.split(" ");
+            setSelectedCountryCode(countryCode); // "+55"
+            setSelectedAreaCode(areaCode); // 12
+            setSelectedPhoneNumber(phoneNumber); // "999888777"
+        }
+    }
+
+//=============================================Setting of client data=============================================
     useEffect(() => {
         setDateInputFields();
+        setSelectedWhatsapp();
     }, [client]);
 
+    useEffect(()=> {
+        console.log("selectedCountryCode: ", selectedCountryCode);
+        console.log("selectedAreaCode: ", selectedAreaCode);
+        console.log("selectedPhoneNumber: ", selectedPhoneNumber);
+    },[selectedCountryCode, selectedAreaCode, selectedPhoneNumber]);
+
+//==================================================Saving logic==================================================
     const handleSave = () => {
         const allValid = validateAll();
         if (!allValid) {
@@ -60,6 +85,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         resetFields();
         setDateInputFields();
     }
+//===============================================================================================================
 
     return (
         <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}
@@ -102,14 +128,8 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                     <p className="errorMessage">{errors.password || ""}</p>
                 </div>
 
-                <div className="inputContainer">
-                    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" " readOnly={!isEditing}
-                        className={`formInput ${!isEditing ? "readOnly": errors.whatsapp ? "formInputError" : ""}`} value={fields.whatsapp}
-                        onChange={(e) => {setField("whatsapp", formatPhone(e.target.value));}}/>
-                    <label htmlFor="whatsapp">WhatsApp</label>
-                    <p className="errorMessage">{errors.whatsapp || ""}</p>
-                </div>
-                
+                <PhoneInput onChange={setSelectedWhatsapp}/>
+
                 <DateInput fieldLabel={`Data de nascimento (${calculateAge(fields.dateOfBirth)})`}
                     hasError={errors.dateOfBirth} onDateChange={(newDate) => setField("dateOfBirth", newDate)} isReadOnly={!isEditing}
                     selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedMonthLabel={selectedMonthLabel}
@@ -128,3 +148,10 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         </DetailsModal>
     );
 }
+//<div className="inputContainer">
+//   <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" " readOnly={!isEditing}
+//       className={`formInput ${!isEditing ? "readOnly": errors.whatsapp ? "formInputError" : ""}`} value={fields.whatsapp}
+//       onChange={(e) => {setField("whatsapp", formatPhone(e.target.value));}}/>
+//   <label htmlFor="whatsapp">WhatsApp</label>
+//   <p className="errorMessage">{errors.whatsapp || ""}</p>
+///div>

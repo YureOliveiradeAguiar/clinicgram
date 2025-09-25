@@ -33,7 +33,7 @@ class RegisterClientAPIView(APIView):
             return Response({
                 'success': True,
                 'client': serializer.data,
-                'message': f'Cliente {client.fullName} registrado com sucesso!'
+                'message': f'Cliente {client.name} registrado com sucesso!'
             })
         return Response({
             'success': False,

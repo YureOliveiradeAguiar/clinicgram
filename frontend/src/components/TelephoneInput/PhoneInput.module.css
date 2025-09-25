@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Highlight the whole container when any input is focused */
+.container:focus-within {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.input {
+    border: none;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+    background-color: transparent;
+}
+
+.input:not(:last-child) {
+    border-right: 1px solid #ccc;
+}
+
+.country {
+    width: 55px;
+}
+
+.area {
+    width: 50px;
+}
+
+.number {
+    width: 130px;
+    flex-grow: 1;
+    /* Allows the number field to take remaining space */
+}

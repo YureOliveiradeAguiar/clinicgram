@@ -26,9 +26,9 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
         const rawPhone = normalizePhone(data.whatsapp);
         if (!rawPhone) {
             setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
+            return
         }
-
-        const payload = { ...data, rawPhone };
+        data.whatsapp = rawPhone;
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
@@ -37,7 +37,7 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                     'X-CSRFToken': getCookie('csrftoken')
                 },
                 credentials: 'include',
-                body: JSON.stringify(payload)
+                body: JSON.stringify(data)
             });
 
             const result = await response.json();
