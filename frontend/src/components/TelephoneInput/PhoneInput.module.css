@@ -8,7 +8,7 @@
 
 /* Highlight the whole container when any input is focused */
 .container:focus-within {
-    border-color: #007bff;
+    border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
@@ -18,7 +18,6 @@
     font-size: 1rem;
     text-align: center;
     outline: none;
-    background-color: transparent;
 }
 
 .input:not(:last-child) {
@@ -30,7 +29,7 @@
 }
 
 .area {
-    width: 50px;
+    width: 60px;
 }
 
 .number {

@@ -1,37 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styles from './PhoneInput.module.css';
 
-export default function PhoneInput({ onChange }) {
-    const [phone, setPhone] = useState({
-        country: '',
-        area: '',
-        number: '',
-    });
-
-    // Refs to control focus between inputs
+export default function PhoneInput({ phone, setPhone, onChange, isEditing, errors }) {
+    // Expects in the parent: const [phone, setPhone] = useState({ country: '', area: '', number: '' });
+//=====================================These Refs to control focus between inputs====================================
     const areaRef = useRef(null);
     const numberRef = useRef(null);
 
-    // This effect calls the parent's onChange whenever a part of the phone number changes
+//=======================Calls the parent's onChange whenever a part of the phone number changes======================
     useEffect(() => {
         // Only call onChange if at least one field has a value
         if (phone.country || phone.area || phone.number) {
             const fullNumber = `${phone.country} ${phone.area} ${phone.number}`;
-            onChange(fullNumber.trim());
+            onChange(fullNumber);
         }
     }, [phone, onChange]);
 
     const handleInputChange = (segment, e) => {
         const { value, maxLength } = e.target;
-
         // Allow only numbers (and '+' for country code)
         let sanitizedValue = segment === 'country' ? value.replace(/[^\d+]/g, '') : value.replace(/\D/g, '');
-
         setPhone((prev) => ({
             ...prev,
             [segment]: sanitizedValue,
         }));
-
         // Auto-focus to the next input when the current one is full
         if (sanitizedValue.length === maxLength) {
             if (segment === 'country') {
@@ -42,38 +34,26 @@ export default function PhoneInput({ onChange }) {
             }
         }
     };
+//=====================================================================================================
 
     return (
-        <div className={styles.container}>
-            <input
-                type="tel"
-                name="country"
-                className={`${styles.input} ${styles.country}`}
-                placeholder="+55"
-                maxLength={3}
-                value={phone.country}
-                onChange={(e) => handleInputChange('country', e)}
-            />
-            <input
-                ref={areaRef}
-                type="tel"
-                name="area"
-                className={`${styles.input} ${styles.area}`}
-                placeholder="31"
-                maxLength={2}
-                value={phone.area}
-                onChange={(e) => handleInputChange('area', e)}
-            />
-            <input
-                ref={numberRef}
-                type="tel"
-                name="number"
-                className={`${styles.input} ${styles.number}`}
-                placeholder="99999-9999"
-                maxLength={9}
-                value={phone.number}
-                onChange={(e) => handleInputChange('number', e)}
-            />
+        <div>
+            <p className='fieldLabel'>Whatsapp</p>
+            <div className={styles.container}>
+                <input type="tel" name="country" placeholder="+CC"
+                    className={`${styles.input} ${styles.country} ${!isEditing ? "readOnly" : errors.password ? "formInputError" : ""}`}
+                    maxLength={3} value={phone.country} onChange={(e) => handleInputChange('country', e)}
+                />
+                <input ref={areaRef} type="tel" name="area" placeholder="AAA"
+                    className={`${styles.input} ${styles.area} ${!isEditing ? "readOnly" : errors.password ? "formInputError" : ""}`}
+                    maxLength={3} value={phone.area} onChange={(e) => handleInputChange('area', e)}
+                />
+                <input ref={numberRef} type="tel" name="number" placeholder="NNNNNNN"
+                    className={`${styles.input} ${styles.number} ${!isEditing ? "readOnly" : errors.password ? "formInputError" : ""}`}
+                    maxLength={9} value={phone.number} onChange={(e) => handleInputChange('number', e)}
+                />
+            </div>
+            <p className="errorMessage">{errors || ""}</p>
         </div>
     );
 }

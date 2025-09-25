@@ -6,7 +6,6 @@ import DateInput from '../DateInput/DateInput';
 
 import usePatchFields from '@/hooks/usePatchFields.jsx';
 
-import { formatPhone } from "@/utils/phoneUtils";
 import calculateAge from './utils/calculateAge';
 
 
@@ -41,29 +40,24 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
     }
 
 //============================================Selected Phone handling============================================
-    const [selectedCountryCode, setSelectedCountryCode] = useState('');
-    const [selectedAreaCode, setSelectedAreaCode] = useState('');
-    const [selectedPhoneNumber, setSelectedPhoneNumber] = useState('');
-    const setSelectedWhatsapp = () => {
+    const [phone, setPhone] = useState({ country: '', area: '', number: '' });
+
+    const setPhoneInputFields = () => {
         if (client.whatsapp) {
             const [countryCode, areaCode, phoneNumber] = client.whatsapp.split(" ");
-            setSelectedCountryCode(countryCode); // "+55"
-            setSelectedAreaCode(areaCode); // 12
-            setSelectedPhoneNumber(phoneNumber); // "999888777"
+            setPhone({
+                country: countryCode || '',
+                area: areaCode || '',
+                number: phoneNumber || ''
+            });
         }
-    }
+    };
 
 //=============================================Setting of client data=============================================
     useEffect(() => {
         setDateInputFields();
-        setSelectedWhatsapp();
+        setPhoneInputFields();
     }, [client]);
-
-    useEffect(()=> {
-        console.log("selectedCountryCode: ", selectedCountryCode);
-        console.log("selectedAreaCode: ", selectedAreaCode);
-        console.log("selectedPhoneNumber: ", selectedPhoneNumber);
-    },[selectedCountryCode, selectedAreaCode, selectedPhoneNumber]);
 
 //==================================================Saving logic==================================================
     const handleSave = () => {
@@ -84,8 +78,12 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         setIsEditing(false);
         resetFields();
         setDateInputFields();
+        setPhoneInputFields();
     }
 //===============================================================================================================
+    useEffect(()=>{
+        console.log("phone: ", phone);
+    }, [phone]);
 
     return (
         <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}
@@ -128,7 +126,9 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
                     <p className="errorMessage">{errors.password || ""}</p>
                 </div>
 
-                <PhoneInput onChange={setSelectedWhatsapp}/>
+                <PhoneInput phone={phone} setPhone={setPhone} onChange={(newPhone) => setField('whatsapp', newPhone)}
+                    isEditing={isEditing} errors={errors.whatsapp}
+                />
 
                 <DateInput fieldLabel={`Data de nascimento (${calculateAge(fields.dateOfBirth)})`}
                     hasError={errors.dateOfBirth} onDateChange={(newDate) => setField("dateOfBirth", newDate)} isReadOnly={!isEditing}
