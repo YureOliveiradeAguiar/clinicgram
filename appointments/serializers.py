@@ -15,7 +15,7 @@ from django.utils import timezone
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'whatsapp']
 
 class AppointmentSerializer(serializers.ModelSerializer):
     treatment = TreatmentSerializer(read_only=True)

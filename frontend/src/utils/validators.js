@@ -6,12 +6,12 @@ export const validators = {
     },
     whatsapp: (value) => {
         if (!value.trim()) return "O WhatsApp é obrigatório";
-        // Expect format: "+<country> <area> <number>"
+        // Expect format: "<country> <area> <number>"
         const parts = value.split(" ");
         if (parts.length !== 3) return "Formato inválido";
         const [country, area, number] = parts;
         // Country: + + 1–3 digits
-        if (!/^\+\d{1,3}$/.test(country)) {
+        if (!/^\d{1,3}$/.test(country)) {
             return "Código do país inválido";
         }
         // Area: 1–4 digits

@@ -1,0 +1,33 @@
+.messageButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #e6f4ea;
+    color: #2e7d32;
+
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.messageIcon {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+.messageButton:hover {
+    transform: scale(1.05);
+    background-color: #c8e6c9;
+}
+
+.messageButton:active {
+    transform: scale(0.98);
+    background-color: #a5d6a7;
+}

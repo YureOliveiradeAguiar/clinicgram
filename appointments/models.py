@@ -5,7 +5,6 @@ from clients.models import Client
 from workers.models import Worker
 from places.models import Place
 
-
 from django.utils.translation import gettext_lazy as _
 
 

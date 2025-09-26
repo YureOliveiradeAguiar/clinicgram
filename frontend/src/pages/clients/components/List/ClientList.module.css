@@ -1,4 +1,22 @@
+.cardHeading {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2rem;
+}
+
 .cardName {
     color: var(--font);
     font-size: 1.1rem;
+}
+
+.cardStatus {
+    width: fit-content;
+    font-size: 0.95rem;
+    padding: 0 12px;
+    border-radius: 16px;
+}
+
+.cardStatus {
+    background-color: #ffe5e5;
+    color: #d93025
 }

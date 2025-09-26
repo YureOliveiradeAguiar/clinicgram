@@ -1,4 +1,5 @@
 import PersonAddIcon from '@/assets/icons/personAddIcon';
+import WhatsAppICon from '@/assets/icons/whatsappIcon';
 import styles from './ClientList.module.css'
 
 import List from '@/components/List/List';
@@ -44,10 +45,12 @@ export default function ClientList() {
                     )
                     .map(client => (
                         <Card key={client.id} element={client} setOpenModal={setOpenModal}
-                                selectedElement={selectedClient} setSelectedElement={setSelectedClient}>
-                            <p className={styles.cardName} aria-label={client.name}>
-                                {client.name}
-                            </p>
+                            selectedElement={selectedClient} setSelectedElement={setSelectedClient}
+                        >
+                            <div className={styles.cardHeading}>
+                                <span className={styles.cardName}>{client.name}</span>
+                                <span className={styles.cardStatus}>Auta</span>
+                            </div>
                         </Card>
                 ))
             ) : (

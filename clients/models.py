@@ -2,6 +2,8 @@ from django.db import models
 
 from accounts.models import CustomUser
 
+from django.utils.translation import gettext_lazy as _
+
 
 class Client(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="client_profile")

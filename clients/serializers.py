@@ -14,7 +14,9 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ['id', 'firstName', 'lastName', 'name', 'email', 'password', 'whatsapp', 'dateOfBirth', 'observation']
+        fields = ['id', 'firstName', 'lastName', 'name', 'email', 'password',
+            'whatsapp', 'dateOfBirth', 'observation'
+        ]
 
     def get_name(self, obj):
         return obj.name

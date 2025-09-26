@@ -88,17 +88,17 @@ export default function ReservationDetailsModal({ appointment, onDelete, isOpen,
             <ElementDropdown isEditing={isEditing} options={treatments}
                 onSelect={(option) => {setField("treatmentId", option.id); setSelectedTreatment(option)}}
                 selectedOption={selectedTreatment} hasError={errors.treatment}
-                labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento registrado'}}
+                labels={{ label: 'Procedimento*', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento registrado'}}
             />
             <ElementDropdown isEditing={isEditing} options={workers}
                 onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
                 selectedOption={selectedWorker} hasError={errors.worker}
-                labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
+                labels={{ label: 'Estagiário*', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
             />
             <ElementDropdown isEditing={isEditing} options={places}
                 onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
                 selectedOption={selectedPlace} hasError={errors.place}
-                labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                labels={{ label: 'Sala*', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
             />
             <div className="inputContainer">
                 <input type="number" id="priority" name="priority" autoComplete="off"

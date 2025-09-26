@@ -1,34 +1,31 @@
-import RegisterModal from '@/components/RegisterModal/RegisterModal';
-import DateInput from '../DateInput/DateInput';
-
 import { useState } from 'react';
 import { useForm, Controller } from "react-hook-form";
 
+import PhoneInput from '@/components/TelephoneInput/PhoneInput';
+import DateInput from '../DateInput/DateInput';
+import RegisterModal from '@/components/RegisterModal/RegisterModal';
+
 import { getCookie } from '@/utils/csrf.js';
-import { formatPhone, normalizePhone } from '@/utils/phoneUtils';
+import { validators } from '@/utils/validators';
 
 
 export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setStatusMessage }) {
-
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitted  }, setError, clearErrors, control } = useForm({mode:'onBlur'});
 
-    const whatsappValue = watch('whatsapp');
-    
+//=============================================Date dropdown handling===========================================
     const [selectedDay, setSelectedDay] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedMonthLabel, setSelectedMonthLabel] = useState("");
     const [selectedYear, setSelectedYear] = useState(null);
 
+//============================================Selected Phone handling===========================================
+    const [phone, setPhone] = useState({ country: '', area: '', number: '' });
+
+//============================Keeping track of changes to the observations field================================
     const observationsValue = watch('observations') || '';
     
-//==================================================Submitting logic================================================
+//==================================================Submitting logic============================================
     const onSubmit = async (data) => {
-        const rawPhone = normalizePhone(data.whatsapp);
-        if (!rawPhone) {
-            setError("whatsapp", {type: "manual", message: "WhatsApp é obrigatório"});
-            return
-        }
-        data.whatsapp = rawPhone;
         try {
             const response = await fetch('/api/clients/new/', {
                 method: 'POST',
@@ -99,22 +96,14 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
                 <p className="errorMessage">{errors.password?.message || ""}</p>
             </div>
 
-            <div className="inputContainer">
-                <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
-                    className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
-                    {...register('whatsapp', {required: "WhatsApp é obrigatório",
-                        validate: (value) => {
-                            const digits = value.replace(/\D/g, '');
-                            if (digits.length < 10) return "Número incompleto";
-                            return true;
-                    }})}
-                    onChange={(e) => {
-                        const formatted = formatPhone(e.target.value);
-                        setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
-                    }}/>
-                <label htmlFor="whatsapp">WhatsApp</label>
-                <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
-            </div>
+            <Controller name="whatsapp" control={control}
+                render={({ field, fieldState }) => (
+                    <PhoneInput phone={phone} setPhone={setPhone}
+                        onChange={field.onChange}
+                        errors={fieldState.error?.message}
+                    />
+                )}
+            />
 
             <Controller name="dateOfBirth" control={control} rules={{ required: "Informe a data de nascimento completa" }}
                 render={({ field, fieldState }) => (
@@ -136,3 +125,20 @@ export default function ClientRegisterModal({ isOpen, onSuccess, onClose, setSta
         </RegisterModal>
     );
 }
+
+//<div className="inputContainer">
+//    <input type="text" id="whatsapp" name="whatsapp" maxLength="14" placeholder=" "
+//        className={`formInput ${errors.whatsapp ? "formInputError" : ""}`} value={whatsappValue || ""}
+//        {...register('whatsapp', {required: "WhatsApp é obrigatório",
+//            validate: (value) => {
+//                const digits = value.replace(/\D/g, '');
+//                if (digits.length < 10) return "Número incompleto";
+//                return true;
+//        }})}
+//        onChange={(e) => {
+//            const formatted = formatPhone(e.target.value);
+//            setValue('whatsapp', formatted, { shouldValidate: isSubmitted});
+//        }}/>
+//    <label htmlFor="whatsapp">WhatsApp</label>
+//    <p className="errorMessage">{errors.whatsapp?.message || " "}</p>
+//</div>

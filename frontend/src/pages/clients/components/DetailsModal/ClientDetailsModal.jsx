@@ -46,9 +46,9 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         if (client.whatsapp) {
             const [countryCode, areaCode, phoneNumber] = client.whatsapp.split(" ");
             setPhone({
-                country: countryCode || '',
+                country: countryCode ? `+${countryCode}` : '',
                 area: areaCode || '',
-                number: phoneNumber || ''
+                number: phoneNumber || '',
             });
         }
     };
@@ -81,9 +81,6 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         setPhoneInputFields();
     }
 //===============================================================================================================
-    useEffect(()=>{
-        console.log("phone: ", phone);
-    }, [phone]);
 
     return (
         <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}

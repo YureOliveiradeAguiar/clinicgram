@@ -129,7 +129,7 @@ export default function DatePicker({ appointment, isEditing=true, onSelect,
                 ) : ("")}
             </button>
             <p id="dobLabel" className="customLabel">Data</p>
-            {(isEditing && selectedStartHours && selectedEndHours && selectedDay) &&(
+            {(isEditing && selectedStartHours && selectedEndHours && selectedDay) && (
                 <button type="button" className={styles.unscheduleButton}
                     onClick={() => {
                         setSelectedStartHours(null); setSelectedEndHours(null); setSelectedDay(null);

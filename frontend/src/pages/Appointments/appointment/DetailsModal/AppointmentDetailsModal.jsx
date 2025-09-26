@@ -1,7 +1,9 @@
+import WhatsAppICon from '@/assets/icons/whatsAppIcon';
+import styles from './AppointmentDetailsModal.module.css'
+
+import { useEffect, useState } from 'react';
+
 import DetailsModal from '@/components/DetailsModal/DetailsModal';
-
-import { useState } from 'react';
-
 import ElementDropdown from '@/components/ElementDropdown/ElementDropdown.jsx';
 import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 import DatePicker from '@/components/DatePicker/DatePicker.jsx';
@@ -84,6 +86,9 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
     }
 
 //====================================================================================================
+    useEffect(()=>{
+        console.log("selectedClient: ", selectedClient);
+    },[selectedClient]);
 
     return (
         <DetailsModal title={isEditing ? "Edição da Consulta" : "Detalhes da Consulta"} isOpen={isOpen}
@@ -93,25 +98,38 @@ export default function AppointmentDetailsModal({ appointment, onDelete, isOpen,
             <ElementDropdown isEditing={isEditing} options={treatments}
                 onSelect={(option) => {setField("treatmentId", option.id); setSelectedTreatment(option)}}
                 selectedOption={selectedTreatment} hasError={errors.treatment}
-                labels={{ label: 'Procedimento', placeholder: 'Pesquisar procedimento...', noResults: 'Nenhum procedimento registrado'}}
+                labels={{ label: 'Procedimento*', placeholder: 'Pesquisar procedimento', noResults: 'Nenhum procedimento registrado'}}
             />
 
             <ElementDropdown isEditing={isEditing} options={clients}
                 onSelect={(option) => {setField("clientId", option.id); setSelectedClient(option)}}
                 selectedOption={selectedClient} hasError={errors.client}
-                labels={{ label: 'Paciente', placeholder: 'Pesquisar paciente...', noResults: 'Nenhum paciente registrado'}}
-            />
+                labels={{ label: 'Paciente*', placeholder: 'Pesquisar paciente', noResults: 'Nenhum paciente registrado'}}
+            >
+                {(!isEditing && selectedClient) && (
+                    <button type="button" className={styles.messageButton}
+                        onClick={() => {
+                            const message = encodeURIComponent("Olá! Gostaria de confirmar sua consulta agendada. Agradeço desde já!");
+                            const number = selectedClient.whatsapp.replace(/\s+/g, "");
+                            console.log("number: ", number);
+                            window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+                        }}
+                    >
+                        <WhatsAppICon className={styles.messageIcon} />
+                    </button>
+                )}
+            </ElementDropdown>
 
             <ElementDropdown isEditing={isEditing} options={workers}
                 onSelect={(option) => {setField("workerId", option.id); setSelectedWorker(option)}}
                 selectedOption={selectedWorker} hasError={errors.worker}
-                labels={{ label: 'Estagiário', placeholder: 'Pesquisar estagiário...', noResults: 'Nenhum estagiário registrado'}}
+                labels={{ label: 'Estagiário*', placeholder: 'Pesquisar estagiário', noResults: 'Nenhum estagiário registrado'}}
             />
 
             <ElementDropdown isEditing={isEditing} options={places}
                 onSelect={(option) => {setField("placeId", option.id); setSelectedPlace(option)}}
                 selectedOption={selectedPlace} hasError={errors.place}
-                labels={{ label: 'Sala', placeholder: 'Pesquisar sala...', noResults: 'Nenhuma sala registrada'}}
+                labels={{ label: 'Sala*', placeholder: 'Pesquisar sala', noResults: 'Nenhuma sala registrada'}}
             />
 
             <SegmentedControl value={isConfirmed} disabled={!isEditing} onChange={(value) => {setField("isConfirmed", value); setIsConfirmed(value)}}

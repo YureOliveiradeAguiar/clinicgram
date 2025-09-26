@@ -9,6 +9,7 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 export default function ElementDropdown({ selectedOption, onSelect, isEditing=true, options = [], hasError=false,
         isMultiSelect=false, selectedOptions,
         labels = { label: 'Elemento', placeholder: 'Pesquisar elemento', noResults: 'Nenhum elemento encontrado'},
+        children
     }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -101,6 +102,7 @@ export default function ElementDropdown({ selectedOption, onSelect, isEditing=tr
                     )}
                 </div>
             )}
+            {children}
         </div>
     );
 }
