@@ -10,10 +10,10 @@ export default function RegisterModal({ title, onSubmit, isOpen, onClose, childr
         <Modal title={title} isOpen={isOpen} onClose={onClose}>
             <form onSubmit={onSubmit} className="standardFormulary">
                 {children}
-                <div className={styles.buttonSection}>
-                    <ModalButton Icon={SaveIcon} variant="save" type="submit" name="registrar" buttonTitle="Registrar"/>
-                </div>
             </form>
+            <div className={styles.buttonSection}>
+                <ModalButton Icon={SaveIcon} variant="save" type="submit" name="registrar" buttonTitle="Registrar"/>
+            </div>
         </Modal>
     );
 }

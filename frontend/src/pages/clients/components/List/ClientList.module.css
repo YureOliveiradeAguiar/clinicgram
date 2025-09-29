@@ -16,7 +16,12 @@
     border-radius: 16px;
 }
 
-.cardStatus {
+.cardStatus.active {
+    background-color: #e6f0ff;
+    color: #1a73e8;
+}
+
+.cardStatus.discharged {
     background-color: #ffe5e5;
     color: #d93025
 }

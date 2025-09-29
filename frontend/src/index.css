@@ -78,6 +78,9 @@ button:focus {
     display: flex;
     flex-direction: column;
     width: 100%;
+
+    max-height: 80vh;
+    overflow-y: auto;
 }
 Form label, .fieldLabel, Form input, .fieldLabel {
     display: flex;
@@ -250,7 +253,7 @@ input:focus {
 
 /* SCROLL-BAR */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {

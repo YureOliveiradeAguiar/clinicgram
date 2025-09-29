@@ -1,5 +1,5 @@
 import PersonAddIcon from '@/assets/icons/personAddIcon';
-import WhatsAppICon from '@/assets/icons/whatsappIcon';
+// import WhatsAppICon from '@/assets/icons/whatsappIcon'; should I add a whatsapp me button to the client card?
 import styles from './ClientList.module.css'
 
 import List from '@/components/List/List';
@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useAutoClearStatus } from '@/utils/useAutoClearStatus';
 
 import useElement from '@/hooks/useElement';
+import useFetch from '@/hooks/useFetch';
 
 
 export default function ClientList() {
@@ -31,7 +32,11 @@ export default function ClientList() {
     } = useElement({ elementName: "o paciente", elementNamePlural: "os pacientes", elementPath: "clients",
         selectedElement: selectedClient, setSelectedElement: setSelectedClient,
         setStatusMessage, setOpenModal });
-//================================================================================================================
+
+//=====================================Fetches for associating the client to its appointments====================================
+    const { data: appointments} = useFetch({ elementNamePlural:'as consultas', elementPath:'appointments', setStatusMessage});
+
+//===============================================================================================================================
 
     return (
         <List title="Pacientes" NewElementIcon={PersonAddIcon} NewElementMessage="Novo"
@@ -49,7 +54,15 @@ export default function ClientList() {
                         >
                             <div className={styles.cardHeading}>
                                 <span className={styles.cardName}>{client.name}</span>
-                                <span className={styles.cardStatus}>Auta</span>
+                                {appointments.some(
+                                    appt =>
+                                        appt.clientId === client.id &&
+                                        ["scheduled", "unconfirmed", "solicitation"].includes(appt.status)
+                                ) ? (
+                                    <span className={`${styles.cardStatus} ${styles.active}`}>Ativo</span>
+                                ) : (
+                                    <span className={`${styles.cardStatus} ${styles.discharged}`}>Alta</span>
+                                )}
                             </div>
                         </Card>
                 ))

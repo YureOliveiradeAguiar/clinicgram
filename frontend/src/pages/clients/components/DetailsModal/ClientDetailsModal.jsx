@@ -80,7 +80,7 @@ export default function ClientDetailsModal({ client, onDelete, isOpen, onClose, 
         setDateInputFields();
         setPhoneInputFields();
     }
-//===============================================================================================================
+//================================================================================================================
 
     return (
         <DetailsModal title={isEditing ? "Edição do Paciente" : "Detalhes do Paciente"} isOpen={isOpen}

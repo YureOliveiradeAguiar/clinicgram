@@ -4,11 +4,11 @@ import styles from './DateInput.module.css';
 import { useEffect } from "react";
 
 
-export default function DateInput({ fieldLabel="Data de Nascimento", onDateChange, hasError=false, clearErrors, isReadOnly=false,
-        selectedDay, setSelectedDay, selectedMonth, setSelectedMonth,
-        selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear  }) {
+export default function DateInput({ fieldLabel = "Data de Nascimento", onDateChange, hasError = false, clearErrors, isReadOnly = false,
+    selectedDay, setSelectedDay, selectedMonth, setSelectedMonth,
+    selectedMonthLabel, setSelectedMonthLabel, selectedYear, setSelectedYear
+}) {
 
-    
     const formatDateOfBirth = (day, month, year) => {
         if (!year || !month || !day) return null;
         const mm = String(month).padStart(2, "0");
@@ -24,6 +24,7 @@ export default function DateInput({ fieldLabel="Data de Nascimento", onDateChang
             clearErrors?.()
         }
     }, [selectedDay, selectedMonth, selectedYear]);
+//=============================================================================================
 
     return (
         <div className={styles.formGroup}>

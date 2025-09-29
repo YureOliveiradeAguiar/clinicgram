@@ -1,3 +1,4 @@
+import DropdownArrow from '@/assets/icons/dropdownArrow';
 import ArrowDownIcon from '@/assets/icons/arrowDown.jsx'
 import ArrowUpIcon from '@/assets/icons/arrowUp.jsx'
 import styles from './DateDropdown.module.css';
@@ -51,11 +52,7 @@ export default function DateDropdown ({ dropdownLabel, optionType, locale = navi
                 <span className={styles.dropdownLabel}>
                     {dropdownLabel}
                 </span>
-                {isOpen ? (
-                    <ArrowUpIcon className={styles.icon} />
-                ) : (
-                    <ArrowDownIcon className={styles.icon} />
-                )}
+                <DropdownArrow className={`${styles.dropdownArrow} ${isOpen ? styles.arrowUp : ''}`}/>
             </div>
 
             {isOpen && (
